@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0078** Add player progression and development config *(M10; scope: league)*
 - **0076** Add the league command *(M9; scope: cli)*
 - **0075** Add league invariants L01 to L03 *(M9; scope: verify)*
 - **0074** Add the daily tick, matchday play and the season runner *(M9; scope: league)*
