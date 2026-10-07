@@ -97,10 +97,10 @@ class PassConfig(DomainModel):
     base_cross: float = 0.62
     base_back: float = 1.0
     length_penalty_per_m: float = 0.0035
-    skill_swing: float = 0.5
+    skill_swing: float = 0.12  # damped: skill gaps must not compound into lopsided matches
     skill_pivot: float = 55.0
     skill_scale: float = 25.0
-    receiver_touch_weight: float = 0.10
+    receiver_touch_weight: float = 0.04
     pressure_penalty: float = 0.30
     openness_penalty: float = 0.20
     min_probability: float = 0.02
@@ -168,7 +168,7 @@ class DribbleConfig(DomainModel):
     }
 
     base: float = 0.55
-    swing: float = 0.45
+    swing: float = 0.12
     scale: float = 20.0
     pressure_penalty: float = 0.15
     min_probability: float = 0.05
@@ -205,7 +205,7 @@ class DecisionConfig(DomainModel):
     }
 
     candidates: int = Field(ge=1, le=10, default=4)
-    progress_scale: float = 10.0  # utility per unit of threat gained
+    progress_scale: float = 12.0  # utility per unit of threat gained
     loss_cost_base: float = 0.15
     loss_cost_own_third: float = 0.55  # extra cost of losing the ball at the own goal line
     lead_frame_x: float = 0.012  # passes are aimed slightly ahead of the receiver
@@ -276,7 +276,7 @@ class ChallengeConfig(DomainModel):
     attempt_rate: float = 0.10  # per moment, times the pressure on the carrier
     attempt_radius_m: float = 3.0
     tackle_base: float = 0.45
-    tackle_swing: float = 0.4
+    tackle_swing: float = 0.10
     tackle_scale: float = 20.0
     fail_intercept: float = 0.55
     fail_loose: float = 0.20  # the rest of failed passes go out of play
