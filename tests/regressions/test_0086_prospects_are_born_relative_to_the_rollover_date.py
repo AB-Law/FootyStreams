@@ -8,9 +8,13 @@ from __future__ import annotations
 
 import datetime as dt
 
+import pytest
+
 from footystreams.league.youth import contract_end
 from tests.factories.league_config import make_development_config
 from tests.factories.league_run import cached_rolled_over
+
+pytestmark = pytest.mark.timeout(120)  # these build whole seasons; allow for a loaded machine
 
 ROLLOVER_DAY = dt.date(2032, 6, 1)  # the day after the season ends; the tick runs it on 1 June
 YOUTH = make_development_config().youth

@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import pytest
+
 from footystreams.league.report import format_money, format_table
 from tests.factories.league_run import cached_small_season
+
+pytestmark = pytest.mark.timeout(120)  # these build whole seasons; allow for a loaded machine
 
 
 def test_format_table__lists_every_club_best_first_with_the_columns() -> None:

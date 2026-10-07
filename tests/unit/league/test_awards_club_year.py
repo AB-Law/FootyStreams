@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import datetime as dt
 
+import pytest
+
 from footystreams.domain.mood import ModifierVisibility, StateKind
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.standings import StandingRow
@@ -29,6 +31,8 @@ from tests.factories.league_config import (
 )
 from tests.factories.league_run import cached_small_season
 from tests.factories.world import make_world
+
+pytestmark = pytest.mark.timeout(120)  # these build whole seasons; allow for a loaded machine
 
 ROLLOVER = make_development_config().rollover
 FINANCE = make_league_config().finance

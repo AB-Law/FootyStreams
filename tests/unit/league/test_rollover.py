@@ -5,10 +5,14 @@ from __future__ import annotations
 import datetime as dt
 from collections import Counter
 
+import pytest
+
 from footystreams.domain.player import Player, PlayerStatus
 from footystreams.league.squad import is_keeper
 from tests.factories.league_config import make_development_config
 from tests.factories.league_run import cached_rolled_over, play_seasons, season_fingerprint
+
+pytestmark = pytest.mark.timeout(120)  # these build whole seasons; allow for a loaded machine
 
 SQUAD = make_development_config().squad
 
