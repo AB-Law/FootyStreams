@@ -1,0 +1,1 @@
+{"additionalProperties":false,"description":"Derby / rivalry link to another club.","properties":{"club_id":{"title":"Club Id","type":"string"},"intensity":{"title":"Intensity","type":"number"},"label":{"default":"","title":"Label","type":"string"},"origin":{"default":"","title":"Origin","type":"string"}},"required":["club_id","intensity"],"title":"Rivalry","type":"object"}

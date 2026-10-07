@@ -1,0 +1,1 @@
+{"additionalProperties":false,"description":"Outstanding match ban.","properties":{"matches_remaining":{"minimum":1,"title":"Matches Remaining","type":"integer"},"reason":{"maxLength":80,"minLength":1,"title":"Reason","type":"string"}},"required":["matches_remaining","reason"],"title":"Suspension","type":"object"}
