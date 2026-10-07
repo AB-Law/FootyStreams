@@ -120,13 +120,15 @@ def run_gate(root: Path) -> GateResult:
             command, cwd=root, capture_output=True, text=True, timeout=timeout, check=False
         )
     except FileNotFoundError:
-        return GateResult(False, f"Cannot run the gate: command not found: {command[0]!r}")
+        return GateResult(
+            passed=False, report=f"Cannot run the gate: command not found: {command[0]!r}"
+        )
     except subprocess.TimeoutExpired:
-        return GateResult(False, f"The gate timed out after {timeout}s.")
+        return GateResult(passed=False, report=f"The gate timed out after {timeout}s.")
     if completed.returncode == 0:
-        return GateResult(True, "")
+        return GateResult(passed=True, report="")
     combined = (completed.stdout + "\n" + completed.stderr).strip().splitlines()
-    return GateResult(False, "\n".join(combined[-REPORT_TAIL_LINES:]))
+    return GateResult(passed=False, report="\n".join(combined[-REPORT_TAIL_LINES:]))
 
 
 def read_counter(state_dir: Path) -> int:

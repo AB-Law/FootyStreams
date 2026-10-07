@@ -53,7 +53,9 @@ def parse_rule(path: Path) -> Rule:
         end = lines.index(FRONTMATTER_FENCE, 1)
         paths = _parse_paths(lines[1:end])
         lines = lines[end + 1 :]
-    title = next((line.removeprefix(TITLE_PREFIX) for line in lines if line.startswith(TITLE_PREFIX)), "")
+    title = next(
+        (line.removeprefix(TITLE_PREFIX) for line in lines if line.startswith(TITLE_PREFIX)), ""
+    )
     if not title:
         raise ValueError(f"{path}: rule needs a '# Title' heading")
     return Rule(path.stem, title.strip(), tuple(paths), "\n".join(lines).strip("\n"))
@@ -75,7 +77,8 @@ def render_cursor(rule: Rule) -> str:
         fields.append(f"globs: {', '.join(rule.paths)}")
     fields.append(f"alwaysApply: {str(rule.always_applies).lower()}")
     header = "\n".join([FRONTMATTER_FENCE, *fields, FRONTMATTER_FENCE])
-    notice = f"<!-- GENERATED from .claude/rules/{rule.name}.md by tools/rules_sync.py - edit the source. -->"
+    source = f".claude/rules/{rule.name}.md"
+    notice = f"<!-- GENERATED from {source} by tools/rules_sync.py - edit the source. -->"
     return f"{header}\n{notice}\n{rule.body}\n"
 
 
