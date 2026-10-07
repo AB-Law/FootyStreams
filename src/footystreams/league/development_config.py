@@ -98,6 +98,24 @@ class SquadConfig(_Config):
     trialist_contract_years: int = Field(ge=1)
 
 
+class RolloverConfig(_Config):
+    """The off-season steps outside development: reputation, money, contracts, awards."""
+
+    reputation_step: float
+    reputation_max_change: int = Field(ge=0)
+    player_reputation_pull: float = Field(ge=0.0, le=1.0)
+    player_reputation_ability_weight: float = Field(ge=0.0, le=1.0)
+    fanbase_drift: float = Field(ge=0.0)
+    confidence_step: float = Field(ge=0.0)
+    sponsor_years: tuple[int, int]
+    sponsor_reputation_growth: float
+    wage_budget_ratio: float = Field(gt=0.0)
+    wage_tolerance: float = Field(ge=0.0)
+    transfer_budget_share: float = Field(ge=0.0, le=1.0)
+    contract_extend_years: tuple[int, int]
+    awards_min_appearances: int = Field(ge=1)
+
+
 class DevelopmentConfig(_Config):
     """Everything in ``development.yaml``."""
 
@@ -107,3 +125,4 @@ class DevelopmentConfig(_Config):
     retirement: RetirementConfig
     youth: YouthConfig
     squad: SquadConfig
+    rollover: RolloverConfig

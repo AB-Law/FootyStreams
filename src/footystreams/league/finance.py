@@ -204,3 +204,19 @@ def bonus_postings(
         {"match_id": ref.match_id},
     )
     return [posting]
+
+
+TYPICAL_FILL = 0.7  # share of the seats usually taken, for the income estimate
+
+
+def income_estimate(club: Club, config: FinanceConfig) -> Money:
+    """A year's recurring income from the club's state: gate, sponsors, broadcast, merchandise.
+
+    Prize money is left out (it depends on the finish); the estimate sizes the wage budget.
+    """
+    attendance = round(club.stadium.capacity * TYPICAL_FILL)
+    gate, hospitality = gate_income(attendance, club, config)
+    matchdays = (gate + hospitality) * config.home_matches_per_season
+    sponsors = sum(deal.annual_value for deal in club.finances.sponsor_deals)
+    merchandise = club.fanbase.size * config.merchandise_per_fan_per_season
+    return round(matchdays + sponsors + club.finances.broadcast_share + merchandise)
