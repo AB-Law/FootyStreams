@@ -30,8 +30,9 @@ from footystreams.league.matchday import current_table
 from footystreams.league.mood_rules import modifier_for_return
 from footystreams.league.progression import ProgressionInputs, micro_step
 from footystreams.league.recovery import decay_sharpness, recover
-from footystreams.league.rollover import RolloverServices, rollover_season
+from footystreams.league.rollover import rollover_season
 from footystreams.league.rollover_data import load_rollover_data
+from footystreams.league.rollover_state import RolloverServices
 from footystreams.league.tables import LeagueTables
 from footystreams.league.training import training_conditions
 from footystreams.league.world_events import generate_life_events

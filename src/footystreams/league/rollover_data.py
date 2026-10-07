@@ -5,7 +5,7 @@ from __future__ import annotations
 from footystreams.domain.competition import Season
 from footystreams.league.awards import season_totals
 from footystreams.league.matchday import current_table
-from footystreams.league.rollover import RolloverData
+from footystreams.league.rollover_state import KEY_REFERENCE_ABILITY, RolloverData
 from footystreams.persistence.ports import Repositories
 
 ACTIVE = "active"
@@ -36,4 +36,10 @@ def load_rollover_data(repositories: Repositories, season: Season) -> RolloverDa
         table=current_table(repositories, season.id, competition.club_ids),
         totals=season_totals(summaries),
         retired_names=repositories.players.find({"status": RETIRED}),
+        reference_ability=_reference(repositories),
     )
+
+
+def _reference(repositories: Repositories) -> float | None:
+    entry = repositories.meta.get(KEY_REFERENCE_ABILITY)
+    return float(entry.value) if entry is not None else None
