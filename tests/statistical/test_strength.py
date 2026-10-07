@@ -20,12 +20,16 @@ def _record(home_strength: int, away_strength: int, matches: int) -> tuple[int, 
     return wins, draws, losses
 
 
+@pytest.mark.slow
+@pytest.mark.statistical
 def test_strength__much_stronger_home_side_wins_most_and_rarely_loses() -> None:
     wins, _, losses = _record(72, 54, 8)
     assert wins >= 5
     assert losses <= 1
 
 
+@pytest.mark.slow
+@pytest.mark.statistical
 def test_strength__equal_teams_split_the_results_roughly_evenly() -> None:
     wins, _, losses = _record(60, 60, 12)
     assert abs(wins - losses) <= 7

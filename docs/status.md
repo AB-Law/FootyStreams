@@ -48,3 +48,7 @@ Also: committed `schemas/` (drift-tested), factories/strategies under `tests/`, 
 - **M4 done locally:** `simulate_match` / `run_match` over factory teams (`SimRng`, `SimConfig`, positioning, pressure, decision model, pass/dribble/tackle/interception/clearance/shot/save/goal, kickoff/halftime/fulltime, event-derived summary). `uv run sim --demo --seed 7`, `uv run golden check|update`, `verify.verify_match` (M01-M05, M10, M17). `SIM_VERSION` 0.1.0, `SCHEMA_VERSION` 0.1.3. Report: `docs/milestones/M4.md`; implementation notes: `docs/design/02-simulation.md` section 16.
 - **Known gaps:** no dead balls/fouls/cards (M5), fatigue/injuries/subs/weather (M6), ratings/frames/tags (M7). ~0.4 s CPU per match (budget 0.15 s, M8 optimises). Calibration is rough (M8).
 - **Merge notes:** fragment ids 0042+ may collide with Track B; `verify/__init__.py` and `pyproject.toml` scripts (`sim`, `golden`) and `domain/versions.py` are shared files to merge by hand.
+
+### Track A update at the end of M5
+- **M5 done locally** on `feat/m5-dead-balls-discipline` (based on the M4 branch): referee model, fouls, advantage, cards and dismissals, throw-ins, goal kicks, corners with an aerial duel, penalties, free-kick shots and crosses, offside, announced added time; `verify_match` gains M07 (in part), M11, M12. `SIM_VERSION` 0.2.0, `SCHEMA_VERSION` 0.1.4. Report: `docs/milestones/M5.md`.
+- Known gaps: red cards about 2x the band; second-half added time short (substitutions and injuries arrive in M6); 0.37 s CPU a match.
