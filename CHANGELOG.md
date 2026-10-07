@@ -30,6 +30,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0021** Add the parallel match-engine track to the milestone plan *(M0; scope: design)*
 - **0019** Add ADRs, glossary, project status and the M0 milestone report *(M0; scope: docs)*
 - **0003** Add testing strategy, live-channel operational safety, engineering standards and the change-fragment log system. *(design; scope: design, ci)*
 - **0001** Add the Phase 1 design document set (entities, simulation, events, architecture, seeding, milestones). *(design; scope: design)*
