@@ -7,6 +7,7 @@ import json
 import pytest
 
 from footystreams.domain.fixture import FixtureStatus
+from footystreams.domain.match import MatchSetup
 from footystreams.domain.mood import ModifierVisibility
 from footystreams.league.clock import write_date
 from footystreams.league.season import SeasonResult
@@ -14,6 +15,7 @@ from footystreams.persistence.ports import UnitOfWorkFactory
 from tests.factories.league_run import (
     cached_season,
     cached_small_season,
+    make_engine,
     make_runner,
     play_season,
     season_fingerprint,
@@ -132,3 +134,24 @@ def test_run_season__sqlite_backend__gives_the_same_season_as_memory() -> None:
     sql, factory_sql = play_season(2, 4, backend="sql")
     assert sql.table == memory.table
     assert season_fingerprint(factory_sql) == season_fingerprint(factory_memory)
+
+
+def test_replay__a_match_from_its_stored_sheets__reproduces_the_same_log() -> None:
+    _, factory = _small()
+    engine = make_engine(2)
+    with factory() as uow:
+        match = uow.matches.all()[3]
+    setup = MatchSetup(
+        match_id=match.id,
+        fixture_id=match.fixture_id,
+        home=match.home_sheet,
+        away=match.away_sheet,
+        weather=match.weather,
+        referee_id=match.referee_id,
+        attendance=match.attendance,
+        is_derby=match.is_derby,
+        importance=match.importance,
+    )
+    replayed = engine.simulator.simulate(setup, match.seed)
+    assert replayed.log_digest == match.log_digest
+    assert replayed.summary.score_home == match.home_goals

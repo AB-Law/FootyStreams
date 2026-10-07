@@ -18,6 +18,7 @@ commit-msg-check = "footystreams.tools.commitmsg:main"
 pr-size = "footystreams.tools.prsize:main"
 export-schemas = "footystreams.cli.export_schemas:main"
 seed = "footystreams.cli.seed:main"
+league = "footystreams.cli.league:main"
 
 [dependency-groups]
 dev = [
