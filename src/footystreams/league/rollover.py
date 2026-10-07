@@ -51,6 +51,7 @@ FREE_AGENT_REPUTATION = 30
 FULL_SEASON_MINUTES = 90
 MIN_TERM_DAYS = 90
 MIN_WAGE_SCALE = 0.5
+MIN_WEEKLY_WAGE = 600
 
 
 @dataclass(frozen=True, slots=True)
@@ -315,7 +316,16 @@ def _trim_pool(work: _Work, context: tuple[RolloverServices, dt.date]) -> None:
     )
     for player in free[limit:]:
         work.players[player.id] = retired(player, today)
-        work.events.append(retirement_news(player, today))
+        work.events.append(retirement_news(player, today, "left_the_game"))
+
+
+def _on_budget(player: Player, scale: float) -> Player:
+    """A new senior contract scaled to what the club can afford (never below the youth wage)."""
+    contract = player.contract
+    if contract is None or scale >= 1.0:
+        return player
+    wage = max(MIN_WEEKLY_WAGE, round(contract.wage_weekly * scale))
+    return player.model_copy(update={"contract": contract.model_copy(update={"wage_weekly": wage})})
 
 
 def _squads(work: _Work, data: RolloverData, context: tuple[RolloverServices, dt.date]) -> None:
@@ -330,8 +340,11 @@ def _squads(work: _Work, data: RolloverData, context: tuple[RolloverServices, dt
             key=lambda p: p.id,
         )
         members = _seniors_of(work, club_id)
+        scale = min(1.0, _wage_scale(work, club_id, services.tables.development.rollover))
         moves = rebalance(club_id, members, pool, squad_context)
-        for player in (*moves.promoted, *moves.signed, *moves.released):
+        for player in (*moves.promoted, *moves.signed):
+            work.players[player.id] = _on_budget(player, scale)
+        for player in moves.released:
             work.players[player.id] = player
         final = assign_numbers(_seniors_of(work, club_id))
         for player in final:
