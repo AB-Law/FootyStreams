@@ -10,6 +10,7 @@ from sqlalchemy import Engine
 
 from footystreams.cli.league_wiring import build_engine, build_prospects, load_league_tables
 from footystreams.domain.competition import Season
+from footystreams.domain.transfer import OUTSIDE_WORLD
 from footystreams.domain.types import ClubId
 from footystreams.domain.world import World
 from footystreams.league.clock import read_date
@@ -89,7 +90,7 @@ def _print_results(
     results: list[SeasonResult], factory: UnitOfWorkFactory, opening: dict[ClubId, int]
 ) -> None:
     with factory() as uow:
-        clubs = uow.clubs.all()
+        clubs = [club for club in uow.clubs.all() if club.id != OUTSIDE_WORLD]
         today = read_date(uow)
     names = {club.id: club.name for club in clubs}
     for result in results:
@@ -117,7 +118,11 @@ def _run(arguments: argparse.Namespace) -> int:
         with factory() as uow:
             world_seed = int(read_meta(uow, KEY_WORLD_SEED))
             season = current_season(uow, read_date(uow))
-            opening = {club.id: club.finances.balance for club in uow.clubs.all()}
+            opening = {
+                club.id: club.finances.balance
+                for club in uow.clubs.all()
+                if club.id != OUTSIDE_WORLD
+            }
             prospects = build_prospects(uow, static)
         runner = SeasonRunner(
             factory, build_engine(load_league_tables(static=static), world_seed), prospects

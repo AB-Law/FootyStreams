@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0096** Add the transfer market *(M11; scope: league)*
 - **0095** Add the rules of a deal *(M11; scope: league)*
 - **0094** Add transfer windows and needs analysis *(M11; scope: league)*
 - **0093** Add contract renewal talks and expiry *(M11; scope: league)*

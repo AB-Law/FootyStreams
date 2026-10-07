@@ -16,6 +16,7 @@ from footystreams.domain.fixture import FixtureStatus
 from footystreams.domain.mood import StateModifier
 from footystreams.domain.player import Player
 from footystreams.domain.rng import WorldRng
+from footystreams.domain.transfer import OUTSIDE_WORLD
 from footystreams.domain.types import PlayerId
 from footystreams.league.contracts import expire_contracts
 from footystreams.league.delta import WorldDelta, merge_all
@@ -36,12 +37,19 @@ from footystreams.league.rollover_data import load_rollover_data
 from footystreams.league.rollover_state import RolloverServices
 from footystreams.league.tables import LeagueTables
 from footystreams.league.training import training_conditions
+from footystreams.league.transfer_data import run_window_day
+from footystreams.league.transfer_windows import open_window, windows_for
 from footystreams.league.world_events import generate_life_events
 from footystreams.persistence.ports import Repositories
 
 ACTIVE = "active"
 PLAYED = FixtureStatus.PLAYED.value
 RECENT_MATCH_DAYS = 6  # fatigue and morale from a match are gone within this many days
+
+
+def _league_clubs(repositories: Repositories) -> list[Club]:
+    """The clubs of the league (the reserved outside-world club is not one of them)."""
+    return [club for club in repositories.clubs.all() if club.id != OUTSIDE_WORLD]
 
 
 class Stage(Protocol):
@@ -136,7 +144,7 @@ class ClubAdminStage:
         config = self._tables.config.finance
         if not is_pay_day(today, config):
             return WorldDelta()
-        clubs = repositories.clubs.all()
+        clubs = _league_clubs(repositories)
         postings = [
             posting
             for club in clubs
@@ -195,7 +203,7 @@ class TrainingStage:
             return WorldDelta()
         inputs = ProgressionInputs(self._tables.development, self._tables.roles, today)
         changed: list[Player] = []
-        for club in repositories.clubs.all():
+        for club in _league_clubs(repositories):
             staff = repositories.staff.find({"club_id": club.id})
             conditions = training_conditions(
                 club,
@@ -250,3 +258,26 @@ class ContractExpiryStage:
         return WorldDelta(
             players=expiry.players, world_events=expiry.events, deletions=expiry.deletions
         )
+
+
+class TransferStage:
+    """Transfer windows: clubs buy and sell on each day a window is open."""
+
+    name: ClassVar[str] = "transfers"
+
+    def __init__(self, services: RolloverServices) -> None:
+        """Create the stage over the league tables and the prospect factory."""
+        self._services = services
+
+    def run(self, repositories: Repositories, today: dt.date, rng: WorldRng) -> WorldDelta:
+        """One market day if a window is open today, otherwise nothing."""
+        tables = self._services.tables
+        windows = [
+            window
+            for season in repositories.seasons.all()
+            for window in windows_for(season, tables.config.calendar)
+        ]
+        window = open_window(windows, today)
+        if window is None:
+            return WorldDelta()
+        return run_window_day(repositories, window, (today, tables, self._services.prospects), rng)

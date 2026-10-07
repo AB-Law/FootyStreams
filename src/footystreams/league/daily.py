@@ -32,6 +32,7 @@ from footystreams.league.stages import (
     SeasonEndStage,
     Stage,
     TrainingStage,
+    TransferStage,
 )
 from footystreams.persistence.ports import StageLogEntry, UnitOfWorkFactory
 
@@ -61,7 +62,8 @@ def default_stages(engine: MatchdayEngine, prospects: ProspectFactory | None = N
         ContractExpiryStage(tables),
     ]
     if prospects is not None:
-        stages.append(RolloverStage(RolloverServices(tables, prospects)))
+        services = RolloverServices(tables, prospects)
+        stages.extend([TransferStage(services), RolloverStage(services)])
     return stages
 
 

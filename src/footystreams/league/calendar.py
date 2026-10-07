@@ -21,7 +21,8 @@ def window_dates(
 ) -> tuple[dt.date, dt.date]:
     """Opening and closing dates of a transfer window of the season starting at ``season_start``."""
     if kind is WindowKind.MIDSEASON:
-        opens = matchdays[calendar.midseason_window_after_matchday - 1] + dt.timedelta(days=1)
+        after = min(calendar.midseason_window_after_matchday, max(1, len(matchdays) // 2))
+        opens = matchdays[after - 1] + dt.timedelta(days=1)  # a short season has it at its middle
         return opens, opens + dt.timedelta(days=calendar.midseason_window_days - 1)
     year = season_start.year + 1  # the summer window that ends this season's off-season
     return (
