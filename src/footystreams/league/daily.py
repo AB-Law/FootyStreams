@@ -27,6 +27,7 @@ from footystreams.league.stages import (
     RecoveryStage,
     SeasonEndStage,
     Stage,
+    TrainingStage,
 )
 from footystreams.persistence.ports import StageLogEntry, UnitOfWorkFactory
 
@@ -45,6 +46,7 @@ def default_stages(engine: MatchdayEngine) -> list[Stage]:
     tables = engine.tables
     return [
         RecoveryStage(tables),
+        TrainingStage(tables),
         LifeEventsStage(tables),
         ClubAdminStage(tables),
         SeasonEndStage(tables),
