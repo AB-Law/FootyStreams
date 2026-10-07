@@ -1,4 +1,4 @@
-"""L01-L05: a running league is consistent (money, results, schedule, squads, players)."""
+"""L01-L06: a running league is consistent (money, results, schedule, squads, players, deals)."""
 
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ from footystreams.domain.finance import LedgerEntry
 from footystreams.domain.fixture import Fixture, FixtureStatus
 from footystreams.domain.match import Match, MatchStatus
 from footystreams.domain.player import MAX_DEVELOPMENT_LOG, Player, PlayerStatus
+from footystreams.domain.transfer import Transfer
 from footystreams.domain.types import ClubId, Position
 from footystreams.events.summary import MatchSummary
 from footystreams.verify.violation import Violation
@@ -139,5 +140,31 @@ def check_development(players: Sequence[Player]) -> list[Violation]:
             player.id,
             "retired player still has a contract",
             holds=player.status is not PlayerStatus.RETIRED or player.contract is None,
+        )
+    return findings.problems
+
+
+def check_transfers(
+    transfers: Sequence[Transfer], entries: Sequence[LedgerEntry]
+) -> list[Violation]:
+    """L06: every paid transfer has a buyer leg and a seller leg, equal and opposite."""
+    findings = Findings("L06")
+    legs: dict[str, list[LedgerEntry]] = defaultdict(list)
+    for entry in entries:
+        if entry.ref.get("transfer_id"):
+            legs[entry.ref["transfer_id"]].append(entry)
+    for transfer in transfers:
+        found = legs.get(transfer.id, [])
+        if transfer.fee == 0:
+            findings.expect(transfer.id, "a free transfer has ledger legs", holds=not found)
+            continue
+        buyer = [e for e in found if e.club_id == transfer.to_club_id and e.amount == -transfer.fee]
+        seller = [
+            e for e in found if e.club_id == transfer.from_club_id and e.amount == transfer.fee
+        ]
+        findings.expect(transfer.id, "the buyer's leg is missing or wrong", holds=len(buyer) == 1)
+        findings.expect(transfer.id, "the seller's leg is missing or wrong", holds=len(seller) == 1)
+        findings.expect(
+            transfer.id, "the legs do not net to zero", holds=sum(e.amount for e in found) == 0
         )
     return findings.problems

@@ -6,7 +6,8 @@ from collections.abc import Mapping, Sequence
 
 from footystreams.domain.club import Club
 from footystreams.domain.standings import StandingRow
-from footystreams.domain.types import ClubId
+from footystreams.domain.transfer import Transfer
+from footystreams.domain.types import ClubId, PlayerId
 
 MILLION = 1_000_000
 NAME_WIDTH = 26
@@ -37,3 +38,19 @@ def format_money(clubs: Sequence[Club], opening: Mapping[ClubId, int]) -> str:
             f"{club.name:<{NAME_WIDTH}} {balance / MILLION:>9.1f}m {change / MILLION:>+9.1f}m"
         )
     return "\n".join(lines)
+
+
+def format_transfers(
+    transfers: Sequence[Transfer],
+    names: Mapping[ClubId, str],
+    players: Mapping[PlayerId, str],
+) -> str:
+    """Completed transfers, oldest first: date, player, from, to, fee in millions."""
+    header = f"{'Date':<11} {'Player':<22} {'From':<{NAME_WIDTH}} {'To':<{NAME_WIDTH}} {'Fee':>8}"
+    lines = [
+        f"{t.completed_on.isoformat():<11} {players.get(t.player_id, t.player_id):<22} "
+        f"{names.get(t.from_club_id, t.from_club_id):<{NAME_WIDTH}} "
+        f"{names.get(t.to_club_id, t.to_club_id):<{NAME_WIDTH}} {t.fee / MILLION:>7.1f}m"
+        for t in sorted(transfers, key=lambda item: (item.completed_on, item.id))
+    ]
+    return "\n".join([header, *lines])

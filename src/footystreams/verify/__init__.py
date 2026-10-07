@@ -27,6 +27,7 @@ __all__ = [
     "check_results",
     "check_season_complete",
     "check_squads",
+    "check_transfers",
     "format_violations",
     "verify_match",
     "verify_world",

@@ -76,3 +76,13 @@ def test_league__seasons_option__plays_that_many_seasons_with_the_off_season_bet
     assert "2031/32: 12 matches played" in output
     assert "2032/33: 12 matches played" in output
     assert "now 2033-06-02" in output
+
+
+def test_league__transfers_option__lists_the_completed_transfers(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(["--seed", "2", "--clubs", "4", "--seasons", "1", "--transfers"]) == EXIT_OK
+    output = capsys.readouterr().out
+    assert "Date" in output
+    assert "Fee" in output
+    assert "The Wider World" not in output.split("Balance")[1].split("Date")[0]
