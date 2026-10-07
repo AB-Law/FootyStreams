@@ -8,6 +8,8 @@ from collections.abc import Sequence
 from datetime import date
 from pathlib import Path
 
+from footystreams.tools.changelog import git
+from footystreams.tools.changelog.build import render_changelog
 from footystreams.tools.changelog.fragment import (
     SCOPES,
     ChangeType,
@@ -16,15 +18,26 @@ from footystreams.tools.changelog.fragment import (
     Impact,
     parse_fragment,
 )
+from footystreams.tools.changelog.policy import check_change, is_fragment_path
 from footystreams.tools.changelog.store import FragmentStore
-from footystreams.tools.paths import CHANGES_DIR
+from footystreams.tools.paths import PROJECT_ROOT
+
+CHANGELOG_FILE = "CHANGELOG.md"
 
 
 def build_parser() -> argparse.ArgumentParser:
     """Create the argument parser with one sub-command per action."""
     parser = argparse.ArgumentParser(prog="changelog", description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    new = commands.add_parser("new", help="create the next change fragment")
+    _add_new(commands.add_parser("new", help="create the next change fragment"))
+    check = commands.add_parser("check", help="check this change has the fragments it needs")
+    check.add_argument("--base", default=None, help="ref to compare with (default: origin/main)")
+    build = commands.add_parser("build", help="write CHANGELOG.md from the fragments")
+    build.add_argument("--check", action="store_true", help="fail if CHANGELOG.md is stale")
+    return parser
+
+
+def _add_new(new: argparse.ArgumentParser) -> None:
     new.add_argument("summary", help="one imperative, user-facing line")
     new.add_argument("--type", required=True, choices=[kind.value for kind in ChangeType])
     new.add_argument("--scope", required=True, nargs="+", choices=sorted(SCOPES))
@@ -36,24 +49,50 @@ def build_parser() -> argparse.ArgumentParser:
     new.add_argument("--migration", action="store_true")
     new.add_argument("--body", default="", help="optional longer explanation")
     new.add_argument("--date", type=date.fromisoformat, default=None, help="default: today")
-    return parser
 
 
-def main(argv: Sequence[str] | None = None, changes_dir: Path = CHANGES_DIR) -> int:
+def main(argv: Sequence[str] | None = None, root: Path = PROJECT_ROOT) -> int:
     """Run the requested command and return the process exit code."""
     arguments = build_parser().parse_args(argv)
-    store = FragmentStore(changes_dir)
+    store = FragmentStore(root / "changes")
     try:
-        return _create_fragment(arguments, store)
-    except FragmentError as error:
+        if arguments.command == "new":
+            return _new(arguments, store)
+        if arguments.command == "check":
+            return _check(arguments, root)
+        return _build(arguments, store, root / CHANGELOG_FILE)
+    except (FragmentError, git.GitError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
 
 
-def _create_fragment(arguments: argparse.Namespace, store: FragmentStore) -> int:
-    candidate = _fragment_from(arguments, store.next_id())
-    path = store.add(candidate)
-    print(path)
+def _new(arguments: argparse.Namespace, store: FragmentStore) -> int:
+    print(store.add(_fragment_from(arguments, store.next_id())))
+    return 0
+
+
+def _check(arguments: argparse.Namespace, root: Path) -> int:
+    changed = git.changed_files(root, git.resolve_base(root, arguments.base))
+    fragments = [
+        parse_fragment((root / item.path).read_text(encoding="utf-8"), item.path)
+        for item in changed
+        if item.status != "D" and is_fragment_path(item.path)
+    ]
+    problems = check_change(changed, fragments)
+    for problem in problems:
+        print(problem, file=sys.stderr)
+    return 1 if problems else 0
+
+
+def _build(arguments: argparse.Namespace, store: FragmentStore, target: Path) -> int:
+    text = render_changelog(store.unreleased())
+    if arguments.check:
+        current = target.read_text(encoding="utf-8") if target.exists() else ""
+        if current == text:
+            return 0
+        print(f"{target.name} is stale: run 'uv run changelog build'", file=sys.stderr)
+        return 1
+    target.write_text(text, encoding="utf-8", newline="\n")
     return 0
 
 
