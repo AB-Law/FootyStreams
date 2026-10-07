@@ -29,6 +29,10 @@ class ValuationConfig(_Config):
     financial_discount: float = Field(ge=0.0, lt=1.0)
     role_stubbornness: dict[str, float]
     round_concession: float = Field(ge=0.0, le=1.0)
+    ceiling_margin: float = Field(ge=0.0)
+    desire_scale: int = Field(ge=1)
+    youth_age: int
+    youth_weight: float = Field(ge=0.0)
 
 
 class NeedsConfig(_Config):
@@ -38,6 +42,7 @@ class NeedsConfig(_Config):
     upgrade_margin: int = Field(ge=0)
     max_age: int
     max_signing_share: float = Field(gt=0.0, le=1.0)
+    wage_headroom: float = Field(ge=1.0)
 
 
 class TermsConfig(_Config):

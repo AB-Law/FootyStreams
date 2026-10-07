@@ -13,13 +13,18 @@ valuation:
   reservation_floor: 0.90         # a seller accepts at 0.90-1.00 of his reservation price
   financial_discount: 0.15        # a seller in trouble asks this much less
   role_stubbornness: {key: 1.25, rotation: 1.05, prospect: 1.15, backup: 0.90}
-  round_concession: 0.5           # the seller gives up this share of the gap each round
+  round_concession: 0.5           # the buyer closes this share of the gap to his ceiling each round
+  ceiling_margin: 0.25            # a buyer will pay up to this much more than his opening bid
+  desire_scale: 15                # ability points above the need that make desire 1.0
+  youth_age: 23                   # young players are also wanted for their potential
+  youth_weight: 0.2
 
 needs:
   position_minimum: {GK: 2, DEF: 7, MID: 7, FWD: 4}
   upgrade_margin: 4               # a player must beat the weakest starter in the slot by this
   max_age: 34
   max_signing_share: 0.5          # largest share of the transfer budget one deal may use
+  wage_headroom: 1.25             # the wage bill may reach this multiple of the wage budget
 
 terms:
   wage_rounds: [1.0, 1.1, 1.2]    # wage offered as a multiple of the market wage, by round
