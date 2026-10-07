@@ -30,7 +30,7 @@ def injured_off_unreplaced(events: Sequence[MatchEvent], position: int) -> bool:
     )
 
 
-def _leaver(events: Sequence[MatchEvent], position: int) -> PlayerId | None:
+def leaver_at(events: Sequence[MatchEvent], position: int) -> PlayerId | None:
     """Return the player who leaves the pitch at this event, if anyone does."""
     event = events[position]
     if isinstance(event, CardEvent) and event.colour in DISMISSALS:
@@ -51,7 +51,7 @@ def check_dismissed_players_stay_off(events: Sequence[MatchEvent]) -> list[Viola
             Violation("M07", f"{player} appears after leaving the pitch", event.id)
             for player in sorted(players_in(event) & gone)
         )
-        leaver = _leaver(events, position)
+        leaver = leaver_at(events, position)
         if leaver is not None:
             gone.add(leaver)
     return found
