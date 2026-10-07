@@ -7,6 +7,9 @@ and the production pre-air gate, so no check is ever re-implemented elsewhere. C
   M03 ids unique and well formed   M04 score in every context equals the goals so far
   M05 no player on both sheets     M10 positions inside the pitch
   M17 nothing after fulltime but the summary; log starts with a kickoff
+
+The discipline checks (M07 in part, M11) live in `verify/discipline.py` and the sequencing rules
+(M12) in `verify/sequencing.py`; `verify_match` runs them all.
 """
 
 from __future__ import annotations
@@ -20,6 +23,12 @@ from footystreams.events.open_play import GoalEvent
 from footystreams.events.structure import FulltimeEvent, KickoffEvent
 from footystreams.events.summary import MatchSummaryEvent
 from footystreams.events.types import MatchEvent
+from footystreams.verify.discipline import (
+    check_card_logic,
+    check_dismissed_players_stay_off,
+    check_men_counts,
+)
+from footystreams.verify.sequencing import check_sequencing
 from footystreams.verify.violation import Violation
 
 Check = Callable[[Sequence[MatchEvent]], list[Violation]]
@@ -132,6 +141,10 @@ _EVENT_CHECKS: tuple[Check, ...] = (
     check_scores,
     check_positions,
     check_ending,
+    check_dismissed_players_stay_off,
+    check_card_logic,
+    check_men_counts,
+    check_sequencing,
 )
 
 

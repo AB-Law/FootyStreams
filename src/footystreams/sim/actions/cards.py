@@ -83,6 +83,13 @@ def show_card(play: Play, offender: PlayerState, contact: Contact, foul_id: str)
         caused_by=foul_id,
         headline=f"{decision.colour.replace('_', ' ')} card: {label(team, offender.player_id)}",
     )
+    if decision.colour == "yellow":
+        offender.yellow_cards += 1
+    else:
+        if state.assist_from is offender:
+            state.assist_from = None
+        # Dismiss first: like the score on a goal, the men count in a card's context is "after".
+        dismiss(team, offender)
     play.emit.emit(
         state,
         CardEvent,
@@ -91,12 +98,6 @@ def show_card(play: Play, offender: PlayerState, contact: Contact, foul_id: str)
         colour=decision.colour,
         reason=decision.reason,
     )
-    if decision.colour == "yellow":
-        offender.yellow_cards += 1
-    else:
-        if state.assist_from is offender:
-            state.assist_from = None
-        dismiss(team, offender)
     cfg = play.cfg.discipline
     seconds = restart_delay(play, cfg.card_s, cfg.card_spread_s)
     state.stoppage_s += seconds
