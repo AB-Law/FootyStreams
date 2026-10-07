@@ -59,6 +59,24 @@ from footystreams.persistence.specs import ColumnValue
 
 Criteria = Mapping[str, ColumnValue]
 
+# The records are re-exported here so the league layer, which may import only this module from
+# persistence, can name the row types the ports hand out.
+__all__ = [
+    "AppendOnlyRepository",
+    "Criteria",
+    "MetaEntry",
+    "Repositories",
+    "Repository",
+    "StageLogEntry",
+    "StandingsSnapshot",
+    "StoredEvent",
+    "SummaryRecord",
+    "UnitOfWork",
+    "UnitOfWorkFactory",
+    "Versioned",
+    "WorldReader",
+]
+
 
 @dataclass(frozen=True, slots=True)
 class Versioned[Row: BaseModel]:

@@ -6,6 +6,7 @@ import the other.
 
 from __future__ import annotations
 
+import hashlib
 from collections import Counter
 from collections.abc import Mapping
 
@@ -13,6 +14,8 @@ from footystreams.domain.types import ID_PREFIXES
 
 _BASE36 = "0123456789abcdefghijklmnopqrstuvwxyz"
 ID_WIDTH = 5
+DERIVED_WIDTH = 10
+DERIVED_BYTES = 8
 # Kinds minted by the seed and league layers that have no entity prefix in domain.types.
 EXTRA_PREFIXES: Mapping[str, str] = {
     "ledger": "led_",
@@ -74,3 +77,14 @@ class IdMint:
     def minted(self, kind: str) -> int:
         """How many ids of ``kind`` have been minted so far."""
         return self._counts[kind]
+
+
+def derive_id(kind: str, *parts: str) -> str:
+    """A stateless id for ``kind`` that depends only on ``parts`` (same parts, same id).
+
+    The league layer mints rows from pure functions that must give the same rows when a stage is
+    re-run, so it derives ids from what the row is about instead of counting.
+    """
+    prefix = PREFIXES[kind]
+    digest = hashlib.blake2b("\x1f".join(parts).encode(), digest_size=DERIVED_BYTES).digest()
+    return prefix + base36(int.from_bytes(digest, "big"), DERIVED_WIDTH)[-DERIVED_WIDTH:]

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import re
+
 import pytest
 
-from footystreams.domain.ids import IdMint, base36
+from footystreams.domain.ids import IdMint, base36, derive_id
 
 
 def test_base36__known_values() -> None:
@@ -39,3 +41,15 @@ def test_id_mint__snapshot_and_restore_undo_a_discarded_attempt() -> None:
 
 def test_id_mint__resumes_from_saved_counts() -> None:
     assert IdMint({"ledger": 41}).next("ledger") == "led_00016"
+
+
+def test_derive_id__same_parts__same_id_and_valid_shape() -> None:
+    first = derive_id("modifier", "plr_00001", "2031-08-01", "media_storm")
+    assert first == derive_id("modifier", "plr_00001", "2031-08-01", "media_storm")
+    assert first != derive_id("modifier", "plr_00002", "2031-08-01", "media_storm")
+    assert re.fullmatch(r"mod_[0-9a-z]{10}", first)
+
+
+def test_derive_id__unknown_kind__raises() -> None:
+    with pytest.raises(KeyError):
+        derive_id("spaceship", "x")
