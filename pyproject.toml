@@ -11,6 +11,8 @@ dependencies = [
 [project.scripts]
 check = "footystreams.tools.check:main"
 changelog = "footystreams.tools.changelog.cli:main"
+commit-msg-check = "footystreams.tools.commitmsg:main"
+pr-size = "footystreams.tools.prsize:main"
 
 [dependency-groups]
 dev = [
