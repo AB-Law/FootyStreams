@@ -13,6 +13,7 @@ from footystreams.sim.actions.out_of_play import out_of_play
 from footystreams.sim.actions.passing import PassKind
 from footystreams.sim.actions.restarts import left_pitch, overhit_point
 from footystreams.sim.emit import Meta
+from footystreams.sim.enrich import pass_fields
 from footystreams.sim.geometry import Point, frame_coordinate
 from footystreams.sim.mathx import clamp
 from footystreams.sim.options import Option
@@ -125,6 +126,7 @@ def resolve_pass(play: Play, option: Option) -> float:
         to_player_id=receiver.player_id,
         outcome="complete" if failure is None else failure.outcome,
         length_m=round(option.length_m, 1),
+        **pass_fields(play, start, option),
     )
     tempo = play.cfg.tempo
     duration = action_duration(play, tempo.pass_base_s + tempo.pass_per_m_s * option.length_m)

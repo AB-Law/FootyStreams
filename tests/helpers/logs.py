@@ -7,6 +7,7 @@ from functools import cache
 
 from footystreams.domain.match import MatchSetup
 from footystreams.events.discipline import CardEvent
+from footystreams.events.result import MatchResult
 from footystreams.events.types import MatchEvent
 from footystreams.sim import SimConfig, default_tables, merge_config, run_match
 from tests.factories.sim_config import CARD_HEAVY, m5_config
@@ -70,3 +71,10 @@ def injury_heavy_log() -> tuple[MatchEvent, ...]:
     """A match with plenty of injuries, forced changes and sides playing short."""
     config = merge_config(SimConfig(), INJURY_HEAVY)
     return run_match(demo_setup(), 5, config, default_tables()).events
+
+
+@cache
+def context_result() -> MatchResult:
+    """A demo match played with the M7 context and event enrichment switched on."""
+    config = merge_config(SimConfig(), {"context": {"enabled": True}})
+    return run_match(demo_setup(), 7, config, default_tables())

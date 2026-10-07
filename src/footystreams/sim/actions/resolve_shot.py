@@ -14,6 +14,7 @@ from footystreams.sim.actions.nearest import closest_of
 from footystreams.sim.actions.out_of_play import out_of_play
 from footystreams.sim.actions.shooting import finishing_skill
 from footystreams.sim.emit import Meta
+from footystreams.sim.enrich import shot_fields
 from footystreams.sim.geometry import frame_coordinate, goal_distance_m
 from footystreams.sim.mathx import clamp
 from footystreams.sim.options import Option
@@ -108,6 +109,7 @@ def resolve_shot(play: Play, option: Option) -> float:
         xg=round(option.xg, 4),
         outcome=outcome,
         assist_id=assist,
+        **shot_fields(play, option.xg),
     )
     return _after_shot(play, outcome, shot_id, assist) + action_duration(
         play, play.cfg.tempo.shot_s
