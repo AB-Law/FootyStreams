@@ -1,0 +1,1850 @@
+[
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_00001",
+    "squad_number": 1,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_00004",
+    "squad_number": 2,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_00006",
+    "squad_number": 3,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_00008",
+    "squad_number": 4,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_00009",
+    "squad_number": 5,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000c",
+    "squad_number": 6,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000j",
+    "squad_number": 7,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000e",
+    "squad_number": 8,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000o",
+    "squad_number": 9,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000i",
+    "squad_number": 10,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000k",
+    "squad_number": 11,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_00005",
+    "squad_number": 12,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_00002",
+    "squad_number": 13,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_00007",
+    "squad_number": 14,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000a",
+    "squad_number": 15,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000d",
+    "squad_number": 16,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000l",
+    "squad_number": 17,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000f",
+    "squad_number": 18,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000m",
+    "squad_number": 19,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000g",
+    "squad_number": 20,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000n",
+    "squad_number": 21,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000p",
+    "squad_number": 24,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000b",
+    "squad_number": 25,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000h",
+    "squad_number": 28,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_00003",
+    "squad_number": 31,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000q",
+    "squad_number": 32,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000r",
+    "squad_number": 33,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000s",
+    "squad_number": 34,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000t",
+    "squad_number": 35,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000u",
+    "squad_number": 36,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000v",
+    "squad_number": 37,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000w",
+    "squad_number": 38,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00001",
+    "player_id": "plr_0000x",
+    "squad_number": 39,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0000y",
+    "squad_number": 1,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_00011",
+    "squad_number": 2,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_00013",
+    "squad_number": 3,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_00015",
+    "squad_number": 4,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_00016",
+    "squad_number": 5,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_00019",
+    "squad_number": 6,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001g",
+    "squad_number": 7,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001b",
+    "squad_number": 8,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001l",
+    "squad_number": 9,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001f",
+    "squad_number": 10,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001h",
+    "squad_number": 11,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_00012",
+    "squad_number": 12,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0000z",
+    "squad_number": 13,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_00014",
+    "squad_number": 14,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_00017",
+    "squad_number": 15,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001a",
+    "squad_number": 16,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001i",
+    "squad_number": 17,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001c",
+    "squad_number": 18,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001j",
+    "squad_number": 19,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001d",
+    "squad_number": 20,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001k",
+    "squad_number": 21,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001m",
+    "squad_number": 24,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_00018",
+    "squad_number": 25,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001e",
+    "squad_number": 28,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_00010",
+    "squad_number": 31,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001n",
+    "squad_number": 32,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001o",
+    "squad_number": 33,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001p",
+    "squad_number": 34,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001q",
+    "squad_number": 35,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001r",
+    "squad_number": 36,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001s",
+    "squad_number": 37,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001t",
+    "squad_number": 38,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00002",
+    "player_id": "plr_0001u",
+    "squad_number": 39,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0001v",
+    "squad_number": 1,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0001y",
+    "squad_number": 2,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_00020",
+    "squad_number": 3,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_00022",
+    "squad_number": 4,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_00023",
+    "squad_number": 5,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_00026",
+    "squad_number": 6,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002d",
+    "squad_number": 7,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_00028",
+    "squad_number": 8,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002i",
+    "squad_number": 9,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002c",
+    "squad_number": 10,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002e",
+    "squad_number": 11,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0001z",
+    "squad_number": 12,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0001w",
+    "squad_number": 13,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_00021",
+    "squad_number": 14,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_00024",
+    "squad_number": 15,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_00027",
+    "squad_number": 16,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002f",
+    "squad_number": 17,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_00029",
+    "squad_number": 18,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002g",
+    "squad_number": 19,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002a",
+    "squad_number": 20,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002h",
+    "squad_number": 21,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002j",
+    "squad_number": 24,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_00025",
+    "squad_number": 25,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002b",
+    "squad_number": 28,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0001x",
+    "squad_number": 31,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002k",
+    "squad_number": 32,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002l",
+    "squad_number": 33,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002m",
+    "squad_number": 34,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002n",
+    "squad_number": 35,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002o",
+    "squad_number": 36,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002p",
+    "squad_number": 37,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002q",
+    "squad_number": 38,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00003",
+    "player_id": "plr_0002r",
+    "squad_number": 39,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0002s",
+    "squad_number": 1,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0002v",
+    "squad_number": 2,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0002x",
+    "squad_number": 3,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0002z",
+    "squad_number": 4,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_00030",
+    "squad_number": 5,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_00033",
+    "squad_number": 6,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003a",
+    "squad_number": 7,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_00035",
+    "squad_number": 8,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003f",
+    "squad_number": 9,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_00039",
+    "squad_number": 10,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003b",
+    "squad_number": 11,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0002w",
+    "squad_number": 12,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0002t",
+    "squad_number": 13,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0002y",
+    "squad_number": 14,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_00031",
+    "squad_number": 15,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_00034",
+    "squad_number": 16,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003c",
+    "squad_number": 17,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_00036",
+    "squad_number": 18,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003d",
+    "squad_number": 19,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_00037",
+    "squad_number": 20,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003e",
+    "squad_number": 21,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003g",
+    "squad_number": 24,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_00032",
+    "squad_number": 25,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_00038",
+    "squad_number": 28,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0002u",
+    "squad_number": 31,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003h",
+    "squad_number": 32,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003i",
+    "squad_number": 33,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003j",
+    "squad_number": 34,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003k",
+    "squad_number": 35,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003l",
+    "squad_number": 36,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003m",
+    "squad_number": 37,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003n",
+    "squad_number": 38,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00004",
+    "player_id": "plr_0003o",
+    "squad_number": 39,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0003p",
+    "squad_number": 1,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0003s",
+    "squad_number": 2,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0003u",
+    "squad_number": 3,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0003w",
+    "squad_number": 4,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0003x",
+    "squad_number": 5,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_00040",
+    "squad_number": 6,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_00047",
+    "squad_number": 7,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_00042",
+    "squad_number": 8,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0004c",
+    "squad_number": 9,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_00046",
+    "squad_number": 10,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_00048",
+    "squad_number": 11,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0003t",
+    "squad_number": 12,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0003q",
+    "squad_number": 13,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0003v",
+    "squad_number": 14,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0003y",
+    "squad_number": 15,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_00041",
+    "squad_number": 16,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_00049",
+    "squad_number": 17,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_00043",
+    "squad_number": 18,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0004a",
+    "squad_number": 19,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_00044",
+    "squad_number": 20,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0004b",
+    "squad_number": 21,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0004d",
+    "squad_number": 24,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0003z",
+    "squad_number": 25,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_00045",
+    "squad_number": 28,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0003r",
+    "squad_number": 31,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0004e",
+    "squad_number": 32,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0004f",
+    "squad_number": 33,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0004g",
+    "squad_number": 34,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0004h",
+    "squad_number": 35,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0004i",
+    "squad_number": 36,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0004j",
+    "squad_number": 37,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0004k",
+    "squad_number": 38,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00005",
+    "player_id": "plr_0004l",
+    "squad_number": 39,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004m",
+    "squad_number": 1,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004p",
+    "squad_number": 2,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004r",
+    "squad_number": 3,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004t",
+    "squad_number": 4,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004u",
+    "squad_number": 5,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004x",
+    "squad_number": 6,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_00054",
+    "squad_number": 7,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004z",
+    "squad_number": 8,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_00059",
+    "squad_number": 9,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_00053",
+    "squad_number": 10,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_00055",
+    "squad_number": 11,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004q",
+    "squad_number": 12,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004n",
+    "squad_number": 13,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004s",
+    "squad_number": 14,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004v",
+    "squad_number": 15,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004y",
+    "squad_number": 16,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_00056",
+    "squad_number": 17,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_00050",
+    "squad_number": 18,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_00057",
+    "squad_number": 19,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_00051",
+    "squad_number": 20,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_00058",
+    "squad_number": 21,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0005a",
+    "squad_number": 24,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004w",
+    "squad_number": 25,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_00052",
+    "squad_number": 28,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0004o",
+    "squad_number": 31,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0005b",
+    "squad_number": 32,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0005c",
+    "squad_number": 33,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0005d",
+    "squad_number": 34,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0005e",
+    "squad_number": 35,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0005f",
+    "squad_number": 36,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0005g",
+    "squad_number": 37,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0005h",
+    "squad_number": 38,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00006",
+    "player_id": "plr_0005i",
+    "squad_number": 39,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005j",
+    "squad_number": 1,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005m",
+    "squad_number": 2,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005o",
+    "squad_number": 3,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005q",
+    "squad_number": 4,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005r",
+    "squad_number": 5,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005u",
+    "squad_number": 6,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_00061",
+    "squad_number": 7,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005w",
+    "squad_number": 8,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_00066",
+    "squad_number": 9,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_00060",
+    "squad_number": 10,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_00062",
+    "squad_number": 11,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005n",
+    "squad_number": 12,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005k",
+    "squad_number": 13,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005p",
+    "squad_number": 14,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005s",
+    "squad_number": 15,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005v",
+    "squad_number": 16,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_00063",
+    "squad_number": 17,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005x",
+    "squad_number": 18,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_00064",
+    "squad_number": 19,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005y",
+    "squad_number": 20,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_00065",
+    "squad_number": 21,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_00067",
+    "squad_number": 24,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005t",
+    "squad_number": 25,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005z",
+    "squad_number": 28,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0005l",
+    "squad_number": 31,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_00068",
+    "squad_number": 32,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_00069",
+    "squad_number": 33,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0006a",
+    "squad_number": 34,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0006b",
+    "squad_number": 35,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0006c",
+    "squad_number": 36,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0006d",
+    "squad_number": 37,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0006e",
+    "squad_number": 38,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00007",
+    "player_id": "plr_0006f",
+    "squad_number": 39,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006g",
+    "squad_number": 1,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006j",
+    "squad_number": 2,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006l",
+    "squad_number": 3,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006n",
+    "squad_number": 4,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006o",
+    "squad_number": 5,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006r",
+    "squad_number": 6,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006y",
+    "squad_number": 7,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006t",
+    "squad_number": 8,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_00073",
+    "squad_number": 9,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006x",
+    "squad_number": 10,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006z",
+    "squad_number": 11,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006k",
+    "squad_number": 12,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006h",
+    "squad_number": 13,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006m",
+    "squad_number": 14,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006p",
+    "squad_number": 15,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006s",
+    "squad_number": 16,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_00070",
+    "squad_number": 17,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006u",
+    "squad_number": 18,
+    "squad_role": "key",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_00071",
+    "squad_number": 19,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006v",
+    "squad_number": 20,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_00072",
+    "squad_number": 21,
+    "squad_role": "rotation",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_00074",
+    "squad_number": 24,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006q",
+    "squad_number": 25,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006w",
+    "squad_number": 28,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0006i",
+    "squad_number": 31,
+    "squad_role": "backup",
+    "status": "first_team"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_00075",
+    "squad_number": 32,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_00076",
+    "squad_number": 33,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_00077",
+    "squad_number": 34,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_00078",
+    "squad_number": 35,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_00079",
+    "squad_number": 36,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0007a",
+    "squad_number": 37,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0007b",
+    "squad_number": 38,
+    "squad_role": "prospect",
+    "status": "youth"
+  },
+  {
+    "club_id": "clb_00008",
+    "player_id": "plr_0007c",
+    "squad_number": 39,
+    "squad_role": "prospect",
+    "status": "youth"
+  }
+]

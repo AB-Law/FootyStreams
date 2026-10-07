@@ -1,0 +1,2306 @@
+[
+  {
+    "academy": {
+      "intake_quality": 0.56,
+      "intake_size": 4,
+      "level": 56,
+      "philosophy_tag": "balanced_intake",
+      "prospect_ids": [
+        "plr_0000q",
+        "plr_0000r",
+        "plr_0000s",
+        "plr_0000t",
+        "plr_0000u",
+        "plr_0000v",
+        "plr_0000w",
+        "plr_0000x"
+      ]
+    },
+    "board": {
+      "ambition": 67,
+      "budget_strictness": 63,
+      "expectations": [
+        {
+          "deadline": "2032-05-31",
+          "kind": "league_position",
+          "target": "top half"
+        }
+      ],
+      "manager_confidence": 0.6834,
+      "meddling": 73,
+      "patience": 61
+    },
+    "club_reputation": 76,
+    "colours": {
+      "accent": "#ffffff",
+      "away_kit": {
+        "colours": [
+          "#f5deb3",
+          "#5d4037"
+        ],
+        "pattern": "solid"
+      },
+      "home_kit": {
+        "colours": [
+          "#5d4037",
+          "#f5deb3"
+        ],
+        "pattern": "halves"
+      },
+      "primary": "#5d4037",
+      "secondary": "#f5deb3"
+    },
+    "crest_description": "a ship beneath crossed hammers",
+    "culture": {
+      "tags": [
+        "tradition",
+        "nostalgia",
+        "loyalty"
+      ],
+      "values": {
+        "discipline": 0.5047,
+        "glamour": 0.3246,
+        "grit": 0.2935,
+        "loyalty_to_manager": 0.8983,
+        "media_openness": 0.2607,
+        "spending_pride": 0.5631,
+        "tactical_identity": 0.2765,
+        "youth_focus": 0.6443
+      }
+    },
+    "default_tactics": {
+      "extensions": {},
+      "formation": "442",
+      "mentality": "balanced",
+      "modules": {
+        "build_up": {
+          "goalkeeper": "mixed",
+          "kind": "build_up",
+          "passing_directness": 0.576,
+          "patience": 0.5,
+          "tempo": 0.4728,
+          "version": 1,
+          "width": 0.5392
+        },
+        "defensive_block": {
+          "compactness": 0.6,
+          "kind": "defensive_block",
+          "line_height": 0.4745,
+          "marking": "mixed",
+          "offside_trap": 0.4,
+          "tackling": "balanced",
+          "version": 1
+        },
+        "final_third": {
+          "box_occupation": 0.6,
+          "crossing_frequency": 0.5,
+          "dribbling_freedom": 0.5,
+          "focus": "balanced",
+          "kind": "final_third",
+          "shoot_on_sight": 0.45,
+          "version": 1
+        },
+        "game_management": {
+          "foul_tolerance": 0.5,
+          "kind": "game_management",
+          "time_wasting": 0.15,
+          "version": 1
+        },
+        "pressing": {
+          "cover_shadow": 0.5,
+          "intensity": 0.442,
+          "kind": "pressing",
+          "press_line": 0.5,
+          "trigger": "loss_of_ball",
+          "version": 1
+        },
+        "transitions": {
+          "counter_press_seconds": 4,
+          "kind": "transitions",
+          "on_loss": "regroup",
+          "on_win": "hold_shape",
+          "version": 1
+        }
+      },
+      "player_instructions": [],
+      "roles_locked": false,
+      "schema_version": 1,
+      "situational": [],
+      "slots": [
+        {
+          "duty": "support",
+          "role": "goalkeeper",
+          "slot": 0
+        },
+        {
+          "duty": "support",
+          "role": "full_back_rb",
+          "slot": 1
+        },
+        {
+          "duty": "defend",
+          "role": "central_defender",
+          "slot": 2
+        },
+        {
+          "duty": "defend",
+          "role": "ball_playing_defender",
+          "slot": 3
+        },
+        {
+          "duty": "support",
+          "role": "full_back_lb",
+          "slot": 4
+        },
+        {
+          "duty": "support",
+          "role": "wide_midfielder_rm",
+          "slot": 5
+        },
+        {
+          "duty": "support",
+          "role": "central_midfielder",
+          "slot": 6
+        },
+        {
+          "duty": "support",
+          "role": "central_midfielder",
+          "slot": 7
+        },
+        {
+          "duty": "support",
+          "role": "wide_midfielder_lm",
+          "slot": 8
+        },
+        {
+          "duty": "support",
+          "role": "complete_forward",
+          "slot": 9
+        },
+        {
+          "duty": "attack",
+          "role": "complete_forward",
+          "slot": 10
+        }
+      ],
+      "structures": {
+        "in_possession": null,
+        "out_of_possession": null,
+        "rest_defence": null
+      }
+    },
+    "facilities": {
+      "medical": 63,
+      "training": 56,
+      "upgrades": [],
+      "youth": 70
+    },
+    "fanbase": {
+      "away_following": 0.5238,
+      "fickleness": 0.2183,
+      "passion": 0.8496,
+      "size": 645000,
+      "toxicity": 0.5434,
+      "traditions": [
+        "the walk to the ground",
+        "the bell at half time",
+        "the pre-match anthem"
+      ]
+    },
+    "finances": {
+      "balance": 20000000,
+      "broadcast_share": 16500000,
+      "credit_limit": 30000000,
+      "debt": 16000000,
+      "debt_interest_rate": 0.0402,
+      "last_reconciled_on": "2031-07-01",
+      "sponsor_deals": [
+        {
+          "annual_value": 3404021,
+          "ends_on": "2032-06-30",
+          "name": "Pellam Foods"
+        },
+        {
+          "annual_value": 3670479,
+          "ends_on": "2034-06-30",
+          "name": "Valmere Savings"
+        },
+        {
+          "annual_value": 3165488,
+          "ends_on": "2033-06-30",
+          "name": "Reedwater Utilities"
+        }
+      ],
+      "transfer_budget": 29000000,
+      "wage_budget_weekly": 860974
+    },
+    "founded_year": 1871,
+    "id": "clb_00001",
+    "location": {
+      "city": "Seisund",
+      "nation_id": "nat_valmere",
+      "population": 671238,
+      "region": "isles"
+    },
+    "manager_id": "mgr_00001",
+    "name": "Seisund County",
+    "nickname": "the Reds",
+    "prestige": 73,
+    "rivalries": [
+      {
+        "club_id": "clb_00008",
+        "intensity": 0.8,
+        "label": "The Old Road Derby",
+        "origin": "A feud over a stolen cup in 1921"
+      }
+    ],
+    "short_code": "SEI",
+    "short_name": "Seisund",
+    "stadium": {
+      "altitude_m": 145,
+      "atmosphere": 0.8767,
+      "capacity": 42487,
+      "home_advantage": {
+        "crowd_weight": 0.9539,
+        "familiarity_weight": 0.5723,
+        "referee_pressure_weight": 0.6543,
+        "travel_weight": 0.4681
+      },
+      "name": "Hasar Gardens",
+      "nickname": "The Bear Pit",
+      "pitch": {
+        "drainage": 0.3951,
+        "length_m": 102,
+        "quality": 0.6,
+        "quirks": [],
+        "surface": "grass",
+        "width_m": 67
+      },
+      "proximity": 0.7015,
+      "roof": "open",
+      "ticket_price_base": 52,
+      "upgrade": null
+    },
+    "staff_ids": [
+      "stf_00001",
+      "stf_00002",
+      "stf_00003",
+      "stf_00004",
+      "stf_00005",
+      "stf_00006",
+      "stf_00007",
+      "stf_00008",
+      "stf_00009"
+    ]
+  },
+  {
+    "academy": {
+      "intake_quality": 0.58,
+      "intake_size": 4,
+      "level": 58,
+      "philosophy_tag": "balanced_intake",
+      "prospect_ids": [
+        "plr_0001n",
+        "plr_0001o",
+        "plr_0001p",
+        "plr_0001q",
+        "plr_0001r",
+        "plr_0001s",
+        "plr_0001t",
+        "plr_0001u"
+      ]
+    },
+    "board": {
+      "ambition": 80,
+      "budget_strictness": 29,
+      "expectations": [
+        {
+          "deadline": "2032-05-31",
+          "kind": "financial",
+          "target": "reduce the debt"
+        }
+      ],
+      "manager_confidence": 0.6097,
+      "meddling": 85,
+      "patience": 21
+    },
+    "club_reputation": 52,
+    "colours": {
+      "accent": "#f2c200",
+      "away_kit": {
+        "colours": [
+          "#ffffff",
+          "#6a1b9a"
+        ],
+        "pattern": "solid"
+      },
+      "home_kit": {
+        "colours": [
+          "#6a1b9a",
+          "#ffffff"
+        ],
+        "pattern": "solid"
+      },
+      "primary": "#6a1b9a",
+      "secondary": "#ffffff"
+    },
+    "crest_description": "a anchor beneath crossed hammers",
+    "culture": {
+      "tags": [
+        "volatile",
+        "ambition",
+        "debt"
+      ],
+      "values": {
+        "discipline": 0.5793,
+        "glamour": 0.3928,
+        "grit": 0.6284,
+        "loyalty_to_manager": 0.3274,
+        "media_openness": 0.3256,
+        "spending_pride": 0.9451,
+        "tactical_identity": 0.5636,
+        "youth_focus": 0.5541
+      }
+    },
+    "default_tactics": {
+      "extensions": {},
+      "formation": "442",
+      "mentality": "attacking",
+      "modules": {
+        "build_up": {
+          "goalkeeper": "mixed",
+          "kind": "build_up",
+          "passing_directness": 0.4501,
+          "patience": 0.45,
+          "tempo": 0.6925,
+          "version": 1,
+          "width": 0.6238
+        },
+        "defensive_block": {
+          "compactness": 0.65,
+          "kind": "defensive_block",
+          "line_height": 0.799,
+          "marking": "zonal",
+          "offside_trap": 0.6,
+          "tackling": "aggressive",
+          "version": 1
+        },
+        "final_third": {
+          "box_occupation": 0.65,
+          "crossing_frequency": 0.5,
+          "dribbling_freedom": 0.6,
+          "focus": "balanced",
+          "kind": "final_third",
+          "shoot_on_sight": 0.5,
+          "version": 1
+        },
+        "game_management": {
+          "foul_tolerance": 0.55,
+          "kind": "game_management",
+          "time_wasting": 0.0,
+          "version": 1
+        },
+        "pressing": {
+          "cover_shadow": 0.5,
+          "intensity": 0.8525,
+          "kind": "pressing",
+          "press_line": 0.75,
+          "trigger": "loss_of_ball",
+          "version": 1
+        },
+        "transitions": {
+          "counter_press_seconds": 6,
+          "kind": "transitions",
+          "on_loss": "counter_press",
+          "on_win": "counter",
+          "version": 1
+        }
+      },
+      "player_instructions": [],
+      "roles_locked": false,
+      "schema_version": 1,
+      "situational": [],
+      "slots": [
+        {
+          "duty": "support",
+          "role": "goalkeeper",
+          "slot": 0
+        },
+        {
+          "duty": "attack",
+          "role": "full_back_rb",
+          "slot": 1
+        },
+        {
+          "duty": "defend",
+          "role": "central_defender",
+          "slot": 2
+        },
+        {
+          "duty": "defend",
+          "role": "ball_playing_defender",
+          "slot": 3
+        },
+        {
+          "duty": "attack",
+          "role": "full_back_lb",
+          "slot": 4
+        },
+        {
+          "duty": "support",
+          "role": "wide_midfielder_rm",
+          "slot": 5
+        },
+        {
+          "duty": "support",
+          "role": "box_to_box_midfielder",
+          "slot": 6
+        },
+        {
+          "duty": "support",
+          "role": "central_midfielder",
+          "slot": 7
+        },
+        {
+          "duty": "support",
+          "role": "wide_midfielder_lm",
+          "slot": 8
+        },
+        {
+          "duty": "attack",
+          "role": "pressing_forward",
+          "slot": 9
+        },
+        {
+          "duty": "attack",
+          "role": "complete_forward",
+          "slot": 10
+        }
+      ],
+      "structures": {
+        "in_possession": null,
+        "out_of_possession": null,
+        "rest_defence": null
+      }
+    },
+    "facilities": {
+      "medical": 47,
+      "training": 66,
+      "upgrades": [],
+      "youth": 41
+    },
+    "fanbase": {
+      "away_following": 0.3776,
+      "fickleness": 0.6097,
+      "passion": 0.6488,
+      "size": 186000,
+      "toxicity": 0.4539,
+      "traditions": [
+        "the walk to the ground"
+      ]
+    },
+    "finances": {
+      "balance": -5000000,
+      "broadcast_share": 12320000,
+      "credit_limit": 22400000,
+      "debt": 64000000,
+      "debt_interest_rate": 0.0499,
+      "last_reconciled_on": "2031-07-01",
+      "sponsor_deals": [
+        {
+          "annual_value": 3788179,
+          "ends_on": "2033-06-30",
+          "name": "Sablecross Insurance"
+        },
+        {
+          "annual_value": 2254683,
+          "ends_on": "2032-06-30",
+          "name": "Marrow & Dunne"
+        },
+        {
+          "annual_value": 2436990,
+          "ends_on": "2033-06-30",
+          "name": "Kestrel Freight"
+        }
+      ],
+      "transfer_budget": 10000000,
+      "wage_budget_weekly": 1014956
+    },
+    "founded_year": 1901,
+    "id": "clb_00002",
+    "location": {
+      "city": "Bukach",
+      "nation_id": "nat_valmere",
+      "population": 393738,
+      "region": "highland"
+    },
+    "manager_id": "mgr_00002",
+    "name": "Bukach Harriers",
+    "nickname": "the Sparks",
+    "prestige": 47,
+    "rivalries": [
+      {
+        "club_id": "clb_00003",
+        "intensity": 0.5,
+        "label": "The Debt Dispute",
+        "origin": "A prospect poached on a loan that was never repaid"
+      }
+    ],
+    "short_code": "BUK",
+    "short_name": "Bukach",
+    "stadium": {
+      "altitude_m": 419,
+      "atmosphere": 0.7181,
+      "capacity": 23692,
+      "home_advantage": {
+        "crowd_weight": 0.7285,
+        "familiarity_weight": 0.4789,
+        "referee_pressure_weight": 0.6081,
+        "travel_weight": 0.3909
+      },
+      "name": "Tedun Field",
+      "nickname": "",
+      "pitch": {
+        "drainage": 0.4897,
+        "length_m": 106,
+        "quality": 0.7787,
+        "quirks": [],
+        "surface": "grass",
+        "width_m": 70
+      },
+      "proximity": 0.6076,
+      "roof": "open",
+      "ticket_price_base": 45,
+      "upgrade": null
+    },
+    "staff_ids": [
+      "stf_0000a",
+      "stf_0000b",
+      "stf_0000c",
+      "stf_0000d",
+      "stf_0000e",
+      "stf_0000f",
+      "stf_0000g",
+      "stf_0000h",
+      "stf_0000i"
+    ]
+  },
+  {
+    "academy": {
+      "intake_quality": 0.86,
+      "intake_size": 8,
+      "level": 86,
+      "philosophy_tag": "develop_and_sell",
+      "prospect_ids": [
+        "plr_0002k",
+        "plr_0002l",
+        "plr_0002m",
+        "plr_0002n",
+        "plr_0002o",
+        "plr_0002p",
+        "plr_0002q",
+        "plr_0002r"
+      ]
+    },
+    "board": {
+      "ambition": 63,
+      "budget_strictness": 55,
+      "expectations": [
+        {
+          "deadline": "2032-05-31",
+          "kind": "youth",
+          "target": "promote three academy players"
+        }
+      ],
+      "manager_confidence": 0.6179,
+      "meddling": 18,
+      "patience": 83
+    },
+    "club_reputation": 60,
+    "colours": {
+      "accent": "#ffffff",
+      "away_kit": {
+        "colours": [
+          "#111111",
+          "#f26b21"
+        ],
+        "pattern": "solid"
+      },
+      "home_kit": {
+        "colours": [
+          "#f26b21",
+          "#111111"
+        ],
+        "pattern": "solid"
+      },
+      "primary": "#f26b21",
+      "secondary": "#111111"
+    },
+    "crest_description": "a hawk beneath a laurel wreath",
+    "culture": {
+      "tags": [
+        "youth_focus",
+        "development"
+      ],
+      "values": {
+        "discipline": 0.3648,
+        "glamour": 0.3422,
+        "grit": 0.6993,
+        "loyalty_to_manager": 0.6772,
+        "media_openness": 0.68,
+        "spending_pride": 0.5492,
+        "tactical_identity": 0.3511,
+        "youth_focus": 0.8138
+      }
+    },
+    "default_tactics": {
+      "extensions": {},
+      "formation": "451",
+      "mentality": "cautious",
+      "modules": {
+        "build_up": {
+          "goalkeeper": "long",
+          "kind": "build_up",
+          "passing_directness": 0.7673,
+          "patience": 0.3,
+          "tempo": 0.5245,
+          "version": 1,
+          "width": 0.6232
+        },
+        "defensive_block": {
+          "compactness": 0.75,
+          "kind": "defensive_block",
+          "line_height": 0.2843,
+          "marking": "zonal",
+          "offside_trap": 0.2,
+          "tackling": "balanced",
+          "version": 1
+        },
+        "final_third": {
+          "box_occupation": 0.6,
+          "crossing_frequency": 0.45,
+          "dribbling_freedom": 0.55,
+          "focus": "balanced",
+          "kind": "final_third",
+          "shoot_on_sight": 0.55,
+          "version": 1
+        },
+        "game_management": {
+          "foul_tolerance": 0.45,
+          "kind": "game_management",
+          "time_wasting": 0.3,
+          "version": 1
+        },
+        "pressing": {
+          "cover_shadow": 0.5,
+          "intensity": 0.3139,
+          "kind": "pressing",
+          "press_line": 0.3,
+          "trigger": "ball_to_wide",
+          "version": 1
+        },
+        "transitions": {
+          "counter_press_seconds": 2,
+          "kind": "transitions",
+          "on_loss": "drop",
+          "on_win": "counter",
+          "version": 1
+        }
+      },
+      "player_instructions": [],
+      "roles_locked": false,
+      "schema_version": 1,
+      "situational": [],
+      "slots": [
+        {
+          "duty": "support",
+          "role": "goalkeeper",
+          "slot": 0
+        },
+        {
+          "duty": "defend",
+          "role": "full_back_rb",
+          "slot": 1
+        },
+        {
+          "duty": "defend",
+          "role": "central_defender",
+          "slot": 2
+        },
+        {
+          "duty": "defend",
+          "role": "covering_defender",
+          "slot": 3
+        },
+        {
+          "duty": "defend",
+          "role": "full_back_lb",
+          "slot": 4
+        },
+        {
+          "duty": "support",
+          "role": "wide_midfielder_rm",
+          "slot": 5
+        },
+        {
+          "duty": "support",
+          "role": "central_midfielder",
+          "slot": 6
+        },
+        {
+          "duty": "defend",
+          "role": "anchor",
+          "slot": 7
+        },
+        {
+          "duty": "support",
+          "role": "box_to_box_midfielder",
+          "slot": 8
+        },
+        {
+          "duty": "attack",
+          "role": "wide_midfielder_lm",
+          "slot": 9
+        },
+        {
+          "duty": "attack",
+          "role": "complete_forward",
+          "slot": 10
+        }
+      ],
+      "structures": {
+        "in_possession": null,
+        "out_of_possession": null,
+        "rest_defence": null
+      }
+    },
+    "facilities": {
+      "medical": 66,
+      "training": 73,
+      "upgrades": [],
+      "youth": 95
+    },
+    "fanbase": {
+      "away_following": 0.3732,
+      "fickleness": 0.5588,
+      "passion": 0.588,
+      "size": 220000,
+      "toxicity": 0.2431,
+      "traditions": [
+        "the pre-match anthem"
+      ]
+    },
+    "finances": {
+      "balance": 13000000,
+      "broadcast_share": 9460000,
+      "credit_limit": 17200000,
+      "debt": 3000000,
+      "debt_interest_rate": 0.0424,
+      "last_reconciled_on": "2031-07-01",
+      "sponsor_deals": [
+        {
+          "annual_value": 2461973,
+          "ends_on": "2033-06-30",
+          "name": "Brightwater Energy"
+        },
+        {
+          "annual_value": 2078847,
+          "ends_on": "2033-06-30",
+          "name": "Valmere Savings"
+        }
+      ],
+      "transfer_budget": 15000000,
+      "wage_budget_weekly": 472028
+    },
+    "founded_year": 1904,
+    "id": "clb_00003",
+    "location": {
+      "city": "Tartelt",
+      "nation_id": "nat_valmere",
+      "population": 432252,
+      "region": "highland"
+    },
+    "manager_id": "mgr_00003",
+    "name": "Tartelt Athletic",
+    "nickname": "the Saplings",
+    "prestige": 51,
+    "rivalries": [
+      {
+        "club_id": "clb_00002",
+        "intensity": 0.5,
+        "label": "The Debt Dispute",
+        "origin": "A prospect poached on a loan that was never repaid"
+      }
+    ],
+    "short_code": "TAR",
+    "short_name": "Tartelt",
+    "stadium": {
+      "altitude_m": 454,
+      "atmosphere": 0.5253,
+      "capacity": 25806,
+      "home_advantage": {
+        "crowd_weight": 0.4977,
+        "familiarity_weight": 0.6857,
+        "referee_pressure_weight": 0.4419,
+        "travel_weight": 0.6422
+      },
+      "name": "Krudach Gardens",
+      "nickname": "",
+      "pitch": {
+        "drainage": 0.6964,
+        "length_m": 106,
+        "quality": 0.7979,
+        "quirks": [],
+        "surface": "hybrid",
+        "width_m": 71
+      },
+      "proximity": 0.46,
+      "roof": "open",
+      "ticket_price_base": 42,
+      "upgrade": null
+    },
+    "staff_ids": [
+      "stf_0000j",
+      "stf_0000k",
+      "stf_0000l",
+      "stf_0000m",
+      "stf_0000n",
+      "stf_0000o",
+      "stf_0000p",
+      "stf_0000q",
+      "stf_0000r"
+    ]
+  },
+  {
+    "academy": {
+      "intake_quality": 0.58,
+      "intake_size": 5,
+      "level": 58,
+      "philosophy_tag": "balanced_intake",
+      "prospect_ids": [
+        "plr_0003h",
+        "plr_0003i",
+        "plr_0003j",
+        "plr_0003k",
+        "plr_0003l",
+        "plr_0003m",
+        "plr_0003n",
+        "plr_0003o"
+      ]
+    },
+    "board": {
+      "ambition": 62,
+      "budget_strictness": 69,
+      "expectations": [
+        {
+          "deadline": "2032-05-31",
+          "kind": "league_position",
+          "target": "top half"
+        }
+      ],
+      "manager_confidence": 0.5135,
+      "meddling": 41,
+      "patience": 48
+    },
+    "club_reputation": 67,
+    "colours": {
+      "accent": "#f2c200",
+      "away_kit": {
+        "colours": [
+          "#ffffff",
+          "#006b3c"
+        ],
+        "pattern": "solid"
+      },
+      "home_kit": {
+        "colours": [
+          "#006b3c",
+          "#ffffff"
+        ],
+        "pattern": "solid"
+      },
+      "primary": "#006b3c",
+      "secondary": "#ffffff"
+    },
+    "crest_description": "a bull beneath two keys",
+    "culture": {
+      "tags": [
+        "tactical",
+        "discipline"
+      ],
+      "values": {
+        "discipline": 0.8451,
+        "glamour": 0.6295,
+        "grit": 0.2319,
+        "loyalty_to_manager": 0.2334,
+        "media_openness": 0.6523,
+        "spending_pride": 0.5048,
+        "tactical_identity": 0.9283,
+        "youth_focus": 0.3159
+      }
+    },
+    "default_tactics": {
+      "extensions": {},
+      "formation": "4141",
+      "mentality": "cautious",
+      "modules": {
+        "build_up": {
+          "goalkeeper": "long",
+          "kind": "build_up",
+          "passing_directness": 0.6673,
+          "patience": 0.3,
+          "tempo": 0.5362,
+          "version": 1,
+          "width": 0.5178
+        },
+        "defensive_block": {
+          "compactness": 0.75,
+          "kind": "defensive_block",
+          "line_height": 0.3061,
+          "marking": "zonal",
+          "offside_trap": 0.2,
+          "tackling": "balanced",
+          "version": 1
+        },
+        "final_third": {
+          "box_occupation": 0.6,
+          "crossing_frequency": 0.45,
+          "dribbling_freedom": 0.55,
+          "focus": "balanced",
+          "kind": "final_third",
+          "shoot_on_sight": 0.55,
+          "version": 1
+        },
+        "game_management": {
+          "foul_tolerance": 0.45,
+          "kind": "game_management",
+          "time_wasting": 0.3,
+          "version": 1
+        },
+        "pressing": {
+          "cover_shadow": 0.5,
+          "intensity": 0.3084,
+          "kind": "pressing",
+          "press_line": 0.3,
+          "trigger": "ball_to_wide",
+          "version": 1
+        },
+        "transitions": {
+          "counter_press_seconds": 2,
+          "kind": "transitions",
+          "on_loss": "drop",
+          "on_win": "counter",
+          "version": 1
+        }
+      },
+      "player_instructions": [],
+      "roles_locked": false,
+      "schema_version": 1,
+      "situational": [],
+      "slots": [
+        {
+          "duty": "support",
+          "role": "goalkeeper",
+          "slot": 0
+        },
+        {
+          "duty": "defend",
+          "role": "full_back_rb",
+          "slot": 1
+        },
+        {
+          "duty": "defend",
+          "role": "central_defender",
+          "slot": 2
+        },
+        {
+          "duty": "defend",
+          "role": "covering_defender",
+          "slot": 3
+        },
+        {
+          "duty": "defend",
+          "role": "full_back_lb",
+          "slot": 4
+        },
+        {
+          "duty": "defend",
+          "role": "anchor",
+          "slot": 5
+        },
+        {
+          "duty": "support",
+          "role": "wide_midfielder_rm",
+          "slot": 6
+        },
+        {
+          "duty": "support",
+          "role": "central_midfielder",
+          "slot": 7
+        },
+        {
+          "duty": "support",
+          "role": "box_to_box_midfielder",
+          "slot": 8
+        },
+        {
+          "duty": "attack",
+          "role": "wide_midfielder_lm",
+          "slot": 9
+        },
+        {
+          "duty": "attack",
+          "role": "complete_forward",
+          "slot": 10
+        }
+      ],
+      "structures": {
+        "in_possession": null,
+        "out_of_possession": null,
+        "rest_defence": null
+      }
+    },
+    "facilities": {
+      "medical": 67,
+      "training": 68,
+      "upgrades": [],
+      "youth": 51
+    },
+    "fanbase": {
+      "away_following": 0.5476,
+      "fickleness": 0.385,
+      "passion": 0.601,
+      "size": 318000,
+      "toxicity": 0.4181,
+      "traditions": [
+        "the pre-match anthem",
+        "scarves aloft at kickoff"
+      ]
+    },
+    "finances": {
+      "balance": 17000000,
+      "broadcast_share": 10560000,
+      "credit_limit": 19200000,
+      "debt": 3000000,
+      "debt_interest_rate": 0.0511,
+      "last_reconciled_on": "2031-07-01",
+      "sponsor_deals": [
+        {
+          "annual_value": 2429848,
+          "ends_on": "2033-06-30",
+          "name": "Brightwater Energy"
+        },
+        {
+          "annual_value": 2666513,
+          "ends_on": "2034-06-30",
+          "name": "Lowmoor Dairy"
+        },
+        {
+          "annual_value": 3131999,
+          "ends_on": "2034-06-30",
+          "name": "Northgate Steel"
+        }
+      ],
+      "transfer_budget": 22000000,
+      "wage_budget_weekly": 556792
+    },
+    "founded_year": 1895,
+    "id": "clb_00004",
+    "location": {
+      "city": "Vevani",
+      "nation_id": "nat_valmere",
+      "population": 551568,
+      "region": "coastal"
+    },
+    "manager_id": "mgr_00004",
+    "name": "Vevani United",
+    "nickname": "the Foxes",
+    "prestige": 59,
+    "rivalries": [],
+    "short_code": "VEV",
+    "short_name": "Vevani",
+    "stadium": {
+      "altitude_m": 27,
+      "atmosphere": 0.6007,
+      "capacity": 29365,
+      "home_advantage": {
+        "crowd_weight": 0.614,
+        "familiarity_weight": 0.4643,
+        "referee_pressure_weight": 0.6009,
+        "travel_weight": 0.6989
+      },
+      "name": "Nealvasieri Arena",
+      "nickname": "",
+      "pitch": {
+        "drainage": 0.4675,
+        "length_m": 107,
+        "quality": 0.6904,
+        "quirks": [],
+        "surface": "hybrid",
+        "width_m": 69
+      },
+      "proximity": 0.6141,
+      "roof": "open",
+      "ticket_price_base": 49,
+      "upgrade": null
+    },
+    "staff_ids": [
+      "stf_0000s",
+      "stf_0000t",
+      "stf_0000u",
+      "stf_0000v",
+      "stf_0000w",
+      "stf_0000x",
+      "stf_0000y",
+      "stf_0000z",
+      "stf_00010"
+    ]
+  },
+  {
+    "academy": {
+      "intake_quality": 0.48,
+      "intake_size": 4,
+      "level": 48,
+      "philosophy_tag": "balanced_intake",
+      "prospect_ids": [
+        "plr_0004e",
+        "plr_0004f",
+        "plr_0004g",
+        "plr_0004h",
+        "plr_0004i",
+        "plr_0004j",
+        "plr_0004k",
+        "plr_0004l"
+      ]
+    },
+    "board": {
+      "ambition": 40,
+      "budget_strictness": 66,
+      "expectations": [
+        {
+          "deadline": "2032-05-31",
+          "kind": "league_position",
+          "target": "avoid finishing last"
+        }
+      ],
+      "manager_confidence": 0.5611,
+      "meddling": 18,
+      "patience": 70
+    },
+    "club_reputation": 36,
+    "colours": {
+      "accent": "#ffffff",
+      "away_kit": {
+        "colours": [
+          "#f2c200",
+          "#0b3d91"
+        ],
+        "pattern": "solid"
+      },
+      "home_kit": {
+        "colours": [
+          "#0b3d91",
+          "#f2c200"
+        ],
+        "pattern": "hoops"
+      },
+      "primary": "#0b3d91",
+      "secondary": "#f2c200"
+    },
+    "crest_description": "a stag beneath a laurel wreath",
+    "culture": {
+      "tags": [
+        "underdog",
+        "community"
+      ],
+      "values": {
+        "discipline": 0.6895,
+        "glamour": 0.4549,
+        "grit": 0.576,
+        "loyalty_to_manager": 0.393,
+        "media_openness": 0.5028,
+        "spending_pride": 0.3043,
+        "tactical_identity": 0.2611,
+        "youth_focus": 0.4997
+      }
+    },
+    "default_tactics": {
+      "extensions": {},
+      "formation": "442",
+      "mentality": "balanced",
+      "modules": {
+        "build_up": {
+          "goalkeeper": "long",
+          "kind": "build_up",
+          "passing_directness": 0.8236,
+          "patience": 0.2,
+          "tempo": 0.6185,
+          "version": 1,
+          "width": 0.4879
+        },
+        "defensive_block": {
+          "compactness": 0.6,
+          "kind": "defensive_block",
+          "line_height": 0.4688,
+          "marking": "mixed",
+          "offside_trap": 0.3,
+          "tackling": "aggressive",
+          "version": 1
+        },
+        "final_third": {
+          "box_occupation": 0.8,
+          "crossing_frequency": 0.7,
+          "dribbling_freedom": 0.35,
+          "focus": "centre",
+          "kind": "final_third",
+          "shoot_on_sight": 0.6,
+          "version": 1
+        },
+        "game_management": {
+          "foul_tolerance": 0.7,
+          "kind": "game_management",
+          "time_wasting": 0.2,
+          "version": 1
+        },
+        "pressing": {
+          "cover_shadow": 0.4,
+          "intensity": 0.4656,
+          "kind": "pressing",
+          "press_line": 0.45,
+          "trigger": "backpass",
+          "version": 1
+        },
+        "transitions": {
+          "counter_press_seconds": 3,
+          "kind": "transitions",
+          "on_loss": "regroup",
+          "on_win": "counter",
+          "version": 1
+        }
+      },
+      "player_instructions": [],
+      "roles_locked": false,
+      "schema_version": 1,
+      "situational": [],
+      "slots": [
+        {
+          "duty": "support",
+          "role": "goalkeeper",
+          "slot": 0
+        },
+        {
+          "duty": "defend",
+          "role": "full_back_rb",
+          "slot": 1
+        },
+        {
+          "duty": "defend",
+          "role": "central_defender",
+          "slot": 2
+        },
+        {
+          "duty": "defend",
+          "role": "central_defender",
+          "slot": 3
+        },
+        {
+          "duty": "defend",
+          "role": "full_back_lb",
+          "slot": 4
+        },
+        {
+          "duty": "support",
+          "role": "wide_midfielder_rm",
+          "slot": 5
+        },
+        {
+          "duty": "defend",
+          "role": "ball_winning_midfielder_cm",
+          "slot": 6
+        },
+        {
+          "duty": "support",
+          "role": "central_midfielder",
+          "slot": 7
+        },
+        {
+          "duty": "support",
+          "role": "wide_midfielder_lm",
+          "slot": 8
+        },
+        {
+          "duty": "support",
+          "role": "target_man",
+          "slot": 9
+        },
+        {
+          "duty": "attack",
+          "role": "poacher",
+          "slot": 10
+        }
+      ],
+      "structures": {
+        "in_possession": null,
+        "out_of_possession": null,
+        "rest_defence": null
+      }
+    },
+    "facilities": {
+      "medical": 32,
+      "training": 34,
+      "upgrades": [],
+      "youth": 33
+    },
+    "fanbase": {
+      "away_following": 0.1493,
+      "fickleness": 0.2181,
+      "passion": 0.7373,
+      "size": 59000,
+      "toxicity": 0.2414,
+      "traditions": [
+        "the pre-match anthem"
+      ]
+    },
+    "finances": {
+      "balance": 3000000,
+      "broadcast_share": 3080000,
+      "credit_limit": 5600000,
+      "debt": 3000000,
+      "debt_interest_rate": 0.0494,
+      "last_reconciled_on": "2031-07-01",
+      "sponsor_deals": [
+        {
+          "annual_value": 855324,
+          "ends_on": "2034-06-30",
+          "name": "Pellam Foods"
+        },
+        {
+          "annual_value": 826696,
+          "ends_on": "2034-06-30",
+          "name": "Kestrel Freight"
+        }
+      ],
+      "transfer_budget": 4000000,
+      "wage_budget_weekly": 170758
+    },
+    "founded_year": 1915,
+    "id": "clb_00005",
+    "location": {
+      "city": "Nianora",
+      "nation_id": "nat_valmere",
+      "population": 78022,
+      "region": "coastal"
+    },
+    "manager_id": "mgr_00005",
+    "name": "Nianora City",
+    "nickname": "the Minnows",
+    "prestige": 35,
+    "rivalries": [],
+    "short_code": "NIA",
+    "short_name": "Nianora",
+    "stadium": {
+      "altitude_m": 142,
+      "atmosphere": 0.7393,
+      "capacity": 10072,
+      "home_advantage": {
+        "crowd_weight": 0.7275,
+        "familiarity_weight": 0.5071,
+        "referee_pressure_weight": 0.8518,
+        "travel_weight": 0.3476
+      },
+      "name": "Lani Road",
+      "nickname": "",
+      "pitch": {
+        "drainage": 0.6663,
+        "length_m": 102,
+        "quality": 0.4968,
+        "quirks": [],
+        "surface": "grass",
+        "width_m": 64
+      },
+      "proximity": 0.8918,
+      "roof": "open",
+      "ticket_price_base": 32,
+      "upgrade": null
+    },
+    "staff_ids": [
+      "stf_00011",
+      "stf_00012",
+      "stf_00013",
+      "stf_00014",
+      "stf_00015",
+      "stf_00016",
+      "stf_00017",
+      "stf_00018",
+      "stf_00019"
+    ]
+  },
+  {
+    "academy": {
+      "intake_quality": 0.71,
+      "intake_size": 5,
+      "level": 71,
+      "philosophy_tag": "balanced_intake",
+      "prospect_ids": [
+        "plr_0005b",
+        "plr_0005c",
+        "plr_0005d",
+        "plr_0005e",
+        "plr_0005f",
+        "plr_0005g",
+        "plr_0005h",
+        "plr_0005i"
+      ]
+    },
+    "board": {
+      "ambition": 92,
+      "budget_strictness": 60,
+      "expectations": [
+        {
+          "deadline": "2032-05-31",
+          "kind": "league_position",
+          "target": "top 3"
+        }
+      ],
+      "manager_confidence": 0.6717,
+      "meddling": 54,
+      "patience": 32
+    },
+    "club_reputation": 76,
+    "colours": {
+      "accent": "#111111",
+      "away_kit": {
+        "colours": [
+          "#ffffff",
+          "#c8102e"
+        ],
+        "pattern": "solid"
+      },
+      "home_kit": {
+        "colours": [
+          "#c8102e",
+          "#ffffff"
+        ],
+        "pattern": "halves"
+      },
+      "primary": "#c8102e",
+      "secondary": "#ffffff"
+    },
+    "crest_description": "a tower beneath a rising sun",
+    "culture": {
+      "tags": [
+        "ambition",
+        "rivalry"
+      ],
+      "values": {
+        "discipline": 0.526,
+        "glamour": 0.298,
+        "grit": 0.6156,
+        "loyalty_to_manager": 0.4477,
+        "media_openness": 0.2072,
+        "spending_pride": 0.4588,
+        "tactical_identity": 0.2991,
+        "youth_focus": 0.5411
+      }
+    },
+    "default_tactics": {
+      "extensions": {},
+      "formation": "442",
+      "mentality": "balanced",
+      "modules": {
+        "build_up": {
+          "goalkeeper": "long",
+          "kind": "build_up",
+          "passing_directness": 0.8676,
+          "patience": 0.2,
+          "tempo": 0.7486,
+          "version": 1,
+          "width": 0.5927
+        },
+        "defensive_block": {
+          "compactness": 0.6,
+          "kind": "defensive_block",
+          "line_height": 0.4129,
+          "marking": "mixed",
+          "offside_trap": 0.3,
+          "tackling": "aggressive",
+          "version": 1
+        },
+        "final_third": {
+          "box_occupation": 0.8,
+          "crossing_frequency": 0.7,
+          "dribbling_freedom": 0.35,
+          "focus": "centre",
+          "kind": "final_third",
+          "shoot_on_sight": 0.6,
+          "version": 1
+        },
+        "game_management": {
+          "foul_tolerance": 0.7,
+          "kind": "game_management",
+          "time_wasting": 0.2,
+          "version": 1
+        },
+        "pressing": {
+          "cover_shadow": 0.4,
+          "intensity": 0.5581,
+          "kind": "pressing",
+          "press_line": 0.45,
+          "trigger": "backpass",
+          "version": 1
+        },
+        "transitions": {
+          "counter_press_seconds": 3,
+          "kind": "transitions",
+          "on_loss": "regroup",
+          "on_win": "counter",
+          "version": 1
+        }
+      },
+      "player_instructions": [],
+      "roles_locked": false,
+      "schema_version": 1,
+      "situational": [],
+      "slots": [
+        {
+          "duty": "support",
+          "role": "goalkeeper",
+          "slot": 0
+        },
+        {
+          "duty": "defend",
+          "role": "full_back_rb",
+          "slot": 1
+        },
+        {
+          "duty": "defend",
+          "role": "central_defender",
+          "slot": 2
+        },
+        {
+          "duty": "defend",
+          "role": "central_defender",
+          "slot": 3
+        },
+        {
+          "duty": "defend",
+          "role": "full_back_lb",
+          "slot": 4
+        },
+        {
+          "duty": "support",
+          "role": "wide_midfielder_rm",
+          "slot": 5
+        },
+        {
+          "duty": "defend",
+          "role": "ball_winning_midfielder_cm",
+          "slot": 6
+        },
+        {
+          "duty": "support",
+          "role": "central_midfielder",
+          "slot": 7
+        },
+        {
+          "duty": "support",
+          "role": "wide_midfielder_lm",
+          "slot": 8
+        },
+        {
+          "duty": "support",
+          "role": "target_man",
+          "slot": 9
+        },
+        {
+          "duty": "attack",
+          "role": "poacher",
+          "slot": 10
+        }
+      ],
+      "structures": {
+        "in_possession": null,
+        "out_of_possession": null,
+        "rest_defence": null
+      }
+    },
+    "facilities": {
+      "medical": 80,
+      "training": 76,
+      "upgrades": [],
+      "youth": 60
+    },
+    "fanbase": {
+      "away_following": 0.4579,
+      "fickleness": 0.5085,
+      "passion": 0.6957,
+      "size": 687000,
+      "toxicity": 0.3087,
+      "traditions": [
+        "the long-throw roar",
+        "the pre-match anthem"
+      ]
+    },
+    "finances": {
+      "balance": 36000000,
+      "broadcast_share": 21340000,
+      "credit_limit": 38800000,
+      "debt": 4000000,
+      "debt_interest_rate": 0.0367,
+      "last_reconciled_on": "2031-07-01",
+      "sponsor_deals": [
+        {
+          "annual_value": 4753547,
+          "ends_on": "2034-06-30",
+          "name": "Corvane Motors"
+        },
+        {
+          "annual_value": 4568242,
+          "ends_on": "2034-06-30",
+          "name": "Sablecross Insurance"
+        }
+      ],
+      "transfer_budget": 50000000,
+      "wage_budget_weekly": 1046780
+    },
+    "founded_year": 1890,
+    "id": "clb_00006",
+    "location": {
+      "city": "Drudraigar",
+      "nation_id": "nat_valmere",
+      "population": 849440,
+      "region": "highland"
+    },
+    "manager_id": "mgr_00006",
+    "name": "Drudraigar Sporting",
+    "nickname": "the Challengers",
+    "prestige": 70,
+    "rivalries": [
+      {
+        "club_id": "clb_00007",
+        "intensity": 0.9,
+        "label": "The City Derby",
+        "origin": "Two big clubs and a century of one-upmanship"
+      }
+    ],
+    "short_code": "DRU",
+    "short_name": "Drudraigar",
+    "stadium": {
+      "altitude_m": 499,
+      "atmosphere": 0.6407,
+      "capacity": 44838,
+      "home_advantage": {
+        "crowd_weight": 0.6141,
+        "familiarity_weight": 0.4028,
+        "referee_pressure_weight": 0.5428,
+        "travel_weight": 0.4088
+      },
+      "name": "Skerach Park",
+      "nickname": "",
+      "pitch": {
+        "drainage": 0.5261,
+        "length_m": 108,
+        "quality": 0.7735,
+        "quirks": [],
+        "surface": "grass",
+        "width_m": 68
+      },
+      "proximity": 0.4775,
+      "roof": "open",
+      "ticket_price_base": 54,
+      "upgrade": null
+    },
+    "staff_ids": [
+      "stf_0001a",
+      "stf_0001b",
+      "stf_0001c",
+      "stf_0001d",
+      "stf_0001e",
+      "stf_0001f",
+      "stf_0001g",
+      "stf_0001h",
+      "stf_0001i"
+    ]
+  },
+  {
+    "academy": {
+      "intake_quality": 0.63,
+      "intake_size": 5,
+      "level": 63,
+      "philosophy_tag": "balanced_intake",
+      "prospect_ids": [
+        "plr_00068",
+        "plr_00069",
+        "plr_0006a",
+        "plr_0006b",
+        "plr_0006c",
+        "plr_0006d",
+        "plr_0006e",
+        "plr_0006f"
+      ]
+    },
+    "board": {
+      "ambition": 98,
+      "budget_strictness": 41,
+      "expectations": [
+        {
+          "deadline": "2032-05-31",
+          "kind": "league_position",
+          "target": "title"
+        }
+      ],
+      "manager_confidence": 0.5208,
+      "meddling": 72,
+      "patience": 28
+    },
+    "club_reputation": 86,
+    "colours": {
+      "accent": "#ffffff",
+      "away_kit": {
+        "colours": [
+          "#111111",
+          "#2e7d32"
+        ],
+        "pattern": "solid"
+      },
+      "home_kit": {
+        "colours": [
+          "#2e7d32",
+          "#111111"
+        ],
+        "pattern": "stripes"
+      },
+      "primary": "#2e7d32",
+      "secondary": "#111111"
+    },
+    "crest_description": "a oak beneath a laurel wreath",
+    "culture": {
+      "tags": [
+        "glamour",
+        "expectations",
+        "big_stage"
+      ],
+      "values": {
+        "discipline": 0.4584,
+        "glamour": 0.787,
+        "grit": 0.5146,
+        "loyalty_to_manager": 0.4948,
+        "media_openness": 0.6143,
+        "spending_pride": 0.9073,
+        "tactical_identity": 0.3577,
+        "youth_focus": 0.4023
+      }
+    },
+    "default_tactics": {
+      "extensions": {},
+      "formation": "532",
+      "mentality": "defensive",
+      "modules": {
+        "build_up": {
+          "goalkeeper": "long",
+          "kind": "build_up",
+          "passing_directness": 0.8076,
+          "patience": 0.4,
+          "tempo": 0.4167,
+          "version": 1,
+          "width": 0.5294
+        },
+        "defensive_block": {
+          "compactness": 0.85,
+          "kind": "defensive_block",
+          "line_height": 0.1739,
+          "marking": "zonal",
+          "offside_trap": 0.1,
+          "tackling": "stay_on_feet",
+          "version": 1
+        },
+        "final_third": {
+          "box_occupation": 0.6,
+          "crossing_frequency": 0.5,
+          "dribbling_freedom": 0.35,
+          "focus": "balanced",
+          "kind": "final_third",
+          "shoot_on_sight": 0.45,
+          "version": 1
+        },
+        "game_management": {
+          "foul_tolerance": 0.5,
+          "kind": "game_management",
+          "time_wasting": 0.45,
+          "version": 1
+        },
+        "pressing": {
+          "cover_shadow": 0.6,
+          "intensity": 0.298,
+          "kind": "pressing",
+          "press_line": 0.2,
+          "trigger": "none",
+          "version": 1
+        },
+        "transitions": {
+          "counter_press_seconds": 0,
+          "kind": "transitions",
+          "on_loss": "drop",
+          "on_win": "counter",
+          "version": 1
+        }
+      },
+      "player_instructions": [],
+      "roles_locked": false,
+      "schema_version": 1,
+      "situational": [],
+      "slots": [
+        {
+          "duty": "support",
+          "role": "goalkeeper",
+          "slot": 0
+        },
+        {
+          "duty": "support",
+          "role": "wing_back_rwb",
+          "slot": 1
+        },
+        {
+          "duty": "defend",
+          "role": "central_defender",
+          "slot": 2
+        },
+        {
+          "duty": "defend",
+          "role": "covering_defender",
+          "slot": 3
+        },
+        {
+          "duty": "defend",
+          "role": "central_defender",
+          "slot": 4
+        },
+        {
+          "duty": "support",
+          "role": "wing_back_lwb",
+          "slot": 5
+        },
+        {
+          "duty": "defend",
+          "role": "ball_winning_midfielder_cm",
+          "slot": 6
+        },
+        {
+          "duty": "defend",
+          "role": "central_midfielder",
+          "slot": 7
+        },
+        {
+          "duty": "support",
+          "role": "box_to_box_midfielder",
+          "slot": 8
+        },
+        {
+          "duty": "attack",
+          "role": "poacher",
+          "slot": 9
+        },
+        {
+          "duty": "support",
+          "role": "pressing_forward",
+          "slot": 10
+        }
+      ],
+      "structures": {
+        "in_possession": null,
+        "out_of_possession": null,
+        "rest_defence": null
+      }
+    },
+    "facilities": {
+      "medical": 85,
+      "training": 85,
+      "upgrades": [],
+      "youth": 75
+    },
+    "fanbase": {
+      "away_following": 0.57,
+      "fickleness": 0.6942,
+      "passion": 0.7178,
+      "size": 872000,
+      "toxicity": 0.3616,
+      "traditions": [
+        "the pre-match anthem"
+      ]
+    },
+    "finances": {
+      "balance": 68000000,
+      "broadcast_share": 31460000,
+      "credit_limit": 57200000,
+      "debt": 0,
+      "debt_interest_rate": 0.0349,
+      "last_reconciled_on": "2031-07-01",
+      "sponsor_deals": [
+        {
+          "annual_value": 7040440,
+          "ends_on": "2033-06-30",
+          "name": "Halden Brewing"
+        },
+        {
+          "annual_value": 6815415,
+          "ends_on": "2034-06-30",
+          "name": "Valmere Savings"
+        },
+        {
+          "annual_value": 9110539,
+          "ends_on": "2034-06-30",
+          "name": "Reedwater Utilities"
+        }
+      ],
+      "transfer_budget": 78000000,
+      "wage_budget_weekly": 1679880
+    },
+    "founded_year": 1870,
+    "id": "clb_00007",
+    "location": {
+      "city": "Juzvuetiz",
+      "nation_id": "nat_valmere",
+      "population": 848887,
+      "region": "portside"
+    },
+    "manager_id": "mgr_00007",
+    "name": "Juzvuetiz Rangers",
+    "nickname": "the Eagles",
+    "prestige": 84,
+    "rivalries": [
+      {
+        "club_id": "clb_00006",
+        "intensity": 0.9,
+        "label": "The City Derby",
+        "origin": "Two big clubs and a century of one-upmanship"
+      }
+    ],
+    "short_code": "JUZ",
+    "short_name": "Juzvuetiz",
+    "stadium": {
+      "altitude_m": 144,
+      "atmosphere": 0.7455,
+      "capacity": 58534,
+      "home_advantage": {
+        "crowd_weight": 0.654,
+        "familiarity_weight": 0.6502,
+        "referee_pressure_weight": 0.4908,
+        "travel_weight": 0.5887
+      },
+      "name": "Trevosoza Ground",
+      "nickname": "",
+      "pitch": {
+        "drainage": 0.5684,
+        "length_m": 105,
+        "quality": 0.925,
+        "quirks": [],
+        "surface": "grass",
+        "width_m": 75
+      },
+      "proximity": 0.5867,
+      "roof": "open",
+      "ticket_price_base": 60,
+      "upgrade": null
+    },
+    "staff_ids": [
+      "stf_0001j",
+      "stf_0001k",
+      "stf_0001l",
+      "stf_0001m",
+      "stf_0001n",
+      "stf_0001o",
+      "stf_0001p",
+      "stf_0001q",
+      "stf_0001r"
+    ]
+  },
+  {
+    "academy": {
+      "intake_quality": 0.38,
+      "intake_size": 3,
+      "level": 38,
+      "philosophy_tag": "balanced_intake",
+      "prospect_ids": [
+        "plr_00075",
+        "plr_00076",
+        "plr_00077",
+        "plr_00078",
+        "plr_00079",
+        "plr_0007a",
+        "plr_0007b",
+        "plr_0007c"
+      ]
+    },
+    "board": {
+      "ambition": 36,
+      "budget_strictness": 74,
+      "expectations": [
+        {
+          "deadline": "2032-05-31",
+          "kind": "league_position",
+          "target": "avoid the bottom two"
+        }
+      ],
+      "manager_confidence": 0.6467,
+      "meddling": 39,
+      "patience": 68
+    },
+    "club_reputation": 47,
+    "colours": {
+      "accent": "#ffffff",
+      "away_kit": {
+        "colours": [
+          "#8fd3f4",
+          "#7b1e3a"
+        ],
+        "pattern": "solid"
+      },
+      "home_kit": {
+        "colours": [
+          "#7b1e3a",
+          "#8fd3f4"
+        ],
+        "pattern": "solid"
+      },
+      "primary": "#7b1e3a",
+      "secondary": "#8fd3f4"
+    },
+    "crest_description": "a wolf beneath a rising sun",
+    "culture": {
+      "tags": [
+        "grit",
+        "hostile_ground",
+        "discipline_problems"
+      ],
+      "values": {
+        "discipline": 0.4988,
+        "glamour": 0.5646,
+        "grit": 0.8637,
+        "loyalty_to_manager": 0.345,
+        "media_openness": 0.4382,
+        "spending_pride": 0.5636,
+        "tactical_identity": 0.6457,
+        "youth_focus": 0.228
+      }
+    },
+    "default_tactics": {
+      "extensions": {},
+      "formation": "433",
+      "mentality": "attacking",
+      "modules": {
+        "build_up": {
+          "goalkeeper": "mixed",
+          "kind": "build_up",
+          "passing_directness": 0.5004,
+          "patience": 0.45,
+          "tempo": 0.6882,
+          "version": 1,
+          "width": 0.5789
+        },
+        "defensive_block": {
+          "compactness": 0.65,
+          "kind": "defensive_block",
+          "line_height": 0.7116,
+          "marking": "zonal",
+          "offside_trap": 0.6,
+          "tackling": "aggressive",
+          "version": 1
+        },
+        "final_third": {
+          "box_occupation": 0.65,
+          "crossing_frequency": 0.5,
+          "dribbling_freedom": 0.6,
+          "focus": "balanced",
+          "kind": "final_third",
+          "shoot_on_sight": 0.5,
+          "version": 1
+        },
+        "game_management": {
+          "foul_tolerance": 0.55,
+          "kind": "game_management",
+          "time_wasting": 0.0,
+          "version": 1
+        },
+        "pressing": {
+          "cover_shadow": 0.5,
+          "intensity": 0.8078,
+          "kind": "pressing",
+          "press_line": 0.75,
+          "trigger": "loss_of_ball",
+          "version": 1
+        },
+        "transitions": {
+          "counter_press_seconds": 6,
+          "kind": "transitions",
+          "on_loss": "counter_press",
+          "on_win": "counter",
+          "version": 1
+        }
+      },
+      "player_instructions": [],
+      "roles_locked": false,
+      "schema_version": 1,
+      "situational": [],
+      "slots": [
+        {
+          "duty": "support",
+          "role": "goalkeeper",
+          "slot": 0
+        },
+        {
+          "duty": "attack",
+          "role": "full_back_rb",
+          "slot": 1
+        },
+        {
+          "duty": "defend",
+          "role": "central_defender",
+          "slot": 2
+        },
+        {
+          "duty": "defend",
+          "role": "ball_playing_defender",
+          "slot": 3
+        },
+        {
+          "duty": "attack",
+          "role": "full_back_lb",
+          "slot": 4
+        },
+        {
+          "duty": "defend",
+          "role": "anchor",
+          "slot": 5
+        },
+        {
+          "duty": "support",
+          "role": "box_to_box_midfielder",
+          "slot": 6
+        },
+        {
+          "duty": "support",
+          "role": "central_midfielder",
+          "slot": 7
+        },
+        {
+          "duty": "attack",
+          "role": "winger_rw",
+          "slot": 8
+        },
+        {
+          "duty": "attack",
+          "role": "pressing_forward",
+          "slot": 9
+        },
+        {
+          "duty": "attack",
+          "role": "inside_forward_lw",
+          "slot": 10
+        }
+      ],
+      "structures": {
+        "in_possession": null,
+        "out_of_possession": null,
+        "rest_defence": null
+      }
+    },
+    "facilities": {
+      "medical": 46,
+      "training": 43,
+      "upgrades": [],
+      "youth": 47
+    },
+    "fanbase": {
+      "away_following": 0.2929,
+      "fickleness": 0.3036,
+      "passion": 0.8104,
+      "size": 61000,
+      "toxicity": 0.757,
+      "traditions": [
+        "scarves aloft at kickoff",
+        "the bell at half time",
+        "the pre-match anthem"
+      ]
+    },
+    "finances": {
+      "balance": 7000000,
+      "broadcast_share": 6160000,
+      "credit_limit": 11200000,
+      "debt": 4000000,
+      "debt_interest_rate": 0.0434,
+      "last_reconciled_on": "2031-07-01",
+      "sponsor_deals": [
+        {
+          "annual_value": 1709110,
+          "ends_on": "2033-06-30",
+          "name": "Northgate Steel"
+        },
+        {
+          "annual_value": 1762134,
+          "ends_on": "2032-06-30",
+          "name": "Dovecote Homes"
+        }
+      ],
+      "transfer_budget": 5000000,
+      "wage_budget_weekly": 309635
+    },
+    "founded_year": 1904,
+    "id": "clb_00008",
+    "location": {
+      "city": "Gathiški",
+      "nation_id": "nat_valmere",
+      "population": 242273,
+      "region": "borderlands"
+    },
+    "manager_id": "mgr_00008",
+    "name": "Gathiški Albion",
+    "nickname": "the Grafters",
+    "prestige": 37,
+    "rivalries": [
+      {
+        "club_id": "clb_00001",
+        "intensity": 0.8,
+        "label": "The Old Road Derby",
+        "origin": "A feud over a stolen cup in 1921"
+      }
+    ],
+    "short_code": "GAT",
+    "short_name": "Gathiški",
+    "stadium": {
+      "altitude_m": 138,
+      "atmosphere": 0.9206,
+      "capacity": 9726,
+      "home_advantage": {
+        "crowd_weight": 0.9497,
+        "familiarity_weight": 0.4661,
+        "referee_pressure_weight": 0.7437,
+        "travel_weight": 0.5033
+      },
+      "name": "Jychowi Gardens",
+      "nickname": "The Bear Pit",
+      "pitch": {
+        "drainage": 0.3811,
+        "length_m": 103,
+        "quality": 0.4628,
+        "quirks": [],
+        "surface": "grass",
+        "width_m": 66
+      },
+      "proximity": 0.8066,
+      "roof": "open",
+      "ticket_price_base": 41,
+      "upgrade": null
+    },
+    "staff_ids": [
+      "stf_0001s",
+      "stf_0001t",
+      "stf_0001u",
+      "stf_0001v",
+      "stf_0001w",
+      "stf_0001x",
+      "stf_0001y",
+      "stf_0001z",
+      "stf_00020"
+    ]
+  }
+]

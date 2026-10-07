@@ -1,0 +1,82 @@
+[
+  {
+    "amount": 20000000,
+    "category": "other",
+    "club_id": "clb_00001",
+    "counterparty": null,
+    "date": "2031-07-01",
+    "id": "led_00001",
+    "memo_key": "opening_balance",
+    "ref": {}
+  },
+  {
+    "amount": -5000000,
+    "category": "other",
+    "club_id": "clb_00002",
+    "counterparty": null,
+    "date": "2031-07-01",
+    "id": "led_00002",
+    "memo_key": "opening_balance",
+    "ref": {}
+  },
+  {
+    "amount": 13000000,
+    "category": "other",
+    "club_id": "clb_00003",
+    "counterparty": null,
+    "date": "2031-07-01",
+    "id": "led_00003",
+    "memo_key": "opening_balance",
+    "ref": {}
+  },
+  {
+    "amount": 17000000,
+    "category": "other",
+    "club_id": "clb_00004",
+    "counterparty": null,
+    "date": "2031-07-01",
+    "id": "led_00004",
+    "memo_key": "opening_balance",
+    "ref": {}
+  },
+  {
+    "amount": 3000000,
+    "category": "other",
+    "club_id": "clb_00005",
+    "counterparty": null,
+    "date": "2031-07-01",
+    "id": "led_00005",
+    "memo_key": "opening_balance",
+    "ref": {}
+  },
+  {
+    "amount": 36000000,
+    "category": "other",
+    "club_id": "clb_00006",
+    "counterparty": null,
+    "date": "2031-07-01",
+    "id": "led_00006",
+    "memo_key": "opening_balance",
+    "ref": {}
+  },
+  {
+    "amount": 68000000,
+    "category": "other",
+    "club_id": "clb_00007",
+    "counterparty": null,
+    "date": "2031-07-01",
+    "id": "led_00007",
+    "memo_key": "opening_balance",
+    "ref": {}
+  },
+  {
+    "amount": 7000000,
+    "category": "other",
+    "club_id": "clb_00008",
+    "counterparty": null,
+    "date": "2031-07-01",
+    "id": "led_00008",
+    "memo_key": "opening_balance",
+    "ref": {}
+  }
+]
