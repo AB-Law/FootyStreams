@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0023** Add Person Personality and Appearance models *(M1; scope: domain; schema version minor)*
 - **0022** Add domain primitive types, versions and canonical JSON *(M1; scope: domain; schema version minor)*
 - **0017** Add commit message and PR size checks with git hooks *(M0; scope: tools, ci)*
 - **0015** Add 'changelog release' with Markdown and JSON release notes *(M0; scope: tools)*
