@@ -6,6 +6,7 @@ from hypothesis import strategies as st
 
 from footystreams.tools import check
 from footystreams.tools.check import (
+    CHANGELOG_STEPS,
     COVERAGE_TEST_STEP,
     FAST_TEST_STEP,
     LINT_STEPS,
@@ -63,14 +64,14 @@ def test_format_report__verdict_is_passed_only_when_every_step_passed(
     assert report.count("[FAIL]") == sum(code != 0 for code in returncodes)
 
 
-def test_steps_for__fast_tier__is_lint_types_and_plain_tests() -> None:
-    assert steps_for(Tier.FAST) == (*LINT_STEPS, FAST_TEST_STEP)
+def test_steps_for__fast_tier__is_lint_changelog_and_plain_tests() -> None:
+    assert steps_for(Tier.FAST) == (*LINT_STEPS, *CHANGELOG_STEPS, FAST_TEST_STEP)
 
 
 def test_steps_for__pr_tier__swaps_plain_tests_for_coverage_run() -> None:
     steps = steps_for(Tier.PR)
 
-    assert steps == (*LINT_STEPS, COVERAGE_TEST_STEP)
+    assert steps == (*LINT_STEPS, *CHANGELOG_STEPS, COVERAGE_TEST_STEP)
     assert "--cov" in COVERAGE_TEST_STEP.command
 
 

@@ -62,6 +62,11 @@ LINT_STEPS: tuple[CheckStep, ...] = (
     CheckStep("ruff format", (PYTHON, "-m", "ruff", "format", "--check", ".")),
     CheckStep("mypy --strict", (PYTHON, "-m", "mypy")),
 )
+_CHANGELOG = (PYTHON, "-m", "footystreams.tools.changelog.cli")
+CHANGELOG_STEPS: tuple[CheckStep, ...] = (
+    CheckStep("changelog fragments", (*_CHANGELOG, "check")),
+    CheckStep("changelog up to date", (*_CHANGELOG, "build", "--check")),
+)
 FAST_TEST_STEP = CheckStep("pytest (fast tier)", _PYTEST)
 COVERAGE_TEST_STEP = CheckStep(
     "pytest + coverage floor", (*_PYTEST, "--cov", "--cov-report=term-missing:skip-covered")
@@ -71,7 +76,7 @@ COVERAGE_TEST_STEP = CheckStep(
 def steps_for(tier: Tier) -> tuple[CheckStep, ...]:
     """Return the ordered steps that make up a tier."""
     test_step = COVERAGE_TEST_STEP if tier is Tier.PR else FAST_TEST_STEP
-    return (*LINT_STEPS, test_step)
+    return (*LINT_STEPS, *CHANGELOG_STEPS, test_step)
 
 
 def run_step(step: CheckStep) -> StepResult:
