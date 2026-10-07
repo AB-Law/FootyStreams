@@ -245,11 +245,11 @@ def _create(
     work: _Work,
     data: RolloverData,
     requests: Sequence[ProspectRequest],
-    context: tuple[RolloverServices, WorldRng],
+    context: tuple[RolloverServices, dt.date, WorldRng],
 ) -> list[Player]:
-    services, rng = context
+    services, today, rng = context
     known = [*work.players.values(), *data.retired_names]
-    return services.prospects.create(requests, known, rng)
+    return services.prospects.create(requests, known, (today, rng))
 
 
 def _intake(
@@ -269,7 +269,7 @@ def _intake(
         shape = (_formation_positions(services.tables, club), mean)
         requests.extend(intake_requests(club, shape, key, youth, rng.fork(f"intake:{club_id}")))
     for request, player in zip(
-        requests, _create(work, data, requests, (services, rng.fork("create"))), strict=True
+        requests, _create(work, data, requests, (services, today, rng.fork("create"))), strict=True
     ):
         if request.club_id is not None:
             work.players[player.id] = signed_prospect(player, request.club_id, today, youth)
@@ -279,7 +279,7 @@ def _top_up_pool(
     work: _Work, data: RolloverData, context: tuple[RolloverServices, dt.date], rng: WorldRng
 ) -> None:
     """Journeymen join the free-agent pool until it has the configured size."""
-    services, _ = context
+    services, today = context
     config = services.tables.development.squad
     free = sum(1 for p in work.players.values() if p.status is PlayerStatus.FREE_AGENT)
     missing = max(0, config.free_agent_pool - free)
@@ -300,7 +300,7 @@ def _top_up_pool(
         )
         for index in range(missing)
     ]
-    for player in _create(work, data, requests, (services, rng.fork("create"))):
+    for player in _create(work, data, requests, (services, today, rng.fork("create"))):
         work.players[player.id] = player
 
 

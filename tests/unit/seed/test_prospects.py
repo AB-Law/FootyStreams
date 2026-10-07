@@ -10,7 +10,7 @@ from tests.factories.world import make_generation_context, make_world
 
 TODAY = dt.date(2032, 6, 1)
 CONTEXT = make_generation_context(1)
-FACTORY = SeedProspectFactory(CONTEXT.tables, CONTEXT.geography, TODAY)
+FACTORY = SeedProspectFactory(CONTEXT.tables, CONTEXT.geography)
 WORLD = make_world(1)
 
 
@@ -29,23 +29,25 @@ def _request(index: int, *, youth: bool = True, club: bool = True) -> ProspectRe
 
 
 def test_create__one_player_per_request_in_order_with_ids_from_the_keys() -> None:
-    players = FACTORY.create([_request(0), _request(1)], WORLD.players, WorldRng(1))
+    players = FACTORY.create([_request(0), _request(1)], WORLD.players, (TODAY, WorldRng(1)))
     assert len(players) == 2
     assert players[0].id != players[1].id
     assert players[0].id.startswith("plr_")
-    again = FACTORY.create([_request(1)], WORLD.players, WorldRng(9))
+    again = FACTORY.create([_request(1)], WORLD.players, (TODAY, WorldRng(9)))
     assert again[0].id == players[1].id
 
 
 def test_create__same_request_and_seed__same_player() -> None:
-    first = FACTORY.create([_request(0)], WORLD.players, WorldRng(3))
-    assert first == FACTORY.create([_request(0)], WORLD.players, WorldRng(3))
+    first = FACTORY.create([_request(0)], WORLD.players, (TODAY, WorldRng(3)))
+    assert first == FACTORY.create([_request(0)], WORLD.players, (TODAY, WorldRng(3)))
 
 
 def test_create__youth_and_senior_requests__get_the_right_flags_and_ages() -> None:
-    youth = FACTORY.create([_request(0)], WORLD.players, WorldRng(1))[0]
-    senior = FACTORY.create([_request(1, youth=False)], WORLD.players, WorldRng(1))[0]
-    agent = FACTORY.create([_request(2, youth=False, club=False)], WORLD.players, WorldRng(1))[0]
+    youth = FACTORY.create([_request(0)], WORLD.players, (TODAY, WorldRng(1)))[0]
+    senior = FACTORY.create([_request(1, youth=False)], WORLD.players, (TODAY, WorldRng(1)))[0]
+    agent = FACTORY.create(
+        [_request(2, youth=False, club=False)], WORLD.players, (TODAY, WorldRng(1))
+    )[0]
     assert youth.is_youth
     assert youth.age_on(TODAY) == 17
     assert not senior.is_youth
@@ -55,7 +57,7 @@ def test_create__youth_and_senior_requests__get_the_right_flags_and_ages() -> No
 
 def test_create__names_stay_unique_against_the_people_already_in_the_world() -> None:
     requests = [_request(i, youth=False) for i in range(30)]
-    players = FACTORY.create(requests, WORLD.players, WorldRng(2))
+    players = FACTORY.create(requests, WORLD.players, (TODAY, WorldRng(2)))
     taken = {p.known_as for p in WORLD.players}
     new = [p.known_as for p in players]
     assert not taken & set(new)
@@ -64,13 +66,12 @@ def test_create__names_stay_unique_against_the_people_already_in_the_world() -> 
 
 def test_create__ability_lands_near_the_request() -> None:
     players = FACTORY.create(
-        [_request(i, youth=False) for i in range(8)], WORLD.players, WorldRng(2)
+        [_request(i, youth=False) for i in range(8)], WORLD.players, (TODAY, WorldRng(2))
     )
     assert all(abs(p.ability_current - 40) <= 8 for p in players)
 
 
-def test_with_date__creates_for_another_day() -> None:
-    later = FACTORY.with_date(dt.date(2040, 6, 1)).create(
-        [_request(0)], WORLD.players, WorldRng(1)
-    )[0]
-    assert later.age_on(dt.date(2040, 6, 1)) == 17
+def test_create__the_date_decides_the_birth_year() -> None:
+    later_day = dt.date(2040, 6, 1)
+    later = FACTORY.create([_request(0)], WORLD.players, (later_day, WorldRng(1)))[0]
+    assert later.age_on(later_day) == 17

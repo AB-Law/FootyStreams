@@ -93,9 +93,7 @@ def season_fingerprint(factory: UnitOfWorkFactory) -> str:
 def make_prospects(seed: int = 1, clubs: int = 8) -> SeedProspectFactory:
     """The seed adapter that creates academy players and journeymen for the rollover."""
     context = make_generation_context(seed)
-    return SeedProspectFactory(
-        context.tables, context.geography, make_world(seed, clubs).created_in_world
-    )
+    return SeedProspectFactory(context.tables, context.geography)
 
 
 def make_multi_runner(

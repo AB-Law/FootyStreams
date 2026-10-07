@@ -6,6 +6,7 @@ geography and archetypes) builds them, and neither may import the other.
 
 from __future__ import annotations
 
+import datetime as dt
 from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Protocol
@@ -37,6 +38,9 @@ class ProspectFactory(Protocol):
         self,
         requests: Sequence[ProspectRequest],
         existing: Sequence[Player],
-        rng: WorldRng,
+        context: tuple[dt.date, WorldRng],
     ) -> list[Player]:
-        """One new player per request, in order; ids must depend only on the request key."""
+        """One new player per request, in order; ids must depend only on the request key.
+
+        ``context`` is (the in-world date the players are created on, the random stream).
+        """
