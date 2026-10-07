@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import IntEnum
 
+from footystreams.domain.injury import InjurySeverity
 from footystreams.domain.match import TeamSheet
 from footystreams.domain.types import PlayerId, Position, RoleId
 from footystreams.sim.effective import Skills
@@ -107,6 +108,18 @@ class TeamState:
         raise KeyError(msg)
 
 
+@dataclass(frozen=True, slots=True)
+class InjuryCase:
+    """The true diagnosis of an in-match injury; the event shows only what a viewer could see."""
+
+    player_id: PlayerId
+    side: Side
+    name: str
+    body_part: str
+    severity: InjurySeverity
+    elapsed_s: float
+
+
 @dataclass(slots=True)
 class MatchState:
     """The whole live match: both teams, the clock, the ball and who has it."""
@@ -128,6 +141,7 @@ class MatchState:
     conditions: Conditions = NEUTRAL
     assist_from: PlayerState | None = None  # passer of the last completed pass in this chain
     last_turnover_s: float = field(default=-1e9)  # elapsed_s of the latest change of possession
+    injury_log: list[InjuryCase] = field(default_factory=list)
 
     def team(self, side: Side) -> TeamState:
         """Return the team on a side."""

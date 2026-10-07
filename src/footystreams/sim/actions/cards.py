@@ -62,8 +62,13 @@ def decide_card(play: Play, offender: PlayerState, contact: Contact) -> CardDeci
 
 def dismiss(team: TeamState, player: PlayerState) -> None:
     """Remove a sent-off player from the pitch; an outfielder takes over in goal if needed."""
+    remove_from_pitch(team, player, team.sent_off)
+
+
+def remove_from_pitch(team: TeamState, player: PlayerState, into: list[PlayerState]) -> None:
+    """Take a player off the pitch without a replacement; an outfielder keeps goal if needed."""
     team.players.remove(player)
-    team.sent_off.append(player)
+    into.append(player)
     if player.position is Position.GK and team.players:
         stand_in = max(team.players, key=lambda mate: (mate.skills.handling, -mate.slot))
         stand_in.position, stand_in.line = Position.GK, Line.KEEPER

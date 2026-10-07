@@ -136,3 +136,37 @@ class HomeAdvantageConfig(DomainModel):
     default_axis: float = 0.5  # atmosphere, proximity, passion, weight when unknown
     toxicity_share: float = 0.5  # share of the away pressure that does not depend on toxicity
     big_match_share: float = 0.5  # share of the home lift that does not depend on big_match
+
+
+class InjuryConfig(DomainModel):
+    """In-match injuries: how often a contact or a strain hurts a player (02 section 9)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "enabled": "S",
+        "foul_contact": "S",
+        "tackle_contact": "S",
+        "non_contact_per_match": "S",
+        "proneness_floor": "S",
+        "exhaustion_weight": "S",
+        "bravery_weight": "S",
+        "balance_scale": "S",
+        "minor_off_share": "S",
+        "knock_stoppage_s": "S",
+        "minor_stoppage_s": "S",
+        "serious_stoppage_s": "S",
+        "stoppage_spread_s": "S",
+    }
+
+    enabled: bool = False  # switched on in the commit that enables M6 behaviour
+    foul_contact: float = 0.012  # chance a fouled player is hurt, for an average player
+    tackle_contact: float = 0.0015  # same for one of the two in a clean tackle
+    non_contact_per_match: float = 0.08  # strains and cramps a match, before the multipliers
+    proneness_floor: float = 0.5  # hazard x (floor + injury_proneness / 100); 1.0 at proneness 50
+    exhaustion_weight: float = 1.5  # hazard x (1 + weight x exhaustion^2)
+    bravery_weight: float = 0.3  # brave players throw themselves into more trouble
+    balance_scale: float = 150.0  # steadier players ride out more contact
+    minor_off_share: float = 0.7  # of minor injuries, the share that cannot continue
+    knock_stoppage_s: float = 25.0
+    minor_stoppage_s: float = 60.0
+    serious_stoppage_s: float = 90.0
+    stoppage_spread_s: float = 15.0

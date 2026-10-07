@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0078** Add the injury model: hazard, types, forced changes (not yet rolled) *(M6; scope: sim)*
 - **0077** Add substitution mechanics (not yet triggered) *(M6; scope: sim)*
 - **0075** Add home advantage through the crowd *(M6; scope: sim)*
 - **0074** Add fatigue: exhaustion that only rises in play and weakens skills *(M6; scope: sim)*
