@@ -24,6 +24,7 @@ MIN_INTAKE_ABILITY = 10
 QUALITY_BASE, QUALITY_SPAN = 0.85, 0.3  # intake level runs 0.85-1.15 of the mean by academy quality
 ABILITY_SPREAD = 0.35  # of the intake mean ability, in standard deviations
 CONTRACT_END_MONTH_DAY = (6, 30)
+MIN_TERM_DAYS = 90
 
 
 def intake_requests(
@@ -64,9 +65,14 @@ def intake_requests(
 
 
 def contract_end(today: dt.date, years: int) -> dt.date:
-    """The contract-end day (30 June) ``years`` full contract years after the next one."""
+    """The 30 June ``years`` contract seasons after ``today``.
+
+    The first season ends on the first 30 June at least ``MIN_TERM_DAYS`` away, so a deal signed
+    just before the summer does not expire days later.
+    """
     first = dt.date(today.year, *CONTRACT_END_MONTH_DAY)
-    first = first if first > today else dt.date(today.year + 1, *CONTRACT_END_MONTH_DAY)
+    if (first - today).days < MIN_TERM_DAYS:
+        first = first.replace(year=first.year + 1)
     return first.replace(year=first.year + years - 1)
 
 

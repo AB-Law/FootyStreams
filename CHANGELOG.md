@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0083** Add squad rebalancing and squad entries *(M10; scope: league)*
 - **0082** Add youth intake, promotion and the prospect factory *(M10; scope: league)*
 - **0080** Add retirement *(M10; scope: league)*
 - **0079** Add weekly training micro-steps *(M10; scope: league)*
