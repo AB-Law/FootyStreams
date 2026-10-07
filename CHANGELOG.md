@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0144** Add the MatchSimulator seam and the result-only simulator *(M9; scope: league)*
 - **0142** Add league config, calendar, double round-robin schedule and standings with tie-breaks *(M9; scope: data)*
 - **0140** (migration needed) Add SQLite repositories, Alembic 0001_initial and seed --db *(M3; scope: cli)*
 - **0139** Add repository ports, table specs, codec and in-memory repositories *(M3; scope: persistence)*

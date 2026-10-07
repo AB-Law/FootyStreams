@@ -71,3 +71,17 @@ world_events:
     homesickness: 1
   duration_days: [10, 35]
   magnitude: [0.25, 0.8]
+
+# The deterministic stand-in for the event simulator (and the production fallback, docs 10 section 7).
+result_only:
+  goals_per_match: 2.7
+  home_advantage: 0.30          # extra goals for the home side
+  goals_per_rating_point: 0.03  # goal-difference per point of team strength difference, per side
+  mood_gain: 2.0                # how strongly the mood multipliers move a player's effective ability
+  form_weight: 0.08
+  fatigue_weight: 0.10
+  goal_chances: 12              # a side's goals are Binomial(chances, expected goals / chances)
+  yellow_chance: 0.07
+  red_chance: 0.004
+  injury_chance: 0.012
+  rating_noise: 0.6
