@@ -5,6 +5,8 @@ from __future__ import annotations
 import datetime as dt
 from typing import NamedTuple
 
+import pytest
+
 from footystreams.domain.club import Club
 from footystreams.domain.development import DevelopmentEntry
 from footystreams.domain.finance import LedgerCategory, LedgerEntry
@@ -23,6 +25,8 @@ from footystreams.verify import (
 )
 from tests.factories.league_run import cached_rolled_over, cached_small_season
 from tests.helpers.assertions import assert_no_violations
+
+pytestmark = pytest.mark.timeout(120)  # these build whole seasons; allow for a loaded machine
 
 
 class _State(NamedTuple):

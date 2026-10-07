@@ -9,6 +9,8 @@ from footystreams.cli.league import EXIT_OK, EXIT_USAGE, main
 from footystreams.seed.world_io import write_world
 from tests.factories.world import make_world
 
+pytestmark = pytest.mark.timeout(120)  # these build whole seasons; allow for a loaded machine
+
 
 @pytest.fixture(autouse=True)
 def _cached_generation(monkeypatch: pytest.MonkeyPatch) -> None:
