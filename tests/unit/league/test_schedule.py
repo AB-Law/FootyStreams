@@ -7,7 +7,6 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
-from footystreams.domain.ids import IdMint
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.types import ClubId, CompetitionId, SeasonId
 from footystreams.league.schedule import (
@@ -29,7 +28,7 @@ def _fixtures(count: int, seed: int, derbies=()):  # type: ignore[no-untyped-def
     rounds = build_rounds(clubs, WorldRng(seed), derbies)
     dates = [dt.date(2031, 8, 15) + dt.timedelta(days=21 * i) for i in range(len(rounds))]
     fixtures = schedule_fixtures(
-        rounds, (CompetitionId("cmp_00001"), SeasonId("ssn_00001")), dates, IdMint()
+        rounds, (CompetitionId("cmp_00001"), SeasonId("ssn_00001")), dates, derbies
     )
     return clubs, fixtures
 
@@ -87,6 +86,18 @@ def test_build_rounds__impossible_constraints_raise_after_the_attempt_budget() -
     # With two clubs every round is the only derby, so matchday 1 must contain one.
     with pytest.raises(ScheduleError, match="no valid schedule"):
         build_rounds(clubs, WorldRng(1), {frozenset(clubs)})
+
+
+def test_schedule_fixtures__derby_pairs__are_flagged() -> None:
+    rival = frozenset({ClubId("clb_00001"), ClubId("clb_00002")})
+    _, fixtures = _fixtures(4, seed=1, derbies=[rival])
+    flagged = {frozenset((f.home_club_id, f.away_club_id)) for f in fixtures if f.is_derby}
+    assert flagged == {rival}
+
+
+def test_schedule_fixtures__same_inputs__same_ids() -> None:
+    first = _fixtures(6, seed=2)[1]
+    assert [f.id for f in first] == [f.id for f in _fixtures(6, seed=2)[1]]
 
 
 def test_schedule_fixtures__dates_ids_and_stadiums() -> None:
