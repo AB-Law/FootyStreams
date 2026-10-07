@@ -30,6 +30,8 @@ from footystreams.league.matchday import current_table
 from footystreams.league.mood_rules import modifier_for_return
 from footystreams.league.progression import ProgressionInputs, micro_step
 from footystreams.league.recovery import decay_sharpness, recover
+from footystreams.league.rollover import RolloverServices, rollover_season
+from footystreams.league.rollover_data import load_rollover_data
 from footystreams.league.tables import LeagueTables
 from footystreams.league.training import training_conditions
 from footystreams.league.world_events import generate_life_events
@@ -204,3 +206,25 @@ class TrainingStage:
                 if trained is not player:
                     changed.append(trained)
         return WorldDelta(players=tuple(changed))
+
+
+class RolloverStage:
+    """The off-season: awards, year-end, retirements, progression, intake, squads, next season."""
+
+    name: ClassVar[str] = "rollover"
+
+    def __init__(self, services: RolloverServices) -> None:
+        """Create the stage over the league tables and the prospect factory."""
+        self._services = services
+
+    def run(self, repositories: Repositories, today: dt.date, rng: WorldRng) -> WorldDelta:
+        """Roll over every season that ended yesterday and has no successor yet."""
+        yesterday = today - dt.timedelta(days=1)
+        deltas = [
+            rollover_season(
+                load_rollover_data(repositories, season), self._services, today, rng.fork(season.id)
+            )
+            for season in repositories.seasons.all()
+            if season.ends_on == yesterday
+        ]
+        return merge_all(deltas)

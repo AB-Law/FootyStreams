@@ -40,7 +40,7 @@ positions:
   role_familiarity_gain_per_year: 4
 
 retirement:
-  hazard: [[32, 0.0], [33, 0.05], [34, 0.12], [35, 0.22], [36, 0.38], [37, 0.55], [99, 0.8]]
+  hazard: [[31, 0.0], [32, 0.03], [33, 0.08], [34, 0.16], [35, 0.28], [36, 0.45], [37, 0.65], [99, 0.85]]
   ability_weight: 0.008           # hazard grows by this per CA point below the league mean
   min_hazard_multiplier: 0.5
 
@@ -51,7 +51,9 @@ youth:
   potential_bonus_per_quality: 14 # extra potential bonus at intake_quality 1.0
   contract_years: 3
   promotion_age: 18
-  promotion_margin: 2             # promoted when within this many CA points of the squad's weakest senior
+  max_age: 21                     # prospects not promoted by this age are released
+  promotion_margin: 6             # promoted when his value is within this of the squad's weakest senior
+  potential_weight: 0.4           # value = ability + this x (potential - ability)
   wage_weekly: 600
 
 squad:
@@ -59,6 +61,10 @@ squad:
   max_senior: 28
   min_goalkeepers: 2
   trialist_contract_years: 1
+  free_agent_pool: 20             # the pool is topped up with journeymen to at least this many
+  free_agent_pool_max: 40         # the weakest unsigned players beyond this many leave the game
+  journeyman_age: [24, 31]
+  journeyman_ability_fraction: 0.85
 
 rollover:
   reputation_step: 1.2            # club reputation points per place above (below) its expected place
@@ -71,6 +77,7 @@ rollover:
   sponsor_reputation_growth: 0.01 # sponsor value change per club reputation point gained
   wage_budget_ratio: 0.62         # of the income estimate
   wage_tolerance: 0.10            # renewals are scaled down while the bill exceeds the budget by more
+  wage_scale_max: 1.25            # and up (to this) while the bill is well under the budget
   transfer_budget_share: 0.30     # of a positive balance
   contract_extend_years: [1, 3]
   awards_min_appearances: 6

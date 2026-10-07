@@ -12,6 +12,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 
 from footystreams.domain.fixture import Fixture
+from footystreams.domain.prospects import ProspectFactory
 from footystreams.domain.rng import WorldRng, derive_seed
 from footystreams.league.clock import WorldClock
 from footystreams.league.delta import apply_delta
@@ -21,10 +22,12 @@ from footystreams.league.matchday import (
     play_fixture,
     snapshot_standings,
 )
+from footystreams.league.rollover import RolloverServices
 from footystreams.league.stages import (
     ClubAdminStage,
     LifeEventsStage,
     RecoveryStage,
+    RolloverStage,
     SeasonEndStage,
     Stage,
     TrainingStage,
@@ -41,16 +44,23 @@ class DayReport:
     matches_played: int
 
 
-def default_stages(engine: MatchdayEngine) -> list[Stage]:
-    """The stages of this milestone, in the order of docs/design/07 section 2."""
+def default_stages(engine: MatchdayEngine, prospects: ProspectFactory | None = None) -> list[Stage]:
+    """The stages in the order of docs/design/07 section 2.
+
+    The off-season rollover needs a prospect factory (it creates academy players); without one
+    the world simply stops at the end of the season.
+    """
     tables = engine.tables
-    return [
+    stages: list[Stage] = [
         RecoveryStage(tables),
         TrainingStage(tables),
         LifeEventsStage(tables),
         ClubAdminStage(tables),
         SeasonEndStage(tables),
     ]
+    if prospects is not None:
+        stages.append(RolloverStage(RolloverServices(tables, prospects)))
+    return stages
 
 
 class DailyTick:

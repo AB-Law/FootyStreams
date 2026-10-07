@@ -7,12 +7,13 @@ from dataclasses import dataclass
 
 from footystreams.domain.competition import Competition, Season
 from footystreams.domain.fixture import Fixture
+from footystreams.domain.prospects import ProspectFactory
 from footystreams.domain.rng import WorldRng, derive_seed
 from footystreams.domain.standings import StandingRow
 from footystreams.domain.types import ClubId
 from footystreams.league.calendar import matchday_dates
-from footystreams.league.clock import WorldClock
-from footystreams.league.daily import DailyTick, DayReport
+from footystreams.league.clock import WorldClock, read_date
+from footystreams.league.daily import DailyTick, DayReport, default_stages
 from footystreams.league.delta import WorldDelta, apply_delta
 from footystreams.league.matchday import MatchdayEngine, current_table
 from footystreams.league.schedule import ScheduleError, build_rounds, schedule_fixtures
@@ -42,11 +43,21 @@ def derby_pairs(repositories: Repositories, club_ids: tuple[ClubId, ...]) -> set
 class SeasonRunner:
     """Prepares the fixtures of a season and drives the daily tick through it."""
 
-    def __init__(self, factory: UnitOfWorkFactory, engine: MatchdayEngine) -> None:
-        """Create a runner over a database and the matchday engine."""
+    def __init__(
+        self,
+        factory: UnitOfWorkFactory,
+        engine: MatchdayEngine,
+        prospects: ProspectFactory | None = None,
+    ) -> None:
+        """Create a runner over a database and the matchday engine.
+
+        With a prospect factory the off-season rollover runs after each season; without one the
+        world stops at the end of the season.
+        """
         self._factory = factory
         self._engine = engine
-        self._tick = DailyTick(factory, engine)
+        self._rollover = prospects is not None
+        self._tick = DailyTick(factory, engine, default_stages(engine, prospects))
         self._clock = WorldClock(factory)
 
     def prepare(self, season: Season) -> int:
@@ -80,6 +91,17 @@ class SeasonRunner:
         while self._clock.current_date() <= season.ends_on:
             played += self._tick.run_day().matches_played
         return self.result(season, played)
+
+    def run_seasons(self, count: int) -> list[SeasonResult]:
+        """Play ``count`` seasons back to back, with the off-season rollover after each."""
+        results = []
+        for _ in range(count):
+            with self._factory() as uow:
+                season = current_season(uow, read_date(uow))
+            results.append(self.run_season(season))
+            if self._rollover:
+                self._tick.run_day()
+        return results
 
     def run_day(self) -> DayReport:
         """One day of the world (for ``--matchday`` style stepping)."""
