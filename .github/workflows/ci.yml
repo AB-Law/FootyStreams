@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: quality (${{ matrix.os }}, python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.12", "3.13"]
+    env:
+      HYPOTHESIS_PROFILE: ci
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the change-log check compares with origin/main
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --python ${{ matrix.python }}
+      - name: Quality gate (PR tier)
+        run: uv run check --tier pr
+
+  pr-size:
+    name: pull request size
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync
+      - name: Measure (target 400 lines, hard cap 800; label large-approved to allow more)
+        env:
+          BASE: origin/${{ github.base_ref }}
+          LARGE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'large-approved') }}
+        run: |
+          if [ "$LARGE_APPROVED" = "true" ]; then
+            uv run pr-size --base "$BASE" --allow-large
+          else
+            uv run pr-size --base "$BASE"
+          fi
