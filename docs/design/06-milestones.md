@@ -9,7 +9,7 @@ Status: **PROPOSED (Phase 1, revision 4: adds the long-running runtime engine, e
 4. Perf: benchmark table vs. budgets (11 §6) in the report; no regression > 15% vs. previous milestone.
 5. Changelog fragments added; design docs updated; `docs/milestones/Mx.md` written; `docs/status.md` refreshed.
 6. Coverage floor (≥ 90% branch overall; 100% on listed critical modules from the milestone they appear).
-7. Delivered as small PRs (≤ 400 changed lines, hard cap 800), atomic Conventional Commits, each PR with the template filled in (11 §12); the end-of-turn Stop-hook gate (`uv run check`) was green for every turn; **every slice stopped at the human review checkpoint and was pushed/PR'd only after your explicit go-ahead.**
+7. Delivered as **one branch and one PR for the whole milestone** (11 §12), built from atomic Conventional Commits of ≤ 400 changed lines each (the slice list below is the commit plan); the PR description has one section per slice; the end-of-turn Stop-hook gate (`uv run check`) was green for every turn; **the milestone stopped at the human review checkpoint and was pushed and PR'd only after your explicit go-ahead.**
 
 Sizes: S ≈ half a day, M ≈ 1–2 days, L ≈ 3+ days of focused work.
 
@@ -98,9 +98,9 @@ Sizes: S ≈ half a day, M ≈ 1–2 days, L ≈ 3+ days of focused work.
 
 ---
 
-## PR slices (every milestone ships as a sequence of small, green, reviewable PRs)
+## Commit plan per milestone (one branch and one PR per milestone)
 
-Each slice is a branch `<type>/<milestone>-<slug>`, ≤ 400 changed lines (hard cap 800, generated files excluded), leaves `main` green, has its own tests and a changelog fragment. Slices are an *initial plan*; split further whenever a PR grows (11 §12).
+A milestone is **one branch (`<type>/<milestone>-<slug>`) and one PR**. Each slice below becomes one or more **atomic commits** of ≤ 400 changed lines each (generated files excluded); every commit builds, passes `uv run check`, and carries its own tests. Each slice also contributes a changelog fragment and a section of the PR description. The list is an *initial plan*: split a slice into more commits whenever a commit grows (11 §12).
 
 | Milestone | Slices (in order) |
 |-----------|-------------------|
@@ -117,7 +117,7 @@ Each slice is a branch `<type>/<milestone>-<slug>`, ≤ 400 changed lines (hard 
 | **M13** | review model + sequencing · review in sim · extension Protocols + stubs · voice contract · engine integration |
 | **M14** | quarantine/fallback · verify/health CLIs · safe mode · soak runner · fuzz harness · fault injectors · mutation job · shadow run · Dockerfile · README · release notes |
 
-Rules of thumb: tests + implementation + docs for a slice ship together; golden/schema/data regenerations are separate commits in the same PR (or a tiny follow-up PR if large); no slice depends on an unmerged branch except explicit stacks.
+Rules of thumb: tests + implementation + docs for a slice ship together; golden/schema/data regenerations are separate commits in the same PR. (M0 was delivered before this rule, as 13 PRs; from M1 on it is one PR per milestone.)
 
 ## Test plan (cross-cutting) — summary only
 
