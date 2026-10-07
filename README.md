@@ -8,7 +8,8 @@ A fictional football league that runs as a 24/7 live broadcast: a deterministic 
 
 ```bash
 uv sync
-uv run check        # ruff, ruff format, mypy --strict, tests
+uv run check        # ruff, ruff format, mypy --strict, changelog checks, tests
+git config core.hooksPath .githooks   # once per clone: runs the gate before each commit and checks commit messages
 ```
 
 Design index: [`docs/design/README.md`](docs/design/README.md). Agent rules: [`AGENTS.md`](AGENTS.md).

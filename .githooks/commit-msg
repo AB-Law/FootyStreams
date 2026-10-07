@@ -1,0 +1,3 @@
+#!/bin/sh
+# Enforces Conventional Commits. Install once: git config core.hooksPath .githooks
+exec uv run commit-msg-check "$1"

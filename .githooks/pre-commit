@@ -1,0 +1,3 @@
+#!/bin/sh
+# Runs the fast quality gate before every commit. Install once: git config core.hooksPath .githooks
+exec uv run check
