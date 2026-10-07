@@ -47,9 +47,12 @@ class FinanceConfig(_Config):
     merchandise_form_weight: float = Field(ge=0.0, le=1.0)
     facilities_upkeep_per_level_week: int = Field(ge=0)
     youth_academy_per_level_week: int = Field(ge=0)
-    prize_pool_share_of_income: float = Field(ge=0.0)
+    ticket_price_scale: float = Field(gt=0.0)
+    pay_weekday: int = Field(ge=0, le=6)
+    prize_pool_share_of_broadcast: float = Field(ge=0.0)
     prize_position_decay: float = Field(gt=0.0, lt=1.0)
     broadcast_merit_share: float = Field(ge=0.0, le=1.0)
+    merchandise_outcome_factor: dict[str, float]
 
 
 class AttendanceConfig(_Config):

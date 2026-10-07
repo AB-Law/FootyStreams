@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0150** Add club finance and the ledger *(M9; scope: league)*
 - **0149** Add match setup building and the lineup AI *(M9; scope: league)*
 - **0148** Add weather generation and attendance *(M9; scope: league)*
 - **0147** Add rule-based modifiers and the world-event generator *(M9; scope: league)*
