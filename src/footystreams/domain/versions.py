@@ -11,5 +11,5 @@ contracts. ``SIM_VERSION`` stays ``0.0.0`` until the sim exists.
 
 from __future__ import annotations
 
-SCHEMA_VERSION = "0.1.2"
+SCHEMA_VERSION = "0.2.0"
 SIM_VERSION = "0.0.0"

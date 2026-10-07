@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0043** Add world record and static-table models *(M2; scope: schemas; schema version minor)*
 - **0042** Add WorldRng, a deterministic forkable random stream for seed and league code *(M2; scope: domain)*
 - **0038** Enforce SCHEMA_VERSION bump when schemas change *(M1; scope: tools)*
 - **0037** Export initial schemas tree for SCHEMA_VERSION 0.1.0 *(M1; scope: schemas; schema version minor)*

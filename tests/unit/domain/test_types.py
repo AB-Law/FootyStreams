@@ -69,7 +69,7 @@ def test_position_enum__includes_gk_and_st() -> None:
 
 
 def test_versions__initial_constants() -> None:
-    assert SCHEMA_VERSION == "0.1.2"
+    assert SCHEMA_VERSION == "0.2.0"
     assert SIM_VERSION == "0.0.0"
 
 
