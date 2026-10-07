@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0066** Add WorldDelta and stateless derived ids *(M9; scope: league)*
 - **0065** Add the mood resolver *(M9; scope: league)*
 - **0064** Add the MatchSimulator seam and the result-only simulator *(M9; scope: league)*
 - **0062** Add league config, calendar, double round-robin schedule and standings with tie-breaks *(M9; scope: data)*
