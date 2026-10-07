@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0080** Add the AI manager's assessment, candidate plans and mentality ladder *(M6; scope: sim)*
 - **0079** Roll injuries in fouls, tackles and open play; verify injured players leave *(M6; scope: sim, verify)*
 - **0078** Add the injury model: hazard, types, forced changes (not yet rolled) *(M6; scope: sim)*
 - **0077** Add substitution mechanics (not yet triggered) *(M6; scope: sim)*
