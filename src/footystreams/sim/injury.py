@@ -157,3 +157,43 @@ def injure(play: Play, incident: Incident) -> float:
     if replacement is not None:
         stoppage += make_substitution(play, victim, replacement, "injury", Window.FORCED)
     return stoppage
+
+
+def _hurt_by(play: Play, victim: PlayerState, chance: float) -> bool:
+    """Roll once against the base chance scaled by the victim's hazard."""
+    scale = hazard_multiplier(victim, play.state.conditions, play.cfg.injury)
+    return play.injury.u() < chance * scale
+
+
+def injure_in_foul(play: Play, fouler: PlayerState, fouled: PlayerState, foul_id: str) -> float:
+    """Maybe hurt the fouled player; return the stoppage seconds (zero when nobody is hurt)."""
+    cfg = play.cfg.injury
+    if not cfg.enabled or not _hurt_by(play, fouled, cfg.foul_contact):
+        return 0.0
+    return injure(play, Incident(fouled, "foul", fouler, foul_id))
+
+
+def injure_in_tackle(
+    play: Play, tackler: PlayerState, carrier: PlayerState, tackle_id: str
+) -> float:
+    """Maybe hurt one of the two in a clean tackle (the tackler or the carrier, evenly)."""
+    cfg = play.cfg.injury
+    if not cfg.enabled:
+        return 0.0
+    carrier_hurt = play.injury.u() < _HALF
+    victim, other = (carrier, tackler) if carrier_hurt else (tackler, carrier)
+    if not _hurt_by(play, victim, cfg.tackle_contact):
+        return 0.0
+    return injure(play, Incident(victim, "contact", other, tackle_id))
+
+
+def injure_without_contact(play: Play, dt_s: float) -> float:
+    """Maybe strain a player while play runs for `dt_s` seconds; return the stoppage seconds."""
+    cfg = play.cfg.injury
+    if not cfg.enabled or play.injury.u() >= cfg.non_contact_per_match * dt_s / _MATCH_S:
+        return 0.0
+    state = play.state
+    players = [*state.home.players, *state.away.players]
+    weights = [hazard_multiplier(player, state.conditions, cfg) for player in players]
+    victim = players[play.injury.choice_weighted(weights)]
+    return injure(play, Incident(victim, "non_contact", None, None))

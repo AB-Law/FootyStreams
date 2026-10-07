@@ -4,17 +4,21 @@ from dataclasses import replace
 from footystreams.domain.types import Position
 from footystreams.events.discipline import InjuryEvent, SubstitutionEvent
 from footystreams.events.types import MatchEvent
-from footystreams.sim import SimConfig, merge_config
+from footystreams.sim import SimConfig, default_tables, merge_config, run_match
 from footystreams.sim.injury import (
     Incident,
     hazard_multiplier,
     injure,
+    injure_in_foul,
+    injure_in_tackle,
+    injure_without_contact,
 )
 from footystreams.sim.play import Play
 from footystreams.sim.state import PlayerState
 from footystreams.sim.weather import NEUTRAL
 from tests.factories.sim_play import make_play
 from tests.factories.sim_teams import make_demo_setup
+from tests.helpers.sim import assert_match_valid
 
 ON = {"injury": {"enabled": True, "minor_off_share": 1.0}}
 FIRST_SEEDS = range(1, 60)
@@ -64,6 +68,15 @@ def test_hazard_multiplier__tiredness_proneness_and_a_wet_pitch_all_raise_the_ha
     assert hazard_multiplier(player, NEUTRAL, cfg) > rested
     wet = replace(NEUTRAL, injury_mult=1.2)
     assert hazard_multiplier(player, wet, cfg) > hazard_multiplier(player, NEUTRAL, cfg)
+
+
+def test_injure__disabled_config_never_hurts_anyone() -> None:
+    play = make_play(setup=make_demo_setup())
+    victim, other = play.state.home.players[5], play.state.away.players[5]
+    assert injure_in_foul(play, other, victim, "x") == 0.0
+    assert injure_in_tackle(play, other, victim, "x") == 0.0
+    assert injure_without_contact(play, 1e9) == 0.0
+    assert not _events(play)
 
 
 def test_injure__a_player_who_cannot_continue_is_replaced_in_a_forced_change() -> None:
@@ -122,3 +135,15 @@ def test_injure__a_hurt_goalkeeper_without_cover_leaves_an_outfielder_in_goal() 
             break
     assert play.state.home.keeper is not keeper
     assert play.state.home.keeper.position is Position.GK
+
+
+def test_run_match__injury_heavy_matches_are_valid_and_repeatable() -> None:
+    setup = make_demo_setup()
+    config = _config(
+        {"injury": {"foul_contact": 0.3, "tackle_contact": 0.05, "non_contact_per_match": 6.0}}
+    )
+    first = run_match(setup, 11, config, default_tables())
+    again = run_match(setup, 11, config, default_tables())
+    assert_match_valid(first.events, setup)
+    assert first.summary.log_digest == again.summary.log_digest
+    assert any(isinstance(e, InjuryEvent) for e in first.events)

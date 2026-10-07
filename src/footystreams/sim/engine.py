@@ -31,6 +31,7 @@ from footystreams.sim.config_rules import OffsideConfig
 from footystreams.sim.decision import decide
 from footystreams.sim.emit import EventEmitter, Meta, TeamLabel
 from footystreams.sim.fatigue import advance_exhaustion, halftime_recovery
+from footystreams.sim.injury import injure_without_contact
 from footystreams.sim.options import ActionKind, Option
 from footystreams.sim.play import Play
 from footystreams.sim.positioning import place_for_kickoff, update_positions
@@ -152,12 +153,14 @@ class MatchEngine:
 
     def _step(self) -> None:
         state, play = self._state, self._play
+        hurt_s = 0.0
         if self._pending_move_s >= self._config.positioning.step_s:
             update_positions(
                 state, self._pending_move_s, self._config.positioning, self._offside_rule()
             )
             if self._config.fatigue.enabled:
                 advance_exhaustion(state, self._pending_move_s, self._config.fatigue)
+            hurt_s = injure_without_contact(play, self._pending_move_s)
             self._pending_move_s = 0.0
         state.tick += 1
         pressure = pressure_on(state.carrier, state.defenders, self._config.pressure)
@@ -167,7 +170,7 @@ class MatchEngine:
         else:
             option: Option = decide(state, play.rng, self._config, pressure)
             duration = _RESOLVERS[option.kind](play, option)
-        state.t_period += duration
+        state.t_period += duration + hurt_s
         self._pending_move_s += duration
 
     def _offside_rule(self) -> OffsideConfig | None:
