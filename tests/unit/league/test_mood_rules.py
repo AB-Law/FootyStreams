@@ -8,12 +8,8 @@ from footystreams.domain.injury import Injury, InjurySeverity
 from footystreams.domain.mood import ModifierSource, ModifierVisibility, StateKind
 from footystreams.domain.types import MatchId, PlayerId
 from footystreams.league.modifiers import ModifierSpec, new_modifier
-from footystreams.league.mood_rules import (
-    MatchFact,
-    Outcome,
-    modifier_for_return,
-    modifiers_from_match,
-)
+from footystreams.league.mood_rules import MatchFact, modifier_for_return, modifiers_from_match
+from footystreams.league.outcome import Outcome
 from tests.factories.league_config import make_mood_config
 from tests.factories.mood import TODAY
 

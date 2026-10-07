@@ -9,21 +9,13 @@ from __future__ import annotations
 import datetime as dt
 from collections.abc import Sequence
 from dataclasses import dataclass
-from enum import StrEnum
 
 from footystreams.domain.injury import Injury
 from footystreams.domain.mood import ModifierSource, StateKind, StateModifier
 from footystreams.domain.types import MatchId, PlayerId
 from footystreams.league.modifiers import ModifierSpec, new_modifier
 from footystreams.league.mood_config import MoodConfig
-
-
-class Outcome(StrEnum):
-    """How the player's side did."""
-
-    WIN = "win"
-    DRAW = "draw"
-    LOSS = "loss"
+from footystreams.league.outcome import Outcome
 
 
 @dataclass(frozen=True, slots=True)

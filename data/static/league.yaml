@@ -18,9 +18,12 @@ finance:
   merchandise_form_weight: 0.3        # share of merchandise that follows results (win share)
   facilities_upkeep_per_level_week: 450
   youth_academy_per_level_week: 160
-  prize_pool_share_of_income: 0.10     # of the league's total yearly income, paid by final position
+  ticket_price_scale: 2.5              # crowns per unit of a stadium's ticket_price_base
+  pay_weekday: 0                       # weekly accruals fall on this weekday (0 = Monday)
+  prize_pool_share_of_broadcast: 0.45  # prize pool as a share of all clubs' broadcast income
   prize_position_decay: 0.78           # each place earns this share of the one above
   broadcast_merit_share: 0.2           # share of broadcast income paid as merit by final position
+  merchandise_outcome_factor: {win: 1.4, draw: 1.0, loss: 0.6}  # home-match merchandise by result
 
 attendance:
   base_fill: 0.62
