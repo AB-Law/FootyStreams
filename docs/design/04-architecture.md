@@ -298,3 +298,10 @@ Domain validation errors surface as Pydantic `ValidationError`; the CLI converts
 - Ports live in `persistence/ports.py`; `UnitOfWork` is an abstract base class; `RepositoryWorldReader` implements `WorldReader` for any backend. Optimistic concurrency: `save(entity, expected_rev=n)`.
 - Append-only tables (`ledger_entries`, `match_events`) have no update/delete in the ports and UPDATE/DELETE-blocking triggers in SQLite.
 - Details and deviations: `docs/milestones/M3.md`.
+
+## 11. As built (M9)
+
+- `league/` modules, one concern each: `config`, `mood_config`, `climate` (static tables as models); `schedule`, `calendar`, `standings`; `simulator` (the `MatchSimulator` seam) with `incidents` and `result_events`; `mood`, `modifiers`, `mood_rules`, `world_events`; `weather_gen`, `attendance`; `lineup_ai`, `snapshots`, `setup` (`build_match_setup`); `finance` and `ledger` (postings and bookkeeping); `condition`, `injuries`, `post_match` (`derive_world_delta`); `recovery`, `clock`, `stages`, `daily`, `matchday`, `inputs`, `season`, `tables`, `report`.
+- Stages are pure `(Repositories, date, rng) -> WorldDelta`; `WorldDelta` fields are table names and `apply_delta` writes them (append for ledger and events). Ids come from `derive_id`, not counters.
+- `persistence/ports.py` re-exports the record types and errors the league layer needs (it may import nothing else from persistence).
+- Details and deviations: `docs/milestones/M9.md`.

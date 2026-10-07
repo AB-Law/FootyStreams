@@ -52,7 +52,7 @@ Track A (match engine) is built separately; the sections above predate both trac
 |-----------|--------|-------|
 | M2 seed and static data | `feat/m2-seed-world` | done (draft PR); see `docs/milestones/M2.md` |
 | M3 persistence | `feat/m3-persistence` | done; see `docs/milestones/M3.md` |
-| M9 league layer | `feat/m9-league-layer` | pending |
+| M9 league layer | `feat/m9-league-layer` | done; see `docs/milestones/M9.md` |
 | M10 development and rollover | `feat/m10-development-rollover` | pending |
 | M11 contracts and transfers | `feat/m11-contracts-transfers` | pending |
 
@@ -64,6 +64,11 @@ Track A (match engine) is built separately; the sections above predate both trac
 
 ### What M3 added
 - `persistence/`: ports, table specs, codec, in-memory and SQLite backends, `UnitOfWork`, `WorldReader`, Alembic `0001_initial`; `uv run seed --db league.sqlite`. Contract tests in `tests/contract` run every behaviour on both backends.
+
+### What M9 added
+- `uv run league [--seed N] [--clubs K] [--world DIR] [--db PATH] [--matchday N]`: plays the current season (result-only simulator) and prints table and money; a SQLite `--db` is resumable.
+- `league/`: schedule, standings, simulator seam, mood resolver, rule-based modifiers, life events, weather, attendance, lineup AI and `build_match_setup`, finance and `ledger.book`, `derive_world_delta`, `WorldDelta`, `WorldClock`, recovery, `DailyTick` (stage log, one transaction per stage and per match), `SeasonRunner`; `verify/league.py` (L01-L03), W12.
+- 21-day matchday spacing, weekly life events and the ticket price scale are deliberate deviations (see the milestone report).
 
 ### Track B caveats
 - `WorldRng` stands in for track A's `SimRng` (same interface); unify when both tracks merge.
