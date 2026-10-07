@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0036** Add usage registry and export-schemas with drift test *(M1; scope: domain, cli, schemas; schema version minor)*
 - **0035** Add match summary and MatchResult *(M1; scope: events; schema version minor)*
 - **0034** Add match event models and discriminated union *(M1; scope: events; schema version minor)*
 - **0033** Add media and voice profile models *(M1; scope: domain; schema version minor)*

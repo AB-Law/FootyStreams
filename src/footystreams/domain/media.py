@@ -54,7 +54,7 @@ class VoiceCasting(DomainModel):
         "age_range": "R",
         "accent": "R",
         "timbre": "R",
-        "register": "R",
+        "voice_register": "R",
         "base_pace_wpm": "R",
         "pace_variance": "R",
         "energy_range": "R",
@@ -65,7 +65,7 @@ class VoiceCasting(DomainModel):
     age_range: AgeRange
     accent: str
     timbre: tuple[str, ...] = ()
-    register: VoiceRegister = VoiceRegister.MID
+    voice_register: VoiceRegister = VoiceRegister.MID
     base_pace_wpm: int = Field(ge=80, le=220, default=150)
     pace_variance: Unit = 0.1
     energy_range: tuple[Unit, Unit] = (0.2, 0.9)
