@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0160** Add retirement *(M10; scope: league)*
 - **0159** Add weekly training micro-steps *(M10; scope: league)*
 - **0158** Add player progression and development config *(M10; scope: league)*
 - **0156** Add the league command *(M9; scope: cli)*
