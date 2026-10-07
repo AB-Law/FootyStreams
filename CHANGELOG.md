@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0051** Add referee and media crew generators *(M2; scope: data)*
 - **0050** Add the club generator: identity, stadium, finances, organisation, calibrated squads and default tactics *(M2; scope: data)*
 - **0048** Add manager and staff generators with tactic presets and style prototypes *(M2; scope: data)*
 - **0047** Add the player generator: archetypes, spiky attributes, positions, personality and contracts *(M2; scope: data)*
