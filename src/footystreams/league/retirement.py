@@ -46,12 +46,12 @@ def _close_spell(player: Player, today: dt.date) -> tuple[CareerStint, ...]:
     )
 
 
-def retirement_news(player: Player, today: dt.date) -> WorldEvent:
-    """The feed entry for a retirement."""
+def retirement_news(player: Player, today: dt.date, kind: str = "retirement") -> WorldEvent:
+    """The feed entry for a retirement; ``left_the_game`` for an unsigned player let go."""
     return WorldEvent(
-        id=Id(derive_id("world_event", player.id, today.isoformat(), "retirement")),
+        id=Id(derive_id("world_event", player.id, today.isoformat(), kind)),
         date=today,
-        kind="retirement",
+        kind=kind,
         participants=(EntityRef(kind=EntityKind.PLAYER, id=Id(player.id)),),
         facts={"age": player.age_on(today), "ability": player.ability_current},
         visibility=ModifierVisibility.PUBLIC,
