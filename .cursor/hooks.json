@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "hooks": {
+    "stop": [
+      { "command": "python tools/hooks/gate.py --agent cursor", "loop_limit": 8 }
+    ]
+  }
+}

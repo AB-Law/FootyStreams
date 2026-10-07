@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR}/tools/hooks/gate.py\" --agent claude",
+            "timeout": 900,
+            "statusMessage": "Quality gate: ruff, mypy, tests..."
+          }
+        ]
+      }
+    ]
+  }
+}
