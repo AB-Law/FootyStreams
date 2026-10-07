@@ -7,6 +7,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Build / Tooling
+- **0009** Replace .gitignore with a complete Python, tooling and project ruleset. *(M0; scope: tools)*
 - **0007** Add the uv project, strict lint/type/test configuration and the 'uv run check' quality gate. *(M0; scope: tools, ci)*
 
 ### Removed
