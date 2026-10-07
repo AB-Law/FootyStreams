@@ -5,8 +5,10 @@ description = "A fictional football league that runs as a 24/7 live broadcast: d
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "alembic>=1.20.0",
     "pydantic>=2.7",
     "pyyaml>=6.0.3",
+    "sqlalchemy>=2.1.4",
 ]
 
 [project.scripts]

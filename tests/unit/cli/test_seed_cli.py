@@ -9,6 +9,9 @@ import pytest
 
 from footystreams.cli import seed as seed_cli
 from footystreams.cli.seed import EXIT_OK, EXIT_USAGE, EXIT_VIOLATIONS, main
+from footystreams.persistence.sql.engine import create_sqlite_engine
+from footystreams.persistence.sql.uow import SqlUnitOfWork
+from footystreams.persistence.world_store import load_world
 from footystreams.seed.world_io import build_manifest, read_manifest, write_world
 from tests.factories.world import make_world
 
@@ -95,3 +98,11 @@ def test_seed__separate_process_with_random_hash_seed__same_content_hash(tmp_pat
     )
     assert result.returncode == 0, result.stderr
     assert read_manifest(tmp_path / "w") == build_manifest(make_world(1))
+
+
+def test_seed__db_option_loads_the_world_into_sqlite(tmp_path: Path) -> None:
+    database = tmp_path / "league.sqlite"
+    assert main(["--seed", "1", "--out", str(tmp_path / "w"), "--db", str(database)]) == EXIT_OK
+    engine = create_sqlite_engine(database)
+    with SqlUnitOfWork(engine) as uow:
+        assert load_world(uow) == make_world(1)
