@@ -4,11 +4,13 @@ import pytest
 
 from footystreams.domain.types import FormationId, Position
 from footystreams.sim.config import PositionConfig
+from footystreams.sim.config_rules import OffsideConfig
 from footystreams.sim.errors import InvalidSetupError
-from footystreams.sim.geometry import distance_m
+from footystreams.sim.geometry import distance_m, frame_coordinate
 from footystreams.sim.positioning import (
     KICKOFF_MAX_X,
     move_toward,
+    offside_ceiling,
     place_for_kickoff,
     speed_mps,
     target_in_frame,
@@ -122,3 +124,15 @@ def test_place_for_kickoff__everyone_in_own_half_but_the_kicker_on_the_centre_sp
         assert player.x <= KICKOFF_MAX_X
     for player in state.away.players:
         assert player is state.carrier or player.x >= 1.0 - KICKOFF_MAX_X
+
+
+def test_update_positions__the_away_side_plans_from_positions_before_the_home_side_moved() -> None:
+    state = make_state()
+    state.carrier = state.home.players[9]
+    for player in state.home.players:
+        player.x = 0.45
+    attacker = next(p for p in state.away.players if p.line is Line.ATTACK)
+    rule = OffsideConfig()
+    ceiling = offside_ceiling(state.away, state.home, attacker, rule)
+    update_positions(state, 60.0, PositionConfig(), rule)
+    assert frame_coordinate(attacker.x, state.away.attack_dir) == pytest.approx(ceiling)

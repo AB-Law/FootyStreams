@@ -30,7 +30,9 @@ def _weather(**overrides: Any) -> Weather:
 
 
 def test_conditions_for__switched_off_is_neutral() -> None:
-    assert conditions_for(_weather(pitch_wetness=1.0), None, WeatherConfig()) is NEUTRAL
+    assert (
+        conditions_for(_weather(pitch_wetness=1.0), None, WeatherConfig(enabled=False)) is NEUTRAL
+    )
 
 
 def test_conditions_for__mild_dry_weather_has_no_heat_cold_or_wetness() -> None:
@@ -102,9 +104,9 @@ def test_pass_success__environment_only_hurts_long_through_and_cross_balls() -> 
 
 def test_build_state__wet_weather_lowers_players_first_touch_when_enabled() -> None:
     setup = make_setup(weather=_weather(pitch_wetness=1.0))
-    cfg = merge_config(SimConfig(), {"weather": {"enabled": True}})
-    off = make_state(setup, config=SimConfig())
-    on = make_state(setup, config=cfg)
+    cfg = merge_config(SimConfig(), {"weather": {"enabled": False}})
+    off = make_state(setup, config=cfg)
+    on = make_state(setup, config=SimConfig())
     assert on.home.players[3].skills.first_touch < off.home.players[3].skills.first_touch
     assert on.conditions.wet > 0.0
     assert replace(on.conditions).wet == on.conditions.wet

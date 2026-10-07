@@ -71,7 +71,8 @@ def test_hazard_multiplier__tiredness_proneness_and_a_wet_pitch_all_raise_the_ha
 
 
 def test_injure__disabled_config_never_hurts_anyone() -> None:
-    play = make_play(setup=make_demo_setup())
+    off = merge_config(SimConfig(), {"injury": {"enabled": False}})
+    play = make_play(setup=make_demo_setup(), config=off)
     victim, other = play.state.home.players[5], play.state.away.players[5]
     assert injure_in_foul(play, other, victim, "x") == 0.0
     assert injure_in_tackle(play, other, victim, "x") == 0.0

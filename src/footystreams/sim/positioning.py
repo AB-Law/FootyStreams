@@ -74,32 +74,55 @@ def offside_ceiling(
     return line - margin
 
 
-def update_positions(
-    state: MatchState, dt: float, cfg: PositionConfig, offside: OffsideConfig | None = None
-) -> None:
-    """Move every player except the ball carrier toward his target for `dt` seconds.
+Move = tuple[PlayerState, float, float, float]  # player, absolute target x, y, metres allowed
 
-    With `offside` given, attackers stay behind the opponents' second-last defender.
-    """
-    for team in (state.home, state.away):
-        opponents = state.team(opposite(team.side))
-        in_possession = team.side == state.carrier.side
-        ball = (
-            frame_coordinate(state.ball_x, team.attack_dir),
-            frame_coordinate(state.ball_y, team.attack_dir),
-        )
-        for player in team.players:
-            if player is state.carrier:
-                continue
-            target_x, target_y = target_in_frame(team, player, ball, in_possession, cfg)
-            if offside is not None and player.line is not Line.KEEPER:
-                target_x = min(target_x, offside_ceiling(team, opponents, player, offside))
-            move_toward(
+
+def _plan_team_moves(
+    state: MatchState,
+    team: TeamState,
+    dt: float,
+    rules: tuple[PositionConfig, OffsideConfig | None],
+) -> list[Move]:
+    cfg, offside = rules
+    opponents = state.team(opposite(team.side))
+    in_possession = team.side == state.carrier.side
+    ball = (
+        frame_coordinate(state.ball_x, team.attack_dir),
+        frame_coordinate(state.ball_y, team.attack_dir),
+    )
+    moves: list[Move] = []
+    for player in team.players:
+        if player is state.carrier:
+            continue
+        target_x, target_y = target_in_frame(team, player, ball, in_possession, cfg)
+        if offside is not None and player.line is not Line.KEEPER:
+            target_x = min(target_x, offside_ceiling(team, opponents, player, offside))
+        moves.append(
+            (
                 player,
                 frame_coordinate(target_x, team.attack_dir),
                 frame_coordinate(target_y, team.attack_dir),
                 speed_mps(player, cfg) * dt,
             )
+        )
+    return moves
+
+
+def update_positions(
+    state: MatchState, dt: float, cfg: PositionConfig, offside: OffsideConfig | None = None
+) -> None:
+    """Move every player except the ball carrier toward his target for `dt` seconds.
+
+    With `offside` given, attackers stay behind the opponents' second-last defender. Both teams
+    plan from the same positions and then move, so neither side reacts to the other's step.
+    """
+    moves = [
+        move
+        for team in (state.home, state.away)
+        for move in _plan_team_moves(state, team, dt, (cfg, offside))
+    ]
+    for player, target_x, target_y, metres in moves:
+        move_toward(player, target_x, target_y, metres)
 
 
 def place_for_kickoff(state: MatchState, kicking_side: Side) -> None:

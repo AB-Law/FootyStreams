@@ -2,8 +2,8 @@
 
 `crowd = fill x mean(atmosphere, proximity, passion) x 2 x crowd weight`, clamped to [0, 1]
 (an empty ground has no crowd; a neutral venue has attendance 0). The home side's mental
-attributes gain up to 2.5% x crowd, scaled by each player's `big_match`; the away side's composure
-loses up to 2% x crowd x (0.5 + 0.5 toxicity). Everything is multiplied by
+attributes gain up to 12% x crowd, scaled by each player's `big_match`; the away side's composure
+loses up to 7% x crowd x (0.5 + 0.5 toxicity). Everything is multiplied by
 `SimConfig.home_advantage_scale`, the calibration lever (docs/design/02 section 8).
 """
 

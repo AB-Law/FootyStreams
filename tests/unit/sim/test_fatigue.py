@@ -122,7 +122,7 @@ def test_halftime_recovery__lowers_exhaustion_and_never_below_zero() -> None:
 
 
 def test_build_state__with_fatigue_off_nobody_is_tired_and_skills_are_the_base() -> None:
-    state = _state(SimConfig())
+    state = _state(merge_config(SimConfig(), {"fatigue": {"enabled": False}}))
     player = state.home.players[5]
     assert player.exhaustion == 0.0
     assert player.base_skills is player.skills

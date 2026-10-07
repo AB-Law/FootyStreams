@@ -40,7 +40,7 @@ class ManagerConfig(DomainModel):
         "yellow_gain": "S",
     }
 
-    enabled: bool = False  # the AI manager; forced injury changes happen regardless
+    enabled: bool = True  # the AI manager; forced injury changes happen regardless
     max_subs: int = Field(ge=0, le=11, default=5)
     max_windows: int = Field(ge=0, le=11, default=3)  # stoppages in which changes may be made
     window_gap_s: float = 20.0  # changes closer together than this share one window
@@ -51,9 +51,9 @@ class ManagerConfig(DomainModel):
     review_flexibility: float = 0.8
     review_jitter: float = 0.25
     noise_scale: float = 0.30  # sd of the apparent exhaustion of a manager with no tactical sense
-    stay_weight: float = 1.0  # the prior for doing nothing at a checkpoint
-    fatigue_threshold: float = 0.35  # apparent exhaustion above which a fresh-legs change appeals
-    fatigue_gain: float = 3.0
+    stay_weight: float = 0.6  # the prior for doing nothing at a checkpoint
+    fatigue_threshold: float = 0.25  # apparent exhaustion above which a fresh-legs change appeals
+    fatigue_gain: float = 8.0
     min_fit: int = Field(ge=0, le=100, default=30)  # least competence a replacement needs
     chase_from_min: float = 60.0
     protect_from_min: float = 70.0

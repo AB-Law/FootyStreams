@@ -109,7 +109,8 @@ def test_run_match__a_manager_who_never_acts_leaves_the_log_untouched() -> None:
     setup = make_demo_setup()
     quiet = merge_config(SimConfig(), {"manager": {"enabled": True, "stay_weight": 1e12}})
     with_ai = run_match(setup, 21, quiet, default_tables())
-    without = run_match(setup, 21, SimConfig(), default_tables())
+    off = merge_config(SimConfig(), {"manager": {"enabled": False}})
+    without = run_match(setup, 21, off, default_tables())
     assert with_ai.summary.log_digest == without.summary.log_digest
 
 

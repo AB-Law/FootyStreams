@@ -65,6 +65,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0084** Enable the M6 behaviours (fatigue, weather, home advantage, injuries, AI manager), plan both teams' moves from the same positions, bump SIM_VERSION to 0.3.0 *(M6; scope: sim, schemas; sim version minor; schema version patch)*
 - **0071** Enable and calibrate the M5 behaviours; SIM_VERSION 0.2.0 *(M5; scope: sim, schemas; sim version minor; schema version patch)*
 - **0059** Bump SIM_VERSION to 0.1.0 and SCHEMA_VERSION to 0.1.3 *(M4; scope: schemas, sim; sim version minor; schema version patch)*
 - **0057** Damp skill effects and add the totality, strength and performance tests *(M4; scope: sim)*

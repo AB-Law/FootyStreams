@@ -32,7 +32,7 @@ class WeatherConfig(DomainModel):
         "poor_pitch_injury": "S",
     }
 
-    enabled: bool = False  # switched on in the commit that enables M6 behaviour
+    enabled: bool = True
     heat_start_c: float = 22.0  # heat builds from here...
     heat_span_c: float = 12.0  # ...to its maximum this many degrees higher
     cold_end_c: float = 6.0  # cold builds below here...
@@ -86,7 +86,7 @@ class FatigueConfig(DomainModel):
         "refresh_step": "S",
     }
 
-    enabled: bool = False  # switched on in the commit that enables M6 behaviour
+    enabled: bool = True
     match_s: float = 5400.0  # drain is expressed per full match
     base_rate: float = 0.60  # exhaustion gained over 90 minutes by an average, unhurried player
     carried_fatigue_weight: float = 0.6  # starting exhaustion = 0.6 fatigue + 0.4 (1 - fitness)
@@ -129,9 +129,9 @@ class HomeAdvantageConfig(DomainModel):
         "big_match_share": "S",
     }
 
-    enabled: bool = False  # switched on in the commit that enables M6 behaviour
-    crowd_lift: float = 0.025  # share of mental attributes a full, loud crowd adds at home
-    away_pressure: float = 0.02  # share of away composure a full, hostile crowd removes
+    enabled: bool = True
+    crowd_lift: float = 0.12  # share of mental attributes a full, loud crowd adds at home
+    away_pressure: float = 0.07  # share of away composure a full, hostile crowd removes
     default_capacity: int = 40_000  # used when the home sheet carries no stadium
     default_axis: float = 0.5  # atmosphere, proximity, passion, weight when unknown
     toxicity_share: float = 0.5  # share of the away pressure that does not depend on toxicity
@@ -157,10 +157,10 @@ class InjuryConfig(DomainModel):
         "stoppage_spread_s": "S",
     }
 
-    enabled: bool = False  # switched on in the commit that enables M6 behaviour
-    foul_contact: float = 0.012  # chance a fouled player is hurt, for an average player
+    enabled: bool = True
+    foul_contact: float = 0.016  # chance a fouled player is hurt, for an average player
     tackle_contact: float = 0.0015  # same for one of the two in a clean tackle
-    non_contact_per_match: float = 0.08  # strains and cramps a match, before the multipliers
+    non_contact_per_match: float = 0.10  # strains and cramps a match, before the multipliers
     proneness_floor: float = 0.5  # hazard x (floor + injury_proneness / 100); 1.0 at proneness 50
     exhaustion_weight: float = 1.5  # hazard x (1 + weight x exhaustion^2)
     bravery_weight: float = 0.3  # brave players throw themselves into more trouble
