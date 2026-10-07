@@ -68,6 +68,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0052** Speed up option generation and refresh positions every 4 seconds *(M4; scope: sim)*
 
 ### Tests
+- **0060** Pin the M4 golden digests *(M4; scope: sim; sim version minor)*
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
