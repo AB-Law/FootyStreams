@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0066** Add throw-ins, goal kicks, corners with an aerial duel and out-of-play detection *(M5; scope: sim)*
 - **0065** Add cards: yellow, red, second yellow, dismissals and the emergency keeper *(M5; scope: sim)*
 - **0064** Add fouls, advantage and free-kick restarts (off by default until M5 is enabled) *(M5; scope: sim)*
 - **0062** Add the referee profile, call model and the discipline and setpiece streams *(M5; scope: sim)*

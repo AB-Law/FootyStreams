@@ -11,6 +11,7 @@ from dataclasses import dataclass
 
 from footystreams.events.open_play import GoalEvent, SaveEvent, ShotEvent
 from footystreams.sim.actions.challenge import closest_of
+from footystreams.sim.actions.out_of_play import out_of_play
 from footystreams.sim.actions.shooting import finishing_skill
 from footystreams.sim.emit import Meta
 from footystreams.sim.geometry import frame_coordinate, goal_distance_m
@@ -19,7 +20,7 @@ from footystreams.sim.options import Option
 from footystreams.sim.play import Play, action_duration, actor, label, take_possession
 from footystreams.sim.positioning import place_for_kickoff
 from footystreams.sim.pressure import nearest_opponents
-from footystreams.sim.side import opposite
+from footystreams.sim.side import Side, opposite
 from footystreams.sim.state import PlayerState
 
 _PERCENT = 100.0
@@ -114,17 +115,34 @@ def resolve_shot(play: Play, option: Option) -> float:
 
 
 def _after_shot(play: Play, outcome: str, shot_id: str, assist: str | None) -> float:
-    """Apply the consequences of a shot outcome; return extra seconds (goal celebration)."""
+    """Apply the consequences of a shot outcome; return extra seconds (goal, restarts)."""
     state = play.state
     if outcome == "goal":
         return _score_goal(play, shot_id, assist)
     if outcome == "saved":
-        _record_save(play, shot_id)
-    elif outcome == "off_target":
-        _keeper_collects(play)
-    else:  # blocked or woodwork: the ball breaks loose near the shooter
-        _loose_ball(play, (state.ball_x, state.ball_y))
+        return _record_save(play, shot_id)
+    if outcome == "off_target":
+        return _behind(play, last_touch=state.carrier.side, keeper_collects=True)
+    if outcome == "blocked" and _deflected_behind(play, play.cfg.restarts.blocked_corner_share):
+        return _behind(play, last_touch=state.defenders.side, keeper_collects=False)
+    _loose_ball(play, (state.ball_x, state.ball_y))
     return 0.0
+
+
+def _deflected_behind(play: Play, share: float) -> bool:
+    """True when restarts are on and the ball runs out behind the goal (one `setpiece` draw)."""
+    return play.cfg.restarts.enabled and play.setpiece.u() < share
+
+
+def _behind(play: Play, *, last_touch: Side, keeper_collects: bool) -> float:
+    """The ball goes out behind the goal: a goal kick or corner, or the keeper just collects it."""
+    state = play.state
+    if not play.cfg.restarts.enabled:
+        if keeper_collects:
+            _keeper_collects(play)
+        return 0.0
+    goal_x = frame_coordinate(1.0, state.attackers.attack_dir)
+    return out_of_play(play, (goal_x, state.carrier.y), last_touch)
 
 
 def _keeper_collects(play: Play) -> None:
@@ -134,7 +152,7 @@ def _keeper_collects(play: Play) -> None:
     take_possession(state, keeper, spot_x, keeper.y)
 
 
-def _record_save(play: Play, shot_id: str) -> None:
+def _record_save(play: Play, shot_id: str) -> float:
     state = play.state
     shooter, keeper = state.carrier, state.defenders.keeper
     meta = Meta(
@@ -147,8 +165,11 @@ def _record_save(play: Play, shot_id: str) -> None:
     play.emit.emit(state, SaveEvent, meta, keeper_id=keeper.player_id, shot_event_id=shot_id)
     if play.rng.u() < play.cfg.shot.keeper_holds:
         _keeper_collects(play)
+    elif _deflected_behind(play, play.cfg.restarts.parry_corner_share):
+        return _behind(play, last_touch=keeper.side, keeper_collects=False)
     else:
         _loose_ball(play, (keeper.x, keeper.y))
+    return 0.0
 
 
 def _loose_ball(play: Play, spot: tuple[float, float]) -> None:

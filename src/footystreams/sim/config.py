@@ -24,7 +24,7 @@ from footystreams.sim.config_play import (
     ShotConfig,
     TempoConfig,
 )
-from footystreams.sim.config_rules import DisciplineConfig, RefereeConfig
+from footystreams.sim.config_rules import DisciplineConfig, RefereeConfig, RestartConfig
 
 CONFIG_HASH_LENGTH = 16
 
@@ -37,6 +37,7 @@ __all__ = [
     "PositionConfig",
     "PressureConfig",
     "RefereeConfig",
+    "RestartConfig",
     "ShotConfig",
     "SimConfig",
     "TempoConfig",
@@ -63,6 +64,7 @@ class SimConfig(DomainModel):
         "challenge": "S",
         "referee": "S",
         "discipline": "S",
+        "restarts": "S",
     }
 
     model_profile: str = "v1"
@@ -79,6 +81,7 @@ class SimConfig(DomainModel):
     challenge: ChallengeConfig = Field(default_factory=ChallengeConfig)
     referee: RefereeConfig = Field(default_factory=RefereeConfig)
     discipline: DisciplineConfig = Field(default_factory=DisciplineConfig)
+    restarts: RestartConfig = Field(default_factory=RestartConfig)
 
 
 def config_hash(config: SimConfig) -> str:

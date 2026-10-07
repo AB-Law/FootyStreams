@@ -1,4 +1,4 @@
-"""Laws-of-the-game knobs: the referee and discipline (fouls, advantage, restarts)."""
+"""Laws-of-the-game knobs: the referee, discipline and out-of-play restarts."""
 
 from __future__ import annotations
 
@@ -86,3 +86,47 @@ class DisciplineConfig(DomainModel):
     card_s: float = 30.0
     card_spread_s: float = 10.0
     min_players: int = Field(ge=1, le=11, default=7)  # a side is never reduced below this
+
+
+class RestartConfig(DomainModel):
+    """Out-of-play restarts: throw-ins, goal kicks, corners and the aerial duel (02 section 6)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "enabled": "S",
+        "throw_in_s": "S",
+        "throw_in_spread_s": "S",
+        "goal_kick_s": "S",
+        "goal_kick_spread_s": "S",
+        "corner_s": "S",
+        "corner_spread_s": "S",
+        "overhit_min_m": "S",
+        "overhit_max_m": "S",
+        "blocked_corner_share": "S",
+        "parry_corner_share": "S",
+        "clearance_out_share": "S",
+        "cross_corner_share": "S",
+        "dribble_out_share": "S",
+        "corner_keeper_claim": "S",
+        "corner_shot_share": "S",
+        "corner_xg_base": "S",
+        "corner_delivery_swing": "S",
+    }
+
+    enabled: bool = False  # switched on in the commit that enables M5 behaviour
+    throw_in_s: float = 10.0
+    throw_in_spread_s: float = 4.0
+    goal_kick_s: float = 17.0
+    goal_kick_spread_s: float = 5.0
+    corner_s: float = 24.0
+    corner_spread_s: float = 6.0
+    overhit_min_m: float = 4.0  # how far past its target an overhit pass travels
+    overhit_max_m: float = 14.0
+    blocked_corner_share: float = 0.30  # blocked shots deflected behind
+    parry_corner_share: float = 0.35  # parried shots tipped behind
+    clearance_out_share: float = 0.25  # clearances that go into touch
+    cross_corner_share: float = 0.35  # blocked crosses deflected behind
+    dribble_out_share: float = 0.60  # heavy touches that run out of play
+    corner_keeper_claim: float = 0.18
+    corner_shot_share: float = 0.46  # times the attackers' aerial share
+    corner_xg_base: float = 0.10
+    corner_delivery_swing: float = 0.20  # a good delivery lifts the attackers' share by this much

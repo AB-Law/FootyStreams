@@ -17,6 +17,7 @@ from footystreams.domain.tactics.modules.v1 import (
     FinalThird,
     GameManagement,
     Pressing,
+    SetPieces,
 )
 
 _MENTALITY_LEVEL = {
@@ -52,9 +53,8 @@ class TacticsView:
     time_wasting: float
     foul_tolerance: float
     offside_trap: float
-    tackle_aggression: (
-        float  # multiplier on foul-worthy contact: 0.8 stay on feet .. 1.25 aggressive
-    )
+    corner_attackers: int  # players sent into the box for a corner
+    tackle_aggression: float  # x on foul-worthy contact: 0.8 stay on feet .. 1.25 aggressive
 
 
 def build_view(sheet: TeamSheet) -> TacticsView:
@@ -81,6 +81,7 @@ def build_view(sheet: TeamSheet) -> TacticsView:
         time_wasting=management.time_wasting,
         foul_tolerance=management.foul_tolerance,
         offside_trap=block.offside_trap,
+        corner_attackers=_module(sheet, ModuleKey.SET_PIECES, SetPieces).corner_attackers,
         tackle_aggression=_TACKLE_AGGRESSION[block.tackling],
     )
 
