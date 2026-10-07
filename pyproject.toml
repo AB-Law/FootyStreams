@@ -10,6 +10,7 @@ dependencies = [
 ]
 
 [project.scripts]
+seed = "footystreams.cli.seed:main"
 check = "footystreams.tools.check:main"
 changelog = "footystreams.tools.changelog.cli:main"
 commit-msg-check = "footystreams.tools.commitmsg:main"
