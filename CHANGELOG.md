@@ -57,6 +57,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ### Removed
 - **0008** Remove the Cursor rules generator; keep plain, hand-maintained .cursor/rules copies. *(design; scope: tools, design)*
 
+### Performance
+- **0052** Speed up option generation and refresh positions every 4 seconds *(M4; scope: sim)*
+
 ### Tests
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 

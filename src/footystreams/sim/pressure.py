@@ -6,13 +6,16 @@
 
 from __future__ import annotations
 
+from math import sqrt
+
 from footystreams.sim.config import PressureConfig
-from footystreams.sim.geometry import distance_m, segment_distance_m
+from footystreams.sim.geometry import PITCH_LENGTH_M, PITCH_WIDTH_M, distance_m
 from footystreams.sim.mathx import clamp
 from footystreams.sim.state import PlayerState, TeamState
 
 NEAREST_PRESSERS = 3
 _PERCENT = 100.0
+_FAR_SQUARED = 1e12  # larger than any squared pitch distance
 _ATTRIBUTE_PAIR_SCALE = 200.0  # work_rate + aggression, each on 1-100
 
 
@@ -51,13 +54,28 @@ def openness(
     cfg: PressureConfig,
 ) -> float:
     """Return how free a receiver is in [0, 1]: own space mixed with a clear passing lane."""
-    space = 1e9
-    lane = 1e9
-    start = (carrier.x, carrier.y)
-    end = (receiver_x, receiver_y)
+    # Perf: M4-match-sweep - openness ran for 6 candidates x 22 distances per moment and was 30% of
+    # match time through call overhead; the arithmetic is inlined in metres, squared until the end.
+    cx, cy = carrier.x * PITCH_LENGTH_M, carrier.y * PITCH_WIDTH_M
+    rx, ry = receiver_x * PITCH_LENGTH_M, receiver_y * PITCH_WIDTH_M
+    lane_x, lane_y = rx - cx, ry - cy
+    lane_length_squared = lane_x * lane_x + lane_y * lane_y
+    least_space = least_lane = _FAR_SQUARED
     for player in opponents.players:
-        space = min(space, distance_m(receiver_x, receiver_y, player.x, player.y))
-        lane = min(lane, segment_distance_m((player.x, player.y), start, end))
-    own_space = clamp(space / cfg.open_distance_m, 0.0, 1.0)
-    clear_lane = clamp(lane / cfg.lane_clear_m, 0.0, 1.0)
+        ox, oy = player.x * PITCH_LENGTH_M, player.y * PITCH_WIDTH_M
+        space = (ox - rx) * (ox - rx) + (oy - ry) * (oy - ry)
+        if space < least_space:  # noqa: PLR1730 - min() call overhead dominates here
+            least_space = space
+        along = (
+            ((ox - cx) * lane_x + (oy - cy) * lane_y) / lane_length_squared
+            if lane_length_squared
+            else 0.0
+        )
+        along = 0.0 if along < 0.0 else 1.0 if along > 1.0 else along
+        off_x, off_y = ox - (cx + along * lane_x), oy - (cy + along * lane_y)
+        gap = off_x * off_x + off_y * off_y
+        if gap < least_lane:  # noqa: PLR1730
+            least_lane = gap
+    own_space = clamp(sqrt(least_space) / cfg.open_distance_m, 0.0, 1.0)
+    clear_lane = clamp(sqrt(least_lane) / cfg.lane_clear_m, 0.0, 1.0)
     return cfg.open_weight * own_space + (1.0 - cfg.open_weight) * clear_lane

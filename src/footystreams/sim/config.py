@@ -31,6 +31,7 @@ class PositionConfig(DomainModel):
         "width_max": "S",
         "base_speed_mps": "S",
         "speed_range_mps": "S",
+        "step_s": "S",
     }
 
     push_in_possession: float = 0.09
@@ -42,6 +43,7 @@ class PositionConfig(DomainModel):
     width_max: float = 1.25
     base_speed_mps: float = 4.5
     speed_range_mps: float = 3.5
+    step_s: float = 4.0  # positions are refreshed once this much match time has passed
 
 
 class PressureConfig(DomainModel):
@@ -202,7 +204,7 @@ class DecisionConfig(DomainModel):
         "weight_floor": "S",
     }
 
-    candidates: int = Field(ge=1, le=10, default=5)
+    candidates: int = Field(ge=1, le=10, default=4)
     progress_scale: float = 10.0  # utility per unit of threat gained
     loss_cost_base: float = 0.15
     loss_cost_own_third: float = 0.55  # extra cost of losing the ball at the own goal line
