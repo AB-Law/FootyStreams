@@ -7,6 +7,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0012** Add the verify package's Violation type and the shared test helpers and factories packages. *(M0; scope: verify, tools)*
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Build / Tooling

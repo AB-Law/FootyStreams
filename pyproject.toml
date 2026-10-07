@@ -33,7 +33,7 @@ packages = ["src/footystreams"]
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-src = ["src", "tests", "tools"]
+src = [".", "src"]
 # Markdown (design docs, rules, fragments) is prose, not code to lint or reformat.
 extend-exclude = ["docs", "changes", ".claude", ".cursor", "*.md"]
 
