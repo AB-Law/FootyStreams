@@ -10,10 +10,12 @@ from __future__ import annotations
 from math import sqrt
 
 from footystreams.sim.config import PositionConfig
+from footystreams.sim.config_rules import OffsideConfig
 from footystreams.sim.geometry import CENTRE, PITCH_LENGTH_M, PITCH_WIDTH_M, frame_coordinate
 from footystreams.sim.mathx import clamp
-from footystreams.sim.side import Side
-from footystreams.sim.state import MatchState, PlayerState, TeamState
+from footystreams.sim.offside import offside_line
+from footystreams.sim.side import Side, opposite
+from footystreams.sim.state import Line, MatchState, PlayerState, TeamState
 
 # Share of the line-height shift and the push/drop each row takes: GK, defence, mid, attack.
 _LINE_SHIFT_WEIGHT = (0.0, 1.0, 0.6, 0.3)
@@ -60,9 +62,27 @@ def move_toward(player: PlayerState, target_x: float, target_y: float, max_metre
     player.y += (target_y - player.y) * fraction
 
 
-def update_positions(state: MatchState, dt: float, cfg: PositionConfig) -> None:
-    """Move every player except the ball carrier toward his target for `dt` seconds."""
+def offside_ceiling(
+    team: TeamState, opponents: TeamState, player: PlayerState, cfg: OffsideConfig
+) -> float:
+    """Return the farthest frame x this player will stand: just short of the offside line.
+
+    Sharper off-the-ball movers (higher `off_ball_movement`) hug the line more tightly.
+    """
+    line = offside_line(opponents, team.attack_dir)
+    margin = cfg.margin_min + cfg.margin_range * (1.0 - player.skills.off_ball_movement / _PERCENT)
+    return line - margin
+
+
+def update_positions(
+    state: MatchState, dt: float, cfg: PositionConfig, offside: OffsideConfig | None = None
+) -> None:
+    """Move every player except the ball carrier toward his target for `dt` seconds.
+
+    With `offside` given, attackers stay behind the opponents' second-last defender.
+    """
     for team in (state.home, state.away):
+        opponents = state.team(opposite(team.side))
         in_possession = team.side == state.carrier.side
         ball = (
             frame_coordinate(state.ball_x, team.attack_dir),
@@ -72,6 +92,8 @@ def update_positions(state: MatchState, dt: float, cfg: PositionConfig) -> None:
             if player is state.carrier:
                 continue
             target_x, target_y = target_in_frame(team, player, ball, in_possession, cfg)
+            if offside is not None and player.line is not Line.KEEPER:
+                target_x = min(target_x, offside_ceiling(team, opponents, player, offside))
             move_toward(
                 player,
                 frame_coordinate(target_x, team.attack_dir),

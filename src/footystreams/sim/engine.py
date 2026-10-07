@@ -21,6 +21,7 @@ from footystreams.sim.actions.resolve_dribble import resolve_clearance, resolve_
 from footystreams.sim.actions.resolve_pass import resolve_pass
 from footystreams.sim.actions.resolve_shot import resolve_shot
 from footystreams.sim.config import SimConfig, config_hash
+from footystreams.sim.config_rules import OffsideConfig
 from footystreams.sim.decision import decide
 from footystreams.sim.emit import EventEmitter, Meta, TeamLabel
 from footystreams.sim.options import ActionKind, Option
@@ -119,7 +120,9 @@ class MatchEngine:
     def _step(self) -> None:
         state, play = self._state, self._play
         if self._pending_move_s >= self._config.positioning.step_s:
-            update_positions(state, self._pending_move_s, self._config.positioning)
+            update_positions(
+                state, self._pending_move_s, self._config.positioning, self._offside_rule()
+            )
             self._pending_move_s = 0.0
         state.tick += 1
         pressure = pressure_on(state.carrier, state.defenders, self._config.pressure)
@@ -131,6 +134,9 @@ class MatchEngine:
             duration = _RESOLVERS[option.kind](play, option)
         state.t_period += duration
         self._pending_move_s += duration
+
+    def _offside_rule(self) -> OffsideConfig | None:
+        return self._config.offside if self._config.offside.enabled else None
 
     def _summary_event(self) -> MatchEvent:
         events = list(self._emitter.events)

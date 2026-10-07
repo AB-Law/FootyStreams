@@ -8,6 +8,7 @@ from typing import Literal
 from footystreams.events.open_play import PassEvent
 from footystreams.sim.actions.challenge import pick_interceptor, record_interception
 from footystreams.sim.actions.nearest import nearest_defender_to
+from footystreams.sim.actions.offside import offside_called, punish_offside
 from footystreams.sim.actions.out_of_play import out_of_play
 from footystreams.sim.actions.passing import PassKind
 from footystreams.sim.actions.restarts import left_pitch, overhit_point
@@ -91,6 +92,17 @@ def _overhit(play: Play, option: Option, start: Point) -> Failure:
     return Failure("incomplete", winner)
 
 
+def _receive(
+    play: Play, passer: PlayerState, receiver: PlayerState, option: Option, pass_id: str
+) -> float:
+    """The receiver gets the ball, unless the referee flags him offside; return extra seconds."""
+    if play.cfg.offside.enabled and offside_called(play, passer, receiver):
+        return punish_offside(play, receiver, pass_id)
+    take_possession(play.state, receiver, option.end[0], option.end[1])
+    play.state.assist_from = passer
+    return 0.0
+
+
 def resolve_pass(play: Play, option: Option) -> float:
     """Play out the chosen pass and return how many seconds it took."""
     state = play.state
@@ -114,13 +126,10 @@ def resolve_pass(play: Play, option: Option) -> float:
         outcome="complete" if failure is None else failure.outcome,
         length_m=round(option.length_m, 1),
     )
-    if failure is None:
-        take_possession(state, receiver, option.end[0], option.end[1])
-        state.assist_from = passer
     tempo = play.cfg.tempo
     duration = action_duration(play, tempo.pass_base_s + tempo.pass_per_m_s * option.length_m)
     if failure is None:
-        return duration
+        return duration + _receive(play, passer, receiver, option, pass_id)
     if failure.exit_point is not None:
         touch = opposite(passer.side) if failure.deflected else passer.side
         return duration + out_of_play(play, failure.exit_point, touch)

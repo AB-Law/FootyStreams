@@ -150,3 +150,21 @@ class RestartConfig(DomainModel):
     corner_shot_share: float = 0.46  # times the attackers' aerial share
     corner_xg_base: float = 0.10
     corner_delivery_swing: float = 0.20  # a good delivery lifts the attackers' share by this much
+
+
+class OffsideConfig(DomainModel):
+    """Offside: the flag, and how closely attackers hug the line (docs/design/02 section 5.3)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "enabled": "S",
+        "call_base": "S",
+        "call_consistency": "S",
+        "margin_min": "S",
+        "margin_range": "S",
+    }
+
+    enabled: bool = False  # switched on in the commit that enables M5 behaviour
+    call_base: float = 0.88  # chance an offside pass is flagged, for a middling referee
+    call_consistency: float = 0.10  # more of it for a consistent referee
+    margin_min: float = 0.004  # frame-x distance a sharp mover keeps from the line
+    margin_range: float = 0.03  # extra distance for a player with no off-ball movement
