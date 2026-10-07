@@ -28,7 +28,7 @@ def test_retirement_chance__young_players_never_retire() -> None:
 
 
 def test_retirement_chance__rises_with_age() -> None:
-    chances = [retirement_chance(aged(PLAYERS[0], a), 60, TODAY, CONFIG) for a in (33, 35, 37, 40)]
+    chances = [retirement_chance(aged(PLAYERS[0], a), 60, TODAY, CONFIG) for a in (32, 35, 37, 40)]
     assert chances == sorted(chances)
     assert chances[-1] > chances[0] > 0
 
@@ -53,7 +53,7 @@ def test_choose_retirements__same_seed_same_people_and_only_the_old() -> None:
         p.id for p in choose_retirements(squad, TODAY, CONFIG, WorldRng(4))
     ]
     assert first
-    assert all(p.age_on(TODAY) >= 33 for p in first)
+    assert all(p.age_on(TODAY) >= 32 for p in first)
 
 
 def test_choose_retirements__nobody_to_consider__returns_nothing() -> None:

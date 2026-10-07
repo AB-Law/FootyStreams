@@ -85,7 +85,9 @@ class YouthConfig(_Config):
     potential_bonus_per_quality: int
     contract_years: int = Field(ge=1)
     promotion_age: int
+    max_age: int
     promotion_margin: int
+    potential_weight: float = Field(ge=0.0, le=1.0)
     wage_weekly: int = Field(ge=0)
 
 
@@ -96,6 +98,10 @@ class SquadConfig(_Config):
     max_senior: int
     min_goalkeepers: int
     trialist_contract_years: int = Field(ge=1)
+    free_agent_pool: int = Field(ge=0)
+    free_agent_pool_max: int = Field(ge=0)
+    journeyman_age: tuple[int, int]
+    journeyman_ability_fraction: float = Field(gt=0.0, le=1.0)
 
 
 class RolloverConfig(_Config):
@@ -111,6 +117,7 @@ class RolloverConfig(_Config):
     sponsor_reputation_growth: float
     wage_budget_ratio: float = Field(gt=0.0)
     wage_tolerance: float = Field(ge=0.0)
+    wage_scale_max: float = Field(ge=1.0)
     transfer_budget_share: float = Field(ge=0.0, le=1.0)
     contract_extend_years: tuple[int, int]
     awards_min_appearances: int = Field(ge=1)

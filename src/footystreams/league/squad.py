@@ -17,7 +17,7 @@ from footystreams.domain.types import ClubId, PlayerId, Position
 from footystreams.domain.valuation import market_value_of, wage_from_value
 from footystreams.domain.world import SquadEntry
 from footystreams.league.development_config import SquadConfig, YouthConfig
-from footystreams.league.youth import contract_end, promoted
+from footystreams.league.youth import NATURAL_POSITION_FLOOR, contract_end, promoted
 
 FIRST_SENIOR_NUMBER = 12
 FIRST_YOUTH_NUMBER = 32
@@ -71,9 +71,14 @@ def signed_free_agent(player: Player, club_id: ClubId, today: dt.date, years: in
     )
 
 
-def _best(candidates: Iterable[Player], *, keeper: bool | None) -> Player | None:
+def squad_value(player: Player, weight: float) -> float:
+    """What a player is worth to a squad: ability plus a share of his room to grow."""
+    return player.ability_current + weight * (player.ability_potential - player.ability_current)
+
+
+def _best(candidates: Iterable[Player], weight: float, *, keeper: bool | None) -> Player | None:
     pool = [c for c in candidates if keeper is None or is_keeper(c) == keeper]
-    return max(pool, key=lambda p: (p.ability_current, p.id), default=None)
+    return max(pool, key=lambda p: (squad_value(p, weight), p.id), default=None)
 
 
 @dataclass(frozen=True, slots=True)
@@ -92,15 +97,35 @@ def rebalance(
     moves = SquadMoves()
     seniors = [p for p in players if not p.is_youth]
     youths = sorted((p for p in players if p.is_youth), key=lambda p: (-p.ability_current, p.id))
-    weakest = min((p.ability_current for p in seniors), default=0)
+    weight = context.youth.potential_weight
+    weakest = min((squad_value(p, weight) for p in seniors), default=0.0)
     for youth in youths:
         eligible = youth.age_on(context.today) >= context.youth.promotion_age
-        strong = youth.ability_current >= weakest - context.youth.promotion_margin
-        if eligible and strong and len(seniors) + len(moves.promoted) < context.squad.max_senior:
+        strong = squad_value(youth, weight) >= weakest - context.youth.promotion_margin
+        if eligible and strong:
             moves.promoted.append(promoted(youth, context.today))
+    _age_out(youths, moves, context)
     _fill(club_id, (seniors, youths), pool, (moves, context))
     _release_surplus(seniors, moves, context.squad)
     return moves
+
+
+def _age_out(youths: Sequence[Player], moves: SquadMoves, context: SquadContext) -> None:
+    """Prospects past the maximum age who were not promoted leave as ordinary free agents."""
+    kept = {p.id for p in moves.promoted}
+    for youth in youths:
+        if youth.id not in kept and youth.age_on(context.today) >= context.youth.max_age:
+            moves.released.append(released(adult(youth)))
+
+
+def adult(player: Player) -> Player:
+    """A former prospect as an ordinary player (his main position settled at the natural level)."""
+    competence = dict(player.position_competence)
+    competence[player.primary_position] = max(
+        competence[player.primary_position], NATURAL_POSITION_FLOOR
+    )
+    grown = player.model_copy(update={"is_youth": False, "position_competence": competence})
+    return Player.model_validate(grown.model_dump())
 
 
 def _keepers(seniors: Sequence[Player], moves: SquadMoves) -> int:
@@ -119,18 +144,19 @@ def _fill(
 ) -> None:
     seniors, youths = people
     moves, context = state
-    left_youths = [y for y in youths if all(y.id != p.id for p in moves.promoted)]
+    gone = {p.id for p in (*moves.promoted, *moves.released)}
+    left_youths = [y for y in youths if y.id not in gone]
     free = [a for a in pool if a.status is PlayerStatus.FREE_AGENT]
     while _count(seniors, moves) < context.squad.min_senior or (
         _keepers(seniors, moves) < context.squad.min_goalkeepers
     ):
         keeper = True if _keepers(seniors, moves) < context.squad.min_goalkeepers else None
-        own = _best(left_youths, keeper=keeper)
+        own = _best(left_youths, context.youth.potential_weight, keeper=keeper)
         if own is not None:
             left_youths.remove(own)
             moves.promoted.append(promoted(own, context.today))
             continue
-        outside = _best(free, keeper=keeper)
+        outside = _best(free, context.youth.potential_weight, keeper=keeper)
         if outside is None:
             return
         free.remove(outside)

@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0085** Add the season rollover and multi-season runs *(M10; scope: league)*
 - **0084** Add season awards, club year-end and the income estimate *(M10; scope: league)*
 - **0083** Add squad rebalancing and squad entries *(M10; scope: league)*
 - **0082** Add youth intake, promotion and the prospect factory *(M10; scope: league)*
