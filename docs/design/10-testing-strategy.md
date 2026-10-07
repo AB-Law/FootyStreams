@@ -37,7 +37,7 @@ Status: **PROPOSED (revision 3).** Premise: the league will run as a 24/7 channe
 
 | Tier | Runs | Contains | Budget |
 |------|------|----------|--------|
-| **T0 fast** | **end of every agent turn (Stop hook, 11 §11)** / every commit / pre-commit / `uv run check` | static analysis, architecture, unit, property (small `max_examples`), contract, ≈ 30-match smoke sim + invariants, golden digests (5), rules-sync check, changelog check; **passes 100% or the agent's turn is not allowed to end** | **≤ 60 s** (xdist) |
+| **T0 fast** | **end of every agent turn (Stop hook, 11 §11)** / every commit / pre-commit / `uv run check` | static analysis, architecture, unit, property (small `max_examples`), contract, ≈ 30-match smoke sim + invariants, golden digests (5), changelog check; **passes 100% or the agent's turn is not allowed to end** | **≤ 60 s** (xdist) |
 | **T1 PR** | every pull request | T0 + integration + full property (100 examples) + metamorphic + e2e E1–E4, E8, E10 + sim fuzz (500 setups) + 200-match fast statistical + 3-season soak + perf gates | **≤ 10 min** on CI (Windows + Linux matrix, Python 3.12 & 3.13) |
 | **T2 nightly** | scheduled | 1,200-match statistical (all profiles), sim fuzz 20,000 setups, 50-season soak, e2e all (E1–E10), mutation testing on critical modules, perf benchmarks vs baseline on a pinned runner, `pip-audit` | ≤ 90 min |
 | **T3 weekly / release gate** | scheduled + before any release | 200-season parity/economy run, cross-version DB migration, 7-virtual-day **shadow run** (§7), full determinism matrix incl. macOS, long hypothesis (2,000 examples) | ≤ 6 h |
