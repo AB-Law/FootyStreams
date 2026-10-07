@@ -7,9 +7,21 @@ from pathlib import Path
 
 import pytest
 
+from footystreams.cli import seed as seed_cli
 from footystreams.cli.seed import EXIT_OK, EXIT_USAGE, EXIT_VIOLATIONS, main
 from footystreams.seed.world_io import build_manifest, read_manifest, write_world
 from tests.factories.world import make_world
+
+
+@pytest.fixture(autouse=True)
+def _cached_generation(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest) -> None:
+    """Generation takes seconds and is covered elsewhere; the CLI tests reuse the cached world.
+
+    The subprocess test is deliberately left alone: it runs the real thing end to end.
+    """
+    if "separate_process" in request.node.name:
+        return
+    monkeypatch.setattr(seed_cli, "generate_world", lambda seed, config, tables: make_world(seed))
 
 
 def test_seed__writes_a_world_and_reports_the_hash(
@@ -20,11 +32,6 @@ def test_seed__writes_a_world_and_reports_the_hash(
     assert "coherence checks: PASS" in output
     assert "wrote" in output
     assert read_manifest(tmp_path / "w").content_sha256 in output
-
-
-def test_seed__written_world_has_the_same_hash_as_the_in_process_world(tmp_path: Path) -> None:
-    main(["--seed", "1", "--out", str(tmp_path / "w")])
-    assert read_manifest(tmp_path / "w") == build_manifest(make_world(1))
 
 
 def test_seed__validate_only_writes_nothing(

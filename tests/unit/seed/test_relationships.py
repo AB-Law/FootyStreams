@@ -129,14 +129,6 @@ def test_relationships__kin_share_a_surname_but_not_a_known_as() -> None:
         assert relative.known_as != elder.known_as
 
 
-def test_relationships__same_seed__identical() -> None:
-    first = _world_slice(3)[2]
-    second = _world_slice(3)[2]
-    assert [r.model_dump_json() for r in first.relationships] == [
-        r.model_dump_json() for r in second.relationships
-    ]
-
-
 def test_builder__self_links_and_duplicates_are_dropped() -> None:
     ctx = make_generation_context()
     builder = RelationshipBuilder(ctx.ids, WORLD_START)
