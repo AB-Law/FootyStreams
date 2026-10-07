@@ -10,6 +10,7 @@ from __future__ import annotations
 from collections.abc import Iterator
 
 from footystreams.domain.match import MatchSetup
+from footystreams.domain.referee import Referee
 from footystreams.events.base import EventBase
 from footystreams.events.digest import log_digest
 from footystreams.events.structure import FulltimeEvent, HalftimeEvent, KickoffEvent
@@ -26,6 +27,7 @@ from footystreams.sim.options import ActionKind, Option
 from footystreams.sim.play import Play, action_duration
 from footystreams.sim.positioning import place_for_kickoff, update_positions
 from footystreams.sim.pressure import pressure_on
+from footystreams.sim.referee import referee_profile
 from footystreams.sim.rng import SimRng
 from footystreams.sim.side import Side
 from footystreams.sim.state import REGULATION_PERIOD_S, MatchState, build_state
@@ -55,7 +57,12 @@ class MatchEngine:
     """Runs one match and yields its events in order."""
 
     def __init__(
-        self, setup: MatchSetup, seed: int, config: SimConfig, tables: StaticTables
+        self,
+        setup: MatchSetup,
+        seed: int,
+        config: SimConfig,
+        tables: StaticTables,
+        referee: Referee | None = None,
     ) -> None:
         """Prepare streams, state and the emitter; no event is produced until `run`."""
         root = SimRng(seed)
@@ -65,7 +72,15 @@ class MatchEngine:
         self._config = config
         self._state: MatchState = build_state(setup, tables, streams["dayform"])
         self._emitter = EventEmitter(setup.match_id)
-        self._play = Play(self._state, streams["play"], config, self._emitter)
+        self._play = Play(
+            self._state,
+            streams["play"],
+            config,
+            self._emitter,
+            streams["discipline"],
+            streams["setpiece"],
+            referee_profile(referee),
+        )
         self._pending_move_s = 0.0
 
     def run(self) -> Iterator[MatchEvent]:

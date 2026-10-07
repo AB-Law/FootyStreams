@@ -21,10 +21,12 @@ def test_differences__nothing_stored_means_everything_differs() -> None:
     assert differences(_doc(), None) == ["golden file missing"]
 
 
-def test_differences__names_changed_cases_and_config_hash() -> None:
-    stored = _doc()
-    current = {**_doc(digest="b"), "config_hash": "d"}
-    assert differences(current, stored) == ["config_hash", "x"]
+def test_differences__names_changed_cases() -> None:
+    assert differences(_doc(digest="b"), _doc()) == ["x"]
+
+
+def test_differences__a_changed_config_hash_alone_is_not_a_difference() -> None:
+    assert differences({**_doc(), "config_hash": "d"}, _doc()) == []
 
 
 def test_differences__identical_documents_have_no_differences() -> None:

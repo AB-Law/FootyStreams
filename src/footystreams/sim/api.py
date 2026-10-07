@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections.abc import Iterator
 
 from footystreams.domain.match import MatchSetup
+from footystreams.domain.referee import Referee
 from footystreams.events.result import MatchResult
 from footystreams.events.summary import MatchSummaryEvent
 from footystreams.events.types import MatchEvent
@@ -32,16 +33,30 @@ def validate_setup(setup: MatchSetup) -> None:
 
 
 def simulate_match(
-    setup: MatchSetup, seed: int, config: SimConfig, tables: StaticTables
+    setup: MatchSetup,
+    seed: int,
+    config: SimConfig,
+    tables: StaticTables,
+    referee: Referee | None = None,
 ) -> Iterator[MatchEvent]:
-    """Simulate a match and yield its events; the last event is the `match_summary`."""
+    """Simulate a match and yield its events; the last event is the `match_summary`.
+
+    `referee` is the official named by `setup.referee_id`; `MatchSetup` carries only the id, so the
+    caller resolves it. Without one a neutral referee officiates.
+    """
     validate_setup(setup)
-    return MatchEngine(setup, seed, config, tables).run()
+    return MatchEngine(setup, seed, config, tables, referee).run()
 
 
-def run_match(setup: MatchSetup, seed: int, config: SimConfig, tables: StaticTables) -> MatchResult:
+def run_match(
+    setup: MatchSetup,
+    seed: int,
+    config: SimConfig,
+    tables: StaticTables,
+    referee: Referee | None = None,
+) -> MatchResult:
     """Simulate a match to completion and return the events, summary and identity."""
-    events = tuple(simulate_match(setup, seed, config, tables))
+    events = tuple(simulate_match(setup, seed, config, tables, referee))
     last = events[-1]
     if not isinstance(last, MatchSummaryEvent):
         msg = f"match {setup.match_id} ended without a summary"

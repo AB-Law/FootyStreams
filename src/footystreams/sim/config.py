@@ -286,6 +286,26 @@ class ChallengeConfig(DomainModel):
     clearance_spread: float = 0.15
 
 
+class RefereeConfig(DomainModel):
+    """How a referee turns a contact into a called foul (docs/design/02 section 6)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "threshold_base": "S",
+        "strictness_swing": "S",
+        "call_scale": "S",
+        "consistency_noise": "S",
+        "home_bias_scale": "S",
+        "crowd_capacity": "S",
+    }
+
+    threshold_base: float = 0.55  # severity at which an average referee calls half of the contacts
+    strictness_swing: float = 0.25  # a strict referee lowers the threshold by this much
+    call_scale: float = 0.12  # width of the call probability's S-curve
+    consistency_noise: float = 0.10  # threshold jitter of a fully inconsistent referee
+    home_bias_scale: float = 0.15  # threshold shift per unit of home bias x crowd
+    crowd_capacity: int = Field(ge=1, default=40_000)  # attendance that counts as a full crowd
+
+
 class SimConfig(DomainModel):
     """Top-level simulation configuration (defaults are the shipped balance)."""
 
@@ -302,6 +322,7 @@ class SimConfig(DomainModel):
         "decision": "S",
         "tempo": "S",
         "challenge": "S",
+        "referee": "S",
     }
 
     model_profile: str = "v1"
@@ -316,6 +337,7 @@ class SimConfig(DomainModel):
     decision: DecisionConfig = Field(default_factory=DecisionConfig)
     tempo: TempoConfig = Field(default_factory=TempoConfig)
     challenge: ChallengeConfig = Field(default_factory=ChallengeConfig)
+    referee: RefereeConfig = Field(default_factory=RefereeConfig)
 
 
 def config_hash(config: SimConfig) -> str:

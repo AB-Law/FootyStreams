@@ -12,6 +12,7 @@ from footystreams.domain.types import PlayerId
 from footystreams.events.base import Participant
 from footystreams.sim.config import SimConfig
 from footystreams.sim.emit import EventEmitter, participant
+from footystreams.sim.referee import RefereeProfile
 from footystreams.sim.rng import SimRng
 from footystreams.sim.state import MatchState, PlayerState, TeamState
 
@@ -20,12 +21,19 @@ _CENTRE = 0.5
 
 @dataclass(slots=True)
 class Play:
-    """Everything one resolver needs: state, the `play` stream, config and the event log."""
+    """Everything one resolver needs: state, random streams, config, referee and the event log.
+
+    `rng` is the `play` stream; `discipline` serves fouls and cards, `setpiece` the dead-ball
+    restarts. A stream is never shared across concerns (docs/design/02 section 1).
+    """
 
     state: MatchState
     rng: SimRng
     cfg: SimConfig
     emit: EventEmitter
+    discipline: SimRng
+    setpiece: SimRng
+    referee: RefereeProfile
 
 
 def take_possession(state: MatchState, player: PlayerState, x: float, y: float) -> None:

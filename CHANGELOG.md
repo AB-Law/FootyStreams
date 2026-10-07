@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0062** Add the referee profile, call model and the discipline and setpiece streams *(M5; scope: sim)*
 - **0058** Add the golden tool and the cross-process determinism test *(M4; scope: cli, sim)*
 - **0056** Add verify_match with invariants M01-M05, M10 and M17 *(M4; scope: verify)*
 - **0055** Add the sim command and the text renderer *(M4; scope: cli)*
@@ -59,6 +60,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0063** Ignore the config hash when comparing golden digests *(M5; scope: cli)*
 - **0041** Close M1 test gaps for union usage and aggregates *(M1; scope: domain, events, docs; schema version patch)*
 
 ### Removed
