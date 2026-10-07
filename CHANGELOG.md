@@ -51,6 +51,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0045** Add mutable match state and the positioning model *(M4; scope: sim)*
 - **0044** Add pitch geometry, tactics view and effective skills *(M4; scope: sim)*
 - **0043** Add SimConfig with config hash and merge, and static formation tables *(M4; scope: sim)*
+- **0042** Add WorldRng, a deterministic forkable random stream for seed and league code *(M2; scope: domain)*
 - **0042** Add SimRng (xoshiro256**) and exact-arithmetic mathx helpers *(M4; scope: sim)*
 - **0038** Enforce SCHEMA_VERSION bump when schemas change *(M1; scope: tools)*
 - **0037** Export initial schemas tree for SCHEMA_VERSION 0.1.0 *(M1; scope: schemas; schema version minor)*
