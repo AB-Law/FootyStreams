@@ -46,8 +46,8 @@ retirement:
 
 youth:
   intake_age: [16, 18]
-  ability_fraction: 0.70          # intake current ability as a share of the league senior mean
-  potential_bonus_base: 12
+  ability_fraction: 0.58          # intake current ability as a share of the reference level
+  potential_bonus_base: 10
   potential_bonus_per_quality: 18 # extra potential bonus at intake_quality 1.0
   contract_years: 3
   promotion_age: 18

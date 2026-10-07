@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from footystreams.domain.player import Player
     from footystreams.domain.world import SquadEntry
     from footystreams.persistence.ports import (
+        MetaEntry,
         Repositories,
         StandingsSnapshot,
         StoredEvent,
@@ -52,6 +53,7 @@ class WorldDelta:
     events: tuple[StoredEvent, ...] = ()
     seasons: tuple[Season, ...] = ()
     squad_entries: tuple[SquadEntry, ...] = ()
+    meta: tuple[MetaEntry, ...] = ()
     deletions: tuple[tuple[str, str], ...] = ()  # (table, key) rows to remove, applied first
 
     def is_empty(self) -> bool:

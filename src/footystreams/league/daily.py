@@ -22,7 +22,7 @@ from footystreams.league.matchday import (
     play_fixture,
     snapshot_standings,
 )
-from footystreams.league.rollover import RolloverServices
+from footystreams.league.rollover_state import RolloverServices
 from footystreams.league.stages import (
     ClubAdminStage,
     LifeEventsStage,

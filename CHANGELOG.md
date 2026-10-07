@@ -114,6 +114,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0169** Scale intake from the league's own recorded level; split the rollover modules *(M10; scope: league)*
 - **0168** Tune development, intake and squad wages; add league health and a 20-season test *(M10; scope: league)*
 - **0152** Derive fixture ids and flag derbies when scheduling *(M9; scope: league)*
 - **0118** Enable the M7 context and event enrichment by default (SIM_VERSION stays 0.4.0, goldens re-pinned) *(M7; scope: sim; sim version minor)*

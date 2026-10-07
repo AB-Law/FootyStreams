@@ -8,22 +8,16 @@ awards, club year-end, contracts, retirements, progression, youth intake, squads
 from __future__ import annotations
 
 import datetime as dt
-from collections.abc import Mapping, Sequence
-from dataclasses import dataclass, field
+from collections.abc import Mapping
 
-from footystreams.domain.club import Club
 from footystreams.domain.competition import Competition, Season
 from footystreams.domain.ids import derive_id
 from footystreams.domain.injury import Discipline
-from footystreams.domain.mood import StateKind, StateModifier, WorldEvent
+from footystreams.domain.mood import StateKind
 from footystreams.domain.player import Player, PlayerStatus
-from footystreams.domain.prospects import ProspectFactory, ProspectRequest
 from footystreams.domain.rng import WorldRng
-from footystreams.domain.staff import StaffMember
-from footystreams.domain.standings import StandingRow
-from footystreams.domain.types import ClubId, PlayerId, Position, SeasonId
+from footystreams.domain.types import PlayerId, SeasonId
 from footystreams.domain.valuation import market_value_of, wage_from_value
-from footystreams.domain.world import SquadEntry
 from footystreams.league.awards import SeasonTotals, award_modifiers, season_awards
 from footystreams.league.club_year import (
     expected_places,
@@ -33,71 +27,28 @@ from footystreams.league.club_year import (
     update_standing,
 )
 from footystreams.league.delta import WorldDelta
-from footystreams.league.development_config import RolloverConfig
 from footystreams.league.progression import ProgressionInputs, progress_season
 from footystreams.league.retirement import choose_retirements, retired, retirement_news
-from footystreams.league.squad import (
-    SquadContext,
-    assign_numbers,
-    rebalance,
-    squad_entries,
-    squad_value,
+from footystreams.league.rollover_squads import intake, mean_ability, squads, top_up_pool, trim_pool
+from footystreams.league.rollover_state import (
+    KEY_REFERENCE_ABILITY,
+    RolloverData,
+    RolloverServices,
+    Work,
+    seniors_of,
+    wage_scale,
 )
 from footystreams.league.tables import LeagueTables
 from footystreams.league.training import training_conditions
-from footystreams.league.youth import contract_end, intake_requests, signed_prospect
+from footystreams.league.youth import contract_end
+from footystreams.persistence.ports import MetaEntry
 
 FREE_AGENT_REPUTATION = 30
 FULL_SEASON_MINUTES = 90
 MIN_TERM_DAYS = 90
-MIN_WAGE_SCALE = 0.5
-MIN_WEEKLY_WAGE = 600
 
 
-@dataclass(frozen=True, slots=True)
-class RolloverData:
-    """The loaded state of a season that has just ended."""
-
-    season: Season
-    competition: Competition
-    clubs: Mapping[ClubId, Club]
-    players: Sequence[Player]  # active players and free agents
-    staff: Mapping[ClubId, Sequence[StaffMember]]
-    entries: Mapping[ClubId, Sequence[SquadEntry]]
-    table: Sequence[StandingRow]
-    totals: Mapping[PlayerId, SeasonTotals]
-    retired_names: Sequence[Player]  # retired players, only so new names avoid theirs
-
-
-@dataclass(frozen=True, slots=True)
-class RolloverServices:
-    """Collaborators of the rollover."""
-
-    tables: LeagueTables
-    prospects: ProspectFactory
-
-
-@dataclass(slots=True)
-class _Work:
-    """The evolving state while the steps run (local to one rollover call)."""
-
-    players: dict[str, Player]
-    clubs: dict[ClubId, Club]
-    events: list[WorldEvent] = field(default_factory=list)
-    modifiers: list[StateModifier] = field(default_factory=list)
-    entries: list[SquadEntry] = field(default_factory=list)
-    deletions: list[tuple[str, str]] = field(default_factory=list)
-
-
-def _seniors_of(work: _Work, club_id: ClubId) -> list[Player]:
-    return [
-        p
-        for p in work.players.values()
-        if p.contract and p.contract.club_id == club_id and p.status is PlayerStatus.ACTIVE
-    ]
-
-
-def _awards(work: _Work, data: RolloverData, context: tuple[RolloverServices, dt.date]) -> None:
+def _awards(work: Work, data: RolloverData, context: tuple[RolloverServices, dt.date]) -> None:
     services, today = context
     config = services.tables.development.rollover
     work.events.extend(
@@ -107,7 +58,7 @@ def _awards(work: _Work, data: RolloverData, context: tuple[RolloverServices, dt
     )
     champion = data.table[0].club_id
     winners: dict[StateKind, list[PlayerId]] = {
-        StateKind.TROPHY_GLOW: [PlayerId(p.id) for p in _seniors_of(work, champion)]
+        StateKind.TROPHY_GLOW: [PlayerId(p.id) for p in seniors_of(work, champion)]
     }
     individual = [
         e.participants[0].id
@@ -119,7 +70,7 @@ def _awards(work: _Work, data: RolloverData, context: tuple[RolloverServices, dt
 
 
 def _club_year_end(
-    work: _Work, data: RolloverData, context: tuple[RolloverServices, dt.date], rng: WorldRng
+    work: Work, data: RolloverData, context: tuple[RolloverServices, dt.date], rng: WorldRng
 ) -> None:
     services, today = context
     config = services.tables.development.rollover
@@ -142,18 +93,6 @@ def _club_year_end(
         work.clubs[club_id] = reset_budgets(moved, services.tables.config.finance, config)
 
 
-def _wage_scale(work: _Work, club_id: ClubId, config: RolloverConfig) -> float:
-    """Renewal wage scale: under 1.0 when the bill exceeds the budget, over 1.0 when well under it.
-
-    A rich club pays its players more; the scale stays within the configured limits.
-    """
-    bill = sum(p.contract.wage_weekly for p in _seniors_of(work, club_id) if p.contract)
-    allowed = work.clubs[club_id].finances.wage_budget_weekly * (1 + config.wage_tolerance)
-    if not bill:
-        return 1.0
-    return max(MIN_WAGE_SCALE, min(config.wage_scale_max, allowed / bill))
-
-
 def renew_contract(player: Player, today: dt.date, years: int, scale: float) -> Player:
     """A new contract for a player whose deal is about to end: half old wage, half market wage."""
     contract = player.contract
@@ -167,14 +106,14 @@ def renew_contract(player: Player, today: dt.date, years: int, scale: float) -> 
     return player.model_copy(update={"contract": renewed})
 
 
-def _renew_contracts(work: _Work, context: tuple[RolloverServices, dt.date], rng: WorldRng) -> None:
+def _renew_contracts(work: Work, context: tuple[RolloverServices, dt.date], rng: WorldRng) -> None:
     services, today = context
     config = services.tables.development.rollover
     for club_id in sorted(work.clubs):
-        scale = _wage_scale(work, club_id, config)
+        scale = wage_scale(work, club_id, config)
         expiring = [
             p
-            for p in _seniors_of(work, club_id)
+            for p in seniors_of(work, club_id)
             if p.contract and (p.contract.end - today).days < MIN_TERM_DAYS
         ]
         for player in sorted(expiring, key=lambda p: p.id):
@@ -182,7 +121,7 @@ def _renew_contracts(work: _Work, context: tuple[RolloverServices, dt.date], rng
             work.players[player.id] = renew_contract(player, today, years, scale)
 
 
-def _retire(work: _Work, context: tuple[RolloverServices, dt.date], rng: WorldRng) -> None:
+def _retire(work: Work, context: tuple[RolloverServices, dt.date], rng: WorldRng) -> None:
     services, today = context
     config = services.tables.development.retirement
     chosen = choose_retirements(list(work.players.values()), today, config, rng)
@@ -199,7 +138,7 @@ def _playing_time(
 
 
 def _progress(
-    work: _Work, data: RolloverData, context: tuple[RolloverServices, dt.date], rng: WorldRng
+    work: Work, data: RolloverData, context: tuple[RolloverServices, dt.date], rng: WorldRng
 ) -> None:
     services, today = context
     development = services.tables.development
@@ -231,129 +170,6 @@ def _progress(
         )
 
 
-def _mean_ability(players: Sequence[Player]) -> float:
-    seniors = [
-        p.ability_current for p in players if not p.is_youth and p.status is PlayerStatus.ACTIVE
-    ]
-    return sum(seniors) / len(seniors) if seniors else 0.0
-
-
-def _formation_positions(tables: LeagueTables, club: Club) -> list[Position]:
-    return list(tables.formations.formations[club.default_tactics.formation].positions())
-
-
-def _create(
-    work: _Work,
-    data: RolloverData,
-    requests: Sequence[ProspectRequest],
-    context: tuple[RolloverServices, dt.date, WorldRng],
-) -> list[Player]:
-    services, today, rng = context
-    known = [*work.players.values(), *data.retired_names]
-    return services.prospects.create(requests, known, (today, rng))
-
-
-def _intake(
-    work: _Work,
-    data: RolloverData,
-    context: tuple[RolloverServices, dt.date],
-    rng: WorldRng,
-) -> None:
-    """The academy intake of every club, signed on youth contracts."""
-    services, today = context
-    youth = services.tables.development.youth
-    mean = _mean_ability(data.players)
-    key = str(data.season.starts_on.year + 1)
-    requests: list[ProspectRequest] = []
-    for club_id in sorted(work.clubs):
-        club = work.clubs[club_id]
-        shape = (_formation_positions(services.tables, club), mean)
-        requests.extend(intake_requests(club, shape, key, youth, rng.fork(f"intake:{club_id}")))
-    for request, player in zip(
-        requests, _create(work, data, requests, (services, today, rng.fork("create"))), strict=True
-    ):
-        if request.club_id is not None:
-            work.players[player.id] = signed_prospect(player, request.club_id, today, youth)
-
-
-def _top_up_pool(
-    work: _Work, data: RolloverData, context: tuple[RolloverServices, dt.date], rng: WorldRng
-) -> None:
-    """Journeymen join the free-agent pool until it has the configured size."""
-    services, today = context
-    config = services.tables.development.squad
-    free = sum(1 for p in work.players.values() if p.status is PlayerStatus.FREE_AGENT)
-    missing = max(0, config.free_agent_pool - free)
-    positions = [Position.GK, Position.CB, Position.RB, Position.CM, Position.RW, Position.ST]
-    mean = _mean_ability(data.players)
-    key = f"pool:{data.season.starts_on.year + 1}"
-    requests = [
-        ProspectRequest(
-            key=f"{key}:{index}",
-            position=positions[index % len(positions)],
-            age=rng.fork(f"age:{index}").randint(*config.journeyman_age),
-            ability=round(mean * config.journeyman_ability_fraction),
-            potential_bonus=0,
-            region=next(iter(work.clubs.values())).location.region,
-            club_reputation=FREE_AGENT_REPUTATION,
-            club_id=None,
-            youth=False,
-        )
-        for index in range(missing)
-    ]
-    for player in _create(work, data, requests, (services, today, rng.fork("create"))):
-        work.players[player.id] = player
-
-
-def _trim_pool(work: _Work, context: tuple[RolloverServices, dt.date]) -> None:
-    """The weakest unsigned players beyond the pool limit leave the game."""
-    services, today = context
-    limit = services.tables.development.squad.free_agent_pool_max
-    weight = services.tables.development.youth.potential_weight
-    free = sorted(
-        (p for p in work.players.values() if p.status is PlayerStatus.FREE_AGENT),
-        key=lambda p: (-squad_value(p, weight), p.id),
-    )
-    for player in free[limit:]:
-        work.players[player.id] = retired(player, today)
-        work.events.append(retirement_news(player, today, "left_the_game"))
-
-
-def _on_budget(player: Player, scale: float) -> Player:
-    """A new senior contract scaled to what the club can afford (never below the youth wage)."""
-    contract = player.contract
-    if contract is None or scale >= 1.0:
-        return player
-    wage = max(MIN_WEEKLY_WAGE, round(contract.wage_weekly * scale))
-    return player.model_copy(update={"contract": contract.model_copy(update={"wage_weekly": wage})})
-
-
-def _squads(work: _Work, data: RolloverData, context: tuple[RolloverServices, dt.date]) -> None:
-    """Rebalance every club's squad, then number the newcomers and sync the squad entries."""
-    services, today = context
-    squad_context = SquadContext(
-        today, services.tables.development.squad, services.tables.development.youth
-    )
-    for club_id in sorted(work.clubs):
-        pool = sorted(
-            (p for p in work.players.values() if p.status is PlayerStatus.FREE_AGENT),
-            key=lambda p: p.id,
-        )
-        members = _seniors_of(work, club_id)
-        scale = min(1.0, _wage_scale(work, club_id, services.tables.development.rollover))
-        moves = rebalance(club_id, members, pool, squad_context)
-        for player in (*moves.promoted, *moves.signed):
-            work.players[player.id] = _on_budget(player, scale)
-        for player in moves.released:
-            work.players[player.id] = player
-        final = assign_numbers(_seniors_of(work, club_id))
-        for player in final:
-            work.players[player.id] = player
-        wanted, stale = squad_entries(club_id, final, data.entries.get(club_id, ()))
-        work.entries.extend(wanted)
-        work.deletions.extend(("squad_entries", key) for key in stale)
-
-
 def next_season(season: Season, competition: Competition, tables: LeagueTables) -> Season:
     """The season after ``season``: next year's label and dates, the same matchdays."""
     year = season.starts_on.year + 1
@@ -373,17 +189,22 @@ def rollover_season(
     data: RolloverData, services: RolloverServices, today: dt.date, rng: WorldRng
 ) -> WorldDelta:
     """Run every rollover step for a finished season and return what changed."""
-    work = _Work(players={p.id: p for p in data.players}, clubs=dict(data.clubs))
+    reference = (
+        data.reference_ability if data.reference_ability is not None else mean_ability(data.players)
+    )
+    work = Work(
+        players={p.id: p for p in data.players}, clubs=dict(data.clubs), reference=reference
+    )
     context = (services, today)
     _awards(work, data, context)
     _club_year_end(work, data, context, rng.fork("clubs"))
     _retire(work, context, rng.fork("retire"))
     _renew_contracts(work, context, rng.fork("contracts"))
     _progress(work, data, context, rng.fork("progress"))
-    _intake(work, data, context, rng.fork("intake"))
-    _top_up_pool(work, data, context, rng.fork("pool"))
-    _squads(work, data, context)
-    _trim_pool(work, context)
+    intake(work, data, context, rng.fork("intake"))
+    top_up_pool(work, data, context, rng.fork("pool"))
+    squads(work, data, context)
+    trim_pool(work, context)
     changed = tuple(p for pid, p in sorted(work.players.items()) if p is not _original(data, pid))
     return WorldDelta(
         players=changed,
@@ -392,6 +213,11 @@ def rollover_season(
         world_events=tuple(work.events),
         seasons=(next_season(data.season, data.competition, services.tables),),
         squad_entries=tuple(work.entries),
+        meta=(
+            ()
+            if data.reference_ability is not None
+            else (MetaEntry(key=KEY_REFERENCE_ABILITY, value=f"{reference:.4f}"),)
+        ),
         deletions=tuple(work.deletions),
     )
 
