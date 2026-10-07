@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0075** Add home advantage through the crowd *(M6; scope: sim)*
 - **0074** Add fatigue: exhaustion that only rises in play and weakens skills *(M6; scope: sim)*
 - **0073** Add weather and pitch conditions *(M6; scope: sim)*
 - **0070** Extend verify_match with M07 (dismissed players), M11 (card logic, men counts) and M12 (sequencing) *(M5; scope: verify, sim)*

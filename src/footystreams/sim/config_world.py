@@ -114,3 +114,25 @@ class FatigueConfig(DomainModel):
     technical_k: float = 0.15
     technical_onset: float = 0.2
     refresh_step: float = 0.05  # skills are rebuilt when exhaustion crosses a multiple of this
+
+
+class HomeAdvantageConfig(DomainModel):
+    """The crowd channel of home advantage (docs/design/02 section 8; scaled by SimConfig)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "enabled": "S",
+        "crowd_lift": "S",
+        "away_pressure": "S",
+        "default_capacity": "S",
+        "default_axis": "S",
+        "toxicity_share": "S",
+        "big_match_share": "S",
+    }
+
+    enabled: bool = False  # switched on in the commit that enables M6 behaviour
+    crowd_lift: float = 0.025  # share of mental attributes a full, loud crowd adds at home
+    away_pressure: float = 0.02  # share of away composure a full, hostile crowd removes
+    default_capacity: int = 40_000  # used when the home sheet carries no stadium
+    default_axis: float = 0.5  # atmosphere, proximity, passion, weight when unknown
+    toxicity_share: float = 0.5  # share of the away pressure that does not depend on toxicity
+    big_match_share: float = 0.5  # share of the home lift that does not depend on big_match

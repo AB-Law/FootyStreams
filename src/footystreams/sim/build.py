@@ -12,10 +12,11 @@ from footystreams.domain.match import LineupSlot, MatchSetup, TeamSheet
 from footystreams.domain.snapshot import PlayerSnapshot
 from footystreams.domain.types import FormationId
 from footystreams.sim.config import SimConfig
-from footystreams.sim.effective import build_skills, day_form_multiplier, multipliers
+from footystreams.sim.effective import Skills, build_skills, day_form_multiplier, multipliers
 from footystreams.sim.errors import InvalidSetupError
 from footystreams.sim.fatigue import away_travel, initial_exhaustion, player_drain
 from footystreams.sim.geometry import frame_coordinate
+from footystreams.sim.homeadv import NO_CROWD, Crowd, apply_crowd, crowd_of
 from footystreams.sim.rng import SimRng
 from footystreams.sim.side import Side
 from footystreams.sim.state import MatchState, PlayerState, TeamState, line_of
@@ -31,6 +32,7 @@ class BuildContext:
     day_rng: SimRng
     conditions: Conditions
     config: SimConfig
+    crowd: Crowd = NO_CROWD
 
 
 def build_state(
@@ -39,7 +41,7 @@ def build_state(
     """Build the initial state: players on their slots, home to kick off in period 1."""
     config = config or SimConfig()
     conditions = conditions_for(setup.weather, setup.home.stadium, config.weather)
-    context = BuildContext(day_rng, conditions, config)
+    context = _context(setup, day_rng, conditions, config)
     home = _build_team("home", setup.home, tables, context)
     away = _build_team("away", setup.away, tables, context)
     return MatchState(
@@ -50,6 +52,14 @@ def build_state(
         attendance=setup.attendance,
         conditions=conditions,
     )
+
+
+def _context(
+    setup: MatchSetup, day_rng: SimRng, conditions: Conditions, config: SimConfig
+) -> BuildContext:
+    """Gather what players are built with: streams, conditions and the crowd."""
+    crowd = crowd_of(setup, config.home_advantage)
+    return BuildContext(day_rng, conditions, config, crowd)
 
 
 def _build_team(
@@ -85,7 +95,9 @@ def _build_player(
         position=formation_slot.position,
         line=line_of(formation_slot.position),
         role=lineup_slot.role,
-        skills=apply_conditions(build_skills(snapshot, mult), context.conditions),
+        skills=_with_crowd(
+            apply_conditions(build_skills(snapshot, mult), context.conditions), side, context
+        ),
         base_x=formation_slot.x,
         base_y=formation_slot.y,
         x=frame_coordinate(formation_slot.x, attack_dir),
@@ -93,6 +105,14 @@ def _build_player(
         shirt=snapshot.squad_number,
     )
     return _with_fatigue(player, snapshot, sheet, context)
+
+
+def _with_crowd(skills: Skills, side: Side, context: BuildContext) -> Skills:
+    """Apply the home-advantage crowd to a player's skills (identity when it is off)."""
+    config = context.config
+    return apply_crowd(
+        skills, side, context.crowd, config.home_advantage, config.home_advantage_scale
+    )
 
 
 def _with_fatigue(
