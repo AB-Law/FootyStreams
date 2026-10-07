@@ -42,3 +42,27 @@ Also: committed `schemas/` (drift-tested), factories/strategies under `tests/`, 
 - The architecture checker matches imports by name (aliases like `import math as m` are not tracked).
 - Claude and Cursor rule files are maintained by hand in pairs (`.claude/rules` and `.cursor/rules`).
 - Mood caps are named defaults only until `mood.yaml` (M2/M9).
+
+---
+
+## Track B (world) — overnight run, 2026-10-07
+Track A (match engine) is built separately; the sections above predate both tracks. Track B builds M2, M3, M9, M10, M11 as **stacked draft PRs** (each branch is cut from the previous one).
+
+| Milestone | Branch | State |
+|-----------|--------|-------|
+| M2 seed and static data | `feat/m2-seed-world` | done (draft PR); see `docs/milestones/M2.md` |
+| M3 persistence | `feat/m3-persistence` | next |
+| M9 league layer | `feat/m9-league-layer` | pending |
+| M10 development and rollover | `feat/m10-development-rollover` | pending |
+| M11 contracts and transfers | `feat/m11-contracts-transfers` | pending |
+
+### What M2 added
+- `uv run seed --seed N [--out DIR] [--name NAME] [--clubs K] [--validate] [--world DIR]`; the committed `data/worlds/default` is seed 1 (`content_sha256` in its manifest).
+- `seed/` (static loaders, names, players, managers, clubs, referees, media, relationships, `generate_world`, `world_io`), `verify/world*.py` (W01-W03, W07-W10, C01-C08), and in `domain/`: `WorldRng`, `IdMint`, `squad_strength`, world records and static-table models (**SCHEMA_VERSION 0.2.0**).
+- Static tables in `data/static/`: formations, roles, traits, injuries, climate, name cultures, denylist/blocklist, player/club/media archetypes, manager styles, tactic presets.
+- Tests share one world per seed through `tests/factories/world.make_world`; generation takes about 2.3 s.
+
+### Track B caveats
+- `WorldRng` stands in for track A's `SimRng` (same interface); unify when both tracks merge.
+- Fragment ids from 0042 may collide with track A's; the second merger renumbers.
+- The fast gate takes about 40 s (budget 60 s); `--tier pr` about 2 min.

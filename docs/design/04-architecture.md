@@ -57,7 +57,10 @@ FootyStreams/
 │  │  ├─ competition.py  fixture.py  standings.py
 │  │  ├─ match.py            # Match, TeamSheet, PlayerSnapshot, Weather
 │  │  ├─ memory.py  relationship.py  proposals.py
-│  │  ├─ ratings.py          # compute_current_ability, role ratings, team_rating (pure)
+│  │  ├─ ratings.py          # compute_current_ability, ability_from_attributes, role ratings, team_rating (pure)
+│  │  ├─ squad_strength.py   # best_lineup / squad_strength (pure; used by seed, verify, lineup AI)
+│  │  ├─ rng.py  ids.py  textfold.py   # WorldRng, IdMint, name folding: shared by seed and league
+│  │  ├─ world.py  static_tables.py    # Nation/City/SquadEntry/WorldManifest/World; Formation/Trait/InjuryType
 │  │  ├─ valuation.py        # market_value (pure)
 │  │  └─ usage.py            # S/L/R field registry + check helpers
 │  ├─ events/
