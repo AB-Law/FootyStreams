@@ -25,23 +25,19 @@ from footystreams.seed.static.tables import StaticTables
 class SeedProspectFactory:
     """Creates players for the league layer with the seed generators."""
 
-    def __init__(self, tables: StaticTables, geography: Geography, today: dt.date) -> None:
-        """Create the factory; ``today`` is the in-world date the players are created on."""
+    def __init__(self, tables: StaticTables, geography: Geography) -> None:
+        """Create the factory over the static tables and the world's geography."""
         self._tables = tables
         self._geography = geography
-        self._today = today
-
-    def with_date(self, today: dt.date) -> SeedProspectFactory:
-        """The same factory for another in-world date."""
-        return SeedProspectFactory(self._tables, self._geography, today)
 
     def create(
         self,
         requests: Sequence[ProspectRequest],
         existing: Sequence[Player],
-        rng: WorldRng,
+        context: tuple[dt.date, WorldRng],
     ) -> list[Player]:
-        """One new player per request; names avoid everyone in ``existing``."""
+        """One new player per request, born relative to the date; names avoid ``existing``."""
+        today, rng = context
         names = NameBook.from_static()
         names.restore(
             NameBookState(
@@ -50,8 +46,8 @@ class SeedProspectFactory:
                 places=frozenset(),
             )
         )
-        context = GenerationContext(self._tables, names, IdMint(), self._geography, self._today)
-        return [self._one(request, context, rng.fork(request.key)) for request in requests]
+        generation = GenerationContext(self._tables, names, IdMint(), self._geography, today)
+        return [self._one(request, generation, rng.fork(request.key)) for request in requests]
 
     def _one(self, request: ProspectRequest, context: GenerationContext, rng: WorldRng) -> Player:
         spec = PlayerSpec(

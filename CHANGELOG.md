@@ -131,6 +131,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0166** Create academy players relative to the rollover date *(M10; scope: league)*
 - **0138** Merge verify exports, renumber M2 fragments, and retie goldens after Track A rebase *(M2; scope: verify, schemas, sim; sim version patch; schema version patch)*
 - **0120** Fix own-goal tags and bound the M7 context knobs *(M7; scope: events, sim)*
 - **0102** Do not announce a mentality change that changes nothing *(M6; scope: sim)*
