@@ -1,29 +1,11 @@
-import subprocess
 from pathlib import Path
 
 import pytest
 
-from footystreams.tools.changelog import git
+from footystreams.tools import git
 from footystreams.tools.changelog.cli import main
 
 NEW = ["new", "--type", "added", "--scope", "sim", "--milestone", "M4", "--date", "2026-10-07"]
-
-
-def _git(repo: Path, *arguments: str) -> None:
-    subprocess.run(["git", *arguments], cwd=repo, check=True, capture_output=True)  # noqa: S603, S607
-
-
-@pytest.fixture
-def repo(tmp_path: Path) -> Path:
-    """A throwaway git repository on a feature branch that is one empty commit past main."""
-    _git(tmp_path, "init", "-b", "main")
-    _git(tmp_path, "config", "user.email", "test@example.com")
-    _git(tmp_path, "config", "user.name", "Test")
-    (tmp_path / "README.md").write_text("hello", encoding="utf-8")
-    _git(tmp_path, "add", ".")
-    _git(tmp_path, "commit", "-m", "initial")
-    _git(tmp_path, "switch", "-c", "feature")
-    return tmp_path
 
 
 def test_check__no_changes__passes(repo: Path) -> None:
