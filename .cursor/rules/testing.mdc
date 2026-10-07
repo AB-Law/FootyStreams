@@ -3,7 +3,6 @@ description: Testing rules
 globs: tests/**/*.py, src/**/*.py
 alwaysApply: false
 ---
-<!-- GENERATED from .claude/rules/testing.md by tools/rules_sync.py - edit the source. -->
 # Testing rules
 
 Strategy: `docs/design/10-testing-strategy.md`. Tiers: **T0** every commit (<60 s, what `uv run check` runs), **T1** PR, **T2** nightly, **T3** release.

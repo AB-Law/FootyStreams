@@ -3,7 +3,6 @@ description: Simulation package rules
 globs: src/footystreams/sim/**/*.py
 alwaysApply: false
 ---
-<!-- GENERATED from .claude/rules/sim.md by tools/rules_sync.py - edit the source. -->
 # Simulation package rules
 
 - Pure function: `simulate_match(setup, seed, config, tables)`. **No I/O**, no logging, no imports of `persistence`, `league`, `runtime`, `cli`, `os`, `pathlib`, `sqlite3`, `sqlalchemy`, `numpy`, `random`, `time`, `datetime`.

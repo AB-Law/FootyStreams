@@ -12,4 +12,4 @@ paths:
 - Update design docs in the **same change** as the behaviour they describe. Record deviations from the design in the milestone report (`docs/milestones/Mx.md`), and refresh `docs/status.md` (<= 100 lines) at the end of each milestone.
 - JSON Schema in `schemas/` is generated from the Pydantic models (`uv run export-schemas`); never edit it by hand. A drift test fails if it is stale.
 - ADRs (`docs/adr/NNNN-title.md`: context / decision / consequences) for non-obvious or hard-to-reverse decisions.
-- `.claude/rules/*.md` are the **source** of the agent rules (read by Claude Code, and by Cursor via `AGENTS.md`); `.cursor/rules/*.mdc` are **generated** from them by `uv run rules sync` (`--check` is part of `uv run check`). Edit the `.claude/rules` file, never the `.mdc`.
+- Agent rules live in `.claude/rules/*.md` (Claude Code) and `.cursor/rules/*.mdc` (Cursor: same body, plus `description`/`globs`/`alwaysApply` frontmatter). When you change a rule, change **both** files in the same commit.

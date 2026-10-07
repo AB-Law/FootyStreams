@@ -2,7 +2,6 @@
 description: Git workflow (always apply)
 alwaysApply: true
 ---
-<!-- GENERATED from .claude/rules/git-workflow.md by tools/rules_sync.py - edit the source. -->
 # Git workflow (always apply)
 
 **Small, reviewable, atomic.** Full detail: `docs/design/11-engineering-standards.md` section 12.

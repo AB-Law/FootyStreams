@@ -3,7 +3,6 @@ description: Architecture rules
 globs: src/footystreams/**/*.py
 alwaysApply: false
 ---
-<!-- GENERATED from .claude/rules/architecture.md by tools/rules_sync.py - edit the source. -->
 # Architecture rules
 
 Imports point **down**: `domain` <- `events` <- `sim` <- `league` <- (`persistence` ports) <- `runtime`/`cli`.
