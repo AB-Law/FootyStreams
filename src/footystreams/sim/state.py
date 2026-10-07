@@ -21,6 +21,8 @@ from footystreams.sim.side import Side, opposite
 from footystreams.sim.tables import Formation, StaticTables
 from footystreams.sim.tactics_view import TacticsView, build_view
 
+REGULATION_PERIOD_S = 2700.0
+
 
 class Line(IntEnum):
     """Which row of the team a player belongs to; indexes per-line tables."""
@@ -108,6 +110,11 @@ class MatchState:
     def team(self, side: Side) -> TeamState:
         """Return the team on a side."""
         return self.home if side == "home" else self.away
+
+    @property
+    def elapsed_s(self) -> float:
+        """Playing seconds since kick-off, counted across periods (half-time excluded)."""
+        return (self.period - 1) * REGULATION_PERIOD_S + self.t_period
 
     @property
     def attackers(self) -> TeamState:

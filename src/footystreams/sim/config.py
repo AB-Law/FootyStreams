@@ -156,6 +156,58 @@ class DribbleConfig(DomainModel):
     distance_m: float = 8.0  # how far a dribble carries the ball
 
 
+class DecisionConfig(DomainModel):
+    """Utility weights and choice temperature of the carrier's decision (02 section 5.2)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "candidates": "S",
+        "progress_scale": "S",
+        "loss_cost_base": "S",
+        "loss_cost_own_third": "S",
+        "lead_frame_x": "S",
+        "min_pass_m": "S",
+        "shot_scale": "S",
+        "shoot_on_sight_swing": "S",
+        "clear_pressure": "S",
+        "clear_max_frame_x": "S",
+        "clear_base": "S",
+        "clear_slope": "S",
+        "directness_bias": "S",
+        "cross_bias": "S",
+        "dribble_bias": "S",
+        "recycle_bias": "S",
+        "mentality_swing": "S",
+        "urgency_swing": "S",
+        "temperature_base": "S",
+        "temperature_scale": "S",
+        "temperature_pressure": "S",
+        "weight_floor": "S",
+    }
+
+    candidates: int = Field(ge=1, le=10, default=5)
+    progress_scale: float = 10.0  # utility per unit of threat gained
+    loss_cost_base: float = 0.15
+    loss_cost_own_third: float = 0.55  # extra cost of losing the ball at the own goal line
+    lead_frame_x: float = 0.012  # passes are aimed slightly ahead of the receiver
+    min_pass_m: float = 4.0
+    shot_scale: float = 7.0
+    shoot_on_sight_swing: float = 0.8
+    clear_pressure: float = 0.45
+    clear_max_frame_x: float = 0.30
+    clear_base: float = 0.9
+    clear_slope: float = 1.5
+    directness_bias: float = 0.6
+    cross_bias: float = 0.6
+    dribble_bias: float = 0.5
+    recycle_bias: float = 0.4  # extra appeal of a back pass per unit of pressure
+    mentality_swing: float = 0.5
+    urgency_swing: float = 0.3
+    temperature_base: float = 0.35
+    temperature_scale: float = 2.0
+    temperature_pressure: float = 0.4
+    weight_floor: float = 0.02
+
+
 class SimConfig(DomainModel):
     """Top-level simulation configuration (defaults are the shipped balance)."""
 
@@ -169,6 +221,7 @@ class SimConfig(DomainModel):
         "passing": "S",
         "shot": "S",
         "dribble": "S",
+        "decision": "S",
     }
 
     model_profile: str = "v1"
@@ -180,6 +233,7 @@ class SimConfig(DomainModel):
     passing: PassConfig = Field(default_factory=PassConfig)
     shot: ShotConfig = Field(default_factory=ShotConfig)
     dribble: DribbleConfig = Field(default_factory=DribbleConfig)
+    decision: DecisionConfig = Field(default_factory=DecisionConfig)
 
 
 def config_hash(config: SimConfig) -> str:

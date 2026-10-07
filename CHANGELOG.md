@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0047** Add the carrier decision model *(M4; scope: sim)*
 - **0046** Add pressure model and pass, shot and dribble probability models *(M4; scope: sim)*
 - **0045** Add mutable match state and the positioning model *(M4; scope: sim)*
 - **0044** Add pitch geometry, tactics view and effective skills *(M4; scope: sim)*
