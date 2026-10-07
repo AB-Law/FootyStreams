@@ -38,6 +38,9 @@ class SquadSpec(YamlModel):
     age_deviation: float
     age_range: IntRange
     goalkeeper_age_bonus: int
+    home_players: IntRange
+    foreign_nations: IntRange
+    max_per_foreign_nation: int
     youth_age_range: IntRange
     youth_ability: IntRange
     starter_noise: float

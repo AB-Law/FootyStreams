@@ -3,16 +3,16 @@
 from __future__ import annotations
 
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from footystreams.domain.player import Player
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.squad_strength import squad_strength
 from footystreams.domain.static_tables import Formation
 from footystreams.domain.tactics import TeamTactics
-from footystreams.domain.types import ClubId, Position
+from footystreams.domain.types import ClubId, NationId, Position
 from footystreams.seed.clubs.archetypes import ClubArchetype, SquadSpec
-from footystreams.seed.players.context import GenerationContext
+from footystreams.seed.players.context import GenerationContext, Geography
 from footystreams.seed.players.generator import PlayerSpec, generate_player
 
 MAX_CALIBRATION_ATTEMPTS = 5
@@ -34,6 +34,7 @@ class SquadBrief:
     reputation: int
     archetype: ClubArchetype
     tactics: TeamTactics
+    nationalities: tuple[NationId, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -87,9 +88,31 @@ def senior_specs(
                     region=brief.region,
                     club_reputation=brief.reputation,
                     potential_bonus=brief.archetype.academy_bonus,
+                    nationality=_nationality_at(brief, len(specs)),
                 )
             )
     return specs
+
+
+def _nationality_at(brief: SquadBrief, index: int) -> NationId | None:
+    return brief.nationalities[index] if index < len(brief.nationalities) else None
+
+
+def nationality_plan(
+    rng: WorldRng, geography: Geography, spec: SquadSpec, count: int
+) -> tuple[NationId, ...]:
+    """Nationalities of a senior squad: a capped home contingent, the rest from several nations."""
+    home = min(rng.randint(*spec.home_players), count)
+    foreign = sorted(geography.foreign, key=lambda nation: nation.id)
+    chosen = rng.shuffled(foreign)[: rng.randint(*spec.foreign_nations)]
+    taken: Counter[NationId] = Counter()
+    plan = [geography.home.id] * home
+    while len(plan) < count:
+        nation = rng.choice(chosen)
+        if taken[nation.id] < spec.max_per_foreign_nation:
+            taken[nation.id] += 1
+            plan.append(nation.id)
+    return tuple(rng.shuffled(plan))
 
 
 def spec_items(spec: SquadSpec) -> list[tuple[Position, int]]:
@@ -144,6 +167,12 @@ def generate_squad(
 
     A discarded attempt is rolled back (names, ids) so only the accepted squad leaves a trace.
     """
+    squad_spec = ctx.tables.clubs.squad
+    total = sum(squad_spec.senior_template.values())
+    brief = replace(
+        brief,
+        nationalities=nationality_plan(rng.fork("nationality"), ctx.geography, squad_spec, total),
+    )
     quality = target.rating
     for attempt in range(MAX_CALIBRATION_ATTEMPTS):
         checkpoint = ctx.checkpoint()

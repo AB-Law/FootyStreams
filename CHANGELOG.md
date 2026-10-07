@@ -41,6 +41,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0058** Add the golden tool and the cross-process determinism test *(M4; scope: cli, sim)*
 - **0056** Add verify_match with invariants M01-M05, M10 and M17 *(M4; scope: verify)*
 - **0055** Add the sim command and the text renderer *(M4; scope: cli)*
+- **0054** Add verify_world, the world coherence checks, and senior-squad nationality quotas *(M2; scope: seed)*
 - **0054** Add simulate_match, run_match, the match loop and an event-derived summary *(M4; scope: sim, events)*
 - **0053** Add generate_world: the pure seed-to-World function *(M2; scope: seed)*
 - **0052** Add the seed relationship graph *(M2; scope: seed)*

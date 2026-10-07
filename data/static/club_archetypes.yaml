@@ -21,6 +21,9 @@ squad:
   age_deviation: 4.2
   age_range: [17, 37]
   goalkeeper_age_bonus: 2
+  home_players: [10, 13]        # senior squad: Valmerians (capped under the 55% nation share)
+  foreign_nations: [3, 5]       # how many foreign nations the rest come from
+  max_per_foreign_nation: 6
   youth_age_range: [16, 19]
   youth_ability: [34, 50]
   starter_noise: 2.5

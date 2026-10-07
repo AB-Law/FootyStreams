@@ -7,6 +7,7 @@ from itertools import combinations
 import pytest
 
 from footystreams.domain.rng import WorldRng
+from footystreams.domain.textfold import plain
 from footystreams.domain.types import Gender
 from footystreams.seed.names import gates
 from footystreams.seed.names.book import GeneratedName, NameBook, NameGenerationError
@@ -43,7 +44,7 @@ def _draw_all(seed: int, per_culture: int) -> dict[str, list[GeneratedName]]:
 def _trigrams(words: list[str]) -> Counter[str]:
     counts: Counter[str] = Counter()
     for word in words:
-        padded = f"^{gates.plain(word)}$"
+        padded = f"^{plain(word)}$"
         counts.update(padded[i : i + 3] for i in range(len(padded) - 2))
     return counts
 
@@ -197,7 +198,7 @@ def test_is_pronounceable__table(component: str, expected: bool) -> None:
 
 
 def test_plain__folds_diacritics_and_special_letters() -> None:
-    assert gates.plain("Ørsted-Šimák") == "orstedsimak"
+    assert plain("Ørsted-Šimák") == "orstedsimak"
 
 
 def test_book__restore_undoes_a_discarded_attempt() -> None:

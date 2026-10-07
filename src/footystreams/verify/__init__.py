@@ -8,3 +8,7 @@ from footystreams.verify.match import verify_match
 from footystreams.verify.violation import Violation, format_violations
 
 __all__ = ["Violation", "format_violations", "verify_match"]
+from footystreams.verify.world import verify_world
+from footystreams.verify.world_targets import WorldChecks, WorldTargets
+__all__ = ["Violation", "WorldChecks", "WorldTargets", "format_violations", "verify_world"]
+
