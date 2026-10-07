@@ -92,6 +92,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0076** Build the state from a BuildContext and add the bench, injury stream and ManagerConfig *(M6; scope: sim)*
 
 ### Tests
+- **0085** Add the M6 sweeps and metamorphic tests; write the M6 report *(M6; scope: sim)*
 - **0072** Add the M5 sweeps and write the M5 report *(M5; scope: sim, docs)*
 - **0060** Pin the M4 golden digests *(M4; scope: sim; sim version minor)*
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*

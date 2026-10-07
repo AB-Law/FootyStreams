@@ -52,3 +52,8 @@ Also: committed `schemas/` (drift-tested), factories/strategies under `tests/`, 
 ### Track A update at the end of M5
 - **M5 done locally** on `feat/m5-dead-balls-discipline` (based on the M4 branch): referee model, fouls, advantage, cards and dismissals, throw-ins, goal kicks, corners with an aerial duel, penalties, free-kick shots and crosses, offside, announced added time; `verify_match` gains M07 (in part), M11, M12. `SIM_VERSION` 0.2.0, `SCHEMA_VERSION` 0.1.4. Report: `docs/milestones/M5.md`.
 - Known gaps: red cards about 2x the band; second-half added time short (substitutions and injuries arrive in M6); 0.37 s CPU a match.
+
+### Track A update at the end of M6
+- **M6 done locally** on `feat/m6-fatigue-injuries-weather-ai` (based on the M5 branch): fatigue, weather and pitch, home advantage (crowd), injuries with forced changes, substitution mechanics, the AI manager (checkpoints, triggers, mentality changes, changes at stoppages and half-time); `verify_match` gains M06, M08 (M07 and M11 extended; M09 is an engine-level test). `SIM_VERSION` 0.3.0, `SCHEMA_VERSION` 0.1.5. Report: `docs/milestones/M6.md`.
+- Fixed on the way: an away-side positioning edge from sequential team updates.
+- Known gaps: no formation changes or half-time talk in the manager; the factory bench (two outfielders and a goalkeeper) caps changes at about 3.5 a match; draw rate and red cards still high; 0.4 s CPU a match.
