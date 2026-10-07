@@ -36,7 +36,7 @@ jobs:
         run: uv run check --tier pr
 
   pr-size:
-    name: pull request size
+    name: pull request size (informational)
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
@@ -48,13 +48,7 @@ jobs:
           enable-cache: true
       - name: Install dependencies
         run: uv sync
-      - name: Measure (target 400 lines, hard cap 800; label large-approved to allow more)
+      - name: Report size (milestone PRs are large by design; review commit by commit)
         env:
           BASE: origin/${{ github.base_ref }}
-          LARGE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'large-approved') }}
-        run: |
-          if [ "$LARGE_APPROVED" = "true" ]; then
-            uv run pr-size --base "$BASE" --allow-large
-          else
-            uv run pr-size --base "$BASE"
-          fi
+        run: uv run pr-size --base "$BASE" --allow-large

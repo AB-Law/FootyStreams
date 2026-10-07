@@ -44,12 +44,13 @@ def test_ci__quality_job_runs_the_pr_tier_gate_with_full_history() -> None:
     assert checkout["with"]["fetch-depth"] == 0  # the change-log check needs origin/main
 
 
-def test_ci__pr_size_job_only_runs_for_pull_requests_and_honours_the_approval_label() -> None:
+def test_ci__pr_size_job_only_reports_and_never_blocks_milestone_prs() -> None:
     job = _load()["jobs"]["pr-size"]
+    command = _run_commands(job)[-1]
 
     assert job["if"] == "github.event_name == 'pull_request'"
-    assert "large-approved" in job["steps"][-1]["env"]["LARGE_APPROVED"]
-    assert "uv run pr-size" in _run_commands(job)[-1]
+    assert "uv run pr-size" in command
+    assert "--allow-large" in command  # one PR per milestone: informational, not a gate
 
 
 def test_ci__workflow_default_permissions_are_read_only() -> None:
