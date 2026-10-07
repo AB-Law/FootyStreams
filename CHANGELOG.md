@@ -81,6 +81,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0008** Remove the Cursor rules generator; keep plain, hand-maintained .cursor/rules copies. *(design; scope: tools, design)*
 
 ### Refactoring
+- **0081** Move the value and wage formulas into domain.valuation *(M10; scope: domain)*
 - **0049** Move IdMint to domain and add checkpoints for discarded generation attempts *(M2; scope: seed)*
 
 ### Tests

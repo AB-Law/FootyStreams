@@ -9,10 +9,11 @@ from footystreams.domain.contract import SquadRole
 from footystreams.domain.ids import IdMint
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.types import ClubId, Position
+from footystreams.domain.valuation import wage_from_value
 from footystreams.seed.geography import generate_geography
 from footystreams.seed.names.book import NameBook
 from footystreams.seed.players.condition import starting_condition
-from footystreams.seed.players.contract import contract_for, wage_from_value
+from footystreams.seed.players.contract import contract_for
 from footystreams.seed.players.generator import PlayerSpec, generate_player, prior_stints
 from footystreams.seed.players.mind import generate_hidden, generate_personality
 from footystreams.seed.players.positions import resolve_role
