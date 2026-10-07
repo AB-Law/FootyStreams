@@ -46,9 +46,9 @@ weather:
 
 recovery:
   fatigue_rest_day: 0.10
-  fatigue_training_day: 0.05
   fitness_gain_rest_day: 0.004
-  sharpness_decay_idle_day: 0.012
+  sharpness_decay_idle_week: 0.03     # applied on pay day to everyone, down to the floor
+  sharpness_floor: 0.3
   sharpness_gain_per_match: 0.12
   morale_drift_per_day: 0.01
   morale_win: 0.04
@@ -64,6 +64,7 @@ recovery:
 
 world_events:
   daily_hazard: 0.006                  # base chance per player per day of a life event
+  roll_interval_days: 7                # events are rolled once per this many days (on pay day)
   volatility_weight: 0.5
   media_weight: 0.5
   kind_weights:
