@@ -12,6 +12,7 @@ from collections.abc import Iterator
 from footystreams.domain.match import MatchSetup
 from footystreams.domain.referee import Referee
 from footystreams.events.base import EventBase
+from footystreams.events.derive.summary import SummaryInputs, build_summary
 from footystreams.events.digest import log_digest
 from footystreams.events.structure import (
     AddedTimeEvent,
@@ -42,7 +43,6 @@ from footystreams.sim.rng import SimRng
 from footystreams.sim.side import Side
 from footystreams.sim.state import REGULATION_PERIOD_S, MatchState
 from footystreams.sim.stoppage import SECONDS_PER_MINUTE, added_minutes
-from footystreams.sim.summary import SummaryInputs, build_summary
 from footystreams.sim.tables import StaticTables
 
 PERIODS = (1, 2)

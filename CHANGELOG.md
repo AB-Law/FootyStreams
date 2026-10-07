@@ -90,6 +90,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0052** Speed up option generation and refresh positions every 4 seconds *(M4; scope: sim)*
 
 ### Refactoring
+- **0087** Move the summary fold from sim to events/derive so verify and analytics can recompute it *(M7; scope: events, sim)*
 - **0076** Build the state from a BuildContext and add the bench, injury stream and ManagerConfig *(M6; scope: sim)*
 
 ### Tests
