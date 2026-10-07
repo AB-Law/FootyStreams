@@ -77,6 +77,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0083** Roll a foul injury before the card so a dismissed fouler is not named afterwards *(M6; scope: sim)*
 - **0063** Ignore the config hash when comparing golden digests *(M5; scope: cli)*
 - **0041** Close M1 test gaps for union usage and aggregates *(M1; scope: domain, events, docs; schema version patch)*
 

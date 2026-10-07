@@ -68,8 +68,9 @@ def contest_foul(
         fouled_id=carrier.player_id,
         severity=contact.label,
     )
-    booking_s = show_card(play, tackler, contact, foul_id)
-    booking_s += injure_in_foul(play, tackler, carrier, foul_id)
+    # The injury comes before the card: a dismissed fouler is no longer named after his card.
+    booking_s = injure_in_foul(play, tackler, carrier, foul_id)
+    booking_s += show_card(play, tackler, contact, foul_id)
     if plays_advantage(play, contact):
         return booking_s
     if contact.in_box and play.cfg.restarts.enabled:

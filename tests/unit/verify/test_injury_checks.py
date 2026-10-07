@@ -3,9 +3,11 @@ from collections.abc import Sequence
 from footystreams.events.discipline import InjuryEvent, SubstitutionEvent
 from footystreams.events.open_play import PassEvent
 from footystreams.events.types import MatchEvent
+from footystreams.sim import SimConfig, default_tables, merge_config, run_match
 from footystreams.verify import verify_match
 from footystreams.verify.discipline import injured_off_unreplaced
-from tests.helpers.logs import demo_setup, injury_heavy_log
+from tests.factories.sim_config import CARD_HEAVY
+from tests.helpers.logs import INJURY_HEAVY, demo_setup, injury_heavy_log
 from tests.helpers.sim import assert_match_valid
 
 
@@ -48,3 +50,13 @@ def test_m11__an_unreplaced_injury_that_keeps_the_men_count_is_reported() -> Non
     wrong = event.ctx.model_copy(update={"men_home": 11, "men_away": 11})
     log[short] = event.model_copy(update={"ctx": wrong})
     assert "M11" in _codes(log)
+
+
+def test_verify_match__a_foul_that_cards_and_injures_leaves_the_log_clean() -> None:
+    config = merge_config(
+        SimConfig(), {**CARD_HEAVY, "injury": {**INJURY_HEAVY["injury"], "foul_contact": 0.6}}
+    )
+    logs = [run_match(demo_setup(), seed, config, default_tables()).events for seed in range(8)]
+    assert any(isinstance(e, InjuryEvent) and e.cause == "foul" for log in logs for e in log)
+    for log in logs:
+        assert_match_valid(log, demo_setup())
