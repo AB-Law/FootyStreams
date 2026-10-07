@@ -45,9 +45,10 @@ def _lean(score: int) -> float:
 
 
 def _hazard(player: Player, config: WorldEventsConfig) -> float:
-    """The daily chance of a life event: higher for volatile players."""
+    """The chance of at least one life event in a roll's window: higher for volatile players."""
     scale = 1.0 + config.volatility_weight * _lean(player.personality.volatility)
-    return max(0.0, config.daily_hazard * scale)
+    daily = min(1.0, max(0.0, config.daily_hazard * scale))
+    return 1.0 - (1.0 - daily) ** config.roll_interval_days
 
 
 def _kind_weights(player: Player, config: WorldEventsConfig) -> dict[StateKind, float]:

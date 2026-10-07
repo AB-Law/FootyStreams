@@ -84,9 +84,9 @@ class RecoveryConfig(_Config):
     """Daily recovery and post-match condition changes."""
 
     fatigue_rest_day: float = Field(ge=0.0)
-    fatigue_training_day: float = Field(ge=0.0)
     fitness_gain_rest_day: float = Field(ge=0.0)
-    sharpness_decay_idle_day: float = Field(ge=0.0)
+    sharpness_decay_idle_week: float = Field(ge=0.0)
+    sharpness_floor: float = Field(ge=0.0, le=1.0)
     sharpness_gain_per_match: float = Field(ge=0.0)
     morale_drift_per_day: float = Field(ge=0.0)
     morale_win: float
@@ -105,6 +105,7 @@ class WorldEventsConfig(_Config):
     """The seeded life-event generator."""
 
     daily_hazard: float = Field(ge=0.0, le=1.0)
+    roll_interval_days: int = Field(ge=1)
     volatility_weight: float
     media_weight: float
     kind_weights: dict[str, float]
