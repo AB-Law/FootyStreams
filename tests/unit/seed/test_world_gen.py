@@ -43,8 +43,12 @@ def test_generate_world__counts_match_the_plan() -> None:
     assert world.memories == ()
 
 
-def test_generate_world__same_seed__identical_content() -> None:
-    assert _everything(generate_world(2)) == _everything(_world(2))
+def test_generate_world__same_seed__identical_content_within_the_time_budget() -> None:
+    started = time.perf_counter()
+    fresh = generate_world(2, tables=cached_static_tables())
+    elapsed = time.perf_counter() - started
+    assert _everything(fresh) == _everything(_world(2))
+    assert elapsed < 10  # budget is 5 s (docs/design/11 section 6); slow shared runners get slack
 
 
 def test_generate_world__different_seed__different_content() -> None:
@@ -100,12 +104,6 @@ def test_generate_world__fewer_clubs__smaller_league() -> None:
 def test_generator_config__league_size_out_of_range__rejected(clubs: int) -> None:
     with pytest.raises(ValueError, match="clubs must be between"):
         GeneratorConfig(clubs=clubs)
-
-
-def test_generate_world__stays_inside_the_five_second_budget() -> None:
-    started = time.perf_counter()
-    generate_world(5, tables=cached_static_tables())
-    assert time.perf_counter() - started < 10  # budget is 5 s; slower shared runners get slack
 
 
 def test_plan_league__spacing_and_gap_hold_for_many_seeds() -> None:

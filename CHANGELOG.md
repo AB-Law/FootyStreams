@@ -64,6 +64,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0049** Move IdMint to domain and add checkpoints for discarded generation attempts *(M2; scope: seed)*
 
 ### Tests
+- **0056** Share cached worlds across seed tests *(M2; scope: cli)*
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
