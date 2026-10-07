@@ -1,0 +1,295 @@
+# Player archetypes: attribute biases relative to a player's overall level, so profiles are spiky
+# (strong where the archetype demands, weak elsewhere) rather than flat noise around a mean.
+# roles: "<role base id>:<duty>" the archetype is at home in (resolved to ids by the generator).
+# height / bmi: [mean, deviation]. weight: relative frequency among archetypes of the position.
+latent:
+  factor_deviation: 9.0   # spread of each latent factor (athleticism, technique, football_iq)
+  noise_deviation: 7.0    # independent per-attribute noise
+  loadings:
+    athleticism: {pace: 1.0, acceleration: 1.0, stamina: 0.8, strength: 0.6, agility: 0.8, balance: 0.5, jumping_reach: 0.7, natural_fitness: 0.6, work_rate: 0.3}
+    technique: {first_touch: 1.0, dribbling: 1.0, short_passing: 0.8, long_passing: 0.7, crossing: 0.6, finishing: 0.5, ball_shielding: 0.5, set_piece_delivery: 0.6, long_shots: 0.5, flair: 0.5, penalty_taking: 0.4}
+    football_iq: {vision: 1.0, decisions: 1.0, anticipation: 0.9, positioning: 0.8, off_ball_movement: 0.6, composure: 0.7, concentration: 0.7, teamwork: 0.5, marking: 0.3, tackling: 0.2}
+
+position_bias:
+  GK: {finishing: -45, long_shots: -40, dribbling: -40, crossing: -35, heading: -30, tackling: -45, marking: -45, set_piece_delivery: -30, penalty_taking: -30, ball_shielding: -30, first_touch: -15, short_passing: -10, long_passing: -8, off_ball_movement: -35, flair: -20, pace: -20, acceleration: -15, stamina: -10, work_rate: -10}
+  CB: {finishing: -25, long_shots: -20, dribbling: -12, crossing: -15, flair: -12, off_ball_movement: -15, vision: -6, set_piece_delivery: -10, penalty_taking: -15, tackling: 6, marking: 6, heading: 8, positioning: 5, strength: 6, jumping_reach: 6, bravery: 4, pace: -4}
+  RB: &fullback {finishing: -20, long_shots: -10, heading: -8, crossing: 2, tackling: 2, stamina: 6, pace: 5, work_rate: 6, strength: -4, flair: -4, penalty_taking: -10}
+  LB: *fullback
+  RWB: *fullback
+  LWB: *fullback
+  DM: {finishing: -15, long_shots: -8, crossing: -8, dribbling: -6, tackling: 6, positioning: 5, anticipation: 4, work_rate: 5, stamina: 3}
+  CM: {finishing: -8, heading: -6, short_passing: 4, vision: 2, stamina: 3, work_rate: 3}
+  AM: {heading: -14, tackling: -18, marking: -18, strength: -10, stamina: -4, vision: 5, first_touch: 5, dribbling: 4, flair: 6, short_passing: 4}
+  SS: {tackling: -18, marking: -16, heading: -6, first_touch: 4, off_ball_movement: 6, finishing: 4}
+  RM: &wide {finishing: -8, heading: -10, tackling: -8, marking: -10, crossing: 6, pace: 4, stamina: 4}
+  LM: *wide
+  RW: &winger {heading: -14, tackling: -18, marking: -18, strength: -10, crossing: 4, dribbling: 6, pace: 6, acceleration: 4, flair: 4}
+  LW: *winger
+  ST: {tackling: -20, marking: -20, positioning: -6, finishing: 8, heading: 2, composure: 3, off_ball_movement: 6, long_passing: -10, crossing: -8}
+
+# How well a natural player of one position can play another (before versatility scaling).
+adjacency:
+  RB: {RWB: 88, LB: 55, CB: 60, RM: 60, DM: 45}
+  LB: {LWB: 88, RB: 55, CB: 60, LM: 60, DM: 45}
+  CB: {DM: 62, RB: 55, LB: 55}
+  RWB: {RB: 88, RM: 78, RW: 60, LWB: 55}
+  LWB: {LB: 88, LM: 78, LW: 60, RWB: 55}
+  DM: {CM: 82, CB: 65, RB: 40, LB: 40}
+  CM: {DM: 80, AM: 76, RM: 60, LM: 60}
+  AM: {CM: 78, SS: 80, RW: 74, LW: 74, RM: 72, LM: 72, ST: 60}
+  RM: {RW: 86, CM: 62, RWB: 70, AM: 68, LM: 50}
+  LM: {LW: 86, CM: 62, LWB: 70, AM: 68, RM: 50}
+  RW: {RM: 86, AM: 72, ST: 66, SS: 66, LW: 55}
+  LW: {LM: 86, AM: 72, ST: 66, SS: 66, RW: 55}
+  SS: {ST: 88, AM: 82, RW: 62, LW: 62, CM: 50}
+  ST: {SS: 86, AM: 60, RW: 55, LW: 55}
+  GK: {}
+
+appearance:
+  skin_tone: {1: 1, 2: 2, 3: 3, 4: 3, 5: 3, 6: 2, 7: 2, 8: 1}
+  hair_style: {short: 5, buzz: 3, curly: 2, long: 1, bald: 1, fade: 2, braids: 1}
+  hair_colour: {black: 4, brown: 5, blond: 2, red: 1, grey: 1}
+  facial_hair: {none: 6, stubble: 3, beard: 2, moustache: 1, goatee: 1}
+  build: {lean: 3, athletic: 5, stocky: 2, tall: 2}
+
+archetypes:
+  traditional_keeper:
+    position: GK
+    weight: 3
+    bias: {shot_stopping: 6, handling: 4, aerial_command: 4, communication: 3, sweeping: -6, distribution: -2}
+    roles: ["goalkeeper:support"]
+    traits: [comes_for_crosses]
+    height: [191, 4]
+    bmi: [23.2, 1.0]
+  sweeper_keeper:
+    position: GK
+    weight: 2
+    bias: {sweeping: 10, distribution: 8, one_on_ones: 4, first_touch: 8, short_passing: 8, aerial_command: -4, handling: -1}
+    roles: ["sweeper_keeper:support", "sweeper_keeper:attack"]
+    traits: [rushes_out_of_goal]
+    height: [188, 4]
+    bmi: [22.8, 1.0]
+  stopper:
+    position: CB
+    weight: 3
+    bias: {tackling: 12, marking: 10, heading: 10, aggression: 8, bravery: 8, pace: -6, short_passing: -5, composure: -3}
+    roles: ["central_defender:defend"]
+    traits: [dives_into_tackles]
+    height: [189, 5]
+    bmi: [23.8, 1.1]
+  ball_playing_defender:
+    position: CB
+    weight: 2
+    bias: {short_passing: 12, long_passing: 10, composure: 10, vision: 8, first_touch: 8, heading: -2, aggression: -6, bravery: -3}
+    roles: ["ball_playing_defender:defend", "ball_playing_defender:support"]
+    traits: [plays_short_simple_passes]
+    height: [187, 5]
+    bmi: [23.2, 1.0]
+  cover_defender:
+    position: CB
+    weight: 2
+    bias: {pace: 10, acceleration: 8, anticipation: 10, positioning: 8, concentration: 6, strength: -5, heading: -4, bravery: -3}
+    roles: ["covering_defender:defend"]
+    traits: [stays_on_feet]
+    height: [185, 5]
+    bmi: [22.6, 1.0]
+  defensive_full_back:
+    position: RB
+    weight: 3
+    bias: {tackling: 8, marking: 8, positioning: 6, crossing: -4, dribbling: -4, work_rate: 4}
+    roles: ["full_back:defend"]
+    traits: [stays_on_feet]
+    height: [178, 5]
+    bmi: [22.8, 1.0]
+  attacking_full_back:
+    position: RB
+    weight: 3
+    bias: {crossing: 12, dribbling: 8, pace: 8, stamina: 6, tackling: -6, marking: -6, positioning: -3}
+    roles: ["full_back:attack", "full_back:support"]
+    traits: [gets_forward_whenever_possible, runs_with_ball_often]
+    height: [176, 5]
+    bmi: [22.2, 1.0]
+  defensive_full_back_left:
+    position: LB
+    weight: 3
+    bias: {tackling: 8, marking: 8, positioning: 6, crossing: -4, dribbling: -4, work_rate: 4}
+    roles: ["full_back:defend"]
+    traits: [stays_on_feet]
+    height: [178, 5]
+    bmi: [22.8, 1.0]
+  attacking_full_back_left:
+    position: LB
+    weight: 3
+    bias: {crossing: 12, dribbling: 8, pace: 8, stamina: 6, tackling: -6, marking: -6, positioning: -3}
+    roles: ["full_back:attack", "full_back:support"]
+    traits: [gets_forward_whenever_possible, runs_with_ball_often]
+    height: [176, 5]
+    bmi: [22.2, 1.0]
+  wing_back_right:
+    position: RWB
+    weight: 1
+    bias: {stamina: 10, crossing: 8, pace: 6, work_rate: 6, tackling: -2}
+    roles: ["wing_back:attack", "wing_back:support"]
+    traits: [hugs_line]
+    height: [177, 5]
+    bmi: [22.0, 1.0]
+  wing_back_left:
+    position: LWB
+    weight: 1
+    bias: {stamina: 10, crossing: 8, pace: 6, work_rate: 6, tackling: -2}
+    roles: ["wing_back:attack", "wing_back:support"]
+    traits: [hugs_line]
+    height: [177, 5]
+    bmi: [22.0, 1.0]
+  anchor:
+    position: DM
+    weight: 3
+    bias: {tackling: 8, positioning: 8, anticipation: 8, concentration: 6, composure: 2, dribbling: -6, flair: -8, pace: -4}
+    roles: ["anchor:defend", "anchor:support"]
+    traits: [plays_short_simple_passes, marks_tightly]
+    height: [184, 5]
+    bmi: [23.4, 1.1]
+  ball_winner:
+    position: DM
+    weight: 2
+    bias: {tackling: 10, aggression: 10, work_rate: 8, stamina: 6, strength: 6, short_passing: -6, vision: -6, flair: -8}
+    roles: ["ball_winning_midfielder_dm:defend", "ball_winning_midfielder_dm:support"]
+    traits: [dives_into_tackles]
+    height: [181, 5]
+    bmi: [23.6, 1.1]
+  deep_playmaker:
+    position: DM
+    weight: 2
+    bias: {short_passing: 10, long_passing: 12, vision: 10, composure: 8, first_touch: 6, tackling: -2, aggression: -6, pace: -6}
+    roles: ["deep_lying_playmaker_dm:support", "deep_lying_playmaker_dm:defend"]
+    traits: [dictates_tempo, tries_killer_balls]
+    height: [180, 5]
+    bmi: [22.6, 1.0]
+  box_to_box:
+    position: CM
+    weight: 3
+    bias: {stamina: 10, work_rate: 8, determination: 6, tackling: 4, finishing: 2, flair: -6, vision: -2}
+    roles: ["box_to_box_midfielder:support", "box_to_box_midfielder:attack"]
+    traits: [gets_forward_whenever_possible, shoots_from_distance]
+    height: [181, 5]
+    bmi: [23.0, 1.0]
+  central_playmaker:
+    position: CM
+    weight: 3
+    bias: {short_passing: 8, vision: 8, first_touch: 6, decisions: 6, teamwork: 4, pace: -4, aggression: -4}
+    roles: ["central_midfielder:support", "central_midfielder:defend"]
+    traits: [plays_short_simple_passes, likes_to_switch_ball_to_other_flank]
+    height: [179, 5]
+    bmi: [22.4, 1.0]
+  ball_winning_midfielder:
+    position: CM
+    weight: 1
+    bias: {tackling: 10, aggression: 8, work_rate: 8, stamina: 5, strength: 5, vision: -5}
+    roles: ["ball_winning_midfielder_cm:defend", "ball_winning_midfielder_cm:support"]
+    traits: [marks_tightly]
+    height: [181, 5]
+    bmi: [23.4, 1.1]
+  advanced_playmaker:
+    position: AM
+    weight: 3
+    bias: {vision: 10, short_passing: 8, first_touch: 8, flair: 8, decisions: 4, strength: -4}
+    roles: ["advanced_playmaker:support", "advanced_playmaker:attack"]
+    traits: [tries_killer_balls, shoots_from_distance]
+    height: [177, 5]
+    bmi: [22.0, 1.0]
+  attacking_midfielder:
+    position: AM
+    weight: 2
+    bias: {off_ball_movement: 8, finishing: 6, long_shots: 8, dribbling: 6, vision: 2}
+    roles: ["attacking_midfielder:attack", "attacking_midfielder:support"]
+    traits: [shoots_from_distance, set_piece_specialist]
+    height: [178, 5]
+    bmi: [22.2, 1.0]
+  shadow_striker:
+    position: SS
+    weight: 1
+    bias: {off_ball_movement: 8, finishing: 6, anticipation: 6, pace: 4, composure: 4}
+    roles: ["shadow_striker:attack", "shadow_striker:support"]
+    traits: [likes_to_beat_offside_trap, moves_into_channels]
+    height: [178, 5]
+    bmi: [22.4, 1.0]
+  wide_midfielder_right:
+    position: RM
+    weight: 1
+    bias: {crossing: 8, stamina: 8, work_rate: 8, pace: 2, finishing: -4}
+    roles: ["wide_midfielder_rm:support", "wide_midfielder_rm:defend"]
+    traits: [hugs_line, tracks_back]
+    height: [177, 5]
+    bmi: [22.2, 1.0]
+  wide_midfielder_left:
+    position: LM
+    weight: 1
+    bias: {crossing: 8, stamina: 8, work_rate: 8, pace: 2, finishing: -4}
+    roles: ["wide_midfielder_lm:support", "wide_midfielder_lm:defend"]
+    traits: [hugs_line, tracks_back]
+    height: [177, 5]
+    bmi: [22.2, 1.0]
+  classic_winger_right:
+    position: RW
+    weight: 2
+    bias: {crossing: 12, pace: 8, acceleration: 8, dribbling: 6, finishing: -4, composure: -2}
+    roles: ["winger_rw:attack", "winger_rw:support"]
+    traits: [hugs_line, runs_with_ball_often, cuts_inside_from_right]
+    height: [175, 5]
+    bmi: [21.8, 1.0]
+  classic_winger_left:
+    position: LW
+    weight: 2
+    bias: {crossing: 12, pace: 8, acceleration: 8, dribbling: 6, finishing: -4, composure: -2}
+    roles: ["winger_lw:attack", "winger_lw:support"]
+    traits: [hugs_line, runs_with_ball_often, cuts_inside_from_left]
+    height: [175, 5]
+    bmi: [21.8, 1.0]
+  inside_forward_right:
+    position: RW
+    weight: 2
+    bias: {finishing: 10, dribbling: 8, off_ball_movement: 8, long_shots: 6, crossing: -4, work_rate: -3}
+    roles: ["inside_forward_rw:attack", "inside_forward_rw:support"]
+    traits: [cuts_inside_from_right, shoots_from_distance]
+    height: [177, 5]
+    bmi: [22.2, 1.0]
+  inside_forward_left:
+    position: LW
+    weight: 2
+    bias: {finishing: 10, dribbling: 8, off_ball_movement: 8, long_shots: 6, crossing: -4, work_rate: -3}
+    roles: ["inside_forward_lw:attack", "inside_forward_lw:support"]
+    traits: [cuts_inside_from_left, shoots_from_distance]
+    height: [177, 5]
+    bmi: [22.2, 1.0]
+  poacher:
+    position: ST
+    weight: 3
+    bias: {finishing: 12, composure: 8, anticipation: 8, off_ball_movement: 8, work_rate: -8, dribbling: -4, strength: -2}
+    roles: ["poacher:attack"]
+    traits: [likes_to_beat_offside_trap, penalty_specialist]
+    height: [180, 5]
+    bmi: [22.8, 1.0]
+  target_man:
+    position: ST
+    weight: 2
+    bias: {heading: 14, strength: 12, jumping_reach: 10, ball_shielding: 10, pace: -10, acceleration: -8, dribbling: -6}
+    roles: ["target_man:support", "target_man:attack"]
+    traits: [plays_with_back_to_goal]
+    height: [190, 4]
+    bmi: [24.2, 1.1]
+  complete_forward:
+    position: ST
+    weight: 2
+    bias: {finishing: 6, first_touch: 6, dribbling: 4, heading: 4, pace: 4, off_ball_movement: 4, vision: 2}
+    roles: ["complete_forward:attack", "complete_forward:support"]
+    traits: [moves_into_channels, shoots_from_distance]
+    height: [184, 5]
+    bmi: [23.2, 1.0]
+  pressing_forward:
+    position: ST
+    weight: 2
+    bias: {work_rate: 12, stamina: 8, aggression: 8, determination: 8, finishing: -2, composure: -4}
+    roles: ["pressing_forward:defend", "pressing_forward:support", "pressing_forward:attack"]
+    traits: [tracks_back]
+    height: [181, 5]
+    bmi: [22.8, 1.0]

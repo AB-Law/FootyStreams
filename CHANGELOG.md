@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0047** Add the player generator: archetypes, spiky attributes, positions, personality and contracts *(M2; scope: data)*
 - **0046** Add invented name cultures, quality gates and the unique name book *(M2; scope: data)*
 - **0045** Add static YAML tables and loaders: formations, roles, traits, injuries, climate *(M2; scope: data)*
 - **0044** Add ability_from_attributes and best-lineup squad strength helpers *(M2; scope: domain)*

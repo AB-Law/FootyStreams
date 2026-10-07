@@ -1,5 +1,5 @@
-"""World generation: name cultures, players, managers, clubs, media, referees, relationships.
+"""Seed data: static tables, name generation and the deterministic world generator.
 
-May import: domain. Deterministic from a seed. The world_io module is the only file edge.
+May import: domain only (plus the standard library and third-party parsers).
 Design: docs/design/05-seeding.md.
 """
