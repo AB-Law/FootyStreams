@@ -1,18 +1,17 @@
 import pytest
 
-from footystreams.sim import SimConfig, default_tables, merge_config
-from footystreams.sim.build import build_state
+from footystreams.sim import SimConfig, merge_config
 from footystreams.sim.config import HomeAdvantageConfig
 from footystreams.sim.effective import Skills
 from footystreams.sim.homeadv import NO_CROWD, Crowd, apply_crowd, crowd_level, crowd_of
-from footystreams.sim.rng import SimRng
 from tests.factories.match import make_setup
+from tests.factories.sim_play import make_state
 
 CFG = HomeAdvantageConfig(enabled=True)
 
 
 def _skills() -> Skills:
-    return build_state(make_setup(), default_tables(), SimRng(1)).home.players[5].skills
+    return make_state(make_setup()).home.players[5].skills
 
 
 def test_crowd_level__empty_ground_has_none_and_full_loud_ground_more() -> None:
@@ -56,8 +55,8 @@ def test_apply_crowd__scale_zero_or_no_crowd_changes_nothing() -> None:
 
 def test_build_state__with_home_advantage_on_the_home_team_is_a_touch_better_than_away() -> None:
     on = merge_config(SimConfig(), {"home_advantage": {"enabled": True}})
-    state = build_state(make_setup(), default_tables(), SimRng(1), on)
-    off = build_state(make_setup(), default_tables(), SimRng(1), SimConfig())
+    state = make_state(make_setup(), config=on)
+    off = make_state(make_setup(), config=SimConfig())
     assert state.home.players[5].skills.composure > off.home.players[5].skills.composure
     assert state.away.players[5].skills.composure < off.away.players[5].skills.composure
     assert pytest.approx(state.home.players[5].skills.pace) == off.home.players[5].skills.pace

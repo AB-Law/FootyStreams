@@ -4,7 +4,6 @@ import pytest
 
 from footystreams.domain.types import PlayerId
 from footystreams.sim import SimConfig, default_tables, merge_config
-from footystreams.sim.build import build_state
 from footystreams.sim.config import FatigueConfig
 from footystreams.sim.engine import MatchEngine
 from footystreams.sim.fatigue import (
@@ -17,10 +16,10 @@ from footystreams.sim.fatigue import (
     role_load,
     team_factor,
 )
-from footystreams.sim.rng import SimRng
 from footystreams.sim.state import Line, MatchState
 from footystreams.sim.weather import NEUTRAL, Conditions
 from tests.factories.match import make_player_snapshot, make_setup
+from tests.factories.sim_play import make_state
 from tests.factories.sim_teams import make_demo_setup
 
 CFG = FatigueConfig(enabled=True)
@@ -28,7 +27,7 @@ ON = merge_config(SimConfig(), {"fatigue": {"enabled": True}})
 
 
 def _state(config: SimConfig = ON) -> MatchState:
-    return build_state(make_setup(), default_tables(), SimRng(1), config)
+    return make_state(make_setup(), config=config)
 
 
 def test_initial_exhaustion__combines_carried_fatigue_and_lack_of_fitness() -> None:

@@ -84,6 +84,11 @@ class TeamState:
     players: list[PlayerState]
     score: int = 0
     sent_off: list[PlayerState] = field(default_factory=list)
+    bench: list[PlayerId] = field(default_factory=list)
+    substituted_off: list[PlayerState] = field(default_factory=list)  # replaced or injured off
+    subs_used: int = 0
+    windows_used: int = 0
+    last_window_s: float = -1e9  # elapsed_s of the latest substitution window
 
     @property
     def keeper(self) -> PlayerState:

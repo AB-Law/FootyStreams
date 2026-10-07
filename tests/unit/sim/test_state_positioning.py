@@ -3,7 +3,6 @@ from dataclasses import replace
 import pytest
 
 from footystreams.domain.types import FormationId, Position
-from footystreams.sim.build import build_state
 from footystreams.sim.config import PositionConfig
 from footystreams.sim.errors import InvalidSetupError
 from footystreams.sim.geometry import distance_m
@@ -17,14 +16,14 @@ from footystreams.sim.positioning import (
 )
 from footystreams.sim.rng import SimRng
 from footystreams.sim.state import Line, MatchState, line_of
-from footystreams.sim.tables import default_tables
 from tests.factories.match import make_setup, make_team_sheet
+from tests.factories.sim_play import make_state
 
 CFG = PositionConfig()
 
 
 def _state() -> MatchState:
-    return build_state(make_setup(), default_tables(), SimRng(1))
+    return make_state(make_setup())
 
 
 def test_build_state__eleven_players_per_side_in_slot_order_on_their_slots() -> None:
@@ -49,12 +48,12 @@ def test_build_state__unknown_formation__raises_invalid_setup_with_the_club_id()
         update={"tactics": sheet.tactics.model_copy(update={"formation": FormationId("999")})}
     )
     with pytest.raises(InvalidSetupError, match="clb_home01"):
-        build_state(make_setup(home=bad), default_tables(), SimRng(1))
+        make_state(make_setup(home=bad))
 
 
 def test_build_state__draws_one_day_form_per_player_from_the_given_stream() -> None:
     rng = SimRng(1)
-    build_state(make_setup(), default_tables(), rng)
+    make_state(make_setup(), rng=rng)
     assert rng.draws == 22 * 4
 
 

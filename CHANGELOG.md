@@ -80,6 +80,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ### Performance
 - **0052** Speed up option generation and refresh positions every 4 seconds *(M4; scope: sim)*
 
+### Refactoring
+- **0076** Build the state from a BuildContext and add the bench, injury stream and ManagerConfig *(M6; scope: sim)*
+
 ### Tests
 - **0072** Add the M5 sweeps and write the M5 report *(M5; scope: sim, docs)*
 - **0060** Pin the M4 golden digests *(M4; scope: sim; sim version minor)*

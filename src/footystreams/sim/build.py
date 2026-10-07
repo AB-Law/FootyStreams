@@ -35,13 +35,14 @@ class BuildContext:
     crowd: Crowd = NO_CROWD
 
 
-def build_state(
-    setup: MatchSetup, tables: StaticTables, day_rng: SimRng, config: SimConfig | None = None
-) -> MatchState:
-    """Build the initial state: players on their slots, home to kick off in period 1."""
-    config = config or SimConfig()
+def make_context(setup: MatchSetup, day_rng: SimRng, config: SimConfig) -> BuildContext:
+    """Gather what players are built with: the day-form stream, conditions and the crowd."""
     conditions = conditions_for(setup.weather, setup.home.stadium, config.weather)
-    context = _context(setup, day_rng, conditions, config)
+    return BuildContext(day_rng, conditions, config, crowd_of(setup, config.home_advantage))
+
+
+def build_state(setup: MatchSetup, tables: StaticTables, context: BuildContext) -> MatchState:
+    """Build the initial state: players on their slots, home to kick off in period 1."""
     home = _build_team("home", setup.home, tables, context)
     away = _build_team("away", setup.away, tables, context)
     return MatchState(
@@ -50,16 +51,8 @@ def build_state(
         carrier=home.players[0],
         is_derby=setup.is_derby,
         attendance=setup.attendance,
-        conditions=conditions,
+        conditions=context.conditions,
     )
-
-
-def _context(
-    setup: MatchSetup, day_rng: SimRng, conditions: Conditions, config: SimConfig
-) -> BuildContext:
-    """Gather what players are built with: streams, conditions and the crowd."""
-    crowd = crowd_of(setup, config.home_advantage)
-    return BuildContext(day_rng, conditions, config, crowd)
 
 
 def _build_team(
@@ -72,17 +65,20 @@ def _build_team(
         raise InvalidSetupError(msg)
     attack_dir = 1 if side == "home" else -1
     ordered = sorted(sheet.lineup, key=lambda lineup_slot: lineup_slot.slot)
-    players = [_build_player(side, sheet, formation, item, context) for item in ordered]
-    return TeamState(side, sheet, formation, build_view(sheet), attack_dir, players)
+    players = [build_player(side, sheet, formation, item, context) for item in ordered]
+    team = TeamState(side, sheet, formation, build_view(sheet), attack_dir, players)
+    team.bench = list(sheet.bench)
+    return team
 
 
-def _build_player(
+def build_player(
     side: Side,
     sheet: TeamSheet,
     formation: Formation,
     lineup_slot: LineupSlot,
     context: BuildContext,
 ) -> PlayerState:
+    """Build one player standing on a formation slot (starters and substitutes alike)."""
     snapshot: PlayerSnapshot = sheet.squad[lineup_slot.player_id]
     formation_slot = formation.slots[lineup_slot.slot]
     day = day_form_multiplier(snapshot.hidden.consistency, context.day_rng)

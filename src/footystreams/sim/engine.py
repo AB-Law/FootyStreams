@@ -25,7 +25,7 @@ from footystreams.sim.actions.challenge import attempt_press_tackle
 from footystreams.sim.actions.resolve_dribble import resolve_clearance, resolve_dribble
 from footystreams.sim.actions.resolve_pass import resolve_pass
 from footystreams.sim.actions.resolve_shot import resolve_shot
-from footystreams.sim.build import build_state
+from footystreams.sim.build import build_state, make_context
 from footystreams.sim.config import SimConfig, config_hash
 from footystreams.sim.config_rules import OffsideConfig
 from footystreams.sim.decision import decide
@@ -79,7 +79,8 @@ class MatchEngine:
         self._setup = setup
         self._seed = seed
         self._config = config
-        self._state: MatchState = build_state(setup, tables, streams["dayform"], config)
+        context = make_context(setup, streams["dayform"], config)
+        self._state: MatchState = build_state(setup, tables, context)
         self._emitter = EventEmitter(setup.match_id)
         self._play = Play(
             self._state,
@@ -89,6 +90,8 @@ class MatchEngine:
             streams["discipline"],
             streams["setpiece"],
             referee_profile(referee),
+            streams["injury"],
+            context,
         )
         self._pending_move_s = 0.0
 

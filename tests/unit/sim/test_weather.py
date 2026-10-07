@@ -6,12 +6,10 @@ import pytest
 from footystreams.domain.weather import Weather, WeatherCondition
 from footystreams.sim import SimConfig, merge_config
 from footystreams.sim.actions.passing import PassAttempt, PassKind, pass_success_probability
-from footystreams.sim.build import build_state
 from footystreams.sim.config import PassConfig, WeatherConfig
-from footystreams.sim.rng import SimRng
-from footystreams.sim.tables import default_tables
 from footystreams.sim.weather import NEUTRAL, apply_conditions, conditions_for
 from tests.factories.match import make_setup
+from tests.factories.sim_play import make_state
 
 ON = WeatherConfig(enabled=True)
 
@@ -69,7 +67,7 @@ def test_conditions_for__wind_hurts_long_balls() -> None:
 
 
 def test_conditions_for__good_drainage_cuts_the_effective_wetness() -> None:
-    state = build_state(make_setup(), default_tables(), SimRng(1))
+    state = make_state(make_setup())
     stadium = state.home.sheet.stadium
     assert stadium is None  # factory sheets carry no stadium: defaults apply
     default = conditions_for(_weather(pitch_wetness=1.0), None, ON)
@@ -77,7 +75,7 @@ def test_conditions_for__good_drainage_cuts_the_effective_wetness() -> None:
 
 
 def test_apply_conditions__neutral_is_the_identity_and_wet_ground_lowers_touch() -> None:
-    skills = build_state(make_setup(), default_tables(), SimRng(1)).home.players[3].skills
+    skills = make_state(make_setup()).home.players[3].skills
     assert apply_conditions(skills, NEUTRAL) is skills
     soaked = conditions_for(_weather(pitch_wetness=1.0), None, ON)
     wetter = apply_conditions(skills, soaked)
@@ -105,8 +103,8 @@ def test_pass_success__environment_only_hurts_long_through_and_cross_balls() -> 
 def test_build_state__wet_weather_lowers_players_first_touch_when_enabled() -> None:
     setup = make_setup(weather=_weather(pitch_wetness=1.0))
     cfg = merge_config(SimConfig(), {"weather": {"enabled": True}})
-    off = build_state(setup, default_tables(), SimRng(1), SimConfig())
-    on = build_state(setup, default_tables(), SimRng(1), cfg)
+    off = make_state(setup, config=SimConfig())
+    on = make_state(setup, config=cfg)
     assert on.home.players[3].skills.first_touch < off.home.players[3].skills.first_touch
     assert on.conditions.wet > 0.0
     assert replace(on.conditions).wet == on.conditions.wet

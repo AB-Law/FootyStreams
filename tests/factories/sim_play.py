@@ -6,13 +6,14 @@ from functools import cache
 
 from footystreams.domain.match import MatchSetup
 from footystreams.domain.referee import Referee
-from footystreams.sim.build import build_state
+from footystreams.sim.build import build_state, make_context
 from footystreams.sim.config import SimConfig
 from footystreams.sim.emit import EventEmitter
 from footystreams.sim.play import Play
 from footystreams.sim.positioning import place_for_kickoff
 from footystreams.sim.referee import referee_profile
 from footystreams.sim.rng import SimRng
+from footystreams.sim.state import MatchState
 from footystreams.sim.tables import default_tables
 from tests.factories.match import make_setup
 
@@ -21,6 +22,16 @@ from tests.factories.match import make_setup
 def _default_setup() -> MatchSetup:
     """Build the default setup once: models are immutable, so sharing it is safe and fast."""
     return make_setup()
+
+
+def make_state(
+    setup: MatchSetup | None = None, *, config: SimConfig | None = None, rng: SimRng | None = None
+) -> MatchState:
+    """Build a MatchState (no kick-off placement); `rng` is the day-form stream."""
+    setup = setup or _default_setup()
+    config = config or SimConfig()
+    context = make_context(setup, rng or SimRng(1), config)
+    return build_state(setup, default_tables(), context)
 
 
 def make_play(
@@ -32,14 +43,18 @@ def make_play(
     """Build a Play at home's kick-off with fresh streams derived from `seed`."""
     setup = setup or _default_setup()
     root = SimRng(seed)
-    state = build_state(setup, default_tables(), root.fork("dayform"))
+    config = config or SimConfig()
+    context = make_context(setup, root.fork("dayform"), config)
+    state = build_state(setup, default_tables(), context)
     place_for_kickoff(state, "home")
     return Play(
         state,
         root.fork("play"),
-        config or SimConfig(),
+        config,
         EventEmitter(setup.match_id),
         root.fork("discipline"),
         root.fork("setpiece"),
         referee_profile(referee),
+        root.fork("injury"),
+        context,
     )
