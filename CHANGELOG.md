@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0071** Add post-match world deltas *(M9; scope: league)*
 - **0070** Add club finance and the ledger *(M9; scope: league)*
 - **0069** Add match setup building and the lineup AI *(M9; scope: league)*
 - **0068** Add weather generation and attendance *(M9; scope: league)*

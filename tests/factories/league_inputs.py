@@ -7,12 +7,14 @@ from collections.abc import Mapping, Sequence
 from footystreams.domain.match import MatchSetup
 from footystreams.domain.mood import StateModifier
 from footystreams.domain.world import World
+from footystreams.league.post_match import PlayedFixture, PostMatchTables
 from footystreams.league.setup import (
     MatchContext,
     SetupTables,
     TeamInputs,
     build_match_setup,
 )
+from footystreams.league.simulator import ResultOnlySimulator
 from tests.factories.league import make_fixture
 from tests.factories.league_config import make_league_config, make_mood_config
 from tests.factories.match import make_setup
@@ -64,3 +66,30 @@ def make_world_setup(seed: int = 1, home: int = 0, away: int = 1) -> MatchSetup:
     world = make_world(seed)
     sides = (make_team_inputs(world, home), make_team_inputs(world, away))
     return build_match_setup(sides, make_match_context(world, home, away), make_setup_tables())
+
+
+def make_post_match_tables() -> PostMatchTables:
+    """The committed injury, recovery, finance and mood tables."""
+    config = make_league_config()
+    return PostMatchTables(
+        injuries=cached_static_tables().injuries,
+        recovery=config.recovery,
+        finance=config.finance,
+        mood=make_mood_config(),
+    )
+
+
+def make_played_fixture(sim_seed: int = 5, world_seed: int = 1) -> PlayedFixture:
+    """Clubs 0 and 1 of the seed world playing matchday 1 with the result-only simulator."""
+    world = make_world(world_seed)
+    teams = (make_team_inputs(world, 0), make_team_inputs(world, 1))
+    context = make_match_context(world, 0, 1)
+    setup = build_match_setup(teams, context, make_setup_tables())
+    simulator = ResultOnlySimulator(cached_static_tables().roles, make_league_config().result_only)
+    return PlayedFixture(
+        fixture=context.fixture,
+        setup=setup,
+        result=simulator.simulate(setup, sim_seed),
+        teams=teams,
+        today=context.today,
+    )

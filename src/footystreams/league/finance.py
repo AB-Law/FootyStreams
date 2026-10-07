@@ -8,7 +8,7 @@ hospitality ~5%, sponsors ~14%, broadcast 22%, merchandise ~8%, prize pool ~5%).
 from __future__ import annotations
 
 import datetime as dt
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 
 from footystreams.domain.club import Club
@@ -16,7 +16,8 @@ from footystreams.domain.finance import LedgerCategory
 from footystreams.domain.manager import Manager
 from footystreams.domain.player import Player, PlayerStatus
 from footystreams.domain.staff import StaffMember
-from footystreams.domain.types import ClubId, Money
+from footystreams.domain.types import ClubId, Money, PlayerId, Position
+from footystreams.events.summary import PlayerMatchStats
 from footystreams.league.config import FinanceConfig
 from footystreams.league.ledger import Posting
 from footystreams.league.outcome import Outcome
@@ -160,3 +161,46 @@ def season_end_postings(
             Posting(by_id[club_id].id, today, LedgerCategory.BROADCAST, share, "broadcast_merit"),
         )
     ]
+
+
+CLEAN_SHEET_POSITIONS = frozenset(
+    {Position.GK, Position.CB, Position.RB, Position.LB, Position.RWB, Position.LWB, Position.DM}
+)
+
+
+@dataclass(frozen=True, slots=True)
+class MatchRef:
+    """Which match, for which club, on which day."""
+
+    match_id: str
+    club_id: ClubId
+    date: dt.date
+
+
+def bonus_postings(
+    squad: Sequence[Player],
+    result: tuple[Mapping[PlayerId, PlayerMatchStats], int],
+    ref: MatchRef,
+) -> list[Posting]:
+    """Appearance, goal and clean-sheet bonuses owed after a match, as one posting for the club.
+
+    ``result`` is (the match's player stats, goals the club conceded).
+    """
+    stats, conceded = result
+    owed = 0
+    for player in squad:
+        row = stats.get(PlayerId(player.id))
+        if row is None or player.contract is None:
+            continue
+        owed += player.contract.appearance_bonus + row.goals * player.contract.goal_bonus
+        if conceded == 0 and player.primary_position in CLEAN_SHEET_POSITIONS:
+            owed += player.contract.clean_sheet_bonus
+    posting = Posting(
+        ref.club_id,
+        ref.date,
+        LedgerCategory.WAGES_PLAYERS,
+        -owed,
+        "match_bonuses",
+        {"match_id": ref.match_id},
+    )
+    return [posting]
