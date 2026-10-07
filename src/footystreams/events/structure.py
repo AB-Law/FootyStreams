@@ -7,7 +7,8 @@ from typing import ClassVar, Literal
 
 from pydantic import Field
 
-from footystreams.domain.base import UsageTag
+from footystreams.domain.base import DomainModel, UsageTag
+from footystreams.domain.types import PlayerId, Unit
 from footystreams.domain.versions import SCHEMA_VERSION, SIM_VERSION
 from footystreams.events.base import EventBase, event_usage
 from footystreams.events.context import EventContext
@@ -30,19 +31,41 @@ class KickoffEvent(EventBase):
     period: int = Field(ge=1, le=4, default=1)
 
 
+class FramePlayer(DomainModel):
+    """One player in a tracking frame."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "player_id": "S",
+        "x": "S",
+        "y": "S",
+        "speed_mps": "S",
+        "exhaustion": "S",
+    }
+
+    player_id: PlayerId
+    x: float = Field(ge=0.0, le=1.0)
+    y: float = Field(ge=0.0, le=1.0)
+    speed_mps: float = Field(ge=0.0, default=0.0)
+    exhaustion: Unit = 0.0
+
+
 class FrameEvent(EventBase):
-    """Optional 1 Hz frame (must not change other events when toggled)."""
+    """Optional tracking frame (off by default; switching it on never changes other events)."""
 
     __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(
         ctx="S",
         ball_pos_x="S",
         ball_pos_y="S",
+        carrier_id="S",
+        players="S",
     )
 
     type: Literal["frame"] = "frame"
     ctx: EventContext = Field(default_factory=EventContext)
     ball_pos_x: float = Field(ge=0.0, le=1.0)
     ball_pos_y: float = Field(ge=0.0, le=1.0)
+    carrier_id: PlayerId | None = None
+    players: tuple[FramePlayer, ...] = ()  # home then away, in slot order
 
 
 class AddedTimeEvent(EventBase):
