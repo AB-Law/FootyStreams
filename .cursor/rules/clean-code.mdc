@@ -3,7 +3,6 @@ description: Clean code (lint-enforced where possible)
 globs: src/**/*.py, tools/**/*.py, tests/**/*.py
 alwaysApply: false
 ---
-<!-- GENERATED from .claude/rules/clean-code.md by tools/rules_sync.py - edit the source. -->
 # Clean code (lint-enforced where possible)
 
 Priority: **correct -> readable -> fast enough (measured) -> abstractable.** Write for the next reader; a module's single job should be clear in under a minute.

@@ -19,7 +19,7 @@ A fictional football league as a 24/7 live broadcast. This phase builds the **fo
 | [11-engineering-standards.md](11-engineering-standards.md) | **New.** Clean-code limits, SOLID and DRY made concrete, performance budgets, **change-fragment log and release notes**, review checklist, AI-agent rules, **git workflow, agent rules + end-of-turn gate**. |
 | [12-voice-and-tts.md](12-voice-and-tts.md) | **New (rev 4).** What makes commentary sound human, `VoiceProfile v2` / `VoiceSynthesizer v2`, provider landscape, bake-off plan. |
 | [13-runtime-engine.md](13-runtime-engine.md) | **New (rev 4).** The long-running engine: supervisor, pre-simulation buffer, paced match player, event bus/sinks, crash-only resume, health. |
-| [../rules/](../rules/core.md) | **New (rev 4).** Single-source agent rules (generated into Claude and Cursor formats). |
+| [.claude/rules/](../../.claude/rules/core.md) | **New (rev 4).** Agent rules for Claude Code (`.claude/rules/`) and Cursor (`.cursor/rules/`). |
 
 Root files: [`AGENTS.md`](../../AGENTS.md) / `CLAUDE.md` (rules for agents), [`CHANGELOG.md`](../../CHANGELOG.md) and [`changes/`](../../changes/README.md) (the change log).
 
@@ -48,7 +48,7 @@ Root files: [`AGENTS.md`](../../AGENTS.md) / `CLAUDE.md` (rules for agents), [`C
 2. **Tactics are extensible** (01 §3.8): versioned core + registry of tactic modules (v1 modules implemented; gegenpress, support geometry/triangles, overloads, rest defence, positional zones, named set-piece routines, individual tendencies pre-stubbed), per-phase shapes, per-player instructions, situational plans, namespaced extensions, read through a `TacticsView`.
 3. **Voice** (12): `VoiceProfile v2` (casting sheet + provider bindings + lexicon) and a capability-aware `VoiceSynthesizer v2`; what makes commentary sound human (script style, interjections/overlaps, pronunciation, mastering, pre-rendering); provider landscape and a bake-off to choose — **no provider is chosen yet**.
 4. **Engine, not CLI** (13, 04): the product is `uv run engine` — a supervised, crash-only, forever-running service that keeps a pre-simulated buffer ahead of airtime, replays verified matches at broadcast pace, and feeds sinks. CLIs remain as thin dev/ops tools. New milestone M12.
-5. **Claude and Cursor rules + end-of-turn gate** (11 §11): rules authored once in `.claude/rules/` and generated into `.cursor/rules/`; a Stop hook runs ruff, mypy, tests and the other T0 checks after every agent turn and does not let the turn end until they all pass (skips when nothing changed; loud give-up after 8 consecutive failures to avoid infinite loops). Already installed and tested; it is a no-op until `pyproject.toml` exists in M0.
+5. **Claude and Cursor rules + end-of-turn gate** (11 §11): rules in `.claude/rules/` with a plain copy in `.cursor/rules/`; a Stop hook runs ruff, mypy, tests and the other T0 checks after every agent turn and does not let the turn end until they all pass (skips when nothing changed; loud give-up after 8 consecutive failures to avoid infinite loops). Already installed and tested; it is a no-op until `pyproject.toml` exists in M0.
 6. **Git workflow** (11 §12, 06): short-lived branches, atomic Conventional Commits, PRs ≤ 400 lines (cap 800) with a template, rebase-and-merge, and a **PR slice plan for every milestone** so nothing arrives as one huge PR.
 
 ## Key decisions at a glance

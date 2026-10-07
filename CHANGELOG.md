@@ -9,6 +9,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ### Build / Tooling
 - **0007** Add the uv project, strict lint/type/test configuration and the 'uv run check' quality gate. *(M0; scope: tools, ci)*
 
+### Removed
+- **0008** Remove the Cursor rules generator; keep plain, hand-maintained .cursor/rules copies. *(design; scope: tools, design)*
+
 ### Docs / Design
 - **0006** Make .claude/rules the source of agent rules and generate .cursor/rules from it; remove docs/rules. *(design; scope: design, tools)*
 - **0005** Require a human review checkpoint before any push or pull request; record the GitHub remote. *(design; scope: design, ci)*

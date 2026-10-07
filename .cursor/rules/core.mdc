@@ -2,7 +2,6 @@
 description: Core rules (always apply)
 alwaysApply: true
 ---
-<!-- GENERATED from .claude/rules/core.md by tools/rules_sync.py - edit the source. -->
 # Core rules (always apply)
 
 FootyStreams is a fictional football league that runs as a **24/7 live broadcast**. A failure here is visible on air. Correctness, determinism, readability and performance all matter. Long-form rationale: `docs/design/` (index: `docs/design/README.md`; standards: `11-engineering-standards.md`).

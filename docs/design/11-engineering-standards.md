@@ -179,14 +179,13 @@ The design phase itself is already logged: see `changes/unreleased/` and the han
 
 ## 11. Agent rules (Claude Code and Cursor) and the end-of-turn quality gate
 
-**These standards are also delivered to the tools as rules**, from a single source so they cannot drift:
+**These standards are also delivered to the tools as rules** (no generator: the Cursor files are plain copies, changed together with the Claude files):
 
 | Layer | Location | Purpose |
 |-------|----------|---------|
-| Source of truth | `.claude/rules/*.md` (optional frontmatter `paths:`; always-on when absent) | The compact, imperative form of §1–§5, §12 plus architecture/sim/testing/docs rules |
-| Claude Code | the same `.claude/rules/*.md` files (loaded natively; scoped by `paths:`) + `AGENTS.md` (via `CLAUDE.md` import) | Always-on rules (`core`, `git-workflow`) and path-scoped rules that load only when relevant files are touched (keeps context small) |
-| Cursor | `.cursor/rules/*.mdc` (generated; `description`/`globs`/`alwaysApply`) + `AGENTS.md` | Same content, Cursor's format |
-| Generator | `tools/rules_sync.py` → `uv run rules sync`; `--check` is part of `uv run check` | One edit, both tools; stale generated files fail the gate |
+| Claude rules | `.claude/rules/*.md` (optional frontmatter `paths:`; always-on when absent) | The compact, imperative form of §1–§5, §12 plus architecture/sim/testing/docs rules |
+| Claude Code | the files above (loaded natively; scoped by `paths:`) + `AGENTS.md` (via `CLAUDE.md` import) | Always-on rules (`core`, `git-workflow`) and path-scoped rules that load only when relevant files are touched (keeps context small) |
+| Cursor | `.cursor/rules/*.mdc` (same body; `description`/`globs`/`alwaysApply` frontmatter) + `AGENTS.md` (read natively) | Same content, Cursor's format |
 
 `AGENTS.md` is a short index (read natively by both tools); the detailed rules are the files above; this document keeps the rationale.
 
@@ -194,7 +193,7 @@ The design phase itself is already logged: see `changes/unreleased/` and the han
 
 - Claude Code: `.claude/settings.json` → `Stop` hook → `tools/hooks/gate.py --agent claude`; a failing gate exits 2, which keeps Claude working with the failure report.
 - Cursor: `.cursor/hooks.json` → `stop` hook → `tools/hooks/gate.py --agent cursor`; a failing gate returns a `followup_message` that Cursor submits automatically (`loop_limit` 8).
-- What runs: `uv run check` = **ruff check, ruff format --check, mypy --strict, architecture tests, unit/property/contract tests (fast tier T0), golden digests, rules-sync check, changelog check**. Budget ≤ 60 s.
+- What runs: `uv run check` = **ruff check, ruff format --check, mypy --strict, architecture tests, unit/property/contract tests (fast tier T0), golden digests, changelog check**. Budget ≤ 60 s.
 - **Pass means 100%**: any failure blocks. Not a "mostly green".
 - To avoid wasting time the gate **skips when no watched file changed since the last green run**.
 - To avoid an infinite loop on a broken environment (e.g. no `uv`, no network), it **gives up loudly after `FOOTY_GATE_MAX_RETRIES` consecutive failures (default 8; set `0` for never give up)** — the notice states the gate is still red; it is never reported as a pass.
