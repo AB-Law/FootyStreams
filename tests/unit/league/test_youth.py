@@ -56,8 +56,9 @@ def test_intake_requests__same_inputs__same_requests() -> None:
 
 
 def test_contract_end__is_the_thirtieth_of_june_the_given_number_of_seasons_on() -> None:
-    assert contract_end(dt.date(2032, 6, 1), 1) == dt.date(2032, 6, 30)
-    assert contract_end(dt.date(2032, 6, 1), 3) == dt.date(2034, 6, 30)
+    assert contract_end(dt.date(2032, 1, 10), 1) == dt.date(2032, 6, 30)
+    assert contract_end(dt.date(2032, 6, 1), 1) == dt.date(2033, 6, 30)
+    assert contract_end(dt.date(2032, 6, 1), 3) == dt.date(2035, 6, 30)
     assert contract_end(dt.date(2032, 7, 1), 1) == dt.date(2033, 6, 30)
 
 
