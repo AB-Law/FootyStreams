@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0089** Wire the context tracker into the emitter behind SimConfig.context.enabled *(M7; scope: sim, events)*
 - **0088** Add the causal context tracker: momentum, intensity, significance and tags *(M7; scope: events)*
 - **0082** Add match checks M06 (pitch state) and M08 (substitution limits); test exhaustion never falls in a half *(M6; scope: verify)*
 - **0081** Run the AI manager: checkpoints, triggers, changes at stoppages and half-time *(M6; scope: sim)*

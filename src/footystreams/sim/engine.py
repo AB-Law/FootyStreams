@@ -12,6 +12,7 @@ from collections.abc import Iterator
 from footystreams.domain.match import MatchSetup
 from footystreams.domain.referee import Referee
 from footystreams.events.base import EventBase
+from footystreams.events.derive.context import ContextTracker
 from footystreams.events.derive.summary import SummaryInputs, build_summary
 from footystreams.events.digest import log_digest
 from footystreams.events.structure import (
@@ -83,7 +84,8 @@ class MatchEngine:
         self._config = config
         context = make_context(setup, streams["dayform"], config)
         self._state: MatchState = build_state(setup, tables, context)
-        self._emitter = EventEmitter(setup.match_id)
+        tracker = ContextTracker(is_derby=setup.is_derby) if config.context.enabled else None
+        self._emitter = EventEmitter(setup.match_id, tracker)
         self._play = Play(
             self._state,
             streams["play"],

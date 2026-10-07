@@ -180,16 +180,18 @@ def test_intensity__a_busy_spell_is_hotter_than_a_quiet_one() -> None:
     assert _replay(busy.events)[-1].ctx.intensity > _replay(quiet.events)[-1].ctx.intensity
 
 
-def test_significance__a_late_equaliser_matters_more_than_an_early_goal() -> None:
+def test_significance__a_late_chance_matters_more_than_an_early_one() -> None:
     early = LogBuilder()
-    _goal(early, "home")
+    early.add(ShotEvent, player_id=HOME_SCORER, xg=0.2, outcome="saved", minute=10)
     late = LogBuilder()
-    _goal(late, "home")
-    late.add(PassEvent, from_player_id=HOME_SCORER, minute=20)
-    _goal(late, "away", period=2, minute=89)
-    early_goal = _replay(early.events)[0].ctx.significance
-    late_goal = _replay(late.events)[-1].ctx.significance
-    assert late_goal > early_goal
+    late.add(ShotEvent, player_id=HOME_SCORER, xg=0.2, outcome="saved", period=2, minute=89)
+    assert _replay(late.events)[0].ctx.significance > _replay(early.events)[0].ctx.significance
+
+
+def test_significance__a_pass_keeps_its_small_base_whatever_the_minute() -> None:
+    log = LogBuilder()
+    log.add(PassEvent, from_player_id=HOME_SCORER, period=2, minute=89)
+    assert _replay(log.events)[0].ctx.significance == 0.04
 
 
 def test_annotate__the_context_of_an_event_ignores_everything_after_it() -> None:

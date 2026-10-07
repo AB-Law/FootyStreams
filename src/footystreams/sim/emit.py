@@ -14,6 +14,7 @@ from footystreams.domain.types import MatchId, PlayerId, Pos
 from footystreams.events.base import EventBase, Participant
 from footystreams.events.clock import match_clock
 from footystreams.events.context import ContextTag, EventContext
+from footystreams.events.derive.context import ContextTracker, significance
 from footystreams.events.types import MATCH_EVENT_ADAPTER, MatchEvent
 from footystreams.sim.geometry import Point, frame_coordinate
 from footystreams.sim.mathx import clamp
@@ -22,20 +23,6 @@ from footystreams.sim.state import MatchState
 TeamLabel = Literal["home", "away", "none"]
 PHASE_BUILD_UP_MAX_X = 0.40
 PHASE_PROGRESSION_MAX_X = 0.67
-_SIGNIFICANCE_BY_TYPE = {
-    "goal": 1.0,
-    "penalty": 0.6,
-    "card": 0.4,
-    "injury": 0.35,
-    "substitution": 0.2,
-    "save": 0.3,
-    "shot": 0.15,
-    "foul": 0.1,
-    "tackle": 0.08,
-    "interception": 0.06,
-}
-_DEFAULT_SIGNIFICANCE = 0.04
-_XG_SIGNIFICANCE = 2.0
 
 
 @dataclass(frozen=True, slots=True)
@@ -58,9 +45,10 @@ def participant(player_id: PlayerId, role: str) -> Participant:
 class EventEmitter:
     """Builds, numbers and stores the events of one match."""
 
-    def __init__(self, match_id: MatchId) -> None:
-        """Start an empty log for `match_id`."""
+    def __init__(self, match_id: MatchId, tracker: ContextTracker | None = None) -> None:
+        """Start an empty log for `match_id`; a tracker adds the causal context to each event."""
         self._match_id = match_id
+        self._tracker = tracker
         self._events: list[MatchEvent] = []
         self._pending = 0
 
@@ -99,6 +87,8 @@ class EventEmitter:
                 **fields,
             }
         )
+        if self._tracker is not None:
+            event = self._tracker.annotate(event)
         self._events.append(event)
         return event_id
 
@@ -115,14 +105,6 @@ def phase_of(state: MatchState) -> str:
     if frame_x < PHASE_BUILD_UP_MAX_X:
         return "build_up"
     return "progression" if frame_x < PHASE_PROGRESSION_MAX_X else "final_third"
-
-
-def significance(event_type: str, xg: float) -> float:
-    """Return how much an event matters in [0, 1]: a rule on type, lifted by shot quality."""
-    base = _SIGNIFICANCE_BY_TYPE.get(event_type, _DEFAULT_SIGNIFICANCE)
-    if event_type == "shot":
-        base += _XG_SIGNIFICANCE * xg
-    return clamp(base, 0.0, 1.0)
 
 
 def _context(

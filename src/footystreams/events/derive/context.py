@@ -66,6 +66,28 @@ _SIGNIFICANCE_BOOST = {
     ContextTag.LAST_MINUTES: 0.05,
 }
 _MATTERS = 0.1  # events below this significance are not boosted by the match situation
+_SIGNIFICANCE_BY_TYPE = {
+    "goal": 1.0,
+    "penalty": 0.6,
+    "card": 0.4,
+    "injury": 0.35,
+    "substitution": 0.2,
+    "save": 0.3,
+    "shot": 0.15,
+    "foul": 0.1,
+    "tackle": 0.08,
+    "interception": 0.06,
+}
+_DEFAULT_SIGNIFICANCE = 0.04
+_XG_SIGNIFICANCE = 2.0
+
+
+def significance(event_type: str, xg: float) -> float:
+    """Return how much an event matters in [0, 1]: a rule on type, lifted by shot quality."""
+    base = _SIGNIFICANCE_BY_TYPE.get(event_type, _DEFAULT_SIGNIFICANCE)
+    if event_type == "shot":
+        base += _XG_SIGNIFICANCE * xg
+    return min(1.0, max(0.0, base))
 
 
 def _squash(z: float) -> float:
@@ -142,7 +164,7 @@ class ContextTracker:
 
     @staticmethod
     def _significance(event: MatchEvent, tags: set[ContextTag]) -> float:
-        base = event.ctx.significance
+        base = significance(event.type, event.xg if isinstance(event, ShotEvent) else 0.0)
         if base < _MATTERS:
             return base
         boost = sum(_SIGNIFICANCE_BOOST.get(tag, 0.0) for tag in tags)

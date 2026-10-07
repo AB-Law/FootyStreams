@@ -3,8 +3,9 @@ from pydantic import ValidationError
 
 from footystreams.domain.types import MatchId, PlayerId
 from footystreams.events.context import ContextTag
+from footystreams.events.derive.context import significance
 from footystreams.events.open_play import PassEvent, ShotEvent
-from footystreams.sim.emit import EventEmitter, Meta, participant, phase_of, significance
+from footystreams.sim.emit import EventEmitter, Meta, participant, phase_of
 from footystreams.sim.positioning import place_for_kickoff
 from footystreams.sim.state import MatchState
 from tests.factories.match import make_setup
