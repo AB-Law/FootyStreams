@@ -11,6 +11,7 @@ from footystreams.league.matchday import MatchdayEngine
 from footystreams.league.mood_config import MoodConfig
 from footystreams.league.simulator import ResultOnlySimulator
 from footystreams.league.tables import LeagueTables
+from footystreams.league.transfer_config import TransferConfig
 from footystreams.persistence.ports import Repositories
 from footystreams.seed.players.context import Geography
 from footystreams.seed.prospects import SeedProspectFactory
@@ -31,6 +32,7 @@ def load_league_tables(
         config=LeagueConfig.model_validate(read_yaml("league.yaml", directory)),
         mood=MoodConfig.model_validate(read_yaml("mood.yaml", directory)),
         development=DevelopmentConfig.model_validate(read_yaml("development.yaml", directory)),
+        transfer=TransferConfig.model_validate(read_yaml("transfer.yaml", directory)),
     )
 
 

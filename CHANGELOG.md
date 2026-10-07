@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0092** Add the transfer config and noisy scouting *(M11; scope: league)*
 - **0087** Add squad and development invariants L04 and L05; league --seasons *(M10; scope: verify)*
 - **0085** Add the season rollover and multi-season runs *(M10; scope: league)*
 - **0084** Add season awards, club year-end and the income estimate *(M10; scope: league)*

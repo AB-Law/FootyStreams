@@ -12,6 +12,7 @@ from footystreams.league.development_config import DevelopmentConfig
 from footystreams.league.mood_config import MoodConfig
 from footystreams.league.post_match import PostMatchTables
 from footystreams.league.setup import SetupTables
+from footystreams.league.transfer_config import TransferConfig
 
 
 @dataclass(frozen=True, slots=True)
@@ -25,6 +26,7 @@ class LeagueTables:
     config: LeagueConfig
     mood: MoodConfig
     development: DevelopmentConfig
+    transfer: TransferConfig
 
     @property
     def setup(self) -> SetupTables:
