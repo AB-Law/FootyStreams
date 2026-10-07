@@ -1,0 +1,69 @@
+# Manager style prototypes. Philosophy sliders are drawn around these values; the preset is the
+# key in tactic_presets.yaml the style starts from. formations: weighted candidates for the
+# preferred formation (the rest of this list become fallbacks).
+styles:
+  possession:
+    preset: possession_433
+    philosophy: {possession_preference: 0.85, directness: 0.2, pressing_intensity: 0.6, tempo: 0.45, width: 0.5, defensive_line: 0.7, risk_taking: 0.55}
+    formations: {"433": 5, "4231": 3, "4141": 1}
+    press_tones: {calm: 3, charming: 2, dry: 1, evasive: 1}
+    touchline: {calm: 3, stoic: 2, animated: 1}
+    substitutions: {earliest_minute: [55, 68], aggressiveness: [0.3, 0.6], protect_lead_bias: [0.4, 0.7], chase_game_bias: [0.5, 0.8]}
+  gegen_press:
+    preset: gegen_press_4231
+    philosophy: {possession_preference: 0.6, directness: 0.5, pressing_intensity: 0.95, tempo: 0.8, width: 0.55, defensive_line: 0.8, risk_taking: 0.75}
+    formations: {"4231": 5, "433": 3, "442": 1}
+    press_tones: {fiery: 3, charming: 2, blunt: 2}
+    touchline: {animated: 4, furious: 2, theatrical: 1}
+    substitutions: {earliest_minute: [50, 62], aggressiveness: [0.6, 0.9], protect_lead_bias: [0.2, 0.5], chase_game_bias: [0.6, 0.9]}
+  high_press:
+    preset: high_press_433
+    philosophy: {possession_preference: 0.6, directness: 0.45, pressing_intensity: 0.8, tempo: 0.7, width: 0.6, defensive_line: 0.75, risk_taking: 0.65}
+    formations: {"433": 5, "4231": 2, "442": 2}
+    press_tones: {fiery: 2, blunt: 2, charming: 2, calm: 1}
+    touchline: {animated: 3, furious: 1, calm: 1}
+    substitutions: {earliest_minute: [52, 64], aggressiveness: [0.5, 0.8], protect_lead_bias: [0.3, 0.6], chase_game_bias: [0.5, 0.8]}
+  wing_play:
+    preset: wing_play_442
+    philosophy: {possession_preference: 0.5, directness: 0.55, pressing_intensity: 0.55, tempo: 0.6, width: 0.9, defensive_line: 0.55, risk_taking: 0.55}
+    formations: {"442": 5, "343": 1, "433": 2}
+    press_tones: {charming: 2, dry: 2, calm: 2}
+    touchline: {animated: 2, calm: 2, theatrical: 1}
+    substitutions: {earliest_minute: [55, 70], aggressiveness: [0.4, 0.7], protect_lead_bias: [0.4, 0.6], chase_game_bias: [0.4, 0.7]}
+  direct:
+    preset: direct_442
+    philosophy: {possession_preference: 0.35, directness: 0.9, pressing_intensity: 0.5, tempo: 0.65, width: 0.55, defensive_line: 0.45, risk_taking: 0.5}
+    formations: {"442": 6, "451": 1, "4141": 1}
+    press_tones: {blunt: 4, dry: 2, evasive: 1}
+    touchline: {furious: 2, animated: 2, stoic: 2}
+    substitutions: {earliest_minute: [58, 72], aggressiveness: [0.3, 0.6], protect_lead_bias: [0.5, 0.8], chase_game_bias: [0.5, 0.8]}
+  low_block:
+    preset: low_block_532
+    philosophy: {possession_preference: 0.3, directness: 0.7, pressing_intensity: 0.25, tempo: 0.4, width: 0.5, defensive_line: 0.2, risk_taking: 0.25}
+    formations: {"532": 5, "451": 2, "4141": 1}
+    press_tones: {evasive: 3, dry: 3, blunt: 1}
+    touchline: {stoic: 4, calm: 2, animated: 1}
+    substitutions: {earliest_minute: [62, 76], aggressiveness: [0.2, 0.5], protect_lead_bias: [0.7, 0.95], chase_game_bias: [0.3, 0.6]}
+  counter_attacking:
+    preset: counter_attack_451
+    philosophy: {possession_preference: 0.35, directness: 0.7, pressing_intensity: 0.35, tempo: 0.6, width: 0.55, defensive_line: 0.3, risk_taking: 0.45}
+    formations: {"451": 4, "4141": 2, "532": 2, "442": 1}
+    press_tones: {dry: 3, calm: 2, evasive: 2}
+    touchline: {calm: 2, stoic: 2, animated: 1}
+    substitutions: {earliest_minute: [58, 72], aggressiveness: [0.3, 0.6], protect_lead_bias: [0.5, 0.8], chase_game_bias: [0.4, 0.7]}
+  balanced:
+    preset: balanced_4141
+    philosophy: {possession_preference: 0.5, directness: 0.5, pressing_intensity: 0.5, tempo: 0.5, width: 0.55, defensive_line: 0.5, risk_taking: 0.5}
+    formations: {"4141": 3, "442": 3, "433": 2}
+    press_tones: {calm: 3, charming: 2, dry: 2, evasive: 1}
+    touchline: {calm: 3, stoic: 2, animated: 1}
+    substitutions: {earliest_minute: [56, 70], aggressiveness: [0.35, 0.65], protect_lead_bias: [0.4, 0.7], chase_game_bias: [0.4, 0.7]}
+
+# Specialist spikes: attribute deltas added to a manager's baseline quality (one is drawn).
+specialisms:
+  tactician: {tactical_knowledge: 15, adaptability: 8, man_management: -10, motivation: -5}
+  motivator: {motivation: 15, man_management: 10, tactical_knowledge: -10}
+  developer: {youth_development: 18, judging_potential: 12, tactical_knowledge: -4}
+  disciplinarian: {discipline: 16, fitness_coaching: 8, man_management: -8, media_handling: -6}
+  dealmaker: {negotiation: 16, judging_ability: 10, set_piece_coaching: -8}
+  all_rounder: {}
