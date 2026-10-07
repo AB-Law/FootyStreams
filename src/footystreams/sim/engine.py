@@ -32,6 +32,7 @@ from footystreams.sim.decision import decide
 from footystreams.sim.emit import EventEmitter, Meta, TeamLabel
 from footystreams.sim.fatigue import advance_exhaustion, halftime_recovery
 from footystreams.sim.injury import injure_without_contact
+from footystreams.sim.manager_ai import ManagerAI
 from footystreams.sim.options import ActionKind, Option
 from footystreams.sim.play import Play
 from footystreams.sim.positioning import place_for_kickoff, update_positions
@@ -94,6 +95,11 @@ class MatchEngine:
             streams["injury"],
             context,
         )
+        self._manager = (
+            ManagerAI(self._play, streams["mgr_home"], streams["mgr_away"])
+            if config.manager.enabled
+            else None
+        )
         self._pending_move_s = 0.0
 
     @property
@@ -114,6 +120,9 @@ class MatchEngine:
                 if not announced and state.t_period >= REGULATION_PERIOD_S:
                     added, announced = self._announce_added_time(period), True
                     yield from self._emitter.drain()
+            if period == PERIODS[0] and self._manager is not None:
+                self._manager.at_halftime()
+                yield from self._emitter.drain()
             state.played_before_s += REGULATION_PERIOD_S + added * SECONDS_PER_MINUTE
             if period == PERIODS[0]:
                 if self._config.fatigue.enabled:
@@ -153,14 +162,15 @@ class MatchEngine:
 
     def _step(self) -> None:
         state, play = self._state, self._play
-        hurt_s = 0.0
+        mark = len(self._emitter.events)
+        pause_s = 0.0
         if self._pending_move_s >= self._config.positioning.step_s:
             update_positions(
                 state, self._pending_move_s, self._config.positioning, self._offside_rule()
             )
             if self._config.fatigue.enabled:
                 advance_exhaustion(state, self._pending_move_s, self._config.fatigue)
-            hurt_s = injure_without_contact(play, self._pending_move_s)
+            pause_s = injure_without_contact(play, self._pending_move_s)
             self._pending_move_s = 0.0
         state.tick += 1
         pressure = pressure_on(state.carrier, state.defenders, self._config.pressure)
@@ -170,7 +180,9 @@ class MatchEngine:
         else:
             option: Option = decide(state, play.rng, self._config, pressure)
             duration = _RESOLVERS[option.kind](play, option)
-        state.t_period += duration + hurt_s
+        if self._manager is not None:
+            pause_s += self._manager.after_action(self._emitter.events[mark:])
+        state.t_period += duration + pause_s
         self._pending_move_s += duration
 
     def _offside_rule(self) -> OffsideConfig | None:
