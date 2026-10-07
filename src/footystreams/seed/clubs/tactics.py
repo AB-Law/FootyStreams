@@ -7,7 +7,7 @@ from collections.abc import Mapping
 from footystreams.domain.manager import Manager, Philosophy
 from footystreams.domain.tactics import ModuleKey, SlotAssignment, TacticModule, TeamTactics
 from footystreams.domain.tactics.modules.v1 import BuildUp, DefensiveBlock, Pressing
-from footystreams.domain.types import Position
+from footystreams.domain.types import UNIT_DECIMALS, Position
 from footystreams.seed.static.presets import TacticPreset
 from footystreams.seed.static.tables import StaticTables
 
@@ -15,7 +15,9 @@ PHILOSOPHY_WEIGHT = 0.5  # how far the manager's own sliders pull the preset tow
 
 
 def _blend(preset_value: float, philosophy_value: float) -> float:
-    return (1 - PHILOSOPHY_WEIGHT) * preset_value + PHILOSOPHY_WEIGHT * philosophy_value
+    """Weighted mean, rounded like a Unit: model_copy skips validation, so we must do it here."""
+    mixed = (1 - PHILOSOPHY_WEIGHT) * preset_value + PHILOSOPHY_WEIGHT * philosophy_value
+    return round(mixed, UNIT_DECIMALS)
 
 
 def _slots_for(
