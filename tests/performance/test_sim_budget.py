@@ -5,7 +5,10 @@ only catches order-of-magnitude regressions and uses the best of a few CPU-time 
 a busy machine does not make it flaky. The real budget is asserted by the M8 profiling pass.
 """
 
+import sys
 import time
+
+import pytest
 
 from footystreams.sim import SimConfig, default_tables, run_match
 from tests.factories.sim_teams import make_demo_setup
@@ -15,6 +18,8 @@ RUNS = 3
 
 
 def test_run_match__best_cpu_time_of_a_few_runs_stays_under_the_tripwire() -> None:
+    if sys.gettrace() is not None:
+        pytest.skip("timing is meaningless under a tracer (coverage slows the sim about 4x)")
     setup, tables, config = make_demo_setup(), default_tables(), SimConfig()
     run_match(setup, 0, config, tables)  # warm-up: imports, caches
     best = float("inf")

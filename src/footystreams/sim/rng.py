@@ -93,11 +93,11 @@ class SimRng:
             raise ValueError(msg)
         threshold = self.u() * total
         running = 0.0
-        for index, weight in enumerate(weights):
+        for index, weight in enumerate(weights[:-1]):
             running += weight
             if threshold < running:
                 return index
-        return len(weights) - 1
+        return len(weights) - 1  # the last bucket takes whatever the others leave
 
     def fork(self, label: str) -> SimRng:
         """Derive an independent child stream named `label` (same seed + label => same stream)."""

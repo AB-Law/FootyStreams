@@ -124,3 +124,14 @@ def test_draws__counts_every_draw() -> None:
     rng.bernoulli(0.5)
     rng.gauss()
     assert rng.draws == 6
+
+
+def test_choice_weighted__single_weight_is_always_index_zero() -> None:
+    rng = SimRng(8)
+    assert {rng.choice_weighted([2.5]) for _ in range(20)} == {0}
+
+
+def test_choice_weighted__last_bucket_gets_the_remainder() -> None:
+    rng = SimRng(9)
+    picks = [rng.choice_weighted([1.0, 1.0, 1.0]) for _ in range(600)]
+    assert set(picks) == {0, 1, 2}
