@@ -51,7 +51,7 @@ Track A (match engine) is built separately; the sections above predate both trac
 | Milestone | Branch | State |
 |-----------|--------|-------|
 | M2 seed and static data | `feat/m2-seed-world` | done (draft PR); see `docs/milestones/M2.md` |
-| M3 persistence | `feat/m3-persistence` | next |
+| M3 persistence | `feat/m3-persistence` | done; see `docs/milestones/M3.md` |
 | M9 league layer | `feat/m9-league-layer` | pending |
 | M10 development and rollover | `feat/m10-development-rollover` | pending |
 | M11 contracts and transfers | `feat/m11-contracts-transfers` | pending |
@@ -61,6 +61,9 @@ Track A (match engine) is built separately; the sections above predate both trac
 - `seed/` (static loaders, names, players, managers, clubs, referees, media, relationships, `generate_world`, `world_io`), `verify/world*.py` (W01-W03, W07-W10, C01-C08), and in `domain/`: `WorldRng`, `IdMint`, `squad_strength`, world records and static-table models (**SCHEMA_VERSION 0.2.0**).
 - Static tables in `data/static/`: formations, roles, traits, injuries, climate, name cultures, denylist/blocklist, player/club/media archetypes, manager styles, tactic presets.
 - Tests share one world per seed through `tests/factories/world.make_world`; generation takes about 2.3 s.
+
+### What M3 added
+- `persistence/`: ports, table specs, codec, in-memory and SQLite backends, `UnitOfWork`, `WorldReader`, Alembic `0001_initial`; `uv run seed --db league.sqlite`. Contract tests in `tests/contract` run every behaviour on both backends.
 
 ### Track B caveats
 - `WorldRng` stands in for track A's `SimRng` (same interface); unify when both tracks merge.
