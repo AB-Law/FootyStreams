@@ -115,7 +115,7 @@ def test_resolve_pass__a_complete_pass_to_an_offside_receiver_can_be_flagged() -
 
 
 def test_resolve_pass__with_offside_off_nothing_is_ever_flagged() -> None:
-    play = make_play()
+    play = make_play(config=merge_config(SimConfig(), {"offside": {"enabled": False}}))
     _, receiver = _setup_offside(play, 0.97)
     resolve_pass(play, _pass_to(receiver))
     assert not any(isinstance(e, OffsideEvent) for e in play.emit.events)

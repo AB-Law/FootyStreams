@@ -52,11 +52,12 @@ def decide_card(play: Play, offender: PlayerState, contact: Contact) -> CardDeci
         return CardDecision("red", "denying_opportunity")
     if contact.severity > cfg.red_threshold:
         return CardDecision("red", "violent_conduct")
-    if contact.severity > yellow_threshold(play.referee, cfg):
-        if offender.yellow_cards >= 1:
+    threshold = yellow_threshold(play.referee, cfg)
+    if offender.yellow_cards >= 1:
+        if contact.severity > threshold + cfg.second_booking_margin:
             return CardDecision("second_yellow", "second_yellow")
-        return CardDecision("yellow", "foul")
-    return None
+        return None
+    return CardDecision("yellow", "foul") if contact.severity > threshold else None
 
 
 def dismiss(team: TeamState, player: PlayerState) -> None:

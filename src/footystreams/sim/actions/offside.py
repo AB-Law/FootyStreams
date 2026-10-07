@@ -19,14 +19,28 @@ from footystreams.sim.state import PlayerState
 
 
 def offside_called(play: Play, passer: PlayerState, receiver: PlayerState) -> bool:
-    """Decide if a pass to `receiver` is flagged (no draw unless he is in an offside position)."""
-    state, cfg = play.state, play.cfg.offside
+    """Decide if a pass to `receiver` is flagged (no draw unless he is on or near the line)."""
+    state = play.state
     direction = state.team(passer.side).attack_dir
     line = offside_line(state.team(opposite(passer.side)), direction)
     ahead = frame_coordinate(receiver.x, direction)
     if not in_offside_position(ahead, frame_coordinate(passer.x, direction), line):
+        return _mistimed_run(play, receiver, ahead, line) and _flagged(play)
+    return _flagged(play)
+
+
+def _flagged(play: Play) -> bool:
+    """The referee spots it (one `discipline` draw)."""
+    return play.discipline.u() < call_probability(play.referee.consistency, play.cfg.offside)
+
+
+def _mistimed_run(play: Play, receiver: PlayerState, ahead: float, line: float) -> bool:
+    """A receiver level with the line may have set off a stride early (one draw near the line)."""
+    cfg = play.cfg.offside
+    if cfg.mistime_base <= 0.0 or ahead < line - cfg.mistime_zone:
         return False
-    return play.discipline.u() < call_probability(play.referee.consistency, cfg)
+    flaw = cfg.mistime_base * (1.3 - receiver.skills.off_ball_movement / 100.0)
+    return play.discipline.u() < flaw
 
 
 def punish_offside(play: Play, receiver: PlayerState, pass_id: str) -> float:

@@ -7,13 +7,14 @@ from footystreams.sim.actions.foul import contest_foul
 from footystreams.sim.actions.nearest import closest_of, nearest_defender_to
 from footystreams.sim.actions.out_of_play import out_of_play
 from footystreams.sim.emit import Meta
-from footystreams.sim.geometry import CENTRE
+from footystreams.sim.geometry import CENTRE, frame_coordinate
 from footystreams.sim.options import Option
 from footystreams.sim.play import Play, action_duration, actor, take_possession
 from footystreams.sim.pressure import nearest_opponents
 from footystreams.sim.state import PlayerState
 
 TOUCH_MARGIN = 0.01  # how far beyond the line a ball that went out is placed
+OWN_THIRD_FRAME_X = 0.30
 
 
 def resolve_dribble(play: Play, option: Option) -> float:
@@ -88,10 +89,21 @@ def resolve_clearance(play: Play, option: Option) -> float:
     play.emit.emit(state, ClearanceEvent, meta, player_id=clearer.player_id)
     duration = action_duration(play, play.cfg.tempo.clear_s)
     if play.cfg.restarts.enabled and play.rng.u() < play.cfg.restarts.clearance_out_share:
-        return duration + out_of_play(play, _into_touch(landing), clearer.side)
+        return duration + out_of_play(play, _exit_point(play, clearer, landing), clearer.side)
     winner = _clearance_winner(play, clearer, landing, teammate_wins=teammate_wins)
     take_possession(state, winner, landing[0], landing[1])
     return duration
+
+
+def _exit_point(
+    play: Play, clearer: PlayerState, landing: tuple[float, float]
+) -> tuple[float, float]:
+    """Where a cleared ball leaves the pitch: over the clearer's own goal line or into touch."""
+    direction = play.state.team(clearer.side).attack_dir
+    own_third = frame_coordinate(clearer.x, direction) < OWN_THIRD_FRAME_X
+    if own_third and play.setpiece.u() < play.cfg.restarts.clearance_behind_share:
+        return frame_coordinate(-TOUCH_MARGIN, direction), landing[1]
+    return _into_touch(landing)
 
 
 def _into_touch(landing: tuple[float, float]) -> tuple[float, float]:

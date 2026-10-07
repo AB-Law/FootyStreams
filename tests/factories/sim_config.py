@@ -1,4 +1,4 @@
-"""Simulation configs for tests: all dead-ball and discipline behaviour switched on."""
+"""Simulation configs for tests: the shipped defaults and a card-heavy variant."""
 
 from __future__ import annotations
 
@@ -7,23 +7,8 @@ from typing import Any
 
 from footystreams.sim import SimConfig, merge_config
 
-# Everything M5 adds, switched on with calibrated-ish values. After the commit that enables M5 by
-# default these equal the defaults and the factory simply returns SimConfig().
-M5_OVERRIDES: Mapping[str, Any] = {
-    "discipline": {"contact_base": 0.45},
-    "restarts": {
-        "enabled": True,
-        "clearance_out_share": 0.5,
-        "blocked_corner_share": 0.5,
-        "parry_corner_share": 0.5,
-        "cross_corner_share": 0.5,
-        "overhit_min_m": 6.0,
-        "overhit_max_m": 20.0,
-    },
-    "challenge": {"fail_intercept": 0.42, "fail_loose": 0.18},
-    "offside": {"enabled": True},
-    "stoppage": {"enabled": True},
-}
+# M5 behaviour is on by default; the name stays so tests say what they rely on.
+M5_OVERRIDES: Mapping[str, Any] = {}
 
 # A config that produces cards, penalties and dismissals within a handful of matches.
 CARD_HEAVY: Mapping[str, Any] = {

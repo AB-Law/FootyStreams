@@ -192,7 +192,7 @@ def _failing_pass(seed: int, cfg: SimConfig) -> Play:
 
 def test_resolve_pass__with_restarts_off_no_restart_event_ever_appears() -> None:
     for seed in range(60):
-        play = _failing_pass(seed, SimConfig())
+        play = _failing_pass(seed, merge_config(SimConfig(), {"restarts": {"enabled": False}}))
         assert not any(
             isinstance(e, ThrowInEvent | GoalKickEvent | CornerEvent) for e in play.emit.events
         )

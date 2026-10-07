@@ -10,9 +10,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from footystreams.sim.config import DisciplineConfig
+from footystreams.sim.config import DisciplineConfig, RefereeConfig
 from footystreams.sim.effective import Skills
-from footystreams.sim.geometry import frame_coordinate, in_penalty_area
+from footystreams.sim.geometry import CENTRE, frame_coordinate, in_penalty_area
 from footystreams.sim.mathx import clamp
 from footystreams.sim.play import Play
 from footystreams.sim.referee import crowd_pressure, home_tilt, is_called
@@ -35,9 +35,12 @@ class Contact:
 
 
 def contact_probability(
-    tackler: Skills, view: TacticsView, *, derby: bool, cfg: DisciplineConfig
+    tackler: Skills, view: TacticsView, *, derby: bool, cfg: DisciplineConfig, booked: bool = False
 ) -> float:
-    """Return the chance a challenge by this man involves foul-worthy contact."""
+    """Return the chance a challenge by this man involves foul-worthy contact.
+
+    A player who already holds a yellow card is more careful (`booked_caution`).
+    """
     proneness = (
         _BASE_FACTOR
         + cfg.aggression_weight * tackler.aggression / _PERCENT
@@ -45,7 +48,9 @@ def contact_probability(
         - cfg.tackling_weight * tackler.tackling / _PERCENT
     )
     derby_factor = cfg.derby_factor if derby else 1.0
-    return clamp(cfg.contact_base * proneness * view.tackle_aggression * derby_factor, 0.0, 1.0)
+    caution = cfg.booked_caution if booked else 1.0
+    chance = cfg.contact_base * proneness * view.tackle_aggression * derby_factor * caution
+    return clamp(chance, 0.0, 1.0)
 
 
 def severity_of(tackler: Skills, draw: float, cfg: DisciplineConfig) -> float:
@@ -78,6 +83,15 @@ def denies_opportunity(
     return ahead <= cfg.dogso_max_defenders_ahead
 
 
+def box_shift(profile_penalty_propensity: float, cfg: RefereeConfig) -> float:
+    """Return how much a contact in the box needs extra severity to be whistled.
+
+    `box_leniency` makes every referee reluctant; a penalty-prone referee (propensity above 0.5)
+    is less so.
+    """
+    return cfg.box_leniency - cfg.penalty_swing * (profile_penalty_propensity - CENTRE) * 2.0
+
+
 def roll_contact(play: Play, tackler: PlayerState, carrier: PlayerState) -> Contact | None:
     """Roll for a called foul in a challenge; None when there is no contact or the referee waves on.
 
@@ -85,20 +99,28 @@ def roll_contact(play: Play, tackler: PlayerState, carrier: PlayerState) -> Cont
     """
     state, cfg = play.state, play.cfg
     fouling_team = state.team(tackler.side)
-    chance = contact_probability(
-        tackler.skills, fouling_team.view, derby=state.is_derby, cfg=cfg.discipline
+    attack_dir = state.team(carrier.side).attack_dir
+    in_box = in_penalty_area(
+        frame_coordinate(carrier.x, attack_dir), frame_coordinate(carrier.y, attack_dir)
     )
+    chance = contact_probability(
+        tackler.skills,
+        fouling_team.view,
+        derby=state.is_derby,
+        cfg=cfg.discipline,
+        booked=tackler.yellow_cards > 0,
+    )
+    if in_box:
+        chance *= cfg.discipline.box_caution
     if play.discipline.u() >= chance:
         return None
     severity = severity_of(tackler.skills, play.discipline.u(), cfg.discipline)
     crowd = crowd_pressure(state.attendance, cfg.referee)
     tilt = home_tilt(play.referee, tackler.side, crowd, cfg.referee)
+    if in_box:
+        tilt -= box_shift(play.referee.penalty_propensity, cfg.referee)
     if not is_called(play.referee, severity, tilt, cfg.referee, play.discipline):
         return None
-    attack_dir = state.team(carrier.side).attack_dir
-    in_box = in_penalty_area(
-        frame_coordinate(carrier.x, attack_dir), frame_coordinate(carrier.y, attack_dir)
-    )
     return Contact(
         severity,
         severity_label(severity, cfg.discipline),

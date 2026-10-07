@@ -29,8 +29,7 @@ def test_added_minutes__rounds_up() -> None:
 
 @pytest.mark.parametrize("seed", [1, 2, 3])
 def test_run_match__with_added_time_each_half_announces_it_and_plays_it(seed: int) -> None:
-    cfg = merge_config(SimConfig(), {"stoppage": {"enabled": True}})
-    result = run_match(make_demo_setup(), seed, cfg, default_tables(), make_referee())
+    result = run_match(make_demo_setup(), seed, SimConfig(), default_tables(), make_referee())
     announcements = [e for e in result.events if isinstance(e, AddedTimeEvent)]
     assert [e.clock.period for e in announcements] == [1, 2]
     halftime = next(e for e in result.events if isinstance(e, HalftimeEvent))
@@ -39,5 +38,6 @@ def test_run_match__with_added_time_each_half_announces_it_and_plays_it(seed: in
 
 
 def test_run_match__without_added_time_there_is_no_announcement() -> None:
-    result = run_match(make_demo_setup(), 1, SimConfig(), default_tables())
+    cfg = merge_config(SimConfig(), {"stoppage": {"enabled": False}})
+    result = run_match(make_demo_setup(), 1, cfg, default_tables())
     assert not any(isinstance(e, AddedTimeEvent) for e in result.events)

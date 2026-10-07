@@ -202,7 +202,7 @@ class DecisionConfig(DomainModel):
     loss_cost_own_third: float = 0.55  # extra cost of losing the ball at the own goal line
     lead_frame_x: float = 0.012  # passes are aimed slightly ahead of the receiver
     min_pass_m: float = 4.0
-    shot_scale: float = 16.0
+    shot_scale: float = 14.0
     shoot_on_sight_swing: float = 0.8
     clear_pressure: float = 0.45
     clear_max_frame_x: float = 0.30
@@ -270,8 +270,8 @@ class ChallengeConfig(DomainModel):
     tackle_base: float = 0.45
     tackle_swing: float = 0.10
     tackle_scale: float = 20.0
-    fail_intercept: float = 0.55
-    fail_loose: float = 0.20  # the rest of failed passes go out of play
+    fail_intercept: float = 0.42
+    fail_loose: float = 0.18  # the rest of failed passes go out of play
     fail_out_long_shift: float = 0.15  # long balls and crosses are likelier to go out
     dribble_tackled_share: float = 0.8
     clearance_teammate_share: float = 0.42
