@@ -3,7 +3,7 @@
 -
 
 ## Changes
-<!-- Grouped by area (sim, league, persistence, tools, docs...). Keep the diff focused: one concern per PR. -->
+<!-- One short subsection per slice of the milestone commit plan (docs/design/06-milestones.md); the reviewer reads commit by commit. -->
 -
 
 ## How verified
@@ -30,4 +30,4 @@
 - [ ] No duplicated logic; no abstraction without a second user or a seam
 - [ ] Layering respected; pure core stays pure; randomness only via passed `SimRng`
 - [ ] Tests at the right levels; invariants via `verify/`, not re-implemented
-- [ ] PR is small and reviewable (<= 400 changed lines excluding generated files) with atomic commits
+- [ ] Atomic commits (<= 400 changed lines each, generated files excluded); the PR reads well commit by commit
