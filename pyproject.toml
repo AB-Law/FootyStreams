@@ -47,6 +47,9 @@ ignore = [
     "TRY003",        # long exception messages are fine when they carry ids and context
 ]
 
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
 [tool.ruff.lint.mccabe]
 max-complexity = 8
 
