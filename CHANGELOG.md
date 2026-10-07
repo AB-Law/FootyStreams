@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0015** Add 'changelog release' with Markdown and JSON release notes *(M0; scope: tools)*
 - **0014** Add 'changelog check' and 'changelog build' and enforce them in the quality gate *(M0; scope: tools)*
 - **0013** Add change fragment parsing and the 'changelog new' command *(M0; scope: tools)*
 - **0012** Add the verify package's Violation type and the shared test helpers and factories packages. *(M0; scope: verify, tools)*

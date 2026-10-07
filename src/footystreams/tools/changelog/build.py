@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 
 from footystreams.tools.changelog.fragment import ChangeType, Fragment, Impact
+from footystreams.tools.changelog.store import Release
 
 SECTION_TITLES: dict[ChangeType, str] = {
     ChangeType.ADDED: "Added",
@@ -29,15 +30,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 """
 
 
-def render_changelog(unreleased: Sequence[Fragment]) -> str:
-    """Render the whole CHANGELOG.md text."""
-    sections = ["## [Unreleased]", *_render_sections(unreleased)]
-    return HEADER + "\n" + "\n\n".join(sections) + "\n"
+def render_changelog(unreleased: Sequence[Fragment], releases: Sequence[Release] = ()) -> str:
+    """Render the whole CHANGELOG.md text: the unreleased section, then each release."""
+    blocks = [_block("## [Unreleased]", unreleased)]
+    blocks.extend(_block(f"## [{r.version}] - {r.date.isoformat()}", r.fragments) for r in releases)
+    return HEADER + "\n" + "\n\n".join(blocks) + "\n"
 
 
-def _render_sections(fragments: Sequence[Fragment]) -> list[str]:
-    if not fragments:
-        return ["_No unreleased changes._"]
+def _block(heading: str, fragments: Sequence[Fragment]) -> str:
+    body = render_sections(fragments) if fragments else ["_No unreleased changes._"]
+    return "\n\n".join([heading, *body])
+
+
+def render_sections(fragments: Sequence[Fragment]) -> list[str]:
+    """Render fragments grouped by change type, newest first within each group."""
     rendered = []
     for change_type, title in SECTION_TITLES.items():
         members = sorted((f for f in fragments if f.type is change_type), key=lambda f: f.id)

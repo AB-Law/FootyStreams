@@ -19,6 +19,7 @@ from footystreams.tools.changelog.fragment import (
     parse_fragment,
 )
 from footystreams.tools.changelog.policy import check_change, is_fragment_path
+from footystreams.tools.changelog.release import write_release_notes
 from footystreams.tools.changelog.store import FragmentStore
 from footystreams.tools.paths import PROJECT_ROOT
 
@@ -34,6 +35,9 @@ def build_parser() -> argparse.ArgumentParser:
     check.add_argument("--base", default=None, help="ref to compare with (default: origin/main)")
     build = commands.add_parser("build", help="write CHANGELOG.md from the fragments")
     build.add_argument("--check", action="store_true", help="fail if CHANGELOG.md is stale")
+    release = commands.add_parser("release", help="publish the unreleased fragments as a version")
+    release.add_argument("version", help="MAJOR.MINOR.PATCH")
+    release.add_argument("--date", type=date.fromisoformat, default=None, help="default: today")
     return parser
 
 
@@ -60,8 +64,10 @@ def main(argv: Sequence[str] | None = None, root: Path = PROJECT_ROOT) -> int:
             return _new(arguments, store)
         if arguments.command == "check":
             return _check(arguments, root)
+        if arguments.command == "release":
+            return _release(arguments, store, root)
         return _build(arguments, store, root / CHANGELOG_FILE)
-    except (FragmentError, git.GitError) as error:
+    except (FragmentError, git.GitError, ValueError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
 
@@ -85,7 +91,7 @@ def _check(arguments: argparse.Namespace, root: Path) -> int:
 
 
 def _build(arguments: argparse.Namespace, store: FragmentStore, target: Path) -> int:
-    text = render_changelog(store.unreleased())
+    text = render_changelog(store.unreleased(), store.releases())
     if arguments.check:
         current = target.read_text(encoding="utf-8") if target.exists() else ""
         if current == text:
@@ -93,6 +99,16 @@ def _build(arguments: argparse.Namespace, store: FragmentStore, target: Path) ->
         print(f"{target.name} is stale: run 'uv run changelog build'", file=sys.stderr)
         return 1
     target.write_text(text, encoding="utf-8", newline="\n")
+    return 0
+
+
+def _release(arguments: argparse.Namespace, store: FragmentStore, root: Path) -> int:
+    release = store.publish(arguments.version, arguments.date or date.today())
+    notes = write_release_notes(root, release)
+    changelog = render_changelog(store.unreleased(), store.releases())
+    (root / CHANGELOG_FILE).write_text(changelog, encoding="utf-8", newline="\n")
+    for path in notes:
+        print(path)
     return 0
 
 
