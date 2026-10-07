@@ -208,6 +208,64 @@ class DecisionConfig(DomainModel):
     weight_floor: float = 0.02
 
 
+class TempoConfig(DomainModel):
+    """How long each action takes, in seconds (docs/design/02 section 5.4)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "pass_base_s": "S",
+        "pass_per_m_s": "S",
+        "dribble_s": "S",
+        "shot_s": "S",
+        "clear_s": "S",
+        "tackle_s": "S",
+        "celebration_s": "S",
+        "celebration_spread_s": "S",
+        "noise": "S",
+        "tempo_swing": "S",
+    }
+
+    pass_base_s: float = 2.6
+    pass_per_m_s: float = 0.06
+    dribble_s: float = 3.6
+    shot_s: float = 2.2
+    clear_s: float = 2.8
+    tackle_s: float = 1.6
+    celebration_s: float = 55.0  # goal celebration and restart
+    celebration_spread_s: float = 12.0
+    noise: float = 0.3  # +-30% on every duration
+    tempo_swing: float = 0.3  # tempo 0 -> x1.15 slower, tempo 1 -> x0.85 quicker
+
+
+class ChallengeConfig(DomainModel):
+    """Tackles and what happens when a pass or dribble fails (02 sections 5.3, 5.5)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "attempt_rate": "S",
+        "attempt_radius_m": "S",
+        "tackle_base": "S",
+        "tackle_swing": "S",
+        "tackle_scale": "S",
+        "fail_intercept": "S",
+        "fail_loose": "S",
+        "fail_out_long_shift": "S",
+        "dribble_tackled_share": "S",
+        "clearance_teammate_share": "S",
+        "clearance_spread": "S",
+    }
+
+    attempt_rate: float = 0.10  # per moment, times the pressure on the carrier
+    attempt_radius_m: float = 3.0
+    tackle_base: float = 0.45
+    tackle_swing: float = 0.4
+    tackle_scale: float = 20.0
+    fail_intercept: float = 0.55
+    fail_loose: float = 0.20  # the rest of failed passes go out of play
+    fail_out_long_shift: float = 0.15  # long balls and crosses are likelier to go out
+    dribble_tackled_share: float = 0.8
+    clearance_teammate_share: float = 0.42
+    clearance_spread: float = 0.15
+
+
 class SimConfig(DomainModel):
     """Top-level simulation configuration (defaults are the shipped balance)."""
 
@@ -222,6 +280,8 @@ class SimConfig(DomainModel):
         "shot": "S",
         "dribble": "S",
         "decision": "S",
+        "tempo": "S",
+        "challenge": "S",
     }
 
     model_profile: str = "v1"
@@ -234,6 +294,8 @@ class SimConfig(DomainModel):
     shot: ShotConfig = Field(default_factory=ShotConfig)
     dribble: DribbleConfig = Field(default_factory=DribbleConfig)
     decision: DecisionConfig = Field(default_factory=DecisionConfig)
+    tempo: TempoConfig = Field(default_factory=TempoConfig)
+    challenge: ChallengeConfig = Field(default_factory=ChallengeConfig)
 
 
 def config_hash(config: SimConfig) -> str:

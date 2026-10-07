@@ -110,14 +110,14 @@ def test_choice_temperature__pressure_and_poor_decisions_raise_it() -> None:
 
 
 def test_decide__is_deterministic_for_a_given_stream() -> None:
-    first = decide(_state(), SimRng(11), CFG)
-    second = decide(_state(), SimRng(11), CFG)
+    first = decide(_state(), SimRng(11), CFG, 0.1)
+    second = decide(_state(), SimRng(11), CFG, 0.1)
     assert (first.kind, first.end) == (second.kind, second.end)
 
 
 @pytest.mark.parametrize("seed", range(5))
 def test_decide__returns_a_valid_option_across_seeds(seed: int) -> None:
-    option = decide(_state(), SimRng(seed), CFG)
+    option = decide(_state(), SimRng(seed), CFG, 0.1)
     assert 0.0 <= option.probability <= 1.0
     assert 0.0 <= option.end[0] <= 1.0
     assert 0.0 <= option.end[1] <= 1.0

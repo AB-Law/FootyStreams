@@ -10,7 +10,6 @@ from footystreams.sim.config import SimConfig
 from footystreams.sim.geometry import CENTRE
 from footystreams.sim.mathx import clamp, rational_weight
 from footystreams.sim.options import Option, Weights, generate_options
-from footystreams.sim.pressure import pressure_on
 from footystreams.sim.rng import SimRng
 from footystreams.sim.state import MatchState
 
@@ -69,8 +68,7 @@ def choose(options: list[Option], decisions: float, rng: SimRng, cfg: SimConfig)
     return options[rng.choice_weighted(weights)]
 
 
-def decide(state: MatchState, rng: SimRng, cfg: SimConfig) -> Option:
-    """Compute pressure and options for the current carrier and choose what he does."""
-    pressure = pressure_on(state.carrier, state.defenders, cfg.pressure)
+def decide(state: MatchState, rng: SimRng, cfg: SimConfig, pressure: float) -> Option:
+    """Build the carrier's options under the given pressure and choose what he does."""
     options = generate_options(state, pressure, team_weights(state, cfg), cfg)
     return choose(options, state.carrier.skills.decisions, rng, cfg)

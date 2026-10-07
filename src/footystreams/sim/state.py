@@ -105,7 +105,8 @@ class MatchState:
     ball_y: float = 0.5
     chain: int = 0
     chain_started_at: float = 0.0
-    play_duration_s: float = field(default=0.0)
+    assist_from: PlayerState | None = None  # passer of the last completed pass in this chain
+    last_turnover_s: float = field(default=-1e9)  # elapsed_s of the latest change of possession
 
     def team(self, side: Side) -> TeamState:
         """Return the team on a side."""
