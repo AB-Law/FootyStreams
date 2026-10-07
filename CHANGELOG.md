@@ -81,6 +81,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0001** Add the Phase 1 design document set (entities, simulation, events, architecture, seeding, milestones). *(design; scope: design)*
 
 ### Build and tooling
+- **0063** Run the test tiers in parallel with pytest-xdist *(M9; scope: tools)*
 - **0018** Add the CI workflow and CODEOWNERS *(M0; scope: ci)*
 - **0010** Add test plugins, Hypothesis profiles, a coverage floor and the 'pr' tier of 'uv run check'. *(M0; scope: tools, ci)*
 - **0009** Replace .gitignore with a complete Python, tooling and project ruleset. *(M0; scope: tools)*

@@ -56,7 +56,7 @@ class StepResult:
 
 StepRunner = Callable[[CheckStep], StepResult]
 
-_PYTEST = (PYTHON, "-m", "pytest", "-m", "not slow", "-q")
+_PYTEST = (PYTHON, "-m", "pytest", "-m", "not slow", "-q", "-n", "auto")
 LINT_STEPS: tuple[CheckStep, ...] = (
     CheckStep("ruff lint", (PYTHON, "-m", "ruff", "check", ".")),
     CheckStep("ruff format", (PYTHON, "-m", "ruff", "format", "--check", ".")),
