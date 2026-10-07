@@ -82,6 +82,14 @@ class TeamState:
     players: list[PlayerState]
     score: int = 0
 
+    @property
+    def keeper(self) -> PlayerState:
+        """The goalkeeper on the pitch (the first goalkeeper, else the player in slot order 0)."""
+        for candidate in self.players:
+            if candidate.position is Position.GK:
+                return candidate
+        return self.players[0]
+
     def player(self, player_id: PlayerId) -> PlayerState:
         """Return the on-pitch player with this id."""
         for candidate in self.players:

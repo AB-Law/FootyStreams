@@ -122,6 +122,15 @@ class ShotConfig(DomainModel):
         "finishing_span": "S",
         "min_xg": "S",
         "long_range_m": "S",
+        "block_base": "S",
+        "block_pressure": "S",
+        "off_target_base": "S",
+        "off_target_skill_swing": "S",
+        "woodwork_share": "S",
+        "keeper_swing": "S",
+        "max_goal_given_on_target": "S",
+        "keeper_holds": "S",
+        "rebound_attacker_share": "S",
     }
 
     range_m: float = 35.0
@@ -132,6 +141,15 @@ class ShotConfig(DomainModel):
     finishing_span: float = 0.40
     min_xg: float = 0.02
     long_range_m: float = 20.0  # beyond this the shooter's long_shots replaces finishing
+    block_base: float = 0.10  # share of shots a defender gets in the way of
+    block_pressure: float = 0.15  # extra blocked share at full pressure
+    off_target_base: float = 0.30
+    off_target_skill_swing: float = 0.12  # a better finisher misses the frame less
+    woodwork_share: float = 0.03
+    keeper_swing: float = 0.5  # how much keeper quality bends the chance of a goal
+    max_goal_given_on_target: float = 0.95
+    keeper_holds: float = 0.62  # share of saves the keeper catches
+    rebound_attacker_share: float = 0.40  # share of loose balls an attacker reaches first
 
 
 class DribbleConfig(DomainModel):
