@@ -13,5 +13,5 @@ contracts. ``SIM_VERSION`` is ``0.4.0`` in M7 (``0.1.0`` was the first simulator
 
 from __future__ import annotations
 
-SCHEMA_VERSION = "0.2.0"
+SCHEMA_VERSION = "0.3.0"
 SIM_VERSION = "0.4.0"

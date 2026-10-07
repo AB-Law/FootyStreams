@@ -50,6 +50,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0046** Add pressure model and pass, shot and dribble probability models *(M4; scope: sim)*
 - **0045** Add mutable match state and the positioning model *(M4; scope: sim)*
 - **0044** Add pitch geometry, tactics view and effective skills *(M4; scope: sim)*
+- **0043** Add world record and static-table models *(M2; scope: schemas; schema version minor)*
 - **0043** Add SimConfig with config hash and merge, and static formation tables *(M4; scope: sim)*
 - **0042** Add WorldRng, a deterministic forkable random stream for seed and league code *(M2; scope: domain)*
 - **0042** Add SimRng (xoshiro256**) and exact-arithmetic mathx helpers *(M4; scope: sim)*
