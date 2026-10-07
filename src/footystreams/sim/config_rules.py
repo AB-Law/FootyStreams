@@ -50,6 +50,14 @@ class DisciplineConfig(DomainModel):
         "dogso_max_defenders_ahead": "S",
         "free_kick_s": "S",
         "free_kick_spread_s": "S",
+        "yellow_base": "S",
+        "yellow_tendency_swing": "S",
+        "yellow_strictness_swing": "S",
+        "red_threshold": "S",
+        "dogso_red_share": "S",
+        "card_s": "S",
+        "card_spread_s": "S",
+        "min_players": "S",
     }
 
     # Chance a challenge involves foul-worthy contact, for an average man. 0 switches fouls off;
@@ -70,3 +78,11 @@ class DisciplineConfig(DomainModel):
     dogso_max_defenders_ahead: int = 1  # defenders (keeper included) between him and the goal
     free_kick_s: float = 25.0
     free_kick_spread_s: float = 10.0
+    yellow_base: float = 0.68  # severity above which an average referee books a foul
+    yellow_tendency_swing: float = 0.20  # a card-happy referee books milder fouls
+    yellow_strictness_swing: float = 0.10
+    red_threshold: float = 0.90  # severity above which a foul is a straight red
+    dogso_red_share: float = 0.60  # share of denied goal-scoring chances punished with a red
+    card_s: float = 30.0
+    card_spread_s: float = 10.0
+    min_players: int = Field(ge=1, le=11, default=7)  # a side is never reduced below this
