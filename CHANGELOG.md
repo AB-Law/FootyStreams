@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0056** Add verify_match with invariants M01-M05, M10 and M17 *(M4; scope: verify)*
 - **0055** Add the sim command and the text renderer *(M4; scope: cli)*
 - **0054** Add simulate_match, run_match, the match loop and an event-derived summary *(M4; scope: sim, events)*
 - **0051** Resolve shots, saves, goals and the restart after a goal *(M4; scope: sim)*

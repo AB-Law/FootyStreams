@@ -4,6 +4,7 @@ May import: domain, events. Used by tests, strict mode, soak runs and the produc
 Design: docs/design/10-testing-strategy.md section 9.
 """
 
+from footystreams.verify.match import verify_match
 from footystreams.verify.violation import Violation, format_violations
 
-__all__ = ["Violation", "format_violations"]
+__all__ = ["Violation", "format_violations", "verify_match"]
