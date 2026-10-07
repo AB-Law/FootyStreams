@@ -9,6 +9,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0075** Add league invariants L01 to L03 *(M9; scope: verify)*
+- **0074** Add the daily tick, matchday play and the season runner *(M9; scope: league)*
 - **0073** Add the world clock and daily recovery *(M9; scope: league)*
 - **0071** Add post-match world deltas *(M9; scope: league)*
 - **0070** Add club finance and the ledger *(M9; scope: league)*
