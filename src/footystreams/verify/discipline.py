@@ -10,36 +10,13 @@ from __future__ import annotations
 from collections.abc import Sequence
 
 from footystreams.domain.types import PlayerId
-from footystreams.events.discipline import CardEvent, InjuryEvent, SubstitutionEvent
+from footystreams.events.derive.presence import DISMISSALS, injured_off_unreplaced, leaver
+from footystreams.events.discipline import CardEvent
 from footystreams.events.types import MatchEvent
 from footystreams.verify.index import players_in
 from footystreams.verify.violation import Violation
 
 TEAM_SIZE = 11
-DISMISSALS = ("red", "second_yellow")
-
-
-def injured_off_unreplaced(events: Sequence[MatchEvent], position: int) -> bool:
-    """True when the event is an injury that takes the player off and no change follows it."""
-    event = events[position]
-    if not isinstance(event, InjuryEvent) or event.can_continue:
-        return False
-    following = events[position + 1] if position + 1 < len(events) else None
-    return not (
-        isinstance(following, SubstitutionEvent) and following.player_off_id == event.player_id
-    )
-
-
-def leaver_at(events: Sequence[MatchEvent], position: int) -> PlayerId | None:
-    """Return the player who leaves the pitch at this event, if anyone does."""
-    event = events[position]
-    if isinstance(event, CardEvent) and event.colour in DISMISSALS:
-        return event.player_id
-    if isinstance(event, SubstitutionEvent):
-        return event.player_off_id
-    if isinstance(event, InjuryEvent) and injured_off_unreplaced(events, position):
-        return event.player_id
-    return None
 
 
 def check_dismissed_players_stay_off(events: Sequence[MatchEvent]) -> list[Violation]:
@@ -51,9 +28,9 @@ def check_dismissed_players_stay_off(events: Sequence[MatchEvent]) -> list[Viola
             Violation("M07", f"{player} appears after leaving the pitch", event.id)
             for player in sorted(players_in(event) & gone)
         )
-        leaver = leaver_at(events, position)
-        if leaver is not None:
-            gone.add(leaver)
+        departed = leaver(events, position)
+        if departed is not None:
+            gone.add(departed)
     return found
 
 

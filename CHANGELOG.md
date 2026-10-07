@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0091** Add the presence fold (minutes, starts, who left); verify reuses it *(M7; scope: events, verify)*
 - **0090** Record end positions, progressive passes, threat gain and big chances when context is on *(M7; scope: sim, events)*
 - **0089** Wire the context tracker into the emitter behind SimConfig.context.enabled *(M7; scope: sim, events)*
 - **0088** Add the causal context tracker: momentum, intensity, significance and tags *(M7; scope: events)*
