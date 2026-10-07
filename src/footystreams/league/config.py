@@ -97,6 +97,8 @@ class RecoveryConfig(_Config):
     fatigue_per_match_minute: float = Field(ge=0.0)
     rotation_fatigue_threshold: float = Field(ge=0.0, le=1.0)
     rotation_ability_margin: int = Field(ge=0)
+    red_card_ban_matches: int = Field(ge=1)
+    injury_severity_weights: dict[str, float]
 
 
 class WorldEventsConfig(_Config):

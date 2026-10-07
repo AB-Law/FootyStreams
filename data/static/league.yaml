@@ -59,6 +59,8 @@ recovery:
   fatigue_per_match_minute: 0.0035
   rotation_fatigue_threshold: 0.55
   rotation_ability_margin: 5
+  red_card_ban_matches: 2
+  injury_severity_weights: {knock: 0.5, minor: 0.28, moderate: 0.16, severe: 0.06}
 
 world_events:
   daily_hazard: 0.006                  # base chance per player per day of a life event
