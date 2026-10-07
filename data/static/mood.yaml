@@ -1,0 +1,48 @@
+# Mood tunables (docs/design/07 section 3). Hard caps apply to the SUM of all sources.
+caps:
+  mental_penalty: 0.20
+  technical_penalty: 0.10
+  physical_penalty: 0.05
+  mental_bonus: 0.06
+  technical_bonus: 0.03
+  physical_bonus: 0.01
+  volatility_add_max: 0.30
+# effects per unit of strength: mental / technical / physical (negative = penalty), volatility_add >= 0
+kinds:
+  personal_turmoil:    {mental: -1.0, technical: -0.5, physical: -0.15, volatility_add: 0.10, default_days: 21, decay: linear, public: false}
+  family_matter:       {mental: -0.7, technical: -0.3, physical: -0.10, volatility_add: 0.05, default_days: 18, decay: linear, public: false}
+  media_storm:         {mental: -0.8, technical: -0.4, physical: -0.05, volatility_add: 0.10, default_days: 14, decay: linear, public: true}
+  dressing_room_row:   {mental: -0.7, technical: -0.35, physical: -0.05, volatility_add: 0.15, default_days: 14, decay: linear, public: true}
+  manager_row:         {mental: -0.8, technical: -0.4, physical: -0.05, volatility_add: 0.15, default_days: 21, decay: linear, public: true}
+  contract_dispute:    {mental: -0.6, technical: -0.3, physical: 0.0, volatility_add: 0.05, default_days: 60, decay: linear, public: true}
+  transfer_unrest:     {mental: -0.6, technical: -0.3, physical: 0.0, volatility_add: 0.05, default_days: 45, decay: linear, public: true}
+  transfer_snub:       {mental: -0.5, technical: -0.25, physical: 0.0, volatility_add: 0.05, default_days: 21, decay: linear, public: true}
+  homesickness:        {mental: -0.5, technical: -0.25, physical: -0.05, volatility_add: 0.0, default_days: 60, decay: half_life, half_life_days: 30, public: false}
+  fan_abuse:           {mental: -0.6, technical: -0.3, physical: 0.0, volatility_add: 0.10, default_days: 14, decay: linear, public: true}
+  blamed_for_defeat:   {mental: -0.7, technical: -0.35, physical: 0.0, volatility_add: 0.05, default_days: 21, decay: linear, public: true}
+  dropped_unfairly:    {mental: -0.6, technical: -0.3, physical: 0.0, volatility_add: 0.10, default_days: 21, decay: linear, public: true}
+  injury_return_joy:   {mental: 0.4, technical: 0.2, physical: 0.1, volatility_add: 0.0, default_days: 21, decay: linear, public: true}
+  new_contract_glow:   {mental: 0.4, technical: 0.2, physical: 0.0, volatility_add: 0.0, default_days: 60, decay: linear, public: true}
+  award_glow:          {mental: 0.5, technical: 0.25, physical: 0.0, volatility_add: 0.0, default_days: 30, decay: linear, public: true}
+  derby_hero:          {mental: 0.6, technical: 0.3, physical: 0.0, volatility_add: 0.0, default_days: 28, decay: linear, public: true}
+  trophy_glow:         {mental: 0.5, technical: 0.25, physical: 0.1, volatility_add: 0.0, default_days: 60, decay: linear, public: true}
+  manager_backing:     {mental: 0.4, technical: 0.2, physical: 0.0, volatility_add: 0.0, default_days: 30, decay: linear, public: false}
+  new_signing_enthusiasm: {mental: 0.4, technical: 0.2, physical: 0.0, volatility_add: 0.0, default_days: 45, decay: linear, public: true}
+  captaincy_pride:     {mental: 0.3, technical: 0.1, physical: 0.0, volatility_add: 0.0, default_days: 90, decay: linear, public: true}
+  rested_and_happy:    {mental: 0.3, technical: 0.1, physical: 0.15, volatility_add: 0.0, default_days: 10, decay: linear, public: false}
+  confidence_surge:    {mental: 0.5, technical: 0.25, physical: 0.0, volatility_add: 0.0, default_days: 21, decay: linear, public: true}
+# How personality scales the strength of a modifier of a kind: sensitivity = 1 + sum(weight * (trait-50)/50).
+# Negative weights shrink the effect of high trait values (a resilient player shrugs things off).
+sensitivity:
+  negative: {resilience: -0.4, professionalism: -0.2, volatility: 0.2, ego: 0.1}
+  positive: {ego: 0.1, ambition: 0.1}
+kind_sensitivity:
+  media_storm: {media_openness: 0.3}
+  transfer_unrest: {loyalty: 0.3}
+  transfer_snub: {loyalty: 0.3}
+  contract_dispute: {loyalty: 0.2}
+  manager_row: {ego: 0.3, volatility: 0.2}
+  dressing_room_row: {ego: 0.2, volatility: 0.2}
+  dropped_unfairly: {ego: 0.3}
+sensitivity_floor: 0.4
+sensitivity_ceiling: 1.8

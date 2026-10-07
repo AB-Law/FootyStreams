@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0142** Add league config, calendar, double round-robin schedule and standings with tie-breaks *(M9; scope: data)*
 - **0140** (migration needed) Add SQLite repositories, Alembic 0001_initial and seed --db *(M3; scope: cli)*
 - **0139** Add repository ports, table specs, codec and in-memory repositories *(M3; scope: persistence)*
 - **0136** Commit the default world (seed 1) with a regeneration test *(M2; scope: seed)*
