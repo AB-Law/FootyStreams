@@ -9,6 +9,23 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0038** Enforce SCHEMA_VERSION bump when schemas change *(M1; scope: tools)*
+- **0037** Export initial schemas tree for SCHEMA_VERSION 0.1.0 *(M1; scope: schemas; schema version minor)*
+- **0036** Add usage registry and export-schemas with drift test *(M1; scope: domain, cli, schemas; schema version minor)*
+- **0035** Add match summary and MatchResult *(M1; scope: events; schema version minor)*
+- **0034** Add match event models and discriminated union *(M1; scope: events; schema version minor)*
+- **0033** Add media and voice profile models *(M1; scope: domain; schema version minor)*
+- **0032** Add world social transfer and development models *(M1; scope: domain; schema version minor)*
+- **0031** Add match stack with ResolvedMood and sheets *(M1; scope: domain; schema version minor)*
+- **0030** Add competition fixture and standings models *(M1; scope: domain; schema version minor)*
+- **0029** Add Club Stadium Fanbase Finance and Board *(M1; scope: domain; schema version minor)*
+- **0028** Add TeamTactics module package *(M1; scope: domain; schema version minor)*
+- **0027** Add Manager Staff and Referee models *(M1; scope: domain; schema version minor)*
+- **0026** Add RoleCatalog ratings valuation and PlayerProfile *(M1; scope: domain; schema version minor)*
+- **0025** Add contract injury and player condition models *(M1; scope: domain; schema version minor)*
+- **0024** Add player attribute groups and Player core *(M1; scope: domain; schema version minor)*
+- **0023** Add Person Personality and Appearance models *(M1; scope: domain; schema version minor)*
+- **0022** Add domain primitive types, versions and canonical JSON *(M1; scope: domain; schema version minor)*
 - **0017** Add commit message and PR size checks with git hooks *(M0; scope: tools, ci)*
 - **0015** Add 'changelog release' with Markdown and JSON release notes *(M0; scope: tools)*
 - **0014** Add 'changelog check' and 'changelog build' and enforce them in the quality gate *(M0; scope: tools)*
@@ -17,11 +34,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0040** Tune valuation peak/contract and document rating constants *(M1; scope: domain; schema version patch)*
 - **0020** Deliver each milestone as one branch and one PR; PR size becomes informational *(M0; scope: design, ci)*
 - **0006** Make .claude/rules the source of agent rules and generate .cursor/rules from it; remove docs/rules. *(design; scope: design, tools)*
 - **0005** Require a human review checkpoint before any push or pull request; record the GitHub remote. *(design; scope: design, ci)*
 - **0004** Revise design for extensible tactics, attribute types, voice, runtime engine; add agent rules, end-of-turn gate and git workflow. *(design; scope: design, ci, tools)*
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
+
+### Fixed
+- **0041** Close M1 test gaps for union usage and aggregates *(M1; scope: domain, events, docs; schema version patch)*
 
 ### Removed
 - **0008** Remove the Cursor rules generator; keep plain, hand-maintained .cursor/rules copies. *(design; scope: tools, design)*
@@ -30,6 +51,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0039** Record M1 decisions and refresh design paths *(M1; scope: design, docs)*
 - **0021** Add the parallel match-engine track to the milestone plan *(M0; scope: design)*
 - **0019** Add ADRs, glossary, project status and the M0 milestone report *(M0; scope: docs)*
 - **0003** Add testing strategy, live-channel operational safety, engineering standards and the change-fragment log system. *(design; scope: design, ci)*

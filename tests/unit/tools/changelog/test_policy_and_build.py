@@ -4,7 +4,12 @@ import pytest
 
 from footystreams.tools.changelog.build import render_changelog
 from footystreams.tools.changelog.fragment import ChangeType, Fragment, Impact
-from footystreams.tools.changelog.policy import ChangedFile, check_change, is_fragment_path
+from footystreams.tools.changelog.policy import (
+    ChangedFile,
+    SchemaVersionFact,
+    check_change,
+    is_fragment_path,
+)
 
 
 def _fragment(
@@ -83,6 +88,34 @@ def test_check_change__schemas_need_a_schema_version_impact() -> None:
 
     assert [p.rule for p in check_change(changed, [_fragment()])] == ["schema-version-impact"]
     assert check_change(changed, [_fragment(schema=Impact.PATCH)]) == []
+
+
+def test_check_change__schemas_first_introduction__allows_new_versions_file() -> None:
+    changed = _changed(
+        "schemas/events.schema.json",
+        "src/footystreams/domain/versions.py",
+        status="A",
+    )
+    fact = SchemaVersionFact(path_in_change=True, base_version=None, head_version="0.1.0")
+    assert check_change(changed, [_fragment(schema=Impact.MINOR)], fact) == []
+
+
+def test_check_change__schemas_without_version_bump__is_a_problem() -> None:
+    changed = _changed("schemas/events.schema.json")
+    fact = SchemaVersionFact(path_in_change=False, base_version="0.1.0", head_version="0.1.0")
+    rules = [
+        problem.rule for problem in check_change(changed, [_fragment(schema=Impact.PATCH)], fact)
+    ]
+    assert "schema-version-bump" in rules
+
+
+def test_check_change__schemas_with_bumped_version__is_fine() -> None:
+    changed = _changed(
+        "schemas/events.schema.json",
+        "src/footystreams/domain/versions.py",
+    )
+    fact = SchemaVersionFact(path_in_change=True, base_version="0.1.0", head_version="0.2.0")
+    assert check_change(changed, [_fragment(schema=Impact.MINOR)], fact) == []
 
 
 def test_render_changelog__no_fragments__says_so() -> None:

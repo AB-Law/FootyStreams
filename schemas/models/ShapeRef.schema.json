@@ -1,0 +1,1 @@
+{"additionalProperties":false,"description":"Named shape reference for a tactical phase.","properties":{"formation":{"title":"Formation","type":"string"},"label":{"default":"","title":"Label","type":"string"}},"required":["formation"],"title":"ShapeRef","type":"object"}

@@ -1,0 +1,1 @@
+{"additionalProperties":false,"description":"Who proposed the change.","properties":{"component":{"title":"Component","type":"string"},"model_id":{"title":"Model Id","type":"string"},"prompt_hash":{"title":"Prompt Hash","type":"string"}},"required":["component","model_id","prompt_hash"],"title":"ProposalSource","type":"object"}

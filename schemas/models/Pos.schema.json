@@ -1,0 +1,1 @@
+{"additionalProperties":false,"description":"Absolute pitch coordinates; home attacks +x in period 1.","properties":{"x":{"title":"X","type":"number"},"y":{"title":"Y","type":"number"}},"required":["x","y"],"title":"Pos","type":"object"}

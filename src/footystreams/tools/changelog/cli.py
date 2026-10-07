@@ -19,9 +19,16 @@ from footystreams.tools.changelog.fragment import (
     Impact,
     parse_fragment,
 )
-from footystreams.tools.changelog.policy import check_change, is_fragment_path
+from footystreams.tools.changelog.policy import (
+    SCHEMA_VERSIONS_PATH,
+    ChangedFile,
+    SchemaVersionFact,
+    check_change,
+    is_fragment_path,
+)
 from footystreams.tools.changelog.release import write_release_notes
 from footystreams.tools.changelog.store import FragmentStore
+from footystreams.tools.git import run_git
 from footystreams.tools.paths import PROJECT_ROOT
 
 CHANGELOG_FILE = "CHANGELOG.md"
@@ -79,16 +86,54 @@ def _new(arguments: argparse.Namespace, store: FragmentStore) -> int:
 
 
 def _check(arguments: argparse.Namespace, root: Path) -> int:
-    changed = git.changed_files(root, repo_git.resolve_base(root, arguments.base))
+    base = repo_git.resolve_base(root, arguments.base)
+    changed = git.changed_files(root, base)
     fragments = [
         parse_fragment((root / item.path).read_text(encoding="utf-8"), item.path)
         for item in changed
         if item.status != "D" and is_fragment_path(item.path)
     ]
-    problems = check_change(changed, fragments)
+    fact = _schema_version_fact(root, base, changed)
+    problems = check_change(changed, fragments, fact)
     for problem in problems:
         print(problem, file=sys.stderr)
     return 1 if problems else 0
+
+
+def _schema_version_fact(
+    root: Path, base: str, changed: Sequence[ChangedFile]
+) -> SchemaVersionFact:
+    """Read SCHEMA_VERSION at base and head without putting I/O in policy."""
+    path_in_change = any(item.path == SCHEMA_VERSIONS_PATH for item in changed)
+    base_text = _file_at_ref(root, base, SCHEMA_VERSIONS_PATH)
+    head_path = root / SCHEMA_VERSIONS_PATH
+    head_text = head_path.read_text(encoding="utf-8") if head_path.is_file() else None
+    return SchemaVersionFact(
+        path_in_change=path_in_change,
+        base_version=_parse_schema_version(base_text),
+        head_version=_parse_schema_version(head_text),
+    )
+
+
+def _file_at_ref(root: Path, base: str, path: str) -> str | None:
+    """Return file contents at the merge-base of ``base``, or None if missing."""
+    merge_base = repo_git.merge_base(root, base)
+    completed = run_git(root, "show", f"{merge_base}:{path}")
+    if completed.returncode != 0:
+        return None
+    return completed.stdout
+
+
+def _parse_schema_version(text: str | None) -> str | None:
+    """Extract ``SCHEMA_VERSION = "..."`` from a versions module."""
+    if text is None:
+        return None
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("SCHEMA_VERSION"):
+            _, _, rest = stripped.partition("=")
+            return rest.strip().strip("\"'")
+    return None
 
 
 def _build(arguments: argparse.Namespace, store: FragmentStore, target: Path) -> int:
