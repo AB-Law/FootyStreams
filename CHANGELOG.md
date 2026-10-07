@@ -44,6 +44,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0054** Add simulate_match, run_match, the match loop and an event-derived summary *(M4; scope: sim, events)*
 - **0051** Resolve shots, saves, goals and the restart after a goal *(M4; scope: sim)*
 - **0050** Resolve dribbles and clearances *(M4; scope: sim)*
+- **0050** Add the club generator: identity, stadium, finances, organisation, calibrated squads and default tactics *(M2; scope: data)*
 - **0049** Resolve passes: completion, interception, loose ball and out of play *(M4; scope: sim)*
 - **0048** Add the match clock helpers and the event emitter *(M4; scope: sim, events)*
 - **0048** Add manager and staff generators with tactic presets and style prototypes *(M2; scope: data)*
