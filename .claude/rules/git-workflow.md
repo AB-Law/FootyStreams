@@ -1,0 +1,34 @@
+# Git workflow (always apply)
+
+**Small, reviewable, atomic.** Full detail: `docs/design/11-engineering-standards.md` section 12.
+
+## Branches
+- Never commit to `main`. Branch from an up-to-date `main` before the first edit: `<type>/<milestone>-<slug>`, e.g. `feat/m4-pass-resolver`, `fix/m5-offside-edge-case`, `test/m3-repo-contract-suite`, `docs/m0-adr-determinism`. Types: `feat fix refactor perf test docs build ci chore`.
+- One branch = one pull request = one concern. Short-lived (aim: merged within a day or two of work).
+
+## Pull request size
+- Target **<= 400 changed lines**, hard cap **800**, excluding lockfiles, generated schemas, golden files and data dumps. If a slice would be bigger, split it: stack PRs or ship a smaller vertical slice first. The milestone plan (`docs/design/06-milestones.md`) already lists the PR slices per milestone.
+- Behaviour-preserving refactors, formatting and dependency bumps never share a PR with behaviour changes.
+
+## Commits
+- **Atomic:** one logical change per commit; every commit builds and passes `uv run check` (bisectable). Tests go in the same commit as the code they cover. Generated/golden updates are their own commit (`chore(golden): ...`).
+- **Conventional Commits:** `type(scope): imperative summary` (<= 72 chars), blank line, body explaining **why** (and notable trade-offs), footer with the changelog fragment id and any `BREAKING CHANGE:`. No WIP/fixup noise in the history sent for review; tidy before marking the PR ready.
+- Commit as you go, in small steps, rather than one big commit at the end.
+
+## Human review checkpoint (mandatory before any push or PR)
+**No PR is opened, and no branch is pushed, until the user has reviewed the work and said so.** For every slice:
+1. Work on the local feature branch with atomic commits; run `uv run check` until green.
+2. **Stop and present a review package**: branch name, `git log --oneline main..HEAD`, `git diff --stat main...HEAD`, what/why in a few lines, how it was verified, impact flags (SIM_VERSION/SCHEMA_VERSION/config/migration/perf), and anything uncertain. Offer to show the diff pane.
+3. **Wait** for an explicit go-ahead ("open the PR", "looks good, push it"). Silence, a thumbs-up on an earlier slice, or a previous approval of a different slice is not approval. Requested changes go in new atomic commits (or a tidy-up of unpushed history) and are re-presented.
+4. Only then: push the branch and open the PR (`gh pr create`, template filled in). The user may still review again on GitHub before merging.
+- The same checkpoint applies to the very first push: the empty remote gets `main` from the reviewed design baseline only on the user's explicit say-so.
+
+## Pull requests
+- Title = a Conventional Commit line. Description (template `.github/pull_request_template.md`): **Summary** (what and why, 2-4 bullets), **Changes** (by area), **How verified** (commands and results), **Impact** (sim_version / schema / config / migration / performance numbers), **Docs and changelog** (fragment id, docs touched), **Follow-ups**, **Checklist** (clean-code review list from section 10).
+- Open the PR only when `uv run check` is green locally. Link the relevant design section. Keep the diff free of unrelated changes.
+- Merge by **rebase-and-merge** (linear history, atomic commits preserved) after review and green T1; delete the branch after merge.
+
+## What agents may and may not do
+- May: create branches and make atomic commits locally; after the **human review checkpoint** is approved, push the feature branch and open a PR (with `gh`).
+- May not: push a branch or open a PR before the user's review; commit to or push `main`; merge a PR unless the user says so; force-push shared branches (use `--force-with-lease` only on your own branch); skip hooks (`--no-verify`) or signing; rewrite published history; delete remote branches you did not create.
+- The remote is `https://github.com/AB-Law/FootyStreams` (public; empty until the user approves the first push). `gh` is authenticated as the owner, so be extra careful: every outward action needs the checkpoint above.

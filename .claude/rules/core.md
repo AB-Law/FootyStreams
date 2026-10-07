@@ -1,0 +1,22 @@
+# Core rules (always apply)
+
+FootyStreams is a fictional football league that runs as a **24/7 live broadcast**. A failure here is visible on air. Correctness, determinism, readability and performance all matter. Long-form rationale: `docs/design/` (index: `docs/design/README.md`; standards: `11-engineering-standards.md`).
+
+## Start of a session
+- Read `docs/status.md` (current state, once it exists), then only the design sections your task touches. Check `changes/unreleased/` for recent changes.
+
+## Non-negotiables
+- **Determinism:** same seed + inputs => byte-identical event log. Randomness only via a passed `SimRng`. No global `random`, wall-clock, `hash()`, set/dict-order dependence.
+- **Pure core, impure edges:** `domain/`, `events/`, `sim/`, `league/` are pure. I/O, wall clock, asyncio and signals live only in `persistence/`, `runtime/`, `cli/`.
+- **Invariants live once** in `src/footystreams/verify/`. Tests, `--strict`, soak runs and the production pre-air gate all call it. Never re-implement a check.
+- **Performance is a feature:** budgets in `docs/design/11-engineering-standards.md` section 6. No optimisation without a profile and a benchmark; add `# Perf: <benchmark id> - <why>` to any readability-costing optimisation. No accidental O(n^2).
+- **Schemas and versions:** event/model changes bump `SCHEMA_VERSION`; changes to match output for a seed bump `SIM_VERSION` and regenerate goldens with `uv run golden update`.
+- **Never weaken** a lint rule, type rule, coverage floor, budget or invariant to get green. Fix the cause, or stop and ask.
+
+## Definition of done
+- `uv run check` passes completely (ruff, ruff format, mypy, architecture, tests, changelog check). A Stop hook enforces this at the end of every turn; do not try to bypass it.
+- A changelog fragment exists for the change (`uv run changelog new ...`); relevant design docs are updated in the same change.
+
+## Scope discipline
+- Smallest change that solves the problem. No drive-by refactors, no speculative abstractions, no new dependencies without a justification in the fragment.
+- The LLM, TTS and renderer layers are out of scope; keep the extension seams clean.

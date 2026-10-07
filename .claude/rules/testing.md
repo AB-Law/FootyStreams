@@ -1,0 +1,17 @@
+---
+paths:
+  - "tests/**/*.py"
+  - "src/**/*.py"
+---
+# Testing rules
+
+Strategy: `docs/design/10-testing-strategy.md`. Tiers: **T0** every commit (<60 s, what `uv run check` runs), **T1** PR, **T2** nightly, **T3** release.
+
+- Every change ships tests at the right level: unit (pure logic), property/hypothesis (invariants, round-trips, totality), contract (shared suites over every Protocol implementation), integration, e2e (real CLI/engine in a subprocess) as relevant.
+- **Bug fix = failing regression test first**, in `tests/regressions/test_<fragment-id>_<slug>.py`.
+- Naming `test_<unit>__<scenario>__<expected>`; arrange-act-assert; one behaviour per test; parametrise tables; no logic or loops in assertions.
+- Use `tests/factories` builders (`make_player`, `make_team_sheet`, `make_setup`, `make_world(seed)`) and `tests/helpers` assertions that call `verify/`. Do not copy fixtures. Prefer the in-memory repository to mocks; never mock our own domain objects.
+- **No flaky tests.** Randomness only from explicit seeds; no wall clock, no network (blocked by `pytest-socket`); tests run in random order. No retry plugins. A flaky test is a bug to fix now.
+- Statistical, soak, chaos, mutation and perf tests carry markers and run in T1+/T2/T3, not T0.
+- Golden files change only via `uv run golden update`, which requires a bumped `SIM_VERSION` and a fragment with `sim_version_impact`.
+- Coverage floors: >= 90% branch overall; 100% on `verify/`, `league/finance.py`, `league/standings.py`, `league/mood.py`, `sim/rng.py`, `sim/mathx.py`.

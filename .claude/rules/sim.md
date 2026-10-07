@@ -1,0 +1,13 @@
+---
+paths:
+  - "src/footystreams/sim/**/*.py"
+---
+# Simulation package rules
+
+- Pure function: `simulate_match(setup, seed, config, tables)`. **No I/O**, no logging, no imports of `persistence`, `league`, `runtime`, `cli`, `os`, `pathlib`, `sqlite3`, `sqlalchemy`, `numpy`, `random`, `time`, `datetime`.
+- Randomness only through the `SimRng` instance passed in, drawn from the named sub-stream for that concern (`play`, `discipline`, `injury`, `setpiece`, `mgr_home`, `mgr_away`, `dayform`, `review`). Never share a stream across concerns; never draw conditionally in a way that shifts another stream.
+- **Cross-platform determinism:** only exact IEEE operations (`+ - * /`, `sqrt`, comparisons). No `exp`, `log`, `sin`, `cos`, `atan`, `pow` on floats. Use `mathx.squash` / `mathx.gauss` instead. Iterate lists/tuples or sorted keys; never sets; never `hash()`/`id()`.
+- Round emitted floats at the event boundary (positions 4 dp). Event times are integer seconds.
+- Hot path: `__slots__` dataclasses for mutable state, tuples for tables, integer indices internally; Pydantic only at the boundary (events are always built through their validated model). Performance claims need a benchmark (`# Perf: <id>`).
+- Every behaviour component is a Protocol implementation selected by `SimConfig.model_profile`; add new tactical ideas as new components/modules, not edits to unrelated ones.
+- Match invariants are checked by `verify.verify_match`; do not re-implement them here.

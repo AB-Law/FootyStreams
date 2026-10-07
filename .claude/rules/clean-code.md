@@ -1,0 +1,35 @@
+---
+paths:
+  - "src/**/*.py"
+  - "tools/**/*.py"
+  - "tests/**/*.py"
+---
+# Clean code (lint-enforced where possible)
+
+Priority: **correct -> readable -> fast enough (measured) -> abstractable.** Write for the next reader; a module's single job should be clear in under a minute.
+
+## Limits
+- Function: about 25 lines, at most 30 statements; cyclomatic complexity <= 8; <= 5 parameters (use a frozen parameter object beyond that); nesting <= 3 (use guard clauses).
+- Module <= 400 lines, one public concept per module.
+- No magic numbers (named constants or config); the formula behind a number lives in a named function with a plain-words docstring.
+- No boolean flag parameters in public APIs (use an enum, two functions, or a strategy).
+- Full-word, domain-vocabulary names (`docs/glossary.md`). Banned names: `data`, `info`, `manager`, `util`, `helper`, `tmp`. Single letters only for math (`x`, `y`, `t`, `dt`, `xg`).
+- 100% type annotations, `mypy --strict`; no `Any` in `sim/` and `domain/`.
+- Docstrings on every public module/class/function: imperative one-liner, then *why*/units/ranges if not obvious. Comments explain **why**, never what.
+- Specific exceptions (`InvalidSetupError`, `ConflictError`, `SchemaVersionError`); no bare `except`; no silent `pass`; errors carry ids.
+- Immutable by default (frozen models/dataclasses, tuples); mutate only in `sim/state.py` (documented).
+
+## SOLID in this repo
+- **S** one module = one reason to change (`fatigue.py` only fatigue). Orchestrators sequence collaborators; they contain no formulas.
+- **O** extend by data/registries: roles, traits, formations, injuries, mood kinds, tactic modules, balance profiles are validated YAML/models; new event type = new registered class; new sim behaviour = new component selected by `model_profile`.
+- **L** every Protocol implementation passes the same contract test suite.
+- **I** small Protocols; the sim sees only `MatchSetup`; league sees ports, never SQLAlchemy.
+- **D** depend on abstractions you own; wire concrete implementations only in composition roots (`cli/`, `runtime/main.py`, `tests/factories`).
+
+## DRY, without over-abstraction
+- One source of truth for each concept: models -> generated JSON Schema; one invariant catalogue; one config per concern; shared maths in `mathx`; generic `JsonDocumentRepository[T]`; test builders in `tests/factories`.
+- **Rule of three:** duplicate once if cases may diverge; extract on the third occurrence, or at once if it encodes a domain rule that must never differ.
+- A Protocol needs two implementations or a concrete test/seam reason. Reader should follow at most api -> component -> helper (3 hops). No deep inheritance, no metaclass magic, no control-flow-hiding decorators.
+
+## Self-review before finishing
+Does each function do one thing? Any duplicated logic? Any hidden dependency or global? Would a newcomer understand this top-down without reading callers?
