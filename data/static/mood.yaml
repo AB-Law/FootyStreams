@@ -46,3 +46,12 @@ kind_sensitivity:
   dropped_unfairly: {ego: 0.3}
 sensitivity_floor: 0.4
 sensitivity_ceiling: 1.8
+# Rule-based modifiers from facts (docs/design/07 section 3.2). Magnitudes are strengths in [0, 1].
+rules:
+  confidence_goals: 2             # goals in one match that start a confidence surge
+  confidence_rating: 8.5          # or a match rating at least this high
+  confidence_magnitude: 0.6
+  derby_hero_magnitude: 0.8       # scored in a derby the side won
+  blamed_magnitude: 0.6           # sent off in a defeat
+  return_joy_min_days: 28         # injuries at least this long give a joy of returning
+  return_joy_magnitude: 0.7
