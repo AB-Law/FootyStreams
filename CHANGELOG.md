@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0044** Add pitch geometry, tactics view and effective skills *(M4; scope: sim)*
 - **0043** Add SimConfig with config hash and merge, and static formation tables *(M4; scope: sim)*
 - **0042** Add SimRng (xoshiro256**) and exact-arithmetic mathx helpers *(M4; scope: sim)*
 - **0038** Enforce SCHEMA_VERSION bump when schemas change *(M1; scope: tools)*
