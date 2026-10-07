@@ -6,6 +6,9 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = []
 
+[project.scripts]
+check = "footystreams.tools.check:main"
+
 [dependency-groups]
 dev = [
     "mypy>=1.11",
