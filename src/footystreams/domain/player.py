@@ -1,7 +1,6 @@
-"""Player entity: person plus physical profile, positions and attributes.
+"""Player entity: person plus physical profile, positions, attributes and condition.
 
-Contract, injury, condition, training and development fields are added in
-later M1 slices so each commit stays bisectable.
+Training and development fields are added in a later M1 slice.
 """
 
 from __future__ import annotations
@@ -19,18 +18,24 @@ from footystreams.domain.attributes import (
     PhysicalAttrs,
     TechnicalAttrs,
 )
-from footystreams.domain.base import UsageTag
+from footystreams.domain.base import DomainModel, UsageTag
+from footystreams.domain.contract import Contract
+from footystreams.domain.injury import Discipline, Injury, InjuryRecord, MoraleFactor, Suspension
 from footystreams.domain.person import Person
 from footystreams.domain.types import (
     OUTFIELD_POSITIONS,
     AbilityScore,
     Attribute,
+    ClubId,
     Competence,
+    GameDate,
+    Money,
     Position,
     PreferredFoot,
     RoleAssignment,
     RoleId,
     TraitId,
+    Unit,
 )
 
 MIN_PLAYER_HEIGHT_CM = 155
@@ -43,6 +48,8 @@ NATURAL_POSITION_FLOOR = 85
 GK_OUTFIELD_CAP = 30
 MAX_PREFERRED_ROLES = 4
 MAX_TRAITS = 6
+MAX_FORM_HISTORY = 10
+MAX_MORALE_FACTORS = 12
 DEFAULT_ROLE_FAMILIARITY = 35
 
 
@@ -64,8 +71,26 @@ class SquadStatus(StrEnum):
     FREE_AGENT = "free_agent"
 
 
+class CareerStint(DomainModel):
+    """One club spell in a player's career history."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "club_id": "L",
+        "from_date": "L",
+        "to_date": "L",
+        "apps": "L",
+        "goals": "L",
+    }
+
+    club_id: ClubId
+    from_date: GameDate
+    to_date: GameDate | None = None
+    apps: int = Field(ge=0, default=0)
+    goals: int = Field(ge=0, default=0)
+
+
 class Player(Person):
-    """A footballer: attributes, positions and physical profile."""
+    """A footballer: attributes, positions, physical profile and condition."""
 
     __usage__: ClassVar[Mapping[str, UsageTag]] = {
         **Person.__usage__,
@@ -86,6 +111,20 @@ class Player(Person):
         "hidden": "S",
         "ability_current": "L",
         "ability_potential": "L",
+        "form": "S+L",
+        "form_history": "L",
+        "morale": "S+L",
+        "morale_factors": "L",
+        "fitness": "S+L",
+        "fatigue": "S+L",
+        "match_sharpness": "S+L",
+        "current_injury": "S+L",
+        "injury_history": "L",
+        "suspension": "L",
+        "discipline": "L",
+        "contract": "L",
+        "market_value": "L",
+        "career_history": "L",
         "status": "L",
         "squad_status": "L",
         "is_youth": "L",
@@ -108,6 +147,20 @@ class Player(Person):
     hidden: HiddenAttrs
     ability_current: AbilityScore
     ability_potential: AbilityScore
+    form: Unit = 0.5
+    form_history: tuple[float, ...] = ()
+    morale: Unit = 0.5
+    morale_factors: tuple[MoraleFactor, ...] = ()
+    fitness: Unit = 1.0
+    fatigue: Unit = 0.0
+    match_sharpness: Unit = 0.5
+    current_injury: Injury | None = None
+    injury_history: tuple[InjuryRecord, ...] = ()
+    suspension: Suspension | None = None
+    discipline: Discipline = Field(default_factory=Discipline)
+    contract: Contract | None = None
+    market_value: Money = 0
+    career_history: tuple[CareerStint, ...] = ()
     status: PlayerStatus = PlayerStatus.ACTIVE
     squad_status: SquadStatus = SquadStatus.FIRST_TEAM
     is_youth: bool = False
@@ -164,4 +217,10 @@ class Player(Person):
             raise ValueError(msg)
         if len(self.traits) > MAX_TRAITS:
             msg = f"traits max {MAX_TRAITS}"
+            raise ValueError(msg)
+        if len(self.form_history) > MAX_FORM_HISTORY:
+            msg = f"form_history keeps at most {MAX_FORM_HISTORY} ratings"
+            raise ValueError(msg)
+        if len(self.morale_factors) > MAX_MORALE_FACTORS:
+            msg = f"morale_factors max {MAX_MORALE_FACTORS}"
             raise ValueError(msg)

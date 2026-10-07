@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0025** Add contract injury and player condition models *(M1; scope: domain; schema version minor)*
 - **0024** Add player attribute groups and Player core *(M1; scope: domain; schema version minor)*
 - **0023** Add Person Personality and Appearance models *(M1; scope: domain; schema version minor)*
 - **0022** Add domain primitive types, versions and canonical JSON *(M1; scope: domain; schema version minor)*
