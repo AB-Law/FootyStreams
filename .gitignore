@@ -1,23 +1,99 @@
-# Environments and caches
-.venv/
+# ---------------------------------------------------------------- Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+
+# Packaging and build output
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+wheels/
+pip-wheel-metadata/
+
+# Virtual environments (uv creates .venv; uv.lock IS committed)
+.venv/
+venv/
+env/
+ENV/
+
+# ---------------------------------------------------------------- Tooling caches and reports
 .mypy_cache/
+.dmypy.json
+dmypy.json
 .pytest_cache/
 .ruff_cache/
 .hypothesis/
+.benchmarks/
+.mutmut-cache/
+mutants/
+.tox/
+.nox/
 .coverage
+.coverage.*
+coverage.xml
 htmlcov/
+*.prof
+*.pstats
 
-# Quality-gate state (tools/hooks/gate.py)
+# Quality gate state (tools/hooks/gate.py)
 .gate/
 
-# Local databases and engine state
+# ---------------------------------------------------------------- Secrets and local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+CLAUDE.local.md
+AGENTS.local.md
+
+# ---------------------------------------------------------------- Agent / IDE state
+# Keep only the shared, committed agent configuration.
+.claude/*
+!.claude/rules/
+!.claude/settings.json
+.cursor/*
+!.cursor/rules/
+!.cursor/hooks.json
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ---------------------------------------------------------------- OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ---------------------------------------------------------------- Project runtime output
+# Databases, engine state and logs live outside version control.
 *.sqlite
+*.sqlite3
 *.sqlite-wal
 *.sqlite-shm
+*.db
+*.log
 health.json
+engine-state/
+backups/
 
-# Local agent settings
-.claude/settings.local.json
-CLAUDE.local.md
+# Generated worlds: only the committed default world is tracked.
+data/worlds/*
+!data/worlds/default/
+
+# Audio and media produced by future voice/renderer layers
+audio/
+*.wav
+*.mp3
+*.ogg
+*.mp4
+
+# Scratch space
+scratch/
+tmp/
