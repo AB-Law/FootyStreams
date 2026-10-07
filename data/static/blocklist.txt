@@ -1,0 +1,31 @@
+# Substrings that must never appear in a generated name (profanity, slurs, loaded words).
+# Matched case-insensitively against the plain-letter form of each name component.
+fuck
+fuk
+shit
+cunt
+nigg
+fagg
+rape
+nazi
+hitler
+slut
+whor
+bitch
+piss
+twat
+wank
+dick
+cock
+arse
+anus
+penis
+vagin
+kike
+spic
+coon
+chink
+paki
+tits
+turd
+damn

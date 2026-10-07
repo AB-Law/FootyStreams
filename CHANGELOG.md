@@ -48,6 +48,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0048** Add the match clock helpers and the event emitter *(M4; scope: sim, events)*
 - **0047** Add the carrier decision model *(M4; scope: sim)*
 - **0046** Add pressure model and pass, shot and dribble probability models *(M4; scope: sim)*
+- **0046** Add invented name cultures, quality gates and the unique name book *(M2; scope: data)*
 - **0045** Add static YAML tables and loaders: formations, roles, traits, injuries, climate *(M2; scope: data)*
 - **0045** Add mutable match state and the positioning model *(M4; scope: sim)*
 - **0044** Add pitch geometry, tactics view and effective skills *(M4; scope: sim)*
