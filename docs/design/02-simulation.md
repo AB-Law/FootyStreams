@@ -210,7 +210,7 @@ Constraints: window limits, cooldown (≥ 8 min between formation changes), max 
 
 ## 13. Determinism and numerics (implementation notes)
 
-- **`SimRng`** wraps a `random.Random(seed)` Mersenne Twister *instance* but exposes only `u()` (uniform [0,1)), `u_int(n)`, `choice_weighted`, `gauss()` (Irwin–Hall: `(Σ4 u − 2)·√3`), `bernoulli(p)`. Python guarantees `Random.random()` stability for a given seed across platforms/versions. `fork(label)` derives a child seed via `blake2b(seed‖label)`; child streams are independent instances.
+- **`SimRng`** is a self-contained integer generator (xoshiro256** seeded through splitmix64, ADR 0005) because the architecture rules forbid importing `random` in `sim/`. It exposes only `u()` (uniform [0,1) from 53 random bits), `u_int(n)`, `choice_weighted`, `gauss()` (Irwin–Hall: `(Σ4 u − 2)·√3`), `bernoulli(p)`, and a `draws` counter. `fork(label)` derives a child seed via `blake2b(seed‖label)`; child streams are independent instances.
 - Float outputs rounded at emit (`pos` 4 dp, probabilities 4 dp, seconds int). Serialization via `canonical_json()` (sorted keys, `ensure_ascii=False`, `separators=(",",":")`).
 - The final `match_summary` contains `log_digest = sha256(canonical NDJSON of all prior events)`; the golden test pins digests for 5 seed/team pairs; CI runs on Windows and Linux.
 - Everything is ordered: players iterated in slot order; dicts avoided in hot paths or iterated sorted.
