@@ -115,6 +115,8 @@ class MatchState:
     ball_y: float = 0.5
     chain: int = 0
     chain_started_at: float = 0.0
+    played_before_s: float = 0.0  # regulation plus added time of the periods already played
+    stoppage_s: float = 0.0  # dead time accumulated in the current period (goals, cards, ...)
     is_derby: bool = False
     attendance: int = 0
     assist_from: PlayerState | None = None  # passer of the last completed pass in this chain
@@ -127,7 +129,7 @@ class MatchState:
     @property
     def elapsed_s(self) -> float:
         """Playing seconds since kick-off, counted across periods (half-time excluded)."""
-        return (self.period - 1) * REGULATION_PERIOD_S + self.t_period
+        return self.played_before_s + self.t_period
 
     @property
     def attackers(self) -> TeamState:

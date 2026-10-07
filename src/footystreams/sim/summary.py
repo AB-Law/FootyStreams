@@ -13,7 +13,7 @@ from itertools import pairwise
 
 from footystreams.domain.match import MatchSetup, SetupRef
 from footystreams.domain.types import PlayerId
-from footystreams.events.clock import SECONDS_PER_MINUTE, match_elapsed_s
+from footystreams.events.clock import SECONDS_PER_MINUTE, period_elapsed_s
 from footystreams.events.discipline import CardEvent, FoulEvent
 from footystreams.events.open_play import GoalEvent, PassEvent, ShotEvent
 from footystreams.events.restarts import CornerEvent
@@ -125,18 +125,25 @@ _HANDLERS: dict[type, Callable[[_Tally, MatchEvent], None]] = {
 
 
 def _attribute_possession(tally: _Tally, events: Sequence[MatchEvent]) -> None:
-    """Credit each gap between events to the side that acted at its start (capped)."""
+    """Credit each gap between events of one period to the side that acted at its start."""
     for current, following in pairwise(events):
         side = tally.side(current.team)
-        if side is None or isinstance(current, GoalEvent):
+        if (
+            side is None
+            or isinstance(current, GoalEvent)
+            or current.clock.period != following.clock.period
+        ):
             continue
-        gap = match_elapsed_s(following.clock) - match_elapsed_s(current.clock)
+        gap = period_elapsed_s(following.clock) - period_elapsed_s(current.clock)
         side.possession_s += min(max(gap, 0), MAX_POSSESSION_INTERVAL_S)
 
 
 def match_duration_s(events: Sequence[MatchEvent]) -> int:
-    """Return the playing seconds of the match: the clock of the last event."""
-    return match_elapsed_s(events[-1].clock) if events else 0
+    """Return the playing seconds of the match: the last event of each period, summed."""
+    last_per_period: dict[int, int] = {}
+    for event in events:
+        last_per_period[event.clock.period] = period_elapsed_s(event.clock)
+    return sum(last_per_period.values())
 
 
 def halftime_score(events: Sequence[MatchEvent]) -> tuple[int, int]:

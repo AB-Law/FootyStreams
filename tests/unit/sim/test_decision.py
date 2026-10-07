@@ -42,7 +42,7 @@ def test_threat__central_beats_wide_and_is_monotone_in_x() -> None:
 
 def test_urgency__trailing_late_is_positive_leading_late_is_negative_early_is_zero() -> None:
     state = _state()
-    state.period, state.t_period = 2, 2000.0
+    state.period, state.t_period, state.played_before_s = 2, 2000.0, 2700.0
     state.home.score, state.away.score = 0, 2
     assert urgency(state) > 0.5
     state.home.score, state.away.score = 2, 0

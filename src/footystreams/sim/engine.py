@@ -13,7 +13,12 @@ from footystreams.domain.match import MatchSetup
 from footystreams.domain.referee import Referee
 from footystreams.events.base import EventBase
 from footystreams.events.digest import log_digest
-from footystreams.events.structure import FulltimeEvent, HalftimeEvent, KickoffEvent
+from footystreams.events.structure import (
+    AddedTimeEvent,
+    FulltimeEvent,
+    HalftimeEvent,
+    KickoffEvent,
+)
 from footystreams.events.summary import MatchSummaryEvent
 from footystreams.events.types import MatchEvent
 from footystreams.sim.actions.challenge import attempt_press_tackle
@@ -32,6 +37,7 @@ from footystreams.sim.referee import referee_profile
 from footystreams.sim.rng import SimRng
 from footystreams.sim.side import Side
 from footystreams.sim.state import REGULATION_PERIOD_S, MatchState, build_state
+from footystreams.sim.stoppage import SECONDS_PER_MINUTE, added_minutes
 from footystreams.sim.summary import SummaryInputs, build_summary
 from footystreams.sim.tables import StaticTables
 
@@ -90,9 +96,14 @@ class MatchEngine:
         for period in PERIODS:
             self._start_period(period)
             yield from self._emitter.drain()
-            while state.t_period < REGULATION_PERIOD_S:
+            added, announced = 0, False
+            while state.t_period < REGULATION_PERIOD_S + added * SECONDS_PER_MINUTE:
                 self._step()
                 yield from self._emitter.drain()
+                if not announced and state.t_period >= REGULATION_PERIOD_S:
+                    added, announced = self._announce_added_time(period), True
+                    yield from self._emitter.drain()
+            state.played_before_s += REGULATION_PERIOD_S + added * SECONDS_PER_MINUTE
             if period == PERIODS[0]:
                 self._emit_marker(
                     HalftimeEvent, score_home=state.home.score, score_away=state.away.score
@@ -101,9 +112,19 @@ class MatchEngine:
         yield from self._emitter.drain()
         yield self._summary_event()
 
+    def _announce_added_time(self, period: int) -> int:
+        """Emit the added-time board (when enabled) and return the announced minutes."""
+        cfg = self._config.stoppage
+        if not cfg.enabled:
+            return 0
+        generosity = self._play.referee.added_time_generosity
+        minutes = added_minutes(self._state.stoppage_s, generosity, period, cfg)
+        self._emit_marker(AddedTimeEvent, minutes=minutes)
+        return minutes
+
     def _start_period(self, period: int) -> None:
         state = self._state
-        state.period, state.t_period = period, 0.0
+        state.period, state.t_period, state.stoppage_s = period, 0.0, 0.0
         kicking: Side = "home" if period == PERIODS[0] else "away"
         if period != PERIODS[0]:
             state.home.attack_dir, state.away.attack_dir = -1, 1

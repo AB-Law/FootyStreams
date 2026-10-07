@@ -216,4 +216,6 @@ def score_goal(play: Play, shot_id: str, assist: str | None) -> float:
     state.chain_started_at = state.elapsed_s
     state.assist_from = None
     tempo = play.cfg.tempo
-    return tempo.celebration_s + tempo.celebration_spread_s * (play.rng.u() - 0.5) * 2.0
+    seconds = tempo.celebration_s + tempo.celebration_spread_s * (play.rng.u() - 0.5) * 2.0
+    state.stoppage_s += seconds
+    return seconds

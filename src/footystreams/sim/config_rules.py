@@ -168,3 +168,27 @@ class OffsideConfig(DomainModel):
     call_consistency: float = 0.10  # more of it for a consistent referee
     margin_min: float = 0.004  # frame-x distance a sharp mover keeps from the line
     margin_range: float = 0.03  # extra distance for a player with no off-ball movement
+
+
+class StoppageConfig(DomainModel):
+    """Added time: how much stoppage becomes announced minutes (docs/design/02 section 12)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "enabled": "S",
+        "minutes_per_stoppage": "S",
+        "generosity_base": "S",
+        "generosity_swing": "S",
+        "first_half_min": "S",
+        "first_half_max": "S",
+        "second_half_min": "S",
+        "second_half_max": "S",
+    }
+
+    enabled: bool = False  # switched on in the commit that enables M5 behaviour
+    minutes_per_stoppage: float = 0.65  # share of stopped time that is added back
+    generosity_base: float = 0.7  # a stingy referee adds 0.7x, a generous one 1.3x
+    generosity_swing: float = 0.6
+    first_half_min: int = Field(ge=0, default=1)
+    first_half_max: int = Field(ge=0, default=8)
+    second_half_min: int = Field(ge=0, default=2)
+    second_half_max: int = Field(ge=0, default=10)

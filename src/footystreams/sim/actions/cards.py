@@ -98,4 +98,6 @@ def show_card(play: Play, offender: PlayerState, contact: Contact, foul_id: str)
             state.assist_from = None
         dismiss(team, offender)
     cfg = play.cfg.discipline
-    return restart_delay(play, cfg.card_s, cfg.card_spread_s)
+    seconds = restart_delay(play, cfg.card_s, cfg.card_spread_s)
+    state.stoppage_s += seconds
+    return seconds

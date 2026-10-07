@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0069** Add announced added time *(M5; scope: sim)*
 - **0068** Add offside: line-hugging attackers and flagged passes with an indirect free kick *(M5; scope: sim)*
 - **0067** Add penalties and free-kick shots and crosses *(M5; scope: sim)*
 - **0066** Add throw-ins, goal kicks, corners with an aerial duel and out-of-play detection *(M5; scope: sim)*
