@@ -46,6 +46,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0050** Resolve dribbles and clearances *(M4; scope: sim)*
 - **0049** Resolve passes: completion, interception, loose ball and out of play *(M4; scope: sim)*
 - **0048** Add the match clock helpers and the event emitter *(M4; scope: sim, events)*
+- **0048** Add manager and staff generators with tactic presets and style prototypes *(M2; scope: data)*
 - **0047** Add the player generator: archetypes, spiky attributes, positions, personality and contracts *(M2; scope: data)*
 - **0047** Add the carrier decision model *(M4; scope: sim)*
 - **0046** Add pressure model and pass, shot and dribble probability models *(M4; scope: sim)*
