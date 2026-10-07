@@ -77,7 +77,7 @@ class MatchEngine:
         self._setup = setup
         self._seed = seed
         self._config = config
-        self._state: MatchState = build_state(setup, tables, streams["dayform"])
+        self._state: MatchState = build_state(setup, tables, streams["dayform"], config)
         self._emitter = EventEmitter(setup.match_id)
         self._play = Play(
             self._state,

@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0073** Add weather and pitch conditions *(M6; scope: sim)*
 - **0070** Extend verify_match with M07 (dismissed players), M11 (card logic, men counts) and M12 (sequencing) *(M5; scope: verify, sim)*
 - **0069** Add announced added time *(M5; scope: sim)*
 - **0068** Add offside: line-hugging attackers and flagged passes with an indirect free kick *(M5; scope: sim)*
