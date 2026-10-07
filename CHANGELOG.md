@@ -162,6 +162,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0001** Add the Phase 1 design document set (entities, simulation, events, architecture, seeding, milestones). *(design; scope: design)*
 
 ### Build and tooling
+- **0143** Run the test tiers in parallel with pytest-xdist *(M9; scope: tools)*
 - **0073** Bump SIM_VERSION to 0.1.1 and SCHEMA_VERSION to 0.1.4, add two golden cases *(M4; scope: schemas; sim version patch; schema version patch)*
 - **0018** Add the CI workflow and CODEOWNERS *(M0; scope: ci)*
 - **0010** Add test plugins, Hypothesis profiles, a coverage floor and the 'pr' tier of 'uv run check'. *(M0; scope: tools, ci)*
