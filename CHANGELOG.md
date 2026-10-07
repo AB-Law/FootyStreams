@@ -9,6 +9,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0029** Add Club Stadium Fanbase Finance and Board *(M1; scope: domain; schema version minor)*
+- **0028** Add TeamTactics module package *(M1; scope: domain; schema version minor)*
+- **0027** Add Manager Staff and Referee models *(M1; scope: domain; schema version minor)*
 - **0026** Add RoleCatalog ratings valuation and PlayerProfile *(M1; scope: domain; schema version minor)*
 - **0025** Add contract injury and player condition models *(M1; scope: domain; schema version minor)*
 - **0024** Add player attribute groups and Player core *(M1; scope: domain; schema version minor)*
