@@ -44,6 +44,118 @@ class PositionConfig(DomainModel):
     speed_range_mps: float = 3.5
 
 
+class PressureConfig(DomainModel):
+    """Pressure on the carrier and openness of a pass target (docs/design/02 section 4.2)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "radius_base_m": "S",
+        "radius_range_m": "S",
+        "presser_floor": "S",
+        "open_distance_m": "S",
+        "lane_clear_m": "S",
+        "open_weight": "S",
+    }
+
+    radius_base_m: float = 3.0
+    radius_range_m: float = 8.0  # extra radius at full pressing intensity
+    presser_floor: float = 0.4  # share of a presser's pressure that every defender brings
+    open_distance_m: float = 8.0  # distance to the nearest opponent that counts as fully open
+    lane_clear_m: float = 4.0  # defender distance to the passing lane that counts as clear
+    open_weight: float = 0.55  # share of openness from the receiver's own space vs the lane
+
+
+class PassConfig(DomainModel):
+    """Pass classification and success model (docs/design/02 section 5.3)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "base_short": "S",
+        "base_long": "S",
+        "base_through": "S",
+        "base_cross": "S",
+        "base_back": "S",
+        "length_penalty_per_m": "S",
+        "skill_swing": "S",
+        "skill_pivot": "S",
+        "skill_scale": "S",
+        "receiver_touch_weight": "S",
+        "pressure_penalty": "S",
+        "openness_penalty": "S",
+        "min_probability": "S",
+        "max_probability": "S",
+        "long_pass_m": "S",
+        "cross_min_frame_x": "S",
+        "cross_wide_offset": "S",
+        "through_min_gain": "S",
+        "through_min_length_m": "S",
+    }
+
+    base_short: float = 0.98
+    base_long: float = 0.80
+    base_through: float = 0.74
+    base_cross: float = 0.62
+    base_back: float = 1.0
+    length_penalty_per_m: float = 0.0035
+    skill_swing: float = 0.5
+    skill_pivot: float = 55.0
+    skill_scale: float = 25.0
+    receiver_touch_weight: float = 0.10
+    pressure_penalty: float = 0.30
+    openness_penalty: float = 0.20
+    min_probability: float = 0.02
+    max_probability: float = 0.985
+    long_pass_m: float = 32.0
+    cross_min_frame_x: float = 0.62
+    cross_wide_offset: float = 0.28
+    through_min_gain: float = 0.15
+    through_min_length_m: float = 15.0
+
+
+class ShotConfig(DomainModel):
+    """Shot quality (xG) model (docs/design/02 section 5.3)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "range_m": "S",
+        "xg_cap": "S",
+        "xg_half": "S",
+        "pressure_penalty": "S",
+        "finishing_floor": "S",
+        "finishing_span": "S",
+        "min_xg": "S",
+        "long_range_m": "S",
+    }
+
+    range_m: float = 35.0
+    xg_cap: float = 0.75
+    xg_half: float = 0.44  # geometry constant: larger means lower xG from every spot
+    pressure_penalty: float = 0.5
+    finishing_floor: float = 0.80
+    finishing_span: float = 0.40
+    min_xg: float = 0.02
+    long_range_m: float = 20.0  # beyond this the shooter's long_shots replaces finishing
+
+
+class DribbleConfig(DomainModel):
+    """Dribble success model."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "base": "S",
+        "swing": "S",
+        "scale": "S",
+        "pressure_penalty": "S",
+        "min_probability": "S",
+        "max_probability": "S",
+        "distance_m": "S",
+    }
+
+    base: float = 0.55
+    swing: float = 0.45
+    scale: float = 20.0
+    pressure_penalty: float = 0.15
+    min_probability: float = 0.05
+    max_probability: float = 0.95
+    distance_m: float = 8.0  # how far a dribble carries the ball
+
+
 class SimConfig(DomainModel):
     """Top-level simulation configuration (defaults are the shipped balance)."""
 
@@ -53,6 +165,10 @@ class SimConfig(DomainModel):
         "frame_interval_s": "S",
         "home_advantage_scale": "S",
         "positioning": "S",
+        "pressure": "S",
+        "passing": "S",
+        "shot": "S",
+        "dribble": "S",
     }
 
     model_profile: str = "v1"
@@ -60,6 +176,10 @@ class SimConfig(DomainModel):
     frame_interval_s: int = Field(ge=1, le=60, default=1)
     home_advantage_scale: float = Field(ge=0.0, le=3.0, default=1.0)
     positioning: PositionConfig = Field(default_factory=PositionConfig)
+    pressure: PressureConfig = Field(default_factory=PressureConfig)
+    passing: PassConfig = Field(default_factory=PassConfig)
+    shot: ShotConfig = Field(default_factory=ShotConfig)
+    dribble: DribbleConfig = Field(default_factory=DribbleConfig)
 
 
 def config_hash(config: SimConfig) -> str:

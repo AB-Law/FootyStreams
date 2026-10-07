@@ -10,6 +10,8 @@ from __future__ import annotations
 
 from math import sqrt
 
+Point = tuple[float, float]
+
 PITCH_LENGTH_M = 105.0
 PITCH_WIDTH_M = 68.0
 GOAL_WIDTH_M = 7.32
@@ -40,9 +42,6 @@ def squared_distance_m(x1: float, y1: float, x2: float, y2: float) -> float:
 def goal_distance_m(frame_x: float, frame_y: float) -> float:
     """Return the distance from a frame point to the centre of the goal it attacks."""
     return distance_m(frame_x, frame_y, 1.0, CENTRE)
-
-
-Point = tuple[float, float]
 
 
 def segment_distance_m(point: Point, start: Point, end: Point) -> float:
