@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0026** Add RoleCatalog ratings valuation and PlayerProfile *(M1; scope: domain; schema version minor)*
 - **0025** Add contract injury and player condition models *(M1; scope: domain; schema version minor)*
 - **0024** Add player attribute groups and Player core *(M1; scope: domain; schema version minor)*
 - **0023** Add Person Personality and Appearance models *(M1; scope: domain; schema version minor)*
