@@ -1,0 +1,20 @@
+# Injury types. Durations are in-world days. weight: relative frequency within the same severity.
+injuries:
+  dead_leg: {label: "Dead leg", body_part: thigh, severity: knock, min_days: 0, max_days: 4, weight: 3.0, recurrence: 0.02}
+  bruised_shin: {label: "Bruised shin", body_part: shin, severity: knock, min_days: 0, max_days: 5, weight: 2.5, recurrence: 0.02}
+  twisted_knee: {label: "Twisted knee", body_part: knee, severity: knock, min_days: 1, max_days: 6, weight: 2.0, recurrence: 0.04}
+  cut_head: {label: "Cut to the head", body_part: head, severity: knock, min_days: 0, max_days: 3, weight: 1.0, recurrence: 0.0}
+  hamstring_strain: {label: "Hamstring strain", body_part: hamstring, severity: minor, min_days: 7, max_days: 21, weight: 3.0, recurrence: 0.12}
+  calf_strain: {label: "Calf strain", body_part: calf, severity: minor, min_days: 7, max_days: 18, weight: 2.0, recurrence: 0.10}
+  groin_strain: {label: "Groin strain", body_part: groin, severity: minor, min_days: 8, max_days: 20, weight: 2.0, recurrence: 0.10}
+  ankle_knock: {label: "Ankle knock", body_part: ankle, severity: minor, min_days: 5, max_days: 14, weight: 2.5, recurrence: 0.06}
+  back_spasm: {label: "Back spasm", body_part: back, severity: minor, min_days: 6, max_days: 16, weight: 1.0, recurrence: 0.10}
+  ankle_sprain: {label: "Ankle sprain", body_part: ankle, severity: moderate, min_days: 21, max_days: 45, weight: 3.0, recurrence: 0.08}
+  knee_ligament_sprain: {label: "Knee ligament sprain", body_part: knee, severity: moderate, min_days: 28, max_days: 56, weight: 2.0, recurrence: 0.08}
+  torn_hamstring: {label: "Torn hamstring", body_part: hamstring, severity: moderate, min_days: 28, max_days: 60, weight: 2.0, recurrence: 0.15}
+  broken_toe: {label: "Broken toe", body_part: foot, severity: moderate, min_days: 21, max_days: 42, weight: 1.0, recurrence: 0.0}
+  concussion: {label: "Concussion", body_part: head, severity: moderate, min_days: 14, max_days: 28, weight: 1.0, recurrence: 0.05}
+  cruciate_ligament_tear: {label: "Cruciate ligament tear", body_part: knee, severity: severe, min_days: 150, max_days: 270, weight: 2.0, recurrence: 0.10}
+  broken_leg: {label: "Broken leg", body_part: leg, severity: severe, min_days: 90, max_days: 180, weight: 1.0, recurrence: 0.02}
+  achilles_rupture: {label: "Achilles rupture", body_part: achilles, severity: severe, min_days: 180, max_days: 300, weight: 1.0, recurrence: 0.08}
+  broken_collarbone: {label: "Broken collarbone", body_part: shoulder, severity: severe, min_days: 70, max_days: 120, weight: 1.0, recurrence: 0.02}

@@ -1,0 +1,33 @@
+# Player traits ("preferred moves"). usage S = read by the match simulation, R = reserved for later.
+# positions: empty = any. weight: relative frequency among eligible players.
+traits:
+  shoots_from_distance: {label: "Shoots from distance", usage: S, positions: [AM, CM, RM, LM, RW, LW, SS, ST], weight: 1.0}
+  cuts_inside_from_left: {label: "Cuts inside from the left", usage: S, positions: [LW, LM, LWB], weight: 1.2}
+  cuts_inside_from_right: {label: "Cuts inside from the right", usage: S, positions: [RW, RM, RWB], weight: 1.2}
+  dives_into_tackles: {label: "Dives into tackles", usage: S, positions: [CB, DM, CM, RB, LB], weight: 0.8}
+  stays_on_feet: {label: "Stays on his feet", usage: S, positions: [CB, DM, RB, LB], weight: 0.8}
+  long_throws: {label: "Takes long throw-ins", usage: S, positions: [RB, LB, RWB, LWB, CB], weight: 0.5}
+  penalty_specialist: {label: "Penalty specialist", usage: S, positions: [AM, CM, SS, ST, RW, LW], weight: 0.6}
+  set_piece_specialist: {label: "Set-piece specialist", usage: S, positions: [AM, CM, RM, LM, RW, LW], weight: 0.7}
+  tries_killer_balls: {label: "Tries killer balls", usage: S, positions: [AM, CM, DM, SS], weight: 0.8}
+  runs_with_ball_often: {label: "Runs with the ball often", usage: S, positions: [RW, LW, RM, LM, AM, RB, LB, RWB, LWB], weight: 0.9}
+  plays_short_simple_passes: {label: "Plays short simple passes", usage: S, positions: [DM, CM, CB, RB, LB], weight: 1.0}
+  likes_to_beat_offside_trap: {label: "Likes to beat the offside trap", usage: S, positions: [ST, SS, RW, LW], weight: 0.9}
+  argues_with_officials: {label: "Argues with officials", usage: S, weight: 0.5}
+  comes_for_crosses: {label: "Comes for crosses", usage: S, positions: [GK], weight: 1.0}
+  rushes_out_of_goal: {label: "Rushes out of goal", usage: S, positions: [GK], weight: 0.7}
+  plays_with_back_to_goal: {label: "Plays with back to goal", usage: R, positions: [ST, SS], weight: 0.8}
+  moves_into_channels: {label: "Moves into channels", usage: R, positions: [ST, SS, RW, LW], weight: 0.8}
+  gets_forward_whenever_possible: {label: "Gets forward whenever possible", usage: R, positions: [RB, LB, RWB, LWB, CM], weight: 0.9}
+  hugs_line: {label: "Hugs the touchline", usage: R, positions: [RW, LW, RM, LM, RWB, LWB], weight: 0.9}
+  tries_to_play_way_out_of_trouble: {label: "Tries to play his way out of trouble", usage: R, weight: 0.5}
+  likes_to_switch_ball_to_other_flank: {label: "Likes to switch the ball", usage: R, positions: [CM, DM, CB, AM], weight: 0.8}
+  dictates_tempo: {label: "Dictates the tempo", usage: R, positions: [DM, CM, AM], weight: 0.7}
+  knocks_ball_past_opponent: {label: "Knocks the ball past the opponent", usage: R, positions: [RW, LW, ST, SS], weight: 0.8}
+  marks_tightly: {label: "Marks tightly", usage: R, positions: [CB, DM, RB, LB], weight: 0.8}
+  stops_play: {label: "Stops play (wastes time)", usage: R, positions: [GK, CB, DM], weight: 0.4}
+  dwells_on_ball: {label: "Dwells on the ball", usage: R, weight: 0.5}
+  hits_free_kicks_with_power: {label: "Hits free kicks with power", usage: R, positions: [CM, AM, CB, ST], weight: 0.5}
+  tracks_back: {label: "Tracks back", usage: R, positions: [RW, LW, RM, LM, ST, SS], weight: 0.9}
+  plays_no_nonsense: {label: "Plays no-nonsense football", usage: R, positions: [CB, DM, RB, LB, GK], weight: 0.8}
+  looks_for_pass_rather_than_attempting_to_score: {label: "Looks for a pass rather than a shot", usage: R, positions: [AM, SS, ST, RW, LW], weight: 0.6}
