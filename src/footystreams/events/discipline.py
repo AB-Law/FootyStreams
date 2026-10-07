@@ -9,7 +9,7 @@ from pydantic import Field
 
 from footystreams.domain.base import DomainModel, UsageTag
 from footystreams.domain.types import PlayerId
-from footystreams.events.base import EventBase
+from footystreams.events.base import EventBase, event_usage
 from footystreams.events.context import EventContext
 
 
@@ -25,6 +25,13 @@ class TacticsChange(DomainModel):
 class FoulEvent(EventBase):
     """A foul."""
 
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(
+        ctx="S",
+        fouler_id="S",
+        fouled_id="S",
+        severity="S",
+    )
+
     type: Literal["foul"] = "foul"
     ctx: EventContext = Field(default_factory=EventContext)
     fouler_id: PlayerId
@@ -35,6 +42,13 @@ class FoulEvent(EventBase):
 class CardEvent(EventBase):
     """A yellow or red card."""
 
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(
+        ctx="S",
+        player_id="S",
+        colour="S",
+        reason="S",
+    )
+
     type: Literal["card"] = "card"
     ctx: EventContext = Field(default_factory=EventContext)
     player_id: PlayerId
@@ -44,6 +58,17 @@ class CardEvent(EventBase):
 
 class InjuryEvent(EventBase):
     """An in-match injury stoppage (apparent only)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(
+        ctx="S",
+        player_id="S",
+        cause="S",
+        body_part="S",
+        apparent_severity="S",
+        can_continue="S",
+        stoppage_s="S",
+        caused_by_player_id="S",
+    )
 
     type: Literal["injury"] = "injury"
     ctx: EventContext = Field(default_factory=EventContext)
@@ -59,6 +84,13 @@ class InjuryEvent(EventBase):
 class SubstitutionEvent(EventBase):
     """A substitution."""
 
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(
+        ctx="S",
+        player_off_id="S",
+        player_on_id="S",
+        reason="S",
+    )
+
     type: Literal["substitution"] = "substitution"
     ctx: EventContext = Field(default_factory=EventContext)
     player_off_id: PlayerId
@@ -69,6 +101,8 @@ class SubstitutionEvent(EventBase):
 class TacticalChangeEvent(EventBase):
     """In-match tactics patch."""
 
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(ctx="S", changes="S")
+
     type: Literal["tactical_change"] = "tactical_change"
     ctx: EventContext = Field(default_factory=EventContext)
     changes: tuple[TacticsChange, ...] = ()
@@ -76,6 +110,12 @@ class TacticalChangeEvent(EventBase):
 
 class ReviewEvent(EventBase):
     """Video review outcome."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(
+        ctx="S",
+        subject_event_id="S",
+        outcome="S",
+    )
 
     type: Literal["review"] = "review"
     ctx: EventContext = Field(default_factory=EventContext)

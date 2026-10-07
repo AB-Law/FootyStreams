@@ -10,6 +10,25 @@ from pydantic import Field
 from footystreams.domain.base import DomainModel, UsageTag
 from footystreams.domain.types import MatchId, PlayerId, Pos
 
+EVENT_BASE_USAGE: Mapping[str, UsageTag] = {
+    "id": "S",
+    "match_id": "S",
+    "seq": "S",
+    "tick": "S",
+    "type": "S",
+    "clock": "S",
+    "team": "S",
+    "participants": "S",
+    "pos": "S",
+    "caused_by": "S",
+    "chain_id": "S",
+}
+
+
+def event_usage(**fields: UsageTag) -> Mapping[str, UsageTag]:
+    """Merge shared EventBase tags with subclass-specific field tags."""
+    return {**EVENT_BASE_USAGE, **fields}
+
 
 class MatchClock(DomainModel):
     """Displayed match clock at emit time."""
@@ -40,21 +59,13 @@ class Participant(DomainModel):
 
 
 class EventBase(DomainModel):
-    """Shared fields for every match event."""
+    """Shared fields for every match event.
 
-    __usage__: ClassVar[Mapping[str, UsageTag]] = {
-        "id": "S",
-        "match_id": "S",
-        "seq": "S",
-        "tick": "S",
-        "type": "S",
-        "clock": "S",
-        "team": "S",
-        "participants": "S",
-        "pos": "S",
-        "caused_by": "S",
-        "chain_id": "S",
-    }
+    Concrete event subclasses must set ``__usage__ = event_usage(...)`` so
+    subclass-only fields are tagged; inheriting this ClassVar alone is not enough.
+    """
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = EVENT_BASE_USAGE
 
     id: str
     match_id: MatchId

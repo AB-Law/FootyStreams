@@ -1,0 +1,1 @@
+{"additionalProperties":false,"description":"City and nation of birth for commentary colour.","properties":{"city":{"maxLength":40,"minLength":1,"title":"City","type":"string"},"nation":{"title":"Nation","type":"string"}},"required":["city","nation"],"title":"Birthplace","type":"object"}

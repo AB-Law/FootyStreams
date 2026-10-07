@@ -1,0 +1,1 @@
+{"additionalProperties":false,"description":"Soft cultural values and tags.","properties":{"tags":{"default":[],"items":{"type":"string"},"title":"Tags","type":"array"},"values":{"additionalProperties":{"type":"number"},"title":"Values","type":"object"}},"title":"ClubCulture","type":"object"}

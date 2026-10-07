@@ -41,6 +41,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0004** Revise design for extensible tactics, attribute types, voice, runtime engine; add agent rules, end-of-turn gate and git workflow. *(design; scope: design, ci, tools)*
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
+### Fixed
+- **0041** Close M1 test gaps for union usage and aggregates *(M1; scope: domain, events, docs; schema version patch)*
+
 ### Removed
 - **0008** Remove the Cursor rules generator; keep plain, hand-maintained .cursor/rules copies. *(design; scope: tools, design)*
 

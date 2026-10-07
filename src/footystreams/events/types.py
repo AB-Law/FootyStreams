@@ -49,7 +49,7 @@ from footystreams.events.structure import (
 )
 from footystreams.events.summary import MatchSummaryEvent
 
-_EVENT_CLASSES = (
+EVENT_CLASSES = (
     KickoffEvent,
     FrameEvent,
     AddedTimeEvent,
@@ -123,5 +123,5 @@ MatchEvent = Annotated[
 MATCH_EVENT_ADAPTER: TypeAdapter[MatchEvent] = TypeAdapter(MatchEvent)
 
 EVENT_TYPE_NAMES: tuple[str, ...] = tuple(
-    str(cls.model_fields["type"].default) for cls in _EVENT_CLASSES
+    str(cls.model_fields["type"].default) for cls in EVENT_CLASSES
 )

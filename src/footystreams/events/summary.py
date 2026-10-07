@@ -10,7 +10,7 @@ from pydantic import Field
 from footystreams.domain.base import DomainModel, UsageTag
 from footystreams.domain.types import PlayerId, Unit
 from footystreams.domain.versions import SCHEMA_VERSION, SIM_VERSION
-from footystreams.events.base import EventBase
+from footystreams.events.base import EventBase, event_usage
 from footystreams.events.context import EventContext
 
 
@@ -122,6 +122,8 @@ class MatchSummary(DomainModel):
 
 class MatchSummaryEvent(EventBase):
     """Final event carrying the MatchSummary payload."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(ctx="S", summary="L")
 
     type: Literal["match_summary"] = "match_summary"
     ctx: EventContext = Field(default_factory=EventContext)

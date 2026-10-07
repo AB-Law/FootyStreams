@@ -1,0 +1,1 @@
+{"additionalProperties":false,"description":"Lightweight person pointer for assistants/video officials.","properties":{"id":{"title":"Id","type":"string"},"known_as":{"maxLength":40,"minLength":1,"title":"Known As","type":"string"}},"required":["id","known_as"],"title":"PersonRef","type":"object"}

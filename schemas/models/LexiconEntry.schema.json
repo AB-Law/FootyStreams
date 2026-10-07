@@ -1,0 +1,1 @@
+{"additionalProperties":false,"description":"Pronunciation lexicon entry.","properties":{"ipa":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"title":"Ipa"},"respelling":{"title":"Respelling","type":"string"},"token":{"title":"Token","type":"string"}},"required":["token","respelling"],"title":"LexiconEntry","type":"object"}

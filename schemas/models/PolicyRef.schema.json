@@ -1,0 +1,1 @@
+{"additionalProperties":false,"description":"Which ManagerPolicy built in-match decisions.","properties":{"policy_id":{"title":"Policy Id","type":"string"},"policy_version":{"title":"Policy Version","type":"string"}},"required":["policy_id","policy_version"],"title":"PolicyRef","type":"object"}

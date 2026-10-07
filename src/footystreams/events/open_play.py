@@ -2,17 +2,28 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from collections.abc import Mapping
+from typing import ClassVar, Literal
 
 from pydantic import Field
 
+from footystreams.domain.base import UsageTag
 from footystreams.domain.types import PlayerId, Unit
-from footystreams.events.base import EventBase
+from footystreams.events.base import EventBase, event_usage
 from footystreams.events.context import EventContext
 
 
 class PassEvent(EventBase):
     """A pass attempt."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(
+        ctx="S",
+        from_player_id="S",
+        to_player_id="S",
+        outcome="S",
+        length_m="S",
+        key_pass="S",  # noqa: S106 — football "key pass", not a password
+    )
 
     type: Literal["pass"] = "pass"
     ctx: EventContext = Field(default_factory=EventContext)
@@ -26,6 +37,12 @@ class PassEvent(EventBase):
 class DribbleEvent(EventBase):
     """A take-on / carry."""
 
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(
+        ctx="S",
+        player_id="S",
+        outcome="S",
+    )
+
     type: Literal["dribble"] = "dribble"
     ctx: EventContext = Field(default_factory=EventContext)
     player_id: PlayerId
@@ -34,6 +51,13 @@ class DribbleEvent(EventBase):
 
 class TackleEvent(EventBase):
     """A tackle attempt."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(
+        ctx="S",
+        player_id="S",
+        target_id="S",
+        outcome="S",
+    )
 
     type: Literal["tackle"] = "tackle"
     ctx: EventContext = Field(default_factory=EventContext)
@@ -45,6 +69,8 @@ class TackleEvent(EventBase):
 class InterceptionEvent(EventBase):
     """An interception."""
 
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(ctx="S", player_id="S")
+
     type: Literal["interception"] = "interception"
     ctx: EventContext = Field(default_factory=EventContext)
     player_id: PlayerId
@@ -53,6 +79,8 @@ class InterceptionEvent(EventBase):
 class ClearanceEvent(EventBase):
     """A clearance."""
 
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(ctx="S", player_id="S")
+
     type: Literal["clearance"] = "clearance"
     ctx: EventContext = Field(default_factory=EventContext)
     player_id: PlayerId
@@ -60,6 +88,14 @@ class ClearanceEvent(EventBase):
 
 class ShotEvent(EventBase):
     """A shot attempt."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(
+        ctx="S",
+        player_id="S",
+        xg="S",
+        outcome="S",
+        assist_id="S",
+    )
 
     type: Literal["shot"] = "shot"
     ctx: EventContext = Field(default_factory=EventContext)
@@ -72,6 +108,12 @@ class ShotEvent(EventBase):
 class SaveEvent(EventBase):
     """A goalkeeper save."""
 
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(
+        ctx="S",
+        keeper_id="S",
+        shot_event_id="S",
+    )
+
     type: Literal["save"] = "save"
     ctx: EventContext = Field(default_factory=EventContext)
     keeper_id: PlayerId
@@ -80,6 +122,14 @@ class SaveEvent(EventBase):
 
 class GoalEvent(EventBase):
     """A confirmed goal."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(
+        ctx="S",
+        scorer_id="S",
+        assist_id="S",
+        shot_event_id="S",
+        own_goal="S",
+    )
 
     type: Literal["goal"] = "goal"
     ctx: EventContext = Field(default_factory=EventContext)
@@ -91,6 +141,8 @@ class GoalEvent(EventBase):
 
 class OffsideEvent(EventBase):
     """An offside offence."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = event_usage(ctx="S", player_id="S")
 
     type: Literal["offside"] = "offside"
     ctx: EventContext = Field(default_factory=EventContext)

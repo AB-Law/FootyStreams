@@ -1,0 +1,1 @@
+{"additionalProperties":false,"description":"Pending facility improvement.","properties":{"cost":{"minimum":0,"title":"Cost","type":"integer"},"kind":{"title":"Kind","type":"string"},"to_level":{"maximum":100,"minimum":1,"title":"To Level","type":"integer"}},"required":["kind","to_level","cost"],"title":"FacilityUpgrade","type":"object"}
