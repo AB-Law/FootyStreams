@@ -11,6 +11,7 @@ from footystreams.verify.league import (
     check_results,
     check_season_complete,
     check_squads,
+    check_transfers,
 )
 from footystreams.verify.violation import Violation, format_violations
 from footystreams.verify.world import verify_world
@@ -26,6 +27,7 @@ __all__ = [
     "check_results",
     "check_season_complete",
     "check_squads",
+    "check_transfers",
     "format_violations",
     "verify_world",
 ]

@@ -11,10 +11,10 @@ from sqlalchemy import Engine
 from footystreams.cli.league_wiring import build_engine, build_prospects, load_league_tables
 from footystreams.domain.competition import Season
 from footystreams.domain.transfer import OUTSIDE_WORLD
-from footystreams.domain.types import ClubId
+from footystreams.domain.types import ClubId, PlayerId
 from footystreams.domain.world import World
 from footystreams.league.clock import read_date
-from footystreams.league.report import format_money, format_table
+from footystreams.league.report import format_money, format_table, format_transfers
 from footystreams.league.season import SeasonResult, SeasonRunner, current_season
 from footystreams.persistence.memory_impl import InMemoryDatabase, InMemoryUnitOfWork
 from footystreams.persistence.ports import NotFoundError, UnitOfWork, UnitOfWorkFactory
@@ -41,6 +41,9 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--matchday", type=int, help="stop after this matchday has been played")
     parser.add_argument(
         "--seasons", type=int, help="play this many seasons, with the off-season between them"
+    )
+    parser.add_argument(
+        "--transfers", action="store_true", help="also list every completed transfer"
     )
     parser.add_argument(
         "--season-only", action="store_true", help="play the current season to its end (default)"
@@ -86,8 +89,21 @@ def _open(arguments: argparse.Namespace) -> tuple[UnitOfWorkFactory, Engine | No
     return sql, engine
 
 
+def _print_transfers(factory: UnitOfWorkFactory) -> None:
+    with factory() as uow:
+        transfers = uow.transfers.all()
+        names = {club.id: club.name for club in uow.clubs.all()}
+        players = {PlayerId(p.id): p.known_as for p in uow.players.all()}
+    print()
+    print(format_transfers(transfers, names, players))
+
+
 def _print_results(
-    results: list[SeasonResult], factory: UnitOfWorkFactory, opening: dict[ClubId, int]
+    results: list[SeasonResult],
+    factory: UnitOfWorkFactory,
+    opening: dict[ClubId, int],
+    *,
+    show_transfers: bool,
 ) -> None:
     with factory() as uow:
         clubs = [club for club in uow.clubs.all() if club.id != OUTSIDE_WORLD]
@@ -99,6 +115,8 @@ def _print_results(
         print()
     print(f"now {today}")
     print(format_money(clubs, opening))
+    if show_transfers:
+        _print_transfers(factory)
 
 
 def _play(
@@ -127,7 +145,9 @@ def _run(arguments: argparse.Namespace) -> int:
         runner = SeasonRunner(
             factory, build_engine(load_league_tables(static=static), world_seed), prospects
         )
-        _print_results(_play(arguments, runner, season), factory, opening)
+        _print_results(
+            _play(arguments, runner, season), factory, opening, show_transfers=arguments.transfers
+        )
     finally:
         if engine is not None:
             engine.dispose()
