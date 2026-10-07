@@ -86,7 +86,13 @@ class Philosophy(DomainModel):
 
 
 class SubHabits(DomainModel):
-    """Substitution policy habits for the AI manager."""
+    """Substitution *preferences* for the AI manager (not hard match rules).
+
+    The sim (M4/M9) interprets these alongside match state: injuries, reds,
+    scoreline and fatigue can force earlier changes even when
+    ``earliest_minute`` is high. ``reacts_to_cards`` / ``fresh_legs_bias``
+    weight those overrides; they are not applied in M1 (models only).
+    """
 
     __usage__: ClassVar[Mapping[str, UsageTag]] = {
         "earliest_minute": "S",
@@ -99,6 +105,7 @@ class SubHabits(DomainModel):
         "uses_all_subs": "S",
     }
 
+    # Preferred earliest *planned* tactical sub; emergencies ignore this.
     earliest_minute: int = Field(ge=0, le=90)
     preferred_windows: tuple[int, ...] = ()
     aggressiveness: Unit

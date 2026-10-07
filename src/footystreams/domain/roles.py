@@ -12,7 +12,12 @@ from footystreams.domain.types import Duty, Position, RoleId, Unit
 
 
 class RoleDutySpec(DomainModel):
-    """Weights and spatial/utility hints for one role+duty pair."""
+    """Weights and spatial/utility hints for one role+duty pair.
+
+    ``attr_weights`` drive M1 CA / role ratings. ``offset_*`` and
+    ``utility_biases`` are the M2/M4 sim contract (positioning + decision
+    biases); ratings ignore them until the sim consumes the catalog.
+    """
 
     __usage__: ClassVar[Mapping[str, UsageTag]] = {
         "attr_weights": "S",
@@ -22,8 +27,10 @@ class RoleDutySpec(DomainModel):
     }
 
     attr_weights: Mapping[str, float] = Field(min_length=1)
+    # Normalised pitch offsets from the role's default slot (0 = none).
     offset_x: Unit = 0.0
     offset_y: Unit = 0.0
+    # Named decision biases for the sim (e.g. "shoot", "dribble", "cross").
     utility_biases: Mapping[str, float] = Field(default_factory=dict)
 
     @model_validator(mode="after")

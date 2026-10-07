@@ -123,6 +123,8 @@ def make_team_sheet(*, club_id: str = "clb_home01", side: str = "home") -> TeamS
                 risk_taking=0.5,
             ),
             flexibility=0.5,
+            # Factory defaults for a cautious "wait until ~55'" manager.
+            # Not match logic: injuries/cards override via SubHabits biases in sim.
             sub_habits=SubHabits(
                 earliest_minute=55,
                 aggressiveness=0.5,

@@ -43,13 +43,6 @@ def export_all(root: Path = SCHEMAS_DIR) -> list[Path]:
         _write_schema(path, model.model_json_schema())
         written.append(path)
 
-    changelog = root / "CHANGELOG.md"
-    changelog.write_text(
-        f"# Schema changelog\n\n- {SCHEMA_VERSION}: initial export from M1 domain/events models.\n",
-        encoding="utf-8",
-        newline="\n",
-    )
-    written.append(changelog)
     return written
 
 

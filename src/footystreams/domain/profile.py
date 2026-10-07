@@ -17,11 +17,12 @@ from footystreams.domain.ratings import (
 from footystreams.domain.roles import RoleCatalog
 from footystreams.domain.types import AbilityScore, Position
 
-STD_EPSILON = 1e-9
-RELIABLE_CONSISTENCY = 70
-STREAKY_CONSISTENCY = 40
-MAX_EXTREMES = 5
-Z_STRENGTH = 1.0
+# Thresholds for build_profile helpers in this module only (not league config).
+STD_EPSILON = 1e-9  # treat within-player attr variance below this as flat (no extremes)
+RELIABLE_CONSISTENCY = 70  # hidden.consistency ≥ this → volatility_label "reliable"
+STREAKY_CONSISTENCY = 40  # hidden.consistency ≤ this → "streaky"; between → "mixed"
+MAX_EXTREMES = 5  # cap on strengths/weaknesses lists by within-player z-score
+Z_STRENGTH = 1.0  # |z| ≥ this marks an attribute as a strength or weakness
 
 
 class PlayerProfile(DomainModel):
