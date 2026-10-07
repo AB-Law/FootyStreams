@@ -21,7 +21,6 @@
 2. **Stop and present a review package**: branch name, `git log --oneline main..HEAD`, `git diff --stat main...HEAD`, what/why in a few lines, how it was verified, impact flags (SIM_VERSION/SCHEMA_VERSION/config/migration/perf), and anything uncertain. Offer to show the diff pane.
 3. **Wait** for an explicit go-ahead ("open the PR", "looks good, push it"). Silence, a thumbs-up on an earlier slice, or a previous approval of a different slice is not approval. Requested changes go in new atomic commits (or a tidy-up of unpushed history) and are re-presented.
 4. Only then: push the branch and open the PR (`gh pr create`, template filled in). The user may still review again on GitHub before merging.
-- The same checkpoint applies to the very first push: the empty remote gets `main` from the reviewed design baseline only on the user's explicit say-so.
 
 ## Pull requests
 - Title = a Conventional Commit line. Description (template `.github/pull_request_template.md`): **Summary** (what and why, 2-4 bullets), **Changes** (by area), **How verified** (commands and results), **Impact** (sim_version / schema / config / migration / performance numbers), **Docs and changelog** (fragment id, docs touched), **Follow-ups**, **Checklist** (clean-code review list from section 10).
@@ -31,4 +30,4 @@
 ## What agents may and may not do
 - May: create branches and make atomic commits locally; after the **human review checkpoint** is approved, push the feature branch and open a PR (with `gh`).
 - May not: push a branch or open a PR before the user's review; commit to or push `main`; merge a PR unless the user says so; force-push shared branches (use `--force-with-lease` only on your own branch); skip hooks (`--no-verify`) or signing; rewrite published history; delete remote branches you did not create.
-- The remote is `https://github.com/AB-Law/FootyStreams` (public; empty until the user approves the first push). `gh` is authenticated as the owner, so be extra careful: every outward action needs the checkpoint above.
+- The remote is `https://github.com/AB-Law/FootyStreams` (public). `gh` is authenticated as the owner, so be extra careful: every outward action needs the checkpoint above.
