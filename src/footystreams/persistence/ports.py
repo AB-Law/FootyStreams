@@ -48,6 +48,7 @@ from footystreams.domain.transfer import (
     TransferWindow,
 )
 from footystreams.domain.world import City, Nation, SquadEntry
+from footystreams.persistence.errors import ConflictError, NotFoundError, PersistenceError
 from footystreams.persistence.records import (
     MetaEntry,
     StageLogEntry,
@@ -63,8 +64,11 @@ Criteria = Mapping[str, ColumnValue]
 # persistence, can name the row types the ports hand out.
 __all__ = [
     "AppendOnlyRepository",
+    "ConflictError",
     "Criteria",
     "MetaEntry",
+    "NotFoundError",
+    "PersistenceError",
     "Repositories",
     "Repository",
     "StageLogEntry",

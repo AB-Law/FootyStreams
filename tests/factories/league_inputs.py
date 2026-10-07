@@ -7,6 +7,7 @@ from collections.abc import Mapping, Sequence
 from footystreams.domain.match import MatchSetup
 from footystreams.domain.mood import StateModifier
 from footystreams.domain.world import World
+from footystreams.league.climate import ClimateCatalog
 from footystreams.league.post_match import PlayedFixture, PostMatchTables
 from footystreams.league.setup import (
     MatchContext,
@@ -15,6 +16,8 @@ from footystreams.league.setup import (
     build_match_setup,
 )
 from footystreams.league.simulator import ResultOnlySimulator
+from footystreams.league.tables import LeagueTables
+from footystreams.seed.static.files import read_yaml
 from tests.factories.league import make_fixture
 from tests.factories.league_config import make_league_config, make_mood_config
 from tests.factories.match import make_setup
@@ -92,4 +95,17 @@ def make_played_fixture(sim_seed: int = 5, world_seed: int = 1) -> PlayedFixture
         result=simulator.simulate(setup, sim_seed),
         teams=teams,
         today=context.today,
+    )
+
+
+def make_league_tables() -> LeagueTables:
+    """Every committed static table the league layer reads."""
+    static = cached_static_tables()
+    return LeagueTables(
+        roles=static.roles,
+        formations=static.formations,
+        injuries=static.injuries,
+        climate=ClimateCatalog.model_validate(read_yaml("climate.yaml")),
+        config=make_league_config(),
+        mood=make_mood_config(),
     )

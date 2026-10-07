@@ -9,6 +9,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0154** Add the daily tick, matchday play and the season runner *(M9; scope: league)*
+- **0153** Add the world clock and daily recovery *(M9; scope: league)*
 - **0151** Add post-match world deltas *(M9; scope: league)*
 - **0150** Add club finance and the ledger *(M9; scope: league)*
 - **0149** Add match setup building and the lineup AI *(M9; scope: league)*
