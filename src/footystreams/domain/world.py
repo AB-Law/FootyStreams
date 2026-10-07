@@ -33,6 +33,9 @@ from footystreams.domain.types import (
     PlayerId,
 )
 
+# Clubs outside the league (a player's or manager's earlier employers) have ids with this prefix.
+WIDER_WORLD_PREFIX = "clb_wd"
+
 
 class Nation(DomainModel):
     """A fictional nation; the home nation also owns the regional name cultures."""

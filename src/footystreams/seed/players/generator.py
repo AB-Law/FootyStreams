@@ -10,7 +10,15 @@ from footystreams.domain.development import TrainingPlan
 from footystreams.domain.person import Person, Personality
 from footystreams.domain.player import CareerStint, Player, PlayerStatus, SquadStatus
 from footystreams.domain.rng import WorldRng
-from footystreams.domain.types import ClubId, Gender, Position, PreferredFoot, RoleAssignment
+from footystreams.domain.types import (
+    ClubId,
+    Gender,
+    NationId,
+    Position,
+    PreferredFoot,
+    RoleAssignment,
+)
+from footystreams.domain.world import WIDER_WORLD_PREFIX
 from footystreams.seed.people import PersonBrief, make_person
 from footystreams.seed.players.attributes import AttributeBrief, AttributeSet, generate_attributes
 from footystreams.seed.players.body import foot_and_weak_foot, height_and_weight
@@ -30,7 +38,6 @@ REPUTATION_CLUB_WEIGHT = 0.2
 REPUTATION_NOISE = 4.0
 TRAINING_INTENSITY_RANGE = (0.4, 0.7)
 WIDER_WORLD_CLUB_POOL = 40
-WIDER_WORLD_PREFIX = "clb_wd"
 ADULT_AGE = 21
 MAX_PRIOR_STINTS = 2
 STINT_YEARS_RANGE = (1, 4)
@@ -58,6 +65,7 @@ class PlayerSpec:
     club_reputation: int
     youth: bool = False
     potential_bonus: int = 0
+    nationality: NationId | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -160,6 +168,7 @@ def generate_player(spec: PlayerSpec, ctx: GenerationContext, rng: WorldRng) -> 
             region=spec.region,
             personality=parts.personality,
             reputation=_reputation(rng.fork("reputation"), ability, spec.club_reputation),
+            nationality=spec.nationality,
         ),
     )
     player = _assemble(person, spec, parts, rng, ctx.today)

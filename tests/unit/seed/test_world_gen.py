@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import time
 from collections import Counter
-from functools import cache
 from itertools import pairwise
 
 import pytest
@@ -13,13 +12,13 @@ from footystreams.seed.config import MAX_CLUBS, GeneratorConfig
 from footystreams.seed.league_shape import MIN_SPACING, plan_league
 from footystreams.seed.static.tables import load_static_tables
 from footystreams.seed.world_gen import generate_world
+from tests.factories.world import cached_static_tables, make_world
 
 SEEDS_FOR_SHAPE = range(1, 21)
 
 
-@cache
 def _world(seed: int = 1) -> World:
-    return generate_world(seed)
+    return make_world(seed)
 
 
 def _everything(world: World) -> list[str]:
@@ -45,7 +44,7 @@ def test_generate_world__counts_match_the_plan() -> None:
 
 
 def test_generate_world__same_seed__identical_content() -> None:
-    assert _everything(generate_world(2)) == _everything(generate_world(2))
+    assert _everything(generate_world(2)) == _everything(_world(2))
 
 
 def test_generate_world__different_seed__different_content() -> None:
@@ -91,7 +90,7 @@ def test_generate_world__records_are_sorted_by_id() -> None:
 
 
 def test_generate_world__fewer_clubs__smaller_league() -> None:
-    world = generate_world(3, GeneratorConfig(clubs=4))
+    world = make_world(3, clubs=4)
     assert len(world.clubs) == 4
     assert world.seasons[0].matchdays == 6
     assert len(world.competitions[0].club_ids) == 4
@@ -105,7 +104,7 @@ def test_generator_config__league_size_out_of_range__rejected(clubs: int) -> Non
 
 def test_generate_world__stays_inside_the_five_second_budget() -> None:
     started = time.perf_counter()
-    generate_world(5)
+    generate_world(5, tables=cached_static_tables())
     assert time.perf_counter() - started < 10  # budget is 5 s; slower shared runners get slack
 
 

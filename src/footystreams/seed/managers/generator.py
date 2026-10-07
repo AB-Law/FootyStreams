@@ -20,6 +20,7 @@ from footystreams.domain.manager import (
 from footystreams.domain.person import Personality
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.types import ClubId, FormationId, Gender
+from footystreams.domain.world import WIDER_WORLD_PREFIX
 from footystreams.seed.managers.styles import StylePrototype
 from footystreams.seed.people import PersonBrief, make_person
 from footystreams.seed.players.context import GenerationContext
@@ -43,7 +44,6 @@ STINT_YEARS = (1, 4)
 MATCHES_PER_YEAR = (30, 46)
 WAGE_BASE = 6_000
 WIDER_WORLD_CLUBS = 40
-WIDER_WORLD_PREFIX = "clb_wd"
 PERCENT = 100.0
 EXPERIENCE_FLOOR = 0.2  # share of matches a stint's wins can fall to at the weak end
 

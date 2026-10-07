@@ -6,9 +6,9 @@ from dataclasses import dataclass, field
 
 from footystreams.domain.club import ClubColours, ClubLocation, KitPattern, KitSpec
 from footystreams.domain.rng import WorldRng
+from footystreams.domain.textfold import plain
 from footystreams.domain.world import City
 from footystreams.seed.clubs.archetypes import ClubArchetype, ClubTables, Palette
-from footystreams.seed.names.gates import plain
 
 SHORT_CODE_LENGTH = 3
 FALLBACK_LETTERS = "abcdefghijklmnopqrstuvwxyz"

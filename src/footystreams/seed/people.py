@@ -37,6 +37,7 @@ class PersonBrief:
     reputation: int
     home_share: float = HOME_NATIONALITY_SHARE
     family_of: GeneratedName | None = None
+    nationality: NationId | None = None  # fixes the nationality (squad quotas) instead of drawing
 
 
 def date_of_birth(rng: WorldRng, today: dt.date, age: int) -> dt.date:
@@ -50,12 +51,26 @@ def _nationality(
 ) -> tuple[NationId, str, str | None]:
     """Nationality, the name culture to use, and the region of birth (home nation only)."""
     geography = ctx.geography
+    if brief.nationality is not None:
+        return _fixed_nationality(rng, ctx, brief, brief.nationality)
     if rng.bernoulli(brief.home_share):
         own = rng.bernoulli(HOME_REGION_SHARE)
         region = brief.region if own else rng.choice(geography.regions())
         return geography.home.id, region, region
     nation = rng.choice(geography.foreign)
     return nation.id, nation.name_culture, None
+
+
+def _fixed_nationality(
+    rng: WorldRng, ctx: GenerationContext, brief: PersonBrief, nation_id: NationId
+) -> tuple[NationId, str, str | None]:
+    geography = ctx.geography
+    if nation_id == geography.home.id:
+        own = rng.bernoulli(HOME_REGION_SHARE)
+        region = brief.region if own else rng.choice(geography.regions())
+        return nation_id, region, region
+    nation = next(item for item in geography.nations if item.id == nation_id)
+    return nation_id, nation.name_culture, None
 
 
 def _second_nationality(rng: WorldRng, ctx: GenerationContext, first: NationId) -> NationId | None:

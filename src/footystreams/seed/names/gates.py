@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import unicodedata
+from footystreams.domain.textfold import plain
 
 MIN_COMPONENT_LENGTH = 3
 MAX_COMPONENT_LENGTH = 14
@@ -12,14 +12,6 @@ MAX_CONSONANT_RUN = 4
 MAX_VOWEL_RUN = 3
 TRIPLE = 3
 PLAIN_VOWELS = frozenset("aeiouy")
-_SPECIAL_FOLDS = {"ø": "o", "ß": "ss", "æ": "ae", "œ": "oe", "ł": "l", "đ": "d"}
-
-
-def plain(text: str) -> str:
-    """Lower-case letters only, diacritics folded, so filters see what a reader sees."""
-    folded = "".join(_SPECIAL_FOLDS.get(char, char) for char in text.lower())
-    decomposed = unicodedata.normalize("NFKD", folded)
-    return "".join(char for char in decomposed if char.isascii() and char.isalpha())
 
 
 def _has_triple_letter(letters: str) -> bool:
