@@ -18,13 +18,13 @@ from footystreams.domain.types import (
     PreferredFoot,
     RoleAssignment,
 )
+from footystreams.domain.valuation import market_value_of
 from footystreams.domain.world import WIDER_WORLD_PREFIX
 from footystreams.seed.people import PersonBrief, make_person
 from footystreams.seed.players.attributes import AttributeBrief, AttributeSet, generate_attributes
 from footystreams.seed.players.body import foot_and_weak_foot, height_and_weight
 from footystreams.seed.players.condition import StartingCondition, starting_condition
 from footystreams.seed.players.context import GenerationContext
-from footystreams.seed.players.contract import market_value_of
 from footystreams.seed.players.mind import generate_hidden, generate_personality
 from footystreams.seed.players.positions import (
     choose_traits,

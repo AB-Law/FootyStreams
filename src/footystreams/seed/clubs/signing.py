@@ -10,8 +10,9 @@ from footystreams.domain.contract import Contract, SquadRole
 from footystreams.domain.player import Player, SquadStatus
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.types import ClubId, Money, PlayerId, Position
+from footystreams.domain.valuation import market_value_of
 from footystreams.domain.world import SquadEntry
-from footystreams.seed.players.contract import contract_for, market_value_of
+from footystreams.seed.players.contract import contract_for
 
 KEY_PLAYERS = 7
 ROTATION_PLAYERS = 7

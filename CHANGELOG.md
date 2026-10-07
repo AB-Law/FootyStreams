@@ -150,6 +150,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0052** Speed up option generation and refresh positions every 4 seconds *(M4; scope: sim)*
 
 ### Refactoring
+- **0161** Move the value and wage formulas into domain.valuation *(M10; scope: domain)*
 - **0128** Move IdMint to domain and add checkpoints for discarded generation attempts *(M2; scope: seed)*
 - **0104** Move the summary fold from sim to events/derive so verify and analytics can recompute it *(M7; scope: events, sim)*
 - **0091** Build the state from a BuildContext and add the bench, injury stream and ManagerConfig *(M6; scope: sim)*

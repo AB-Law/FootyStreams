@@ -12,7 +12,7 @@ from footystreams.domain.player import Player
 from footystreams.domain.ratings import compute_current_ability
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.roles import RoleCatalog
-from footystreams.domain.valuation import MarketValueInputs, compute_peak_age, market_value
+from footystreams.domain.valuation import market_value_of
 from footystreams.league.development import (
     ATTRIBUTE_MAX,
     ENTRY_CAUSE_SEASON,
@@ -48,26 +48,8 @@ class ProgressionInputs:
 
 def refresh(player: Player, roles: RoleCatalog, today: dt.date) -> Player:
     """Recompute current ability and market value after attributes changed."""
-    ability = compute_current_ability(player, roles)
-    years_left = 0.0
-    if player.contract is not None:
-        years_left = max(0.0, (player.contract.end - today).days / 365.25)
-    peak = compute_peak_age(
-        natural_fitness=player.physical.natural_fitness,
-        determination=player.mental.determination,
-        injury_proneness=player.hidden.injury_proneness,
-    )
-    value = market_value(
-        MarketValueInputs(
-            ability_current=ability,
-            ability_potential=max(ability, player.ability_potential),
-            age=player.age_on(today),
-            reputation=player.reputation,
-            contract_years_left=years_left,
-            peak_age=peak,
-        )
-    )
-    return player.model_copy(update={"ability_current": ability, "market_value": value})
+    rated = player.model_copy(update={"ability_current": compute_current_ability(player, roles)})
+    return rated.model_copy(update={"market_value": market_value_of(rated, today)})
 
 
 def revise_potential(player: Player, inputs: ProgressionInputs, rng: WorldRng) -> Player:
