@@ -5,9 +5,9 @@ from __future__ import annotations
 import datetime as dt
 from functools import cache
 
+from footystreams.domain.ids import IdMint
 from footystreams.domain.rng import WorldRng
 from footystreams.seed.geography import generate_geography
-from footystreams.seed.ids import IdMint
 from footystreams.seed.names.book import NameBook
 from footystreams.seed.players.context import GenerationContext
 from footystreams.seed.static.tables import StaticTables, load_static_tables

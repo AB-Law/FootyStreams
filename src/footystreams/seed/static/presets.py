@@ -12,7 +12,7 @@ from footystreams.domain.manager import ManagerStyle
 from footystreams.domain.roles import RoleCatalog
 from footystreams.domain.static_tables import FormationCatalog
 from footystreams.domain.tactics import Mentality, TeamTactics
-from footystreams.domain.types import Duty, FormationId, RoleId
+from footystreams.domain.types import Duty, FormationId, Position, RoleAssignment, RoleId
 from footystreams.seed.static.files import StaticDataError, YamlModel, load_model
 
 
@@ -26,6 +26,7 @@ class _PresetYaml(YamlModel):
 
 class _PresetsFile(YamlModel):
     presets: dict[str, _PresetYaml]
+    position_defaults: dict[Position, str]
 
 
 @dataclass(frozen=True, slots=True)
@@ -74,10 +75,34 @@ def _tactics(
         raise StaticDataError(msg) from error
 
 
+@dataclass(frozen=True, slots=True)
+class PresetTables:
+    """Presets by manager style plus the fallback role of each position."""
+
+    by_style: Mapping[ManagerStyle, TacticPreset]
+    default_roles: Mapping[Position, RoleAssignment]
+
+
+def _default_roles(raw: _PresetsFile, roles: RoleCatalog) -> dict[Position, RoleAssignment]:
+    defaults: dict[Position, RoleAssignment] = {}
+    for position in Position:
+        entry = raw.position_defaults.get(position)
+        if entry is None:
+            msg = f"tactic_presets.yaml: no position_defaults entry for {position.value}"
+            raise StaticDataError(msg)
+        name, _, duty = entry.partition(":")
+        role = roles.roles.get(RoleId(name))
+        if role is None or role.position is not position or Duty(duty) not in role.duties:
+            msg = f"tactic_presets.yaml: position_defaults[{position.value}] {entry!r} is unusable"
+            raise StaticDataError(msg)
+        defaults[position] = RoleAssignment(role_id=RoleId(name), duty=Duty(duty))
+    return defaults
+
+
 def load_presets(
     roles: RoleCatalog, formations: FormationCatalog, directory: Path | None = None
-) -> Mapping[ManagerStyle, TacticPreset]:
-    """Load presets keyed by manager style; each style needs exactly one preset."""
+) -> PresetTables:
+    """Load presets keyed by manager style (exactly one per style) and the position defaults."""
     raw = load_model(_PresetsFile, "tactic_presets.yaml", directory)
     by_style: dict[ManagerStyle, TacticPreset] = {}
     for key, item in raw.presets.items():
@@ -89,4 +114,4 @@ def load_presets(
     if missing:
         msg = f"tactic_presets.yaml: no preset for style(s) {', '.join(missing)}"
         raise StaticDataError(msg)
-    return by_style
+    return PresetTables(by_style=by_style, default_roles=_default_roles(raw, roles))

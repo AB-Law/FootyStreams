@@ -27,8 +27,8 @@ def _manager(style: ManagerStyle, seed: int = 1, *, club: ClubId | None = CLUB) 
 
 def test_presets__one_valid_preset_per_style_with_matching_slot_positions() -> None:
     tables = load_static_tables()
-    assert set(tables.presets) == set(ManagerStyle)
-    for preset in tables.presets.values():
+    assert set(tables.presets.by_style) == set(ManagerStyle)
+    for preset in tables.presets.by_style.values():
         formation = tables.formations.formations[preset.tactics.formation]
         for slot, shape in zip(preset.tactics.slots, formation.slots, strict=True):
             assert tables.roles.roles[slot.role].position is shape.position
@@ -39,6 +39,7 @@ def test_presets__unusable_role__names_preset_and_slot(tmp_path: Path) -> None:
     text = (
         "presets:\n  p:\n    style: balanced\n    formation: '442'\n    mentality: balanced\n"
         "    slots: [" + ", ".join(['"poacher:attack"'] * 11) + "]\n    modules: {}\n"
+        "position_defaults: {}\n"
     )
     (tmp_path / "tactic_presets.yaml").write_text(text, encoding="utf-8")
     with pytest.raises(StaticDataError, match=r"preset 'p' slot 0"):

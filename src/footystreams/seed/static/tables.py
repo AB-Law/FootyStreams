@@ -2,16 +2,15 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
-from footystreams.domain.manager import ManagerStyle
 from footystreams.domain.roles import RoleCatalog
 from footystreams.domain.static_tables import FormationCatalog, InjuryCatalog, TraitCatalog
+from footystreams.seed.clubs.archetypes import ClubTables, load_club_tables
 from footystreams.seed.managers.styles import StyleTables, load_styles
 from footystreams.seed.players.archetypes import ArchetypeTables, load_archetypes
-from footystreams.seed.static.presets import TacticPreset, load_presets
+from footystreams.seed.static.presets import PresetTables, load_presets
 from footystreams.seed.static.roles import load_roles
 from footystreams.seed.static.simple_tables import load_formations, load_injuries, load_traits
 
@@ -26,7 +25,8 @@ class StaticTables:
     injuries: InjuryCatalog
     archetypes: ArchetypeTables
     styles: StyleTables
-    presets: Mapping[ManagerStyle, TacticPreset]
+    presets: PresetTables
+    clubs: ClubTables
 
 
 def load_static_tables(directory: Path | None = None) -> StaticTables:
@@ -41,4 +41,5 @@ def load_static_tables(directory: Path | None = None) -> StaticTables:
         archetypes=load_archetypes(directory),
         styles=load_styles(directory),
         presets=load_presets(roles, formations, directory),
+        clubs=load_club_tables(directory),
     )

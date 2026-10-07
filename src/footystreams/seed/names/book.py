@@ -43,6 +43,15 @@ class GeneratedName:
     surname_short: str
 
 
+@dataclass(frozen=True, slots=True)
+class NameBookState:
+    """A saved copy of what a NameBook has handed out."""
+
+    known_as: frozenset[str]
+    surnames: Counter[str]
+    places: frozenset[str]
+
+
 class NameBook:
     """Draws names for people and places from the invented cultures."""
 
@@ -68,6 +77,18 @@ class NameBook:
             normalise_list(read_text_lines("denylist.txt", directory)),
             normalise_list(read_text_lines("blocklist.txt", directory)),
         )
+
+    def checkpoint(self) -> NameBookState:
+        """Copy the uniqueness state so a discarded generation attempt can be undone."""
+        return NameBookState(
+            frozenset(self._known_as), Counter(self._surnames), frozenset(self._places)
+        )
+
+    def restore(self, state: NameBookState) -> None:
+        """Return to a previous ``checkpoint``."""
+        self._known_as = set(state.known_as)
+        self._surnames = Counter(state.surnames)
+        self._places = set(state.places)
 
     def culture(self, key: str) -> NameCulture:
         """Look up a culture by key."""

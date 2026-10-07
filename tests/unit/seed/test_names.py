@@ -198,3 +198,13 @@ def test_is_pronounceable__table(component: str, expected: bool) -> None:
 
 def test_plain__folds_diacritics_and_special_letters() -> None:
     assert gates.plain("Ørsted-Šimák") == "orstedsimak"
+
+
+def test_book__restore_undoes_a_discarded_attempt() -> None:
+    book = _fresh_book()
+    rng = WorldRng(13)
+    saved = book.checkpoint()
+    first = book.person(rng.fork("a"), "highland", Gender.MALE)
+    book.restore(saved)
+    again = book.person(rng.fork("a"), "highland", Gender.MALE)
+    assert first == again

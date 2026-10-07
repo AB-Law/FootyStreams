@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from footystreams.domain.ids import IdMint
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.types import CityId, NationId
 from footystreams.domain.world import City, Nation
-from footystreams.seed.ids import IdMint
 from footystreams.seed.names.book import NameBook
 from footystreams.seed.players.context import Geography
 
