@@ -1,5 +1,7 @@
-"""Match event schema: the discriminated event union, shared context and match summary.
+"""Typed match event stream models (no simulation logic)."""
 
-May import: domain. No I/O. This is the cross-language contract (JSON Schema is exported from here).
-Design: docs/design/03-events.md.
-"""
+from footystreams.events.result import MatchResult
+from footystreams.events.summary import MatchSummary
+from footystreams.events.types import MATCH_EVENT_ADAPTER, MatchEvent
+
+__all__ = ["MATCH_EVENT_ADAPTER", "MatchEvent", "MatchResult", "MatchSummary"]
