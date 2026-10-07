@@ -1,0 +1,33 @@
+# Climate bands. Cities reference a band by key; weather generation (league layer) reads the
+# parameters. monthly_temp_c runs January..December in the home nation's northern-style year.
+bands:
+  temperate:
+    label: Temperate
+    monthly_temp_c: [4, 5, 8, 11, 15, 18, 20, 20, 17, 12, 7, 5]
+    rain_probability: 0.30
+    wind_mean_mps: 4.0
+    humidity: 0.70
+  coastal:
+    label: Coastal
+    monthly_temp_c: [6, 6, 8, 10, 13, 16, 18, 19, 17, 13, 9, 7]
+    rain_probability: 0.36
+    wind_mean_mps: 6.0
+    humidity: 0.78
+  highland:
+    label: Highland
+    monthly_temp_c: [0, 1, 4, 7, 11, 14, 16, 16, 13, 8, 3, 1]
+    rain_probability: 0.38
+    wind_mean_mps: 5.5
+    humidity: 0.72
+  continental:
+    label: Continental
+    monthly_temp_c: [-2, 0, 5, 11, 16, 20, 23, 22, 17, 11, 4, 0]
+    rain_probability: 0.24
+    wind_mean_mps: 3.5
+    humidity: 0.62
+  warm:
+    label: Warm
+    monthly_temp_c: [10, 11, 13, 16, 20, 24, 27, 27, 23, 18, 13, 10]
+    rain_probability: 0.16
+    wind_mean_mps: 3.0
+    humidity: 0.58

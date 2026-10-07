@@ -1,0 +1,112 @@
+# Role catalogue (the RoleCatalog contract in domain/roles.py).
+#
+# Each role lists the positions it can be played in, base attribute weights and the duties it
+# allows. A role with several positions expands into one role id per position
+# (full_back -> full_back_rb, full_back_lb); a single-position role keeps its plain id.
+# Per-duty weight tweaks, pitch offsets and decision biases come from duty_profiles below.
+# Weights are relative: only their ratios matter for ratings.
+duty_profiles:
+  defend:
+    weights: {tackling: 0.6, marking: 0.6, positioning: 0.6}
+    offset_x: 0.0
+    utility_biases: {tackle: 0.15, clear: 0.15}
+  support:
+    weights: {}
+    offset_x: 0.03
+    utility_biases: {}
+  attack:
+    weights: {finishing: 0.6, off_ball_movement: 0.6, dribbling: 0.4}
+    offset_x: 0.08
+    utility_biases: {shoot: 0.15, dribble: 0.1}
+
+roles:
+  goalkeeper:
+    positions: [GK]
+    duties: [support]
+    adjust_by_duty: false
+    weights: {shot_stopping: 4, handling: 3, aerial_command: 2, one_on_ones: 2, communication: 1, positioning: 1, concentration: 1, distribution: 1}
+  sweeper_keeper:
+    positions: [GK]
+    duties: [support, attack]
+    adjust_by_duty: false
+    weights: {shot_stopping: 3, handling: 2.5, sweeping: 3, distribution: 2.5, one_on_ones: 2, aerial_command: 1, anticipation: 1.5, composure: 1}
+  central_defender:
+    positions: [CB]
+    duties: [defend, support]
+    weights: {tackling: 3, marking: 3, heading: 3, positioning: 3, strength: 1.5, jumping_reach: 1.5, anticipation: 2, bravery: 1, concentration: 1, composure: 1}
+  ball_playing_defender:
+    positions: [CB]
+    duties: [defend, support]
+    weights: {tackling: 2, marking: 2, positioning: 2.5, heading: 1.5, short_passing: 2.5, long_passing: 2, vision: 1.5, composure: 2.5, first_touch: 1.5, anticipation: 2}
+  covering_defender:
+    positions: [CB]
+    duties: [defend]
+    weights: {pace: 2.5, acceleration: 2, anticipation: 3, positioning: 3, tackling: 2, marking: 2, concentration: 2, decisions: 1.5}
+  full_back:
+    positions: [RB, LB]
+    duties: [defend, support, attack]
+    weights: {tackling: 2, marking: 2, positioning: 2, pace: 2, stamina: 2, crossing: 1.5, work_rate: 1.5, anticipation: 1.5, short_passing: 1}
+  wing_back:
+    positions: [RWB, LWB]
+    duties: [support, attack]
+    weights: {crossing: 2.5, stamina: 3, pace: 2, acceleration: 1.5, dribbling: 1.5, tackling: 1.5, work_rate: 2, positioning: 1, short_passing: 1}
+  anchor:
+    positions: [DM]
+    duties: [defend, support]
+    weights: {tackling: 3, positioning: 3, marking: 2, anticipation: 3, composure: 1, short_passing: 1.5, strength: 1.5, work_rate: 1.5, concentration: 1.5}
+  ball_winning_midfielder:
+    positions: [DM, CM]
+    duties: [defend, support]
+    weights: {tackling: 3, aggression: 2, work_rate: 3, stamina: 2, strength: 2, anticipation: 2, short_passing: 1, positioning: 1.5}
+  deep_lying_playmaker:
+    positions: [DM, CM]
+    duties: [defend, support]
+    weights: {short_passing: 3, long_passing: 3, vision: 3, composure: 2, first_touch: 2, decisions: 2, positioning: 1, teamwork: 1}
+  central_midfielder:
+    positions: [CM]
+    duties: [defend, support, attack]
+    weights: {short_passing: 3, decisions: 2, teamwork: 2, vision: 2, first_touch: 2, tackling: 1, stamina: 1, work_rate: 1.5}
+  box_to_box_midfielder:
+    positions: [CM]
+    duties: [support, attack]
+    weights: {stamina: 3, work_rate: 3, short_passing: 2, tackling: 1.5, off_ball_movement: 1.5, finishing: 1, strength: 1, decisions: 1.5, determination: 1}
+  advanced_playmaker:
+    positions: [AM]
+    duties: [support, attack]
+    weights: {vision: 3, short_passing: 3, first_touch: 2.5, dribbling: 2, decisions: 2, flair: 2, composure: 2, long_shots: 1}
+  attacking_midfielder:
+    positions: [AM]
+    duties: [support, attack]
+    weights: {first_touch: 2, dribbling: 2, finishing: 2, long_shots: 2, off_ball_movement: 2.5, vision: 2, flair: 1.5, short_passing: 1.5}
+  shadow_striker:
+    positions: [SS]
+    duties: [support, attack]
+    weights: {off_ball_movement: 3, finishing: 3, first_touch: 2, pace: 2, composure: 2, anticipation: 2, dribbling: 2, determination: 1}
+  wide_midfielder:
+    positions: [RM, LM]
+    duties: [defend, support, attack]
+    weights: {crossing: 2.5, stamina: 2.5, work_rate: 2.5, pace: 2, dribbling: 2, short_passing: 2, teamwork: 1.5, tackling: 1}
+  winger:
+    positions: [RW, LW]
+    duties: [support, attack]
+    weights: {crossing: 3, dribbling: 3, pace: 3, acceleration: 2.5, agility: 1.5, off_ball_movement: 1.5, first_touch: 2}
+  inside_forward:
+    positions: [RW, LW]
+    duties: [support, attack]
+    weights: {finishing: 3, dribbling: 3, pace: 2.5, acceleration: 2, off_ball_movement: 2.5, first_touch: 2, composure: 1.5, long_shots: 1}
+  poacher:
+    positions: [ST]
+    duties: [attack]
+    weights: {finishing: 4, composure: 3, off_ball_movement: 3, anticipation: 2, pace: 1.5, first_touch: 2}
+  target_man:
+    positions: [ST]
+    duties: [support, attack]
+    weights: {heading: 3, strength: 3, jumping_reach: 3, ball_shielding: 2.5, finishing: 2.5, bravery: 1.5, first_touch: 1.5}
+  complete_forward:
+    positions: [ST]
+    duties: [support, attack]
+    weights: {finishing: 3, first_touch: 2.5, dribbling: 2, heading: 2, pace: 2, strength: 1.5, composure: 2, off_ball_movement: 2.5, vision: 1}
+  pressing_forward:
+    positions: [ST]
+    duties: [defend, support, attack]
+    weights: {work_rate: 3, stamina: 2.5, aggression: 2, finishing: 2, pace: 2, off_ball_movement: 2, determination: 2, tackling: 1}

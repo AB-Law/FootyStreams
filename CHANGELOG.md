@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0045** Add static YAML tables and loaders: formations, roles, traits, injuries, climate *(M2; scope: data)*
 - **0044** Add ability_from_attributes and best-lineup squad strength helpers *(M2; scope: domain)*
 - **0043** Add world record and static-table models *(M2; scope: schemas; schema version minor)*
 - **0042** Add WorldRng, a deterministic forkable random stream for seed and league code *(M2; scope: domain)*
