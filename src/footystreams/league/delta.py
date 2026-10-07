@@ -21,6 +21,13 @@ if TYPE_CHECKING:
     from footystreams.domain.match import Match
     from footystreams.domain.mood import StateModifier, WorldEvent
     from footystreams.domain.player import Player
+    from footystreams.domain.transfer import (
+        ContractOffer,
+        Transfer,
+        TransferBid,
+        TransferListing,
+        TransferWindow,
+    )
     from footystreams.domain.world import SquadEntry
     from footystreams.persistence.ports import (
         MetaEntry,
@@ -53,6 +60,11 @@ class WorldDelta:
     events: tuple[StoredEvent, ...] = ()
     seasons: tuple[Season, ...] = ()
     squad_entries: tuple[SquadEntry, ...] = ()
+    windows: tuple[TransferWindow, ...] = ()
+    listings: tuple[TransferListing, ...] = ()
+    bids: tuple[TransferBid, ...] = ()
+    offers: tuple[ContractOffer, ...] = ()
+    transfers: tuple[Transfer, ...] = ()
     meta: tuple[MetaEntry, ...] = ()
     deletions: tuple[tuple[str, str], ...] = ()  # (table, key) rows to remove, applied first
 

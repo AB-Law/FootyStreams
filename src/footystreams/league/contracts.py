@@ -16,6 +16,7 @@ from footystreams.domain.ids import derive_id
 from footystreams.domain.mood import ModifierVisibility, WorldEvent
 from footystreams.domain.player import Player
 from footystreams.domain.rng import WorldRng
+from footystreams.domain.transfer import OUTSIDE_WORLD
 from footystreams.domain.types import EntityKind, EntityRef, Id, Money
 from footystreams.domain.valuation import market_value_of, wage_from_value
 from footystreams.league.squad import released
@@ -90,7 +91,12 @@ def negotiate(
     today, rng, current = context
     wage_market = market_wage(player, today)
     for number, multiple in enumerate(terms.wage_rounds, start=1):
-        proposal = Proposal(reputation, round(wage_market * multiple * scale), current)
+        proposal = Proposal(
+            reputation,
+            round(wage_market * multiple * scale),
+            current,
+            free_agent=player.contract is None and not current,
+        )
         score = willingness(player, proposal, wage_market, terms) + loyalty_bonus(
             player, proposal, renewal.loyalty_weight
         )
@@ -136,7 +142,8 @@ def expire_contracts(players: Sequence[Player], today: dt.date) -> Expiry:
         if contract is None or contract.end >= today:
             continue
         gone.append(released(player))
-        deletions.append(("squad_entries", f"{contract.club_id}:{player.id}"))
+        if contract.club_id != OUTSIDE_WORLD:
+            deletions.append(("squad_entries", f"{contract.club_id}:{player.id}"))
         events.append(
             WorldEvent(
                 id=Id(derive_id("world_event", player.id, today.isoformat(), "contract_expired")),

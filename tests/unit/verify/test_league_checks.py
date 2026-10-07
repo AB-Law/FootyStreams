@@ -13,6 +13,7 @@ from footystreams.domain.finance import LedgerCategory, LedgerEntry
 from footystreams.domain.fixture import Fixture, FixtureStatus
 from footystreams.domain.match import Match, MatchStatus
 from footystreams.domain.player import Player, PlayerStatus
+from footystreams.domain.transfer import OUTSIDE_WORLD
 from footystreams.domain.types import ClubId, Position
 from footystreams.events.summary import MatchSummary
 from footystreams.verify import (
@@ -118,7 +119,8 @@ RULES = SquadRules(min_senior=22, max_senior=28, min_goalkeepers=2)
 def _rolled_players() -> tuple[list[Player], list[ClubId]]:
     _, factory = cached_rolled_over()
     with factory() as uow:
-        return uow.players.all(), [club.id for club in uow.clubs.all()]
+        league = [club.id for club in uow.clubs.all() if club.id != OUTSIDE_WORLD]
+        return uow.players.all(), league
 
 
 def test_check_squads_and_development__after_a_rollover__are_clean() -> None:

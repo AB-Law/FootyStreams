@@ -42,7 +42,7 @@ medical:
 
 window:
   buyers_per_day: 3
-  deals_per_club: 3
+  deals_per_club: 2
   panic_days: 3                   # the last days of a window: clubs short of players buy anyone
   listing_markup: 1.10
 
@@ -55,7 +55,7 @@ outside:
   supply_size: 24
   supply_ability: [0.80, 1.15]    # of the league level
   supply_age: [21, 31]
-  bid_rate: 0.01                  # daily chance per player an outside club bids, at reputation 100
+  bid_rate: 0.004                 # daily chance per player an outside club bids, at reputation 100
   bid_premium: 1.10
   bid_min_ability: 1.0            # only players at least this share of the league level draw bids
 

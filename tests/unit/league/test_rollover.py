@@ -8,6 +8,7 @@ from collections import Counter
 import pytest
 
 from footystreams.domain.player import Player, PlayerStatus
+from footystreams.domain.transfer import OUTSIDE_WORLD
 from footystreams.league.squad import is_keeper
 from tests.factories.league_config import make_development_config
 from tests.factories.league_run import cached_rolled_over, play_seasons, season_fingerprint
@@ -73,7 +74,9 @@ def test_rollover__squad_entries_match_the_players_under_contract() -> None:
     contracted = {
         (p.contract.club_id, p.id)
         for p in _players()
-        if p.contract is not None and p.status is PlayerStatus.ACTIVE
+        if p.contract is not None
+        and p.status is PlayerStatus.ACTIVE
+        and p.contract.club_id != OUTSIDE_WORLD
     }
     assert {(e.club_id, e.player_id) for e in entries} == contracted
     for club_id in {e.club_id for e in entries}:
@@ -103,7 +106,7 @@ def test_rollover__publishes_the_awards_and_retirements_to_the_feed() -> None:
 def test_rollover__clubs_get_new_budgets_and_sponsors_that_run_past_today() -> None:
     _, factory = cached_rolled_over()
     with factory() as uow:
-        clubs = uow.clubs.all()
+        clubs = [c for c in uow.clubs.all() if c.id != OUTSIDE_WORLD]
     for club in clubs:
         assert club.finances.wage_budget_weekly > 0
         assert all(d.ends_on > dt.date(2032, 6, 1) for d in club.finances.sponsor_deals)
