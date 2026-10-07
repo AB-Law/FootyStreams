@@ -1,0 +1,23 @@
+# Environments and caches
+.venv/
+__pycache__/
+*.pyc
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.hypothesis/
+.coverage
+htmlcov/
+
+# Quality-gate state (tools/hooks/gate.py)
+.gate/
+
+# Local databases and engine state
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+health.json
+
+# Local agent settings
+.claude/settings.local.json
+CLAUDE.local.md
