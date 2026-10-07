@@ -98,3 +98,21 @@ presets:
       pressing: {intensity: 0.5, trigger: loss_of_ball, press_line: 0.5, cover_shadow: 0.5}
       transitions: {on_win: hold_shape, on_loss: regroup, counter_press_seconds: 4}
       game_management: {time_wasting: 0.15, foul_tolerance: 0.5}
+
+# The role a position falls back to when a manager plays a formation his preset does not cover.
+position_defaults:
+  GK: "goalkeeper:support"
+  RB: "full_back_rb:support"
+  LB: "full_back_lb:support"
+  CB: "central_defender:defend"
+  RWB: "wing_back_rwb:support"
+  LWB: "wing_back_lwb:support"
+  DM: "anchor:defend"
+  CM: "central_midfielder:support"
+  AM: "advanced_playmaker:support"
+  RM: "wide_midfielder_rm:support"
+  LM: "wide_midfielder_lm:support"
+  RW: "winger_rw:attack"
+  LW: "winger_lw:attack"
+  SS: "shadow_striker:support"
+  ST: "complete_forward:attack"

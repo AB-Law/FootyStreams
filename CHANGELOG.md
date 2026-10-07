@@ -128,6 +128,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0068** Move the text renderer from cli to sim so cli stays a thin wrapper *(M4; scope: sim, cli)*
 - **0066** Remove duplicated constants from the simulation modules *(M4; scope: sim)*
 - **0062** Share the one-player-on-two-teams check between sim and verify *(M4; scope: domain, verify, sim)*
+- **0049** Move IdMint to domain and add checkpoints for discarded generation attempts *(M2; scope: seed)*
 
 ### Tests
 - **0119** Add the M7 slow-tier sweeps; write the M7 report, design notes and status *(M7; scope: sim)*

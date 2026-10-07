@@ -6,10 +6,10 @@ from collections import Counter
 import pytest
 
 from footystreams.domain.contract import SquadRole
+from footystreams.domain.ids import IdMint
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.types import ClubId, Position
 from footystreams.seed.geography import generate_geography
-from footystreams.seed.ids import IdMint, base36
 from footystreams.seed.names.book import NameBook
 from footystreams.seed.players.condition import starting_condition
 from footystreams.seed.players.contract import contract_for, wage_from_value
@@ -20,27 +20,6 @@ from footystreams.seed.static.tables import load_static_tables
 from tests.factories.world import WORLD_START, make_generation_context
 
 SAMPLES = 400
-
-
-def test_base36__known_values() -> None:
-    assert base36(0) == "00000"
-    assert base36(35, width=1) == "z"
-    assert base36(36, width=2) == "10"
-
-
-def test_base36__negative__raises() -> None:
-    with pytest.raises(ValueError, match="negative"):
-        base36(-1)
-
-
-def test_id_mint__counts_per_kind_and_rejects_unknown_kind() -> None:
-    mint = IdMint()
-    assert mint.next("player") == "plr_00001"
-    assert mint.next("player") == "plr_00002"
-    assert mint.next("club") == "clb_00001"
-    assert mint.minted("player") == 2
-    with pytest.raises(ValueError, match="unknown id kind"):
-        mint.next("spaceship")
 
 
 def test_geography__home_nation_has_six_regions_and_foreign_nations_have_cities() -> None:

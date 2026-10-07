@@ -5,11 +5,11 @@ from __future__ import annotations
 from collections.abc import Mapping
 from dataclasses import dataclass
 
+from footystreams.domain.ids import IdMint
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.types import GameDate, NationId
 from footystreams.domain.world import City, Nation
-from footystreams.seed.ids import IdMint
-from footystreams.seed.names.book import NameBook
+from footystreams.seed.names.book import NameBook, NameBookState
 from footystreams.seed.static.tables import StaticTables
 
 HOME_NATIONALITY_SHARE = 0.70
@@ -56,3 +56,20 @@ class GenerationContext:
     ids: IdMint
     geography: Geography
     today: GameDate
+
+    def checkpoint(self) -> ContextCheckpoint:
+        """Save names and ids before a generation attempt that may be discarded."""
+        return ContextCheckpoint(self.names.checkpoint(), self.ids.snapshot())
+
+    def restore(self, checkpoint: ContextCheckpoint) -> None:
+        """Undo everything handed out since ``checkpoint``."""
+        self.names.restore(checkpoint.names)
+        self.ids.restore(checkpoint.ids)
+
+
+@dataclass(frozen=True, slots=True)
+class ContextCheckpoint:
+    """Saved name and id state of a GenerationContext."""
+
+    names: NameBookState
+    ids: Mapping[str, int]
