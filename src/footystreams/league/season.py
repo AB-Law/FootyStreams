@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import datetime as dt
 from dataclasses import dataclass
 
 from footystreams.domain.competition import Competition, Season
@@ -15,7 +16,7 @@ from footystreams.league.daily import DailyTick, DayReport
 from footystreams.league.delta import WorldDelta, apply_delta
 from footystreams.league.matchday import MatchdayEngine, current_table
 from footystreams.league.schedule import ScheduleError, build_rounds, schedule_fixtures
-from footystreams.persistence.ports import Repositories, UnitOfWorkFactory
+from footystreams.persistence.ports import NotFoundError, Repositories, UnitOfWorkFactory
 
 
 @dataclass(frozen=True, slots=True)
@@ -90,3 +91,23 @@ class SeasonRunner:
             clubs = uow.competitions.require(season.competition_id).club_ids
             table = current_table(uow, season.id, clubs)
         return SeasonResult(season, table, matches_played)
+
+    def run_until_matchday(self, season: Season, matchday: int) -> SeasonResult:
+        """Prepare the season and run days until ``matchday`` has been played and tabled."""
+        self.prepare(season)
+        played = 0
+        while not self._tabled(season, matchday) and self._clock.current_date() <= season.ends_on:
+            played += self._tick.run_day().matches_played
+        return self.result(season, played)
+
+    def _tabled(self, season: Season, matchday: int) -> bool:
+        with self._factory() as uow:
+            return uow.standings.count({"season_id": season.id, "after_matchday": matchday}) > 0
+
+
+def current_season(repositories: Repositories, today: dt.date) -> Season:
+    """The season in progress or next to start: the first that has not ended before ``today``."""
+    for season in sorted(repositories.seasons.all(), key=lambda item: item.starts_on):
+        if season.ends_on >= today:
+            return season
+    raise NotFoundError("seasons", f"no season ends on or after {today}")

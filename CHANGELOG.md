@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0156** Add the league command *(M9; scope: cli)*
 - **0155** Add league invariants L01 to L03 *(M9; scope: verify)*
 - **0154** Add the daily tick, matchday play and the season runner *(M9; scope: league)*
 - **0153** Add the world clock and daily recovery *(M9; scope: league)*
