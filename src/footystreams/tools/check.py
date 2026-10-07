@@ -17,9 +17,9 @@ import time
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from enum import StrEnum
-from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+from footystreams.tools.paths import PROJECT_ROOT
+
 FAILURE_OUTPUT_TAIL_LINES = 60
 PYTHON = sys.executable
 
