@@ -24,7 +24,7 @@ from footystreams.sim.config import SimConfig, config_hash
 from footystreams.sim.decision import decide
 from footystreams.sim.emit import EventEmitter, Meta, TeamLabel
 from footystreams.sim.options import ActionKind, Option
-from footystreams.sim.play import Play, action_duration
+from footystreams.sim.play import Play
 from footystreams.sim.positioning import place_for_kickoff, update_positions
 from footystreams.sim.pressure import pressure_on
 from footystreams.sim.referee import referee_profile
@@ -123,8 +123,9 @@ class MatchEngine:
             self._pending_move_s = 0.0
         state.tick += 1
         pressure = pressure_on(state.carrier, state.defenders, self._config.pressure)
-        if attempt_press_tackle(play, pressure):
-            duration = action_duration(play, self._config.tempo.tackle_s)
+        challenged = attempt_press_tackle(play, pressure)
+        if challenged is not None:
+            duration = challenged
         else:
             option: Option = decide(state, play.rng, self._config, pressure)
             duration = _RESOLVERS[option.kind](play, option)

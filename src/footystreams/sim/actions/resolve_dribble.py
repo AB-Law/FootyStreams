@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from footystreams.events.open_play import ClearanceEvent, DribbleEvent, TackleEvent
 from footystreams.sim.actions.challenge import closest_of, nearest_defender_to
+from footystreams.sim.actions.foul import contest_foul
 from footystreams.sim.emit import Meta
 from footystreams.sim.options import Option
 from footystreams.sim.play import Play, action_duration, actor, take_possession
@@ -26,22 +27,26 @@ def resolve_dribble(play: Play, option: Option) -> float:
     dribble_id = play.emit.emit(
         state, DribbleEvent, meta, player_id=carrier.player_id, outcome=outcome
     )
+    duration = action_duration(play, play.cfg.tempo.dribble_s)
     if beaten:
         carrier.x, carrier.y = option.end
         state.ball_x, state.ball_y = option.end
         state.assist_from = None
-    else:
-        _lose_dribble(play, start, dribble_id, tackled=outcome == "tackled")
-    return action_duration(play, play.cfg.tempo.dribble_s)
+        return duration
+    return duration + _lose_dribble(play, start, dribble_id, tackled=outcome == "tackled")
 
 
 def _lose_dribble(
     play: Play, start: tuple[float, float], dribble_id: str, *, tackled: bool
-) -> None:
+) -> float:
+    """Lose the ball to a tackle or a heavy touch; return any extra stoppage (a called foul)."""
     state = play.state
     carrier = state.carrier
     defender = nearest_opponents(state.defenders, start[0], start[1], 1)[0][1]
     if tackled:
+        stoppage = contest_foul(play, defender, carrier, dribble_id)
+        if stoppage is not None:
+            return stoppage
         meta = Meta(
             team=defender.side,
             participants=(actor(defender, "tackler"), actor(carrier, "carrier")),
@@ -57,6 +62,7 @@ def _lose_dribble(
             outcome="won",
         )
     take_possession(state, defender, start[0], start[1])
+    return 0.0
 
 
 def resolve_clearance(play: Play, option: Option) -> float:

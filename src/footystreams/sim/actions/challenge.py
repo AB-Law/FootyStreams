@@ -4,10 +4,11 @@ from __future__ import annotations
 
 from footystreams.events.open_play import InterceptionEvent, TackleEvent
 from footystreams.sim.actions.dribbling import defending_rating, dribbling_rating
+from footystreams.sim.actions.foul import contest_foul
 from footystreams.sim.emit import Meta
 from footystreams.sim.geometry import Point, distance_m, segment_distance_m
 from footystreams.sim.mathx import squash
-from footystreams.sim.play import Play, actor, take_possession
+from footystreams.sim.play import Play, action_duration, actor, take_possession
 from footystreams.sim.pressure import nearest_opponents
 from footystreams.sim.state import PlayerState
 
@@ -21,18 +22,22 @@ def tackle_win_probability(tackler: PlayerState, carrier: PlayerState, play: Pla
     return cfg.tackle_base + cfg.tackle_swing * (squash(edge) - 0.5) * 2.0
 
 
-def attempt_press_tackle(play: Play, pressure: float) -> bool:
-    """Let the nearest defender try to dispossess the carrier; True when the ball changed hands.
+def attempt_press_tackle(play: Play, pressure: float) -> float | None:
+    """Let the nearest defender challenge the carrier.
 
-    Consumes one draw to decide whether a challenge happens and one more to resolve it. A missed
-    challenge is emitted as a `tackle` with outcome `missed` and play carries on.
+    Returns the seconds the moment took when the challenge ended it (a won tackle or a foul), or
+    None when play carries on (no challenge, or a missed one, emitted as a `tackle` with outcome
+    `missed`). Consumes one draw to decide whether a challenge happens, then the foul draws, then
+    one to resolve it.
     """
     state, cfg = play.state, play.cfg.challenge
-    nearest = nearest_opponents(state.defenders, state.carrier.x, state.carrier.y, 1)
-    gap, tackler = nearest[0]
-    if play.rng.u() >= cfg.attempt_rate * pressure or gap > cfg.attempt_radius_m:
-        return False
     carrier = state.carrier
+    gap, tackler = nearest_opponents(state.defenders, carrier.x, carrier.y, 1)[0]
+    if play.rng.u() >= cfg.attempt_rate * pressure or gap > cfg.attempt_radius_m:
+        return None
+    stoppage = contest_foul(play, tackler, carrier, None)
+    if stoppage is not None:
+        return stoppage + action_duration(play, play.cfg.tempo.tackle_s)
     won = play.rng.u() < tackle_win_probability(tackler, carrier, play)
     meta = Meta(
         team=tackler.side,
@@ -47,9 +52,10 @@ def attempt_press_tackle(play: Play, pressure: float) -> bool:
         target_id=carrier.player_id,
         outcome="won" if won else "missed",
     )
-    if won:
-        take_possession(state, tackler, carrier.x, carrier.y)
-    return won
+    if not won:
+        return None
+    take_possession(state, tackler, carrier.x, carrier.y)
+    return action_duration(play, play.cfg.tempo.tackle_s)
 
 
 def pick_interceptor(play: Play, start: Point, end: Point) -> PlayerState:

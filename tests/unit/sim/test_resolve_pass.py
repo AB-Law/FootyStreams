@@ -72,7 +72,7 @@ def test_attempt_press_tackle__nothing_happens_when_no_defender_is_close() -> No
     play = make_play()
     for defender in play.state.away.players:
         defender.x, defender.y = 0.9, 0.9
-    assert attempt_press_tackle(play, 1.0) is False
+    assert attempt_press_tackle(play, 1.0) is None
     assert play.emit.events == []
 
 
@@ -82,12 +82,11 @@ def test_attempt_press_tackle__close_defender_with_certain_attempt_resolves_a_ta
     carrier = play.state.carrier
     defender = play.state.away.players[3]
     defender.x, defender.y = carrier.x + 0.005, carrier.y
-    won = attempt_press_tackle(play, 1.0)
-    event = play.emit.events[-1]
-    assert isinstance(event, TackleEvent)
-    assert event.outcome == ("won" if won else "missed")
-    if won:
-        assert play.state.carrier.side == "away"
+    result = attempt_press_tackle(play, 1.0)
+    event = next(e for e in play.emit.events if isinstance(e, TackleEvent))
+    assert event.outcome in {"won", "foul"}
+    assert result is not None
+    assert result > 0.0
 
 
 def test_take_possession__same_side_keeps_chain_and_other_side_starts_a_new_one() -> None:

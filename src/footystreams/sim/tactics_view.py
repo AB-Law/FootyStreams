@@ -30,6 +30,9 @@ _MENTALITY_LEVEL = {
 }
 
 
+_TACKLE_AGGRESSION = {"stay_on_feet": 0.8, "balanced": 1.0, "aggressive": 1.25}
+
+
 @dataclass(frozen=True, slots=True)
 class TacticsView:
     """Unit-range tactical numbers for one team (0 = least, 1 = most unless noted)."""
@@ -49,6 +52,9 @@ class TacticsView:
     time_wasting: float
     foul_tolerance: float
     offside_trap: float
+    tackle_aggression: (
+        float  # multiplier on foul-worthy contact: 0.8 stay on feet .. 1.25 aggressive
+    )
 
 
 def build_view(sheet: TeamSheet) -> TacticsView:
@@ -75,6 +81,7 @@ def build_view(sheet: TeamSheet) -> TacticsView:
         time_wasting=management.time_wasting,
         foul_tolerance=management.foul_tolerance,
         offside_trap=block.offside_trap,
+        tackle_aggression=_TACKLE_AGGRESSION[block.tackling],
     )
 
 

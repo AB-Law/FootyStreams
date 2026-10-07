@@ -68,6 +68,7 @@ class PlayerState:
     x: float
     y: float
     shirt: int | None = None
+    yellow_cards: int = 0
 
 
 @dataclass(slots=True)
@@ -81,6 +82,7 @@ class TeamState:
     attack_dir: int
     players: list[PlayerState]
     score: int = 0
+    sent_off: list[PlayerState] = field(default_factory=list)
 
     @property
     def keeper(self) -> PlayerState:
@@ -113,6 +115,8 @@ class MatchState:
     ball_y: float = 0.5
     chain: int = 0
     chain_started_at: float = 0.0
+    is_derby: bool = False
+    attendance: int = 0
     assist_from: PlayerState | None = None  # passer of the last completed pass in this chain
     last_turnover_s: float = field(default=-1e9)  # elapsed_s of the latest change of possession
 
@@ -145,7 +149,13 @@ def build_state(setup: MatchSetup, tables: StaticTables, day_rng: SimRng) -> Mat
     """Build the initial state: players on their slots, home to kick off in period 1."""
     home = _build_team("home", setup.home, tables, day_rng)
     away = _build_team("away", setup.away, tables, day_rng)
-    return MatchState(home=home, away=away, carrier=home.players[0])
+    return MatchState(
+        home=home,
+        away=away,
+        carrier=home.players[0],
+        is_derby=setup.is_derby,
+        attendance=setup.attendance,
+    )
 
 
 def _build_team(side: Side, sheet: TeamSheet, tables: StaticTables, day_rng: SimRng) -> TeamState:

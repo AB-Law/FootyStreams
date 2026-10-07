@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0064** Add fouls, advantage and free-kick restarts (off by default until M5 is enabled) *(M5; scope: sim)*
 - **0062** Add the referee profile, call model and the discipline and setpiece streams *(M5; scope: sim)*
 - **0058** Add the golden tool and the cross-process determinism test *(M4; scope: cli, sim)*
 - **0056** Add verify_match with invariants M01-M05, M10 and M17 *(M4; scope: verify)*
