@@ -130,7 +130,7 @@ def test_pass_skill__uses_the_attribute_for_the_kind() -> None:
 
 @pytest.mark.parametrize(
     ("metres_out", "low", "high"),
-    [(6.0, 0.50, 0.70), (11.0, 0.25, 0.35), (18.0, 0.07, 0.14), (30.0, 0.01, 0.04)],
+    [(6.0, 0.26, 0.38), (11.0, 0.12, 0.20), (18.0, 0.04, 0.08), (30.0, 0.005, 0.02)],
 )
 def test_geometry_xg__matches_the_documented_anchors(
     metres_out: float, low: float, high: float

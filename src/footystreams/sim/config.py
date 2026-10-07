@@ -136,16 +136,16 @@ class ShotConfig(DomainModel):
     }
 
     range_m: float = 35.0
-    xg_cap: float = 0.75
+    xg_cap: float = 0.40
     xg_half: float = 0.44  # geometry constant: larger means lower xG from every spot
-    pressure_penalty: float = 0.5
+    pressure_penalty: float = 0.7
     finishing_floor: float = 0.80
     finishing_span: float = 0.40
     min_xg: float = 0.02
     long_range_m: float = 20.0  # beyond this the shooter's long_shots replaces finishing
-    block_base: float = 0.10  # share of shots a defender gets in the way of
+    block_base: float = 0.12  # share of shots a defender gets in the way of
     block_pressure: float = 0.15  # extra blocked share at full pressure
-    off_target_base: float = 0.30
+    off_target_base: float = 0.43
     off_target_skill_swing: float = 0.12  # a better finisher misses the frame less
     woodwork_share: float = 0.03
     keeper_swing: float = 0.5  # how much keeper quality bends the chance of a goal
@@ -210,7 +210,7 @@ class DecisionConfig(DomainModel):
     loss_cost_own_third: float = 0.55  # extra cost of losing the ball at the own goal line
     lead_frame_x: float = 0.012  # passes are aimed slightly ahead of the receiver
     min_pass_m: float = 4.0
-    shot_scale: float = 7.0
+    shot_scale: float = 16.0
     shoot_on_sight_swing: float = 0.8
     clear_pressure: float = 0.45
     clear_max_frame_x: float = 0.30

@@ -44,6 +44,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0053** Calibrate default shot model to about 2.9 goals a match *(M4; scope: sim)*
 - **0040** Tune valuation peak/contract and document rating constants *(M1; scope: domain; schema version patch)*
 - **0020** Deliver each milestone as one branch and one PR; PR size becomes informational *(M0; scope: design, ci)*
 - **0006** Make .claude/rules the source of agent rules and generate .cursor/rules from it; remove docs/rules. *(design; scope: design, tools)*

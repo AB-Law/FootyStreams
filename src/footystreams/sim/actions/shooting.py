@@ -27,7 +27,8 @@ def geometry_xg(frame_x: float, frame_y: float, cfg: ShotConfig) -> float:
 
     The visible goal mouth is `7.32 m x (distance along the pitch / distance to goal)`; the
     relative size `u = mouth / distance` is mapped through `cap * u^3 / (u^3 + half)`, which gives
-    about 0.6 from 6 m, 0.3 from 11 m, 0.10 from 18 m and 0.02 from 30 m straight on.
+    about 0.32 from 6 m, 0.16 from 11 m, 0.06 from 18 m and 0.01 from 30 m straight on at the
+    default cap of 0.40 (the cap is a calibration knob; pressure and finishing then scale it).
     """
     distance = goal_distance_m(frame_x, frame_y)
     if distance <= 0.0:
