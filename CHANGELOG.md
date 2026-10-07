@@ -7,6 +7,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Build / Tooling
+- **0010** Add test plugins, Hypothesis profiles, a coverage floor and the 'pr' tier of 'uv run check'. *(M0; scope: tools, ci)*
 - **0009** Replace .gitignore with a complete Python, tooling and project ruleset. *(M0; scope: tools)*
 - **0007** Add the uv project, strict lint/type/test configuration and the 'uv run check' quality gate. *(M0; scope: tools, ci)*
 

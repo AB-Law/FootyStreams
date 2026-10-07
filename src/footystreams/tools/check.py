@@ -1,22 +1,34 @@
-"""Run the project's quality gate: `uv run check`.
+"""Run the project's quality gate: `uv run check [--tier fast|pr]`.
 
-The fast tier (T0, see docs/design/10-testing-strategy.md) runs on every commit and at the
-end of every agent turn. Every step runs even if an earlier one fails, so a single run shows
-all problems at once. The process exits non-zero if any step fails.
+Tiers (see docs/design/10-testing-strategy.md):
+  fast  T0, runs on every commit and at the end of every agent turn.
+  pr    T1, the fast tier plus a coverage run with the coverage floor enforced.
+
+Every step runs even if an earlier one fails, so a single run shows all problems at once.
+The process exits non-zero if any step fails.
 """
 
 from __future__ import annotations
 
+import argparse
 import subprocess
 import sys
 import time
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
+from enum import StrEnum
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 FAILURE_OUTPUT_TAIL_LINES = 60
 PYTHON = sys.executable
+
+
+class Tier(StrEnum):
+    """How much of the quality gate to run."""
+
+    FAST = "fast"
+    PR = "pr"
 
 
 @dataclass(frozen=True)
@@ -44,12 +56,22 @@ class StepResult:
 
 StepRunner = Callable[[CheckStep], StepResult]
 
-FAST_STEPS: tuple[CheckStep, ...] = (
+_PYTEST = (PYTHON, "-m", "pytest", "-m", "not slow", "-q")
+LINT_STEPS: tuple[CheckStep, ...] = (
     CheckStep("ruff lint", (PYTHON, "-m", "ruff", "check", ".")),
     CheckStep("ruff format", (PYTHON, "-m", "ruff", "format", "--check", ".")),
     CheckStep("mypy --strict", (PYTHON, "-m", "mypy")),
-    CheckStep("pytest (fast tier)", (PYTHON, "-m", "pytest", "-m", "not slow", "-q")),
 )
+FAST_TEST_STEP = CheckStep("pytest (fast tier)", _PYTEST)
+COVERAGE_TEST_STEP = CheckStep(
+    "pytest + coverage floor", (*_PYTEST, "--cov", "--cov-report=term-missing:skip-covered")
+)
+
+
+def steps_for(tier: Tier) -> tuple[CheckStep, ...]:
+    """Return the ordered steps that make up a tier."""
+    test_step = COVERAGE_TEST_STEP if tier is Tier.PR else FAST_TEST_STEP
+    return (*LINT_STEPS, test_step)
 
 
 def run_step(step: CheckStep) -> StepResult:
@@ -82,9 +104,16 @@ def format_report(results: Sequence[StepResult]) -> str:
     return "\n".join(lines)
 
 
-def main() -> int:
-    """Run the fast tier and return the process exit code."""
-    results = run_steps(FAST_STEPS)
+def parse_tier(argv: Sequence[str] | None = None) -> Tier:
+    """Read the `--tier` option (default: fast)."""
+    parser = argparse.ArgumentParser(prog="check", description=__doc__)
+    parser.add_argument("--tier", type=Tier, choices=list(Tier), default=Tier.FAST)
+    return parser.parse_args(argv).tier  # type: ignore[no-any-return]
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    """Run the requested tier and return the process exit code."""
+    results = run_steps(steps_for(parse_tier(argv)))
     print(format_report(results))
     return 0 if all(result.passed for result in results) else 1
 
