@@ -10,18 +10,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import IntEnum
 
-from footystreams.domain.match import LineupSlot, MatchSetup, TeamSheet
-from footystreams.domain.snapshot import PlayerSnapshot
-from footystreams.domain.types import FormationId, PlayerId, Position, RoleId
-from footystreams.sim.config import SimConfig
-from footystreams.sim.effective import Skills, build_skills, day_form_multiplier, multipliers
-from footystreams.sim.errors import InvalidSetupError
-from footystreams.sim.geometry import frame_coordinate
-from footystreams.sim.rng import SimRng
+from footystreams.domain.match import TeamSheet
+from footystreams.domain.types import PlayerId, Position, RoleId
+from footystreams.sim.effective import Skills
 from footystreams.sim.side import Side, opposite
-from footystreams.sim.tables import Formation, StaticTables
-from footystreams.sim.tactics_view import TacticsView, build_view
-from footystreams.sim.weather import NEUTRAL, Conditions, apply_conditions, conditions_for
+from footystreams.sim.tables import Formation
+from footystreams.sim.tactics_view import TacticsView
+from footystreams.sim.weather import NEUTRAL, Conditions
 
 REGULATION_PERIOD_S = 2700.0
 
@@ -71,6 +66,10 @@ class PlayerState:
     y: float
     shirt: int | None = None
     yellow_cards: int = 0
+    base_skills: Skills | None = None  # skills before fatigue; set when the sim builds the player
+    exhaustion: float = 0.0
+    drain: float = 0.0  # this player's share of the exhaustion rate (before team context)
+    energy_step: int = 0  # exhaustion bucket the current `skills` were built for
 
 
 @dataclass(slots=True)
@@ -148,66 +147,3 @@ class MatchState:
 def line_of(position: Position) -> Line:
     """Return the row a position belongs to."""
     return _LINE_OF[position]
-
-
-def build_state(
-    setup: MatchSetup, tables: StaticTables, day_rng: SimRng, config: SimConfig | None = None
-) -> MatchState:
-    """Build the initial state: players on their slots, home to kick off in period 1."""
-    config = config or SimConfig()
-    conditions = conditions_for(setup.weather, setup.home.stadium, config.weather)
-    home = _build_team("home", setup.home, tables, day_rng, conditions)
-    away = _build_team("away", setup.away, tables, day_rng, conditions)
-    return MatchState(
-        home=home,
-        away=away,
-        carrier=home.players[0],
-        is_derby=setup.is_derby,
-        attendance=setup.attendance,
-        conditions=conditions,
-    )
-
-
-def _build_team(
-    side: Side, sheet: TeamSheet, tables: StaticTables, day_rng: SimRng, conditions: Conditions
-) -> TeamState:
-    formation_id = sheet.tactics.formation
-    formation = tables.formations.get(FormationId(formation_id))
-    if formation is None:
-        msg = f"unknown formation {formation_id!r} on {sheet.club.id}"
-        raise InvalidSetupError(msg)
-    attack_dir = 1 if side == "home" else -1
-    ordered = sorted(sheet.lineup, key=lambda lineup_slot: lineup_slot.slot)
-    players = [
-        _build_player(side, sheet, formation, item, (day_rng, conditions)) for item in ordered
-    ]
-    return TeamState(side, sheet, formation, build_view(sheet), attack_dir, players)
-
-
-def _build_player(
-    side: Side,
-    sheet: TeamSheet,
-    formation: Formation,
-    lineup_slot: LineupSlot,
-    environment: tuple[SimRng, Conditions],
-) -> PlayerState:
-    snapshot: PlayerSnapshot = sheet.squad[lineup_slot.player_id]
-    formation_slot = formation.slots[lineup_slot.slot]
-    day_rng, conditions = environment
-    day = day_form_multiplier(snapshot.hidden.consistency, day_rng)
-    mult = multipliers(snapshot, formation_slot.position, lineup_slot.role, day)
-    attack_dir = 1 if side == "home" else -1
-    return PlayerState(
-        player_id=lineup_slot.player_id,
-        side=side,
-        slot=lineup_slot.slot,
-        position=formation_slot.position,
-        line=line_of(formation_slot.position),
-        role=lineup_slot.role,
-        skills=apply_conditions(build_skills(snapshot, mult), conditions),
-        base_x=formation_slot.x,
-        base_y=formation_slot.y,
-        x=frame_coordinate(formation_slot.x, attack_dir),
-        y=frame_coordinate(formation_slot.y, attack_dir),
-        shirt=snapshot.squad_number,
-    )

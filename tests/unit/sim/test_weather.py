@@ -6,9 +6,9 @@ import pytest
 from footystreams.domain.weather import Weather, WeatherCondition
 from footystreams.sim import SimConfig, merge_config
 from footystreams.sim.actions.passing import PassAttempt, PassKind, pass_success_probability
+from footystreams.sim.build import build_state
 from footystreams.sim.config import PassConfig, WeatherConfig
 from footystreams.sim.rng import SimRng
-from footystreams.sim.state import build_state
 from footystreams.sim.tables import default_tables
 from footystreams.sim.weather import NEUTRAL, apply_conditions, conditions_for
 from tests.factories.match import make_setup

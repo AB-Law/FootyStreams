@@ -50,3 +50,67 @@ class WeatherConfig(DomainModel):
     poor_pitch_pass: float = 0.02  # long-ball success lost on the worst possible pitch
     poor_pitch_dribble: float = 0.02
     poor_pitch_injury: float = 0.10
+
+
+class FatigueConfig(DomainModel):
+    """In-match exhaustion: how fast it builds and what it does to skills (02 section 9)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "enabled": "S",
+        "match_s": "S",
+        "base_rate": "S",
+        "carried_fatigue_weight": "S",
+        "carried_fitness_weight": "S",
+        "stamina_weight": "S",
+        "fitness_weight": "S",
+        "work_rate_weight": "S",
+        "keeper_load": "S",
+        "defence_load": "S",
+        "midfield_load": "S",
+        "attack_load": "S",
+        "press_swing": "S",
+        "tempo_swing": "S",
+        "heat_weight": "S",
+        "wet_weight": "S",
+        "travel_weight": "S",
+        "ten_men_load": "S",
+        "altitude_scale_m": "S",
+        "altitude_cap": "S",
+        "halftime_recovery": "S",
+        "max_exhaustion": "S",
+        "physical_k": "S",
+        "mental_k": "S",
+        "mental_onset": "S",
+        "technical_k": "S",
+        "technical_onset": "S",
+        "refresh_step": "S",
+    }
+
+    enabled: bool = False  # switched on in the commit that enables M6 behaviour
+    match_s: float = 5400.0  # drain is expressed per full match
+    base_rate: float = 0.60  # exhaustion gained over 90 minutes by an average, unhurried player
+    carried_fatigue_weight: float = 0.6  # starting exhaustion = 0.6 fatigue + 0.4 (1 - fitness)
+    carried_fitness_weight: float = 0.4
+    stamina_weight: float = 0.5
+    fitness_weight: float = 0.25
+    work_rate_weight: float = 0.5
+    keeper_load: float = 0.25  # a goalkeeper tires a quarter as fast
+    defence_load: float = 0.9
+    midfield_load: float = 1.1
+    attack_load: float = 1.0
+    press_swing: float = 0.4  # pressing intensity 0 -> x0.8, 1 -> x1.2
+    tempo_swing: float = 0.3
+    heat_weight: float = 0.5
+    wet_weight: float = 0.25
+    travel_weight: float = 0.04  # away sides in a hostile or distant ground tire a little faster
+    ten_men_load: float = 0.10  # extra drain for a side a man down
+    altitude_scale_m: float = 20_000.0  # metres of altitude that would add 100% drain
+    altitude_cap: float = 0.15
+    halftime_recovery: float = 0.06  # the only way exhaustion ever falls
+    max_exhaustion: float = 1.5
+    physical_k: float = 0.30  # physical skills x (1 - k x E^2)
+    mental_k: float = 0.25  # mental skills x (1 - k x max(0, E - onset)^2)
+    mental_onset: float = 0.4
+    technical_k: float = 0.15
+    technical_onset: float = 0.2
+    refresh_step: float = 0.05  # skills are rebuilt when exhaustion crosses a multiple of this

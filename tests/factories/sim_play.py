@@ -6,13 +6,13 @@ from functools import cache
 
 from footystreams.domain.match import MatchSetup
 from footystreams.domain.referee import Referee
+from footystreams.sim.build import build_state
 from footystreams.sim.config import SimConfig
 from footystreams.sim.emit import EventEmitter
 from footystreams.sim.play import Play
 from footystreams.sim.positioning import place_for_kickoff
 from footystreams.sim.referee import referee_profile
 from footystreams.sim.rng import SimRng
-from footystreams.sim.state import build_state
 from footystreams.sim.tables import default_tables
 from tests.factories.match import make_setup
 

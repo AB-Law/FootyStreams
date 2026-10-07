@@ -3,6 +3,7 @@ from dataclasses import replace
 import pytest
 
 from footystreams.domain.types import FormationId, Position
+from footystreams.sim.build import build_state
 from footystreams.sim.config import PositionConfig
 from footystreams.sim.errors import InvalidSetupError
 from footystreams.sim.geometry import distance_m
@@ -15,7 +16,7 @@ from footystreams.sim.positioning import (
     update_positions,
 )
 from footystreams.sim.rng import SimRng
-from footystreams.sim.state import Line, MatchState, build_state, line_of
+from footystreams.sim.state import Line, MatchState, line_of
 from footystreams.sim.tables import default_tables
 from tests.factories.match import make_setup, make_team_sheet
 

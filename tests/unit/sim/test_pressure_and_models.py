@@ -11,11 +11,12 @@ from footystreams.sim.actions.passing import (
     pass_success_probability,
 )
 from footystreams.sim.actions.shooting import geometry_xg, shot_chance
+from footystreams.sim.build import build_state
 from footystreams.sim.config import DribbleConfig, PassConfig, PressureConfig, ShotConfig
 from footystreams.sim.geometry import PITCH_LENGTH_M
 from footystreams.sim.pressure import nearest_opponents, openness, pressure_on
 from footystreams.sim.rng import SimRng
-from footystreams.sim.state import MatchState, build_state
+from footystreams.sim.state import MatchState
 from footystreams.sim.tables import default_tables
 from tests.factories.match import make_setup
 

@@ -1,5 +1,6 @@
 import pytest
 
+from footystreams.sim.build import build_state
 from footystreams.sim.config import SimConfig
 from footystreams.sim.decision import (
     choice_temperature,
@@ -11,7 +12,7 @@ from footystreams.sim.decision import (
 from footystreams.sim.options import ActionKind, Option, generate_options
 from footystreams.sim.positioning import place_for_kickoff
 from footystreams.sim.rng import SimRng
-from footystreams.sim.state import MatchState, build_state
+from footystreams.sim.state import MatchState
 from footystreams.sim.tables import default_tables
 from footystreams.sim.threat import threat
 from tests.factories.match import make_setup

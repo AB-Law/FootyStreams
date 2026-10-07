@@ -25,10 +25,12 @@ from footystreams.sim.actions.challenge import attempt_press_tackle
 from footystreams.sim.actions.resolve_dribble import resolve_clearance, resolve_dribble
 from footystreams.sim.actions.resolve_pass import resolve_pass
 from footystreams.sim.actions.resolve_shot import resolve_shot
+from footystreams.sim.build import build_state
 from footystreams.sim.config import SimConfig, config_hash
 from footystreams.sim.config_rules import OffsideConfig
 from footystreams.sim.decision import decide
 from footystreams.sim.emit import EventEmitter, Meta, TeamLabel
+from footystreams.sim.fatigue import advance_exhaustion, halftime_recovery
 from footystreams.sim.options import ActionKind, Option
 from footystreams.sim.play import Play
 from footystreams.sim.positioning import place_for_kickoff, update_positions
@@ -36,7 +38,7 @@ from footystreams.sim.pressure import pressure_on
 from footystreams.sim.referee import referee_profile
 from footystreams.sim.rng import SimRng
 from footystreams.sim.side import Side
-from footystreams.sim.state import REGULATION_PERIOD_S, MatchState, build_state
+from footystreams.sim.state import REGULATION_PERIOD_S, MatchState
 from footystreams.sim.stoppage import SECONDS_PER_MINUTE, added_minutes
 from footystreams.sim.summary import SummaryInputs, build_summary
 from footystreams.sim.tables import StaticTables
@@ -90,6 +92,11 @@ class MatchEngine:
         )
         self._pending_move_s = 0.0
 
+    @property
+    def state(self) -> MatchState:
+        """The live state, for diagnostics and tests that watch the match as it is played."""
+        return self._state
+
     def run(self) -> Iterator[MatchEvent]:
         """Play the whole match, yielding events as they are produced, summary last."""
         state = self._state
@@ -105,6 +112,8 @@ class MatchEngine:
                     yield from self._emitter.drain()
             state.played_before_s += REGULATION_PERIOD_S + added * SECONDS_PER_MINUTE
             if period == PERIODS[0]:
+                if self._config.fatigue.enabled:
+                    halftime_recovery(state, self._config.fatigue)
                 self._emit_marker(
                     HalftimeEvent, score_home=state.home.score, score_away=state.away.score
                 )
@@ -144,6 +153,8 @@ class MatchEngine:
             update_positions(
                 state, self._pending_move_s, self._config.positioning, self._offside_rule()
             )
+            if self._config.fatigue.enabled:
+                advance_exhaustion(state, self._pending_move_s, self._config.fatigue)
             self._pending_move_s = 0.0
         state.tick += 1
         pressure = pressure_on(state.carrier, state.defenders, self._config.pressure)

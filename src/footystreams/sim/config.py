@@ -31,7 +31,7 @@ from footystreams.sim.config_rules import (
     RestartConfig,
     StoppageConfig,
 )
-from footystreams.sim.config_world import WeatherConfig
+from footystreams.sim.config_world import FatigueConfig, WeatherConfig
 
 CONFIG_HASH_LENGTH = 16
 
@@ -40,6 +40,7 @@ __all__ = [
     "DecisionConfig",
     "DisciplineConfig",
     "DribbleConfig",
+    "FatigueConfig",
     "OffsideConfig",
     "PassConfig",
     "PositionConfig",
@@ -78,6 +79,7 @@ class SimConfig(DomainModel):
         "offside": "S",
         "stoppage": "S",
         "weather": "S",
+        "fatigue": "S",
     }
 
     model_profile: str = "v1"
@@ -98,6 +100,7 @@ class SimConfig(DomainModel):
     offside: OffsideConfig = Field(default_factory=OffsideConfig)
     stoppage: StoppageConfig = Field(default_factory=StoppageConfig)
     weather: WeatherConfig = Field(default_factory=WeatherConfig)
+    fatigue: FatigueConfig = Field(default_factory=FatigueConfig)
 
 
 def config_hash(config: SimConfig) -> str:
