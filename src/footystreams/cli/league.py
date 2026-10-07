@@ -8,7 +8,8 @@ from pathlib import Path
 
 from sqlalchemy import Engine
 
-from footystreams.cli.league_wiring import build_engine, load_league_tables
+from footystreams.cli.league_wiring import build_engine, build_prospects, load_league_tables
+from footystreams.domain.competition import Season
 from footystreams.domain.types import ClubId
 from footystreams.domain.world import World
 from footystreams.league.clock import read_date
@@ -37,6 +38,9 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--world", type=Path, help="start from this world directory, not --seed")
     parser.add_argument("--db", type=Path, help="SQLite file: resumed if it holds a world")
     parser.add_argument("--matchday", type=int, help="stop after this matchday has been played")
+    parser.add_argument(
+        "--seasons", type=int, help="play this many seasons, with the off-season between them"
+    )
     parser.add_argument(
         "--season-only", action="store_true", help="play the current season to its end (default)"
     )
@@ -81,33 +85,44 @@ def _open(arguments: argparse.Namespace) -> tuple[UnitOfWorkFactory, Engine | No
     return sql, engine
 
 
-def _print_result(
-    result: SeasonResult, factory: UnitOfWorkFactory, opening: dict[ClubId, int]
+def _print_results(
+    results: list[SeasonResult], factory: UnitOfWorkFactory, opening: dict[ClubId, int]
 ) -> None:
     with factory() as uow:
         clubs = uow.clubs.all()
         today = read_date(uow)
     names = {club.id: club.name for club in clubs}
-    print(f"{result.season.label}: {result.matches_played} matches played, now {today}")
-    print(format_table(result.table, names))
-    print()
+    for result in results:
+        print(f"{result.season.label}: {result.matches_played} matches played")
+        print(format_table(result.table, names))
+        print()
+    print(f"now {today}")
     print(format_money(clubs, opening))
+
+
+def _play(
+    arguments: argparse.Namespace, runner: SeasonRunner, season: Season
+) -> list[SeasonResult]:
+    if arguments.seasons is not None:
+        return runner.run_seasons(arguments.seasons)
+    if arguments.matchday is not None:
+        return [runner.run_until_matchday(season, arguments.matchday)]
+    return [runner.run_season(season)]
 
 
 def _run(arguments: argparse.Namespace) -> int:
     factory, engine = _open(arguments)
     try:
+        static = load_static_tables()
         with factory() as uow:
             world_seed = int(read_meta(uow, KEY_WORLD_SEED))
             season = current_season(uow, read_date(uow))
             opening = {club.id: club.finances.balance for club in uow.clubs.all()}
-        runner = SeasonRunner(factory, build_engine(load_league_tables(), world_seed))
-        result = (
-            runner.run_until_matchday(season, arguments.matchday)
-            if arguments.matchday is not None
-            else runner.run_season(season)
+            prospects = build_prospects(uow, static)
+        runner = SeasonRunner(
+            factory, build_engine(load_league_tables(static=static), world_seed), prospects
         )
-        _print_result(result, factory, opening)
+        _print_results(_play(arguments, runner, season), factory, opening)
     finally:
         if engine is not None:
             engine.dispose()
