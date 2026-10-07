@@ -17,6 +17,7 @@ from footystreams.domain.mood import StateModifier
 from footystreams.domain.player import Player
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.types import PlayerId
+from footystreams.league.contracts import expire_contracts
 from footystreams.league.delta import WorldDelta, merge_all
 from footystreams.league.finance import (
     WageBills,
@@ -229,3 +230,23 @@ class RolloverStage:
             if season.ends_on == yesterday
         ]
         return merge_all(deltas)
+
+
+class ContractExpiryStage:
+    """The day after the contract-end day: contracts that ran out release their players."""
+
+    name: ClassVar[str] = "contract_expiry"
+
+    def __init__(self, tables: LeagueTables) -> None:
+        """Create the stage over the league tables."""
+        self._tables = tables
+
+    def run(self, repositories: Repositories, today: dt.date, rng: WorldRng) -> WorldDelta:  # noqa: ARG002
+        """Release the players whose contracts ended; nothing on other days."""
+        end = dt.date(today.year, *self._tables.config.calendar.contract_end)
+        if today != end + dt.timedelta(days=1):
+            return WorldDelta()
+        expiry = expire_contracts(repositories.players.find({"status": ACTIVE}), today)
+        return WorldDelta(
+            players=expiry.players, world_events=expiry.events, deletions=expiry.deletions
+        )

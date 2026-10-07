@@ -25,6 +25,7 @@ from footystreams.league.matchday import (
 from footystreams.league.rollover_state import RolloverServices
 from footystreams.league.stages import (
     ClubAdminStage,
+    ContractExpiryStage,
     LifeEventsStage,
     RecoveryStage,
     RolloverStage,
@@ -57,6 +58,7 @@ def default_stages(engine: MatchdayEngine, prospects: ProspectFactory | None = N
         LifeEventsStage(tables),
         ClubAdminStage(tables),
         SeasonEndStage(tables),
+        ContractExpiryStage(tables),
     ]
     if prospects is not None:
         stages.append(RolloverStage(RolloverServices(tables, prospects)))

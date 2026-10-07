@@ -8,16 +8,15 @@ awards, club year-end, contracts, retirements, progression, youth intake, squads
 from __future__ import annotations
 
 import datetime as dt
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 
 from footystreams.domain.competition import Competition, Season
 from footystreams.domain.ids import derive_id
 from footystreams.domain.injury import Discipline
-from footystreams.domain.mood import StateKind
+from footystreams.domain.mood import ModifierSource, StateKind, StateModifier
 from footystreams.domain.player import Player, PlayerStatus
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.types import PlayerId, SeasonId
-from footystreams.domain.valuation import market_value_of, wage_from_value
 from footystreams.league.awards import SeasonTotals, award_modifiers, season_awards
 from footystreams.league.club_year import (
     expected_places,
@@ -26,7 +25,9 @@ from footystreams.league.club_year import (
     reset_budgets,
     update_standing,
 )
+from footystreams.league.contracts import club_wants, negotiate
 from footystreams.league.delta import WorldDelta
+from footystreams.league.modifiers import ModifierSpec, new_modifier
 from footystreams.league.progression import ProgressionInputs, progress_season
 from footystreams.league.retirement import choose_retirements, retired, retirement_news
 from footystreams.league.rollover_squads import intake, mean_ability, squads, top_up_pool, trim_pool
@@ -93,32 +94,60 @@ def _club_year_end(
         work.clubs[club_id] = reset_budgets(moved, services.tables.config.finance, config)
 
 
-def renew_contract(player: Player, today: dt.date, years: int, scale: float) -> Player:
-    """A new contract for a player whose deal is about to end: half old wage, half market wage."""
-    contract = player.contract
-    if contract is None:
-        return player
-    target = wage_from_value(market_value_of(player, today))
-    wage = round((0.5 * contract.wage_weekly + 0.5 * target) * scale)
-    renewed = contract.model_copy(
-        update={"start": today, "end": contract_end(today, years), "wage_weekly": wage}
-    )
-    return player.model_copy(update={"contract": renewed})
-
-
 def _renew_contracts(work: Work, context: tuple[RolloverServices, dt.date], rng: WorldRng) -> None:
+    """Renewal talks for contracts about to end; a failed talk leaves a contract dispute."""
     services, today = context
-    config = services.tables.development.rollover
+    tables = services.tables
+    rollover = tables.development.rollover
     for club_id in sorted(work.clubs):
-        scale = wage_scale(work, club_id, config)
+        club = work.clubs[club_id]
+        squad = seniors_of(work, club_id)
+        scale = wage_scale(work, club_id, rollover)
         expiring = [
-            p
-            for p in seniors_of(work, club_id)
-            if p.contract and (p.contract.end - today).days < MIN_TERM_DAYS
+            p for p in squad if p.contract and (p.contract.end - today).days < MIN_TERM_DAYS
         ]
         for player in sorted(expiring, key=lambda p: p.id):
-            years = rng.fork(f"renew:{player.id}").randint(*config.contract_extend_years)
-            work.players[player.id] = renew_contract(player, today, years, scale)
+            _talks(work, player, (club.club_reputation, scale), (squad, services, today), rng)
+
+
+def _talks(
+    work: Work,
+    player: Player,
+    club: tuple[int, float],
+    context: tuple[Sequence[Player], RolloverServices, dt.date],
+    rng: WorldRng,
+) -> None:
+    squad, services, today = context
+    contract = player.contract
+    config = services.tables.transfer
+    if contract is None or not club_wants(
+        player, squad, contract.squad_role, (config.renewal, today)
+    ):
+        return
+    agreed = negotiate(
+        player, club, (config.terms, config.renewal), (today, rng.fork(f"renew:{player.id}"), True)
+    )
+    if agreed is None:
+        work.modifiers.append(_dispute(player, today, services))
+        return
+    renewed = contract.model_copy(
+        update={
+            "start": today,
+            "end": contract_end(today, agreed.length_years),
+            "wage_weekly": agreed.wage,
+        }
+    )
+    work.players[player.id] = player.model_copy(update={"contract": renewed})
+
+
+def _dispute(player: Player, today: dt.date, services: RolloverServices) -> StateModifier:
+    spec = ModifierSpec(
+        StateKind.CONTRACT_DISPUTE,
+        player.id,
+        services.tables.transfer.renewal.dispute_magnitude,
+        ModifierSource(origin="rule"),
+    )
+    return new_modifier(spec, today, services.tables.mood)
 
 
 def _retire(work: Work, context: tuple[RolloverServices, dt.date], rng: WorldRng) -> None:
