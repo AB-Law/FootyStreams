@@ -9,6 +9,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0031** Add match stack with ResolvedMood and sheets *(M1; scope: domain; schema version minor)*
+- **0030** Add competition fixture and standings models *(M1; scope: domain; schema version minor)*
 - **0029** Add Club Stadium Fanbase Finance and Board *(M1; scope: domain; schema version minor)*
 - **0028** Add TeamTactics module package *(M1; scope: domain; schema version minor)*
 - **0027** Add Manager Staff and Referee models *(M1; scope: domain; schema version minor)*
