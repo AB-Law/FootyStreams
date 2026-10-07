@@ -106,6 +106,16 @@ class RestartConfig(DomainModel):
         "clearance_out_share": "S",
         "cross_corner_share": "S",
         "dribble_out_share": "S",
+        "direct_range_m": "S",
+        "direct_share": "S",
+        "wall_factor": "S",
+        "free_kick_cross_share": "S",
+        "penalty_off_target": "S",
+        "penalty_woodwork": "S",
+        "penalty_skill_pivot": "S",
+        "penalty_goal_given_frame": "S",
+        "penalty_skill_swing": "S",
+        "penalty_distance_m": "S",
         "corner_keeper_claim": "S",
         "corner_shot_share": "S",
         "corner_xg_base": "S",
@@ -126,6 +136,16 @@ class RestartConfig(DomainModel):
     clearance_out_share: float = 0.25  # clearances that go into touch
     cross_corner_share: float = 0.35  # blocked crosses deflected behind
     dribble_out_share: float = 0.60  # heavy touches that run out of play
+    direct_range_m: float = 32.0  # farthest a direct free kick is shot from
+    direct_share: float = 0.70  # chance a kick in range is shot rather than played
+    wall_factor: float = 0.45  # a wall and a set keeper cut the xG of an open-play shot
+    free_kick_cross_share: float = 0.5  # of kicks outside direct range in the attacking half
+    penalty_off_target: float = 0.08  # chance a penalty misses the frame
+    penalty_woodwork: float = 0.03
+    penalty_skill_pivot: float = 55.0
+    penalty_goal_given_frame: float = 0.88  # chance an on-frame penalty beats an average keeper
+    penalty_skill_swing: float = 0.003  # per point of taker-minus-keeper skill
+    penalty_distance_m: float = 11.0
     corner_keeper_claim: float = 0.18
     corner_shot_share: float = 0.46  # times the attackers' aerial share
     corner_xg_base: float = 0.10

@@ -5,7 +5,8 @@ from __future__ import annotations
 from footystreams.events.discipline import FoulEvent
 from footystreams.events.open_play import TackleEvent
 from footystreams.sim.actions.cards import show_card
-from footystreams.sim.actions.setpieces import take_free_kick
+from footystreams.sim.actions.free_kick import take_free_kick
+from footystreams.sim.actions.penalty import take_penalty
 from footystreams.sim.discipline import Contact, roll_contact
 from footystreams.sim.emit import Meta
 from footystreams.sim.play import Play, actor, label
@@ -69,4 +70,6 @@ def contest_foul(
     booking_s = show_card(play, tackler, contact, foul_id)
     if plays_advantage(play, contact):
         return booking_s
+    if contact.in_box and play.cfg.restarts.enabled:
+        return booking_s + take_penalty(play, carrier.side, foul_id)
     return booking_s + take_free_kick(play, carrier.side, spot, "direct", foul_id)

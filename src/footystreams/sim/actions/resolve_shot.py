@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from footystreams.events.open_play import GoalEvent, SaveEvent, ShotEvent
-from footystreams.sim.actions.challenge import closest_of
+from footystreams.sim.actions.nearest import closest_of
 from footystreams.sim.actions.out_of_play import out_of_play
 from footystreams.sim.actions.shooting import finishing_skill
 from footystreams.sim.emit import Meta
@@ -118,14 +118,14 @@ def _after_shot(play: Play, outcome: str, shot_id: str, assist: str | None) -> f
     """Apply the consequences of a shot outcome; return extra seconds (goal, restarts)."""
     state = play.state
     if outcome == "goal":
-        return _score_goal(play, shot_id, assist)
+        return score_goal(play, shot_id, assist)
     if outcome == "saved":
         return _record_save(play, shot_id)
     if outcome == "off_target":
-        return _behind(play, last_touch=state.carrier.side, keeper_collects=True)
+        return restart_behind(play, last_touch=state.carrier.side, collect=True)
     if outcome == "blocked" and _deflected_behind(play, play.cfg.restarts.blocked_corner_share):
-        return _behind(play, last_touch=state.defenders.side, keeper_collects=False)
-    _loose_ball(play, (state.ball_x, state.ball_y))
+        return restart_behind(play, last_touch=state.defenders.side, collect=False)
+    loose_ball(play, (state.ball_x, state.ball_y))
     return 0.0
 
 
@@ -134,18 +134,19 @@ def _deflected_behind(play: Play, share: float) -> bool:
     return play.cfg.restarts.enabled and play.setpiece.u() < share
 
 
-def _behind(play: Play, *, last_touch: Side, keeper_collects: bool) -> float:
+def restart_behind(play: Play, *, last_touch: Side, collect: bool) -> float:
     """The ball goes out behind the goal: a goal kick or corner, or the keeper just collects it."""
     state = play.state
     if not play.cfg.restarts.enabled:
-        if keeper_collects:
-            _keeper_collects(play)
+        if collect:
+            keeper_collects(play)
         return 0.0
     goal_x = frame_coordinate(1.0, state.attackers.attack_dir)
     return out_of_play(play, (goal_x, state.carrier.y), last_touch)
 
 
-def _keeper_collects(play: Play) -> None:
+def keeper_collects(play: Play) -> None:
+    """The keeper picks the ball up near his six-yard box and has possession."""
     state = play.state
     keeper = state.defenders.keeper
     spot_x = frame_coordinate(_KEEPER_RELEASE_FRAME_X, state.defenders.attack_dir)
@@ -163,16 +164,22 @@ def _record_save(play: Play, shot_id: str) -> float:
         headline=f"{label(state.defenders, keeper.player_id)} saves",
     )
     play.emit.emit(state, SaveEvent, meta, keeper_id=keeper.player_id, shot_event_id=shot_id)
+    return after_save(play)
+
+
+def after_save(play: Play) -> float:
+    """The keeper holds, tips it behind (a corner) or parries it loose; return extra seconds."""
+    keeper = play.state.defenders.keeper
     if play.rng.u() < play.cfg.shot.keeper_holds:
-        _keeper_collects(play)
+        keeper_collects(play)
     elif _deflected_behind(play, play.cfg.restarts.parry_corner_share):
-        return _behind(play, last_touch=keeper.side, keeper_collects=False)
+        return restart_behind(play, last_touch=keeper.side, collect=False)
     else:
-        _loose_ball(play, (keeper.x, keeper.y))
+        loose_ball(play, (keeper.x, keeper.y))
     return 0.0
 
 
-def _loose_ball(play: Play, spot: tuple[float, float]) -> None:
+def loose_ball(play: Play, spot: tuple[float, float]) -> None:
     """A parried or blocked ball: the nearest attacker or defender gets there first."""
     state = play.state
     attacker_first = play.rng.u() < play.cfg.shot.rebound_attacker_share
@@ -184,7 +191,8 @@ def _loose_ball(play: Play, spot: tuple[float, float]) -> None:
     take_possession(state, winner, spot[0], spot[1])
 
 
-def _score_goal(play: Play, shot_id: str, assist: str | None) -> float:
+def score_goal(play: Play, shot_id: str, assist: str | None) -> float:
+    """Record a goal by the carrier, restart from the centre and return the celebration seconds."""
     state = play.state
     scorer = state.carrier
     state.attackers.score += 1

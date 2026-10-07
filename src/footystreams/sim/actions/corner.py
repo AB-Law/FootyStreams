@@ -127,11 +127,29 @@ def _keeper_claims(play: Play, side: Side) -> None:
     take_possession(state, defenders.keeper, spot[0], spot[1])
 
 
+def deliver(play: Play, side: Side, taker: PlayerState) -> float:
+    """Play the ball into the box and resolve the aerial duel; return the extra seconds.
+
+    One `setpiece` draw picks the branch: the keeper claims, an attacker heads at goal, or the
+    defence clears. Shared by corners and crossed free kicks.
+    """
+    cfg = play.cfg.restarts
+    duel = build_duel(play, side, taker)
+    roll = play.setpiece.u()
+    claim = cfg.corner_keeper_claim * (CLAIM_BASE - duel.share)
+    if not duel.attackers or roll < claim:
+        _keeper_claims(play, side)
+        return 0.0
+    if roll < claim + cfg.corner_shot_share * duel.share:
+        return _header(play, duel, taker)
+    _clearance(play, duel, side)
+    return 0.0
+
+
 def corner(play: Play, side: Side, flag: Point) -> float:
     """Take a corner for `side` from the flag at `flag`; return the stoppage seconds."""
     state, cfg = play.state, play.cfg.restarts
-    team = state.team(side)
-    taker = choose_corner_taker(team, flag[1])
+    taker = choose_corner_taker(state.team(side), flag[1])
     meta = Meta(team=side, participants=(actor(taker, "taker"),), pos=flag)
     play.emit.emit(
         state,
@@ -142,13 +160,4 @@ def corner(play: Play, side: Side, flag: Point) -> float:
     )
     take_possession(state, taker, flag[0], flag[1])
     seconds = restart_delay(play, cfg.corner_s, cfg.corner_spread_s)
-    duel = build_duel(play, side, taker)
-    roll = play.setpiece.u()
-    claim = cfg.corner_keeper_claim * (CLAIM_BASE - duel.share)
-    if not duel.attackers or roll < claim:
-        _keeper_claims(play, side)
-    elif roll < claim + cfg.corner_shot_share * duel.share:
-        seconds += _header(play, duel, taker)
-    else:
-        _clearance(play, duel, side)
-    return seconds
+    return seconds + deliver(play, side, taker)

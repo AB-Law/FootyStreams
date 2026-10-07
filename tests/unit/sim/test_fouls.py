@@ -6,11 +6,8 @@ from footystreams.events.discipline import FoulEvent
 from footystreams.events.open_play import TackleEvent
 from footystreams.events.restarts import FreeKickEvent
 from footystreams.sim.actions.foul import contest_foul, plays_advantage
-from footystreams.sim.actions.setpieces import (
-    choose_free_kick_taker,
-    restart_delay,
-    take_free_kick,
-)
+from footystreams.sim.actions.free_kick import take_free_kick
+from footystreams.sim.actions.setpieces import choose_free_kick_taker, restart_delay
 from footystreams.sim.config import DisciplineConfig, SimConfig, merge_config
 from footystreams.sim.discipline import (
     Contact,

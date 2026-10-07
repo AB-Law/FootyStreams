@@ -6,7 +6,7 @@ from footystreams.events.open_play import InterceptionEvent, TackleEvent
 from footystreams.sim.actions.dribbling import defending_rating, dribbling_rating
 from footystreams.sim.actions.foul import contest_foul
 from footystreams.sim.emit import Meta
-from footystreams.sim.geometry import Point, distance_m, segment_distance_m
+from footystreams.sim.geometry import Point, segment_distance_m
 from footystreams.sim.mathx import squash
 from footystreams.sim.play import Play, action_duration, actor, take_possession
 from footystreams.sim.pressure import nearest_opponents
@@ -84,16 +84,3 @@ def record_interception(play: Play, defender: PlayerState, pass_event_id: str) -
     )
     play.emit.emit(state, InterceptionEvent, meta, player_id=defender.player_id)
     take_possession(state, defender, defender.x, defender.y)
-
-
-def nearest_defender_to(play: Play, point: Point) -> PlayerState:
-    """Return the defender closest to a point (wins a loose ball there)."""
-    return nearest_opponents(play.state.defenders, point[0], point[1], 1)[0][1]
-
-
-def closest_of(players: list[PlayerState], point: Point) -> PlayerState:
-    """Return the player nearest to a point; ties go to the lower slot."""
-    return min(
-        players,
-        key=lambda player: (distance_m(point[0], point[1], player.x, player.y), player.slot),
-    )

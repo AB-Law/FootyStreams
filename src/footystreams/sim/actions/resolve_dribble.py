@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from footystreams.events.open_play import ClearanceEvent, DribbleEvent, TackleEvent
-from footystreams.sim.actions.challenge import closest_of, nearest_defender_to
 from footystreams.sim.actions.foul import contest_foul
+from footystreams.sim.actions.nearest import closest_of, nearest_defender_to
 from footystreams.sim.actions.out_of_play import out_of_play
 from footystreams.sim.emit import Meta
 from footystreams.sim.geometry import CENTRE

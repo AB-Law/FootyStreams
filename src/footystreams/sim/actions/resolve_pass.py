@@ -6,11 +6,8 @@ from dataclasses import dataclass
 from typing import Literal
 
 from footystreams.events.open_play import PassEvent
-from footystreams.sim.actions.challenge import (
-    nearest_defender_to,
-    pick_interceptor,
-    record_interception,
-)
+from footystreams.sim.actions.challenge import pick_interceptor, record_interception
+from footystreams.sim.actions.nearest import nearest_defender_to
 from footystreams.sim.actions.out_of_play import out_of_play
 from footystreams.sim.actions.passing import PassKind
 from footystreams.sim.actions.restarts import left_pitch, overhit_point
