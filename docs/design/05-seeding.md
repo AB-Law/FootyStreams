@@ -122,3 +122,14 @@ Per club: 2–4 friendship clusters (shared nationality/age/position group), ~2 
 ## 6. Why a generator and not hand-written data
 
 Hand-authoring 264 players with coherent attributes is neither reproducible nor tunable; the generator makes world shape a *parameter* (strength spread, money, ageing), lets the balance harness vary it, and gives the user "regenerate the world" as a first-class action. Hand-authored content is limited to what benefits from authorship: archetype definitions, role/trait/injury tables, name-culture grammars, media personalities and their catchphrases, and the archetype assignment of the eight clubs. Generated worlds can be edited by hand afterwards (they are plain JSON) — the loader re-validates.
+
+## 7. As built (M2)
+
+What the implementation does differently from the plan above (full list in `docs/milestones/M2.md`):
+
+- `contracts.json` is not written: contracts are embedded in the player, manager and staff rows. `seasons.json` holds the first season without fixtures; the schedule and its coherence check (section 5 item 9) arrive with the league layer (M9).
+- Randomness uses `domain.rng.WorldRng` (same interface as `SimRng`) with the sub-streams named in section 1. Ids come from `domain.ids.IdMint`.
+- Senior squads draw 10-13 Valmerians and the rest from 3-5 foreign nations so no nation exceeds 55%; the 70/30 split applies to youth and free agents.
+- The coherence checks live in `verify/world*.py` (codes W01-W03, W07-W10 and C01-C08), not in `seed/`, because the invariant catalogue is single-sourced there.
+- Players are built as `level + shape`: shape is position bias + archetype bias + three correlated latent factors + noise, and the integer level is solved against `domain.ratings.ability_from_attributes`, so generated ability equals the target within 1.
+- Clubs are calibrated by retrying the squad with a corrected quality until the best XI's `team_rating` is within 0.6 of the archetype target; a discarded attempt is rolled back (names, ids) with checkpoints.
