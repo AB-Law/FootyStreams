@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0054** Add simulate_match, run_match, the match loop and an event-derived summary *(M4; scope: sim, events)*
 - **0051** Resolve shots, saves, goals and the restart after a goal *(M4; scope: sim)*
 - **0050** Resolve dribbles and clearances *(M4; scope: sim)*
 - **0049** Resolve passes: completion, interception, loose ball and out of play *(M4; scope: sim)*
