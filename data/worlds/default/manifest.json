@@ -1,0 +1,23 @@
+{
+  "content_sha256": "a373949b523e1fa36df5ee2d9d319742a00632f8ace1269e73c9fe13a8ba7ff7",
+  "counts": {
+    "cities": 42,
+    "clubs": 8,
+    "competitions": 1,
+    "ledger_opening": 8,
+    "managers": 12,
+    "media": 11,
+    "memories": 0,
+    "nations": 9,
+    "players": 294,
+    "referees": 10,
+    "relationships": 271,
+    "seasons": 1,
+    "squad_entries": 264,
+    "staff": 72
+  },
+  "created_in_world": "2031-07-01",
+  "generator_version": "1.0.0",
+  "schema_version": "0.2.0",
+  "world_seed": 1
+}

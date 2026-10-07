@@ -1,0 +1,338 @@
+[
+  {
+    "climate": "continental",
+    "id": "cty_00001",
+    "name": "Gathiški",
+    "nation_id": "nat_valmere",
+    "population": 242273,
+    "region": "borderlands"
+  },
+  {
+    "climate": "continental",
+    "id": "cty_00002",
+    "name": "Chiyisz",
+    "nation_id": "nat_valmere",
+    "population": 401738,
+    "region": "borderlands"
+  },
+  {
+    "climate": "continental",
+    "id": "cty_00003",
+    "name": "Zijowi",
+    "nation_id": "nat_valmere",
+    "population": 142907,
+    "region": "borderlands"
+  },
+  {
+    "climate": "coastal",
+    "id": "cty_00004",
+    "name": "Sirora",
+    "nation_id": "nat_valmere",
+    "population": 896672,
+    "region": "coastal"
+  },
+  {
+    "climate": "coastal",
+    "id": "cty_00005",
+    "name": "Nianora",
+    "nation_id": "nat_valmere",
+    "population": 78022,
+    "region": "coastal"
+  },
+  {
+    "climate": "coastal",
+    "id": "cty_00006",
+    "name": "Vevani",
+    "nation_id": "nat_valmere",
+    "population": 551568,
+    "region": "coastal"
+  },
+  {
+    "climate": "highland",
+    "id": "cty_00007",
+    "name": "Drudraigar",
+    "nation_id": "nat_valmere",
+    "population": 849440,
+    "region": "highland"
+  },
+  {
+    "climate": "highland",
+    "id": "cty_00008",
+    "name": "Bukach",
+    "nation_id": "nat_valmere",
+    "population": 393738,
+    "region": "highland"
+  },
+  {
+    "climate": "highland",
+    "id": "cty_00009",
+    "name": "Tartelt",
+    "nation_id": "nat_valmere",
+    "population": 432252,
+    "region": "highland"
+  },
+  {
+    "climate": "coastal",
+    "id": "cty_0000a",
+    "name": "Seisund",
+    "nation_id": "nat_valmere",
+    "population": 671238,
+    "region": "isles"
+  },
+  {
+    "climate": "coastal",
+    "id": "cty_0000b",
+    "name": "Bjothos",
+    "nation_id": "nat_valmere",
+    "population": 810798,
+    "region": "isles"
+  },
+  {
+    "climate": "coastal",
+    "id": "cty_0000c",
+    "name": "Jugassen",
+    "nation_id": "nat_valmere",
+    "population": 256301,
+    "region": "isles"
+  },
+  {
+    "climate": "warm",
+    "id": "cty_0000d",
+    "name": "Juzvuetiz",
+    "nation_id": "nat_valmere",
+    "population": 848887,
+    "region": "portside"
+  },
+  {
+    "climate": "warm",
+    "id": "cty_0000e",
+    "name": "Quesquin",
+    "nation_id": "nat_valmere",
+    "population": 131020,
+    "region": "portside"
+  },
+  {
+    "climate": "warm",
+    "id": "cty_0000f",
+    "name": "Cesdisiz",
+    "nation_id": "nat_valmere",
+    "population": 576474,
+    "region": "portside"
+  },
+  {
+    "climate": "temperate",
+    "id": "cty_0000g",
+    "name": "Bournpoold",
+    "nation_id": "nat_valmere",
+    "population": 508150,
+    "region": "rivervale"
+  },
+  {
+    "climate": "temperate",
+    "id": "cty_0000h",
+    "name": "Stoostaft",
+    "nation_id": "nat_valmere",
+    "population": 625682,
+    "region": "rivervale"
+  },
+  {
+    "climate": "temperate",
+    "id": "cty_0000i",
+    "name": "Bebra",
+    "nation_id": "nat_valmere",
+    "population": 313000,
+    "region": "rivervale"
+  },
+  {
+    "climate": "temperate",
+    "id": "cty_0000j",
+    "name": "Vovlev",
+    "nation_id": "nat_aldovia",
+    "population": 349546,
+    "region": ""
+  },
+  {
+    "climate": "temperate",
+    "id": "cty_0000k",
+    "name": "Prablic",
+    "nation_id": "nat_aldovia",
+    "population": 858231,
+    "region": ""
+  },
+  {
+    "climate": "temperate",
+    "id": "cty_0000l",
+    "name": "Zedrov",
+    "nation_id": "nat_aldovia",
+    "population": 642471,
+    "region": ""
+  },
+  {
+    "climate": "continental",
+    "id": "cty_0000m",
+    "name": "Bemonne",
+    "nation_id": "nat_brevane",
+    "population": 802694,
+    "region": ""
+  },
+  {
+    "climate": "continental",
+    "id": "cty_0000n",
+    "name": "Jaitille",
+    "nation_id": "nat_brevane",
+    "population": 140569,
+    "region": ""
+  },
+  {
+    "climate": "continental",
+    "id": "cty_0000o",
+    "name": "Clédàin",
+    "nation_id": "nat_brevane",
+    "population": 312022,
+    "region": ""
+  },
+  {
+    "climate": "warm",
+    "id": "cty_0000p",
+    "name": "Tanelli",
+    "nation_id": "nat_corsanth",
+    "population": 329731,
+    "region": ""
+  },
+  {
+    "climate": "warm",
+    "id": "cty_0000q",
+    "name": "Fucci",
+    "nation_id": "nat_corsanth",
+    "population": 770262,
+    "region": ""
+  },
+  {
+    "climate": "warm",
+    "id": "cty_0000r",
+    "name": "Sofontara",
+    "nation_id": "nat_corsanth",
+    "population": 161900,
+    "region": ""
+  },
+  {
+    "climate": "coastal",
+    "id": "cty_0000s",
+    "name": "Drohigard",
+    "nation_id": "nat_dravik",
+    "population": 416251,
+    "region": ""
+  },
+  {
+    "climate": "coastal",
+    "id": "cty_0000t",
+    "name": "Harhavik",
+    "nation_id": "nat_dravik",
+    "population": 849076,
+    "region": ""
+  },
+  {
+    "climate": "coastal",
+    "id": "cty_0000u",
+    "name": "Rämund",
+    "nation_id": "nat_dravik",
+    "population": 42044,
+    "region": ""
+  },
+  {
+    "climate": "temperate",
+    "id": "cty_0000v",
+    "name": "Taals",
+    "nation_id": "nat_estmark",
+    "population": 279334,
+    "region": ""
+  },
+  {
+    "climate": "temperate",
+    "id": "cty_0000w",
+    "name": "Lolas",
+    "nation_id": "nat_estmark",
+    "population": 208854,
+    "region": ""
+  },
+  {
+    "climate": "temperate",
+    "id": "cty_0000x",
+    "name": "Jasnen",
+    "nation_id": "nat_estmark",
+    "population": 761265,
+    "region": ""
+  },
+  {
+    "climate": "continental",
+    "id": "cty_0000y",
+    "name": "Gallodyn",
+    "nation_id": "nat_fenhal",
+    "population": 118115,
+    "region": ""
+  },
+  {
+    "climate": "continental",
+    "id": "cty_0000z",
+    "name": "Traegwae",
+    "nation_id": "nat_fenhal",
+    "population": 376714,
+    "region": ""
+  },
+  {
+    "climate": "continental",
+    "id": "cty_00010",
+    "name": "Codudyn",
+    "nation_id": "nat_fenhal",
+    "population": 66761,
+    "region": ""
+  },
+  {
+    "climate": "warm",
+    "id": "cty_00011",
+    "name": "Diby",
+    "nation_id": "nat_gorlund",
+    "population": 527562,
+    "region": ""
+  },
+  {
+    "climate": "warm",
+    "id": "cty_00012",
+    "name": "Sebuss",
+    "nation_id": "nat_gorlund",
+    "population": 638776,
+    "region": ""
+  },
+  {
+    "climate": "warm",
+    "id": "cty_00013",
+    "name": "Beseck",
+    "nation_id": "nat_gorlund",
+    "population": 696542,
+    "region": ""
+  },
+  {
+    "climate": "coastal",
+    "id": "cty_00014",
+    "name": "Kenaqi",
+    "nation_id": "nat_hasari",
+    "population": 285642,
+    "region": ""
+  },
+  {
+    "climate": "coastal",
+    "id": "cty_00015",
+    "name": "Maikumaqi",
+    "nation_id": "nat_hasari",
+    "population": 349891,
+    "region": ""
+  },
+  {
+    "climate": "coastal",
+    "id": "cty_00016",
+    "name": "Kinilazi",
+    "nation_id": "nat_hasari",
+    "population": 828190,
+    "region": ""
+  }
+]
