@@ -8,6 +8,7 @@ from collections.abc import Sequence
 from datetime import date
 from pathlib import Path
 
+from footystreams.tools import git as repo_git
 from footystreams.tools.changelog import git
 from footystreams.tools.changelog.build import render_changelog
 from footystreams.tools.changelog.fragment import (
@@ -67,7 +68,7 @@ def main(argv: Sequence[str] | None = None, root: Path = PROJECT_ROOT) -> int:
         if arguments.command == "release":
             return _release(arguments, store, root)
         return _build(arguments, store, root / CHANGELOG_FILE)
-    except (FragmentError, git.GitError, ValueError) as error:
+    except (FragmentError, repo_git.GitError, ValueError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
 
@@ -78,7 +79,7 @@ def _new(arguments: argparse.Namespace, store: FragmentStore) -> int:
 
 
 def _check(arguments: argparse.Namespace, root: Path) -> int:
-    changed = git.changed_files(root, git.resolve_base(root, arguments.base))
+    changed = git.changed_files(root, repo_git.resolve_base(root, arguments.base))
     fragments = [
         parse_fragment((root / item.path).read_text(encoding="utf-8"), item.path)
         for item in changed
