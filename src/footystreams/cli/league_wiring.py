@@ -6,6 +6,7 @@ from pathlib import Path
 
 from footystreams.league.climate import ClimateCatalog
 from footystreams.league.config import LeagueConfig
+from footystreams.league.development_config import DevelopmentConfig
 from footystreams.league.matchday import MatchdayEngine
 from footystreams.league.mood_config import MoodConfig
 from footystreams.league.simulator import ResultOnlySimulator
@@ -26,6 +27,7 @@ def load_league_tables(
         climate=ClimateCatalog.model_validate(read_yaml("climate.yaml", directory)),
         config=LeagueConfig.model_validate(read_yaml("league.yaml", directory)),
         mood=MoodConfig.model_validate(read_yaml("mood.yaml", directory)),
+        development=DevelopmentConfig.model_validate(read_yaml("development.yaml", directory)),
     )
 
 

@@ -28,8 +28,10 @@ from footystreams.league.finance import (
 from footystreams.league.ledger import book
 from footystreams.league.matchday import current_table
 from footystreams.league.mood_rules import modifier_for_return
+from footystreams.league.progression import ProgressionInputs, micro_step
 from footystreams.league.recovery import decay_sharpness, recover
 from footystreams.league.tables import LeagueTables
+from footystreams.league.training import training_conditions
 from footystreams.league.world_events import generate_life_events
 from footystreams.persistence.ports import Repositories
 
@@ -172,3 +174,33 @@ class SeasonEndStage:
             [row.club_id for row in table], clubs, today, self._tables.config.finance
         )
         return book({club.id: club for club in clubs}, postings)
+
+
+class TrainingStage:
+    """Weekly training: a few single-point gains for players who still have room to grow."""
+
+    name: ClassVar[str] = "training"
+
+    def __init__(self, tables: LeagueTables) -> None:
+        """Create the stage over the league tables."""
+        self._tables = tables
+
+    def run(self, repositories: Repositories, today: dt.date, rng: WorldRng) -> WorldDelta:
+        """Train every active player on pay day; nothing on other days."""
+        if not is_pay_day(today, self._tables.config.finance):
+            return WorldDelta()
+        inputs = ProgressionInputs(self._tables.development, self._tables.roles, today)
+        changed: list[Player] = []
+        for club in repositories.clubs.all():
+            staff = repositories.staff.find({"club_id": club.id})
+            conditions = training_conditions(
+                club,
+                staff,
+                inputs.config.progression.default_playing_time,
+                inputs.config.progression,
+            )
+            for player in repositories.players.find({"club_id": club.id, "status": ACTIVE}):
+                trained, _ = micro_step(player, conditions, inputs, rng.fork(player.id))
+                if trained is not player:
+                    changed.append(trained)
+        return WorldDelta(players=tuple(changed))
