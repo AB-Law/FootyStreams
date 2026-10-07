@@ -107,6 +107,22 @@ class WorldEventsConfig(_Config):
     magnitude: tuple[float, float]
 
 
+class ResultOnlyConfig(_Config):
+    """Parameters of the result-only match simulator."""
+
+    goals_per_match: float = Field(gt=0.0)
+    home_advantage: float
+    goals_per_rating_point: float = Field(ge=0.0)
+    mood_gain: float = Field(ge=0.0)
+    form_weight: float
+    fatigue_weight: float
+    goal_chances: int = Field(ge=1)
+    yellow_chance: float = Field(ge=0.0, le=1.0)
+    red_chance: float = Field(ge=0.0, le=1.0)
+    injury_chance: float = Field(ge=0.0, le=1.0)
+    rating_noise: float = Field(ge=0.0)
+
+
 class LeagueConfig(_Config):
     """Everything the league layer reads from ``league.yaml``."""
 
@@ -116,3 +132,4 @@ class LeagueConfig(_Config):
     weather: WeatherConfig
     recovery: RecoveryConfig
     world_events: WorldEventsConfig
+    result_only: ResultOnlyConfig
