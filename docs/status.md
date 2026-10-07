@@ -43,49 +43,34 @@ Also: committed `schemas/` (drift-tested), factories/strategies under `tests/`, 
 - Claude and Cursor rule files are maintained by hand in pairs (`.claude/rules` and `.cursor/rules`).
 - Mood caps are named defaults only until `mood.yaml` (M2/M9).
 
-## Track A: match engine (updated at the end of M4, overnight run)
-- **Branch chain (draft PRs, each based on the previous):** `feat/m4-sim-kernel` (base `main`) -> `feat/m5-dead-balls-discipline` -> `feat/m6-fatigue-injuries-weather-ai` -> `feat/m7-summary-ratings-frames`.
-- **M4 done locally:** `simulate_match` / `run_match` over factory teams (`SimRng`, `SimConfig`, positioning, pressure, decision model, pass/dribble/tackle/interception/clearance/shot/save/goal, kickoff/halftime/fulltime, event-derived summary). `uv run sim --demo --seed 7`, `uv run golden check|update`, `verify.verify_match` (M01-M05, M10, M17). `SIM_VERSION` 0.1.1, `SCHEMA_VERSION` 0.1.4. Report: `docs/milestones/M4.md`; implementation notes: `docs/design/02-simulation.md` section 16.
-- **Known gaps:** no dead balls/fouls/cards (M5), fatigue/injuries/subs/weather (M6), ratings/frames/tags (M7). ~0.4 s CPU per match (budget 0.15 s, M8 optimises). Calibration is rough (M8).
-- **Merge notes:** fragment ids 0042+ may collide with Track B; `verify/__init__.py` and `pyproject.toml` scripts (`sim`, `golden`) and `domain/versions.py` are shared files to merge by hand.
-
-### Track A update at the end of M5
-- **M5 done locally** on `feat/m5-dead-balls-discipline` (based on the M4 branch): referee model, fouls, advantage, cards and dismissals, throw-ins, goal kicks, corners with an aerial duel, penalties, free-kick shots and crosses, offside, announced added time; `verify_match` gains M07 (in part), M11, M12. `SIM_VERSION` 0.2.0, `SCHEMA_VERSION` 0.1.5. Report: `docs/milestones/M5.md`.
-- Known gaps: red cards in band for even teams, about 2x the band in the varied sweep; second-half added time short (substitutions and injuries arrive in M6); 0.37 s CPU a match.
-
-### Track A update at the end of M6
-- **M6 done locally** on `feat/m6-fatigue-injuries-weather-ai` (based on the M5 branch): fatigue, weather and pitch, home advantage (crowd), injuries with forced changes, substitution mechanics, the AI manager (checkpoints, triggers, mentality changes, changes at stoppages and half-time); `verify_match` gains M06, M08 (M07 and M11 extended; M09 is an engine-level test). `SIM_VERSION` 0.3.0, `SCHEMA_VERSION` 0.1.6. Report: `docs/milestones/M6.md`.
-- Fixed on the way: an away-side positioning edge from sequential team updates.
-- Known gaps: no formation changes or half-time talk in the manager; the factory bench (two outfielders and a goalkeeper) caps changes at about 3.5 a match; draw rate and red cards still high; 0.4 s CPU a match.
-
-### Track A update at the end of M7
-- **M7 done locally** on `feat/m7-summary-ratings-frames` (based on the M6 branch): the causal context (momentum, intensity, significance, tags), enriched pass/dribble/shot events, the full summary (stats, ratings 3-10, player of the match, hooks, pass matrix, zone flow, shot map, xG/xA/xT, timelines, key moments, injuries), opt-in tracking frames, a read-only `analytics/` module (maps, totals, heatmaps, `annotate`), and `verify` M13-M16 and M18. `SIM_VERSION` 0.4.0, `SCHEMA_VERSION` 0.2.0 (additive, defaults only; flagged in the PR). Report: `docs/milestones/M7.md`.
-- Track A is complete (M4-M7) and **merged to `main`**. Next on this track: M8 (balance harness, calibration, performance), then M9 needs the league layer (`build_match_setup`, lineup AI).
-- Known gaps: about 0.5 s CPU a match (budget 0.15 s), draw rate and red cards high, manager has no formation changes or half-time talk, hooks that need league context.
-
 ---
 
-## Track B (world) — overnight run, 2026-10-07 (rebase onto main 2026-10-08)
-Track A (M4-M7) is on `main`. Track B builds M2, M3, M9, M10, M11 as **stacked draft PRs** (each branch is cut from the previous one). After Track A landed, M2 was rebased onto `main`: fragment ids renumbered to 0121+, `SCHEMA_VERSION` 0.3.1, `SIM_VERSION` 0.4.1.
+## Track B (world) — overnight run, 2026-10-07
+Track A (match engine) is built separately; the sections above predate both tracks. Track B builds M2, M3, M9, M10, M11 as **stacked draft PRs** (each branch is cut from the previous one).
 
 | Milestone | Branch | State |
 |-----------|--------|-------|
-| M2 seed and static data | `feat/m2-seed-world` | rebased onto `main` (draft PR #18); see `docs/milestones/M2.md` |
-| M3 persistence | `feat/m3-persistence` | rebased onto M2 (draft PR #20); see `docs/milestones/M3.md` |
-| M9 league layer | `feat/m9-league-layer` | pending |
+| M2 seed and static data | `feat/m2-seed-world` | done (draft PR); see `docs/milestones/M2.md` |
+| M3 persistence | `feat/m3-persistence` | done; see `docs/milestones/M3.md` |
+| M9 league layer | `feat/m9-league-layer` | done; see `docs/milestones/M9.md` |
 | M10 development and rollover | `feat/m10-development-rollover` | pending |
 | M11 contracts and transfers | `feat/m11-contracts-transfers` | pending |
 
 ### What M2 added
 - `uv run seed --seed N [--out DIR] [--name NAME] [--clubs K] [--validate] [--world DIR]`; the committed `data/worlds/default` is seed 1 (`content_sha256` in its manifest).
-- `seed/` (static loaders, names, players, managers, clubs, referees, media, relationships, `generate_world`, `world_io`), `verify/world*.py` (W01-W03, W07-W10, C01-C08), and in `domain/`: `WorldRng`, `IdMint`, `squad_strength`, world records and static-table models (**SCHEMA_VERSION 0.3.1** on top of Track A's 0.2.0).
+- `seed/` (static loaders, names, players, managers, clubs, referees, media, relationships, `generate_world`, `world_io`), `verify/world*.py` (W01-W03, W07-W10, C01-C08), and in `domain/`: `WorldRng`, `IdMint`, `squad_strength`, world records and static-table models (**SCHEMA_VERSION 0.2.0**).
 - Static tables in `data/static/`: formations, roles, traits, injuries, climate, name cultures, denylist/blocklist, player/club/media archetypes, manager styles, tactic presets.
 - Tests share one world per seed through `tests/factories/world.make_world`; generation takes about 2.3 s.
 
 ### What M3 added
 - `persistence/`: ports, table specs, codec, in-memory and SQLite backends, `UnitOfWork`, `WorldReader`, Alembic `0001_initial`; `uv run seed --db league.sqlite`. Contract tests in `tests/contract` run every behaviour on both backends.
 
+### What M9 added
+- `uv run league [--seed N] [--clubs K] [--world DIR] [--db PATH] [--matchday N]`: plays the current season (result-only simulator) and prints table and money; a SQLite `--db` is resumable.
+- `league/`: schedule, standings, simulator seam, mood resolver, rule-based modifiers, life events, weather, attendance, lineup AI and `build_match_setup`, finance and `ledger.book`, `derive_world_delta`, `WorldDelta`, `WorldClock`, recovery, `DailyTick` (stage log, one transaction per stage and per match), `SeasonRunner`; `verify/league.py` (L01-L03), W12.
+- 21-day matchday spacing, weekly life events and the ticket price scale are deliberate deviations (see the milestone report).
+
 ### Track B caveats
-- `WorldRng` stands in for track A's `SimRng` (same interface); unify when both tracks merge at M8/M12.
-- Fragment ids 0042-0058 were renumbered to 0121-0137 after rebasing onto Track A.
+- `WorldRng` stands in for track A's `SimRng` (same interface); unify when both tracks merge.
+- Fragment ids from 0042 may collide with track A's; the second merger renumbers.
 - The fast gate takes about 40 s (budget 60 s); `--tier pr` about 2 min.

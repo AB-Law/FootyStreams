@@ -164,6 +164,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0157** Write the M9 milestone report and refresh status and design docs *(M9; scope: league)*
 - **0141** Write the M3 milestone report and refresh status and architecture docs *(M3; scope: design)*
 - **0137** Write the M2 milestone report and refresh design docs and status *(M2; scope: design)*
 - **0074** Record the digest decision (ADR 0006), the M4 perf exception and the review round *(M4; scope: design, docs)*
