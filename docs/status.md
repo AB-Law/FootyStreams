@@ -53,7 +53,7 @@ Track A (match engine) is built separately; the sections above predate both trac
 | M2 seed and static data | `feat/m2-seed-world` | done (draft PR); see `docs/milestones/M2.md` |
 | M3 persistence | `feat/m3-persistence` | done; see `docs/milestones/M3.md` |
 | M9 league layer | `feat/m9-league-layer` | done; see `docs/milestones/M9.md` |
-| M10 development and rollover | `feat/m10-development-rollover` | pending |
+| M10 development and rollover | `feat/m10-development-rollover` | done; see `docs/milestones/M10.md` |
 | M11 contracts and transfers | `feat/m11-contracts-transfers` | pending |
 
 ### What M2 added
@@ -69,6 +69,11 @@ Track A (match engine) is built separately; the sections above predate both trac
 - `uv run league [--seed N] [--clubs K] [--world DIR] [--db PATH] [--matchday N]`: plays the current season (result-only simulator) and prints table and money; a SQLite `--db` is resumable.
 - `league/`: schedule, standings, simulator seam, mood resolver, rule-based modifiers, life events, weather, attendance, lineup AI and `build_match_setup`, finance and `ledger.book`, `derive_world_delta`, `WorldDelta`, `WorldClock`, recovery, `DailyTick` (stage log, one transaction per stage and per match), `SeasonRunner`; `verify/league.py` (L01-L03), W12.
 - 21-day matchday spacing, weekly life events and the ticket price scale are deliberate deviations (see the milestone report).
+
+### What M10 added
+- `uv run league --seasons N`: seasons back to back with the rollover (awards, retirements, renewals, progression, intake, squads, next season) the day after each season ends.
+- `league/`: `development`, `progression`, `training`, `retirement`, `youth`, `squad`, `awards`, `club_year`, `rollover*`, `health`; `domain/prospects` (request/factory contract) with `seed/prospects`; `verify` L04/L05; `development.yaml`.
+- Known: the economy diverges slowly (rich clubs hoard, three small clubs stay overdrawn); M11's transfers and financial sales address it.
 
 ### Track B caveats
 - `WorldRng` stands in for track A's `SimRng` (same interface); unify when both tracks merge.

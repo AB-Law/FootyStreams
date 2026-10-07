@@ -1,0 +1,14 @@
+---
+id: 0090
+date: 2026-10-07
+type: docs
+scope: [league]
+milestone: M10
+breaking: false
+schema_version_impact: none
+sim_version_impact: none
+config_impact: false
+migration: false
+summary: Write the M10 milestone report and refresh status and design
+---
+M10 report with deviations, as-built notes in the world-systems design and the Track B status table.
