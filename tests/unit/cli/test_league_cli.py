@@ -64,3 +64,13 @@ def test_league__database__resumes_where_it_stopped_and_ends_where_a_straight_ru
     assert main(["--seed", "2", "--clubs", "4"]) == EXIT_OK
     straight = capsys.readouterr().out
     assert resumed.split("\n", 1)[1].split("\n\n")[0] == straight.split("\n", 1)[1].split("\n\n")[0]
+
+
+def test_league__seasons_option__plays_that_many_seasons_with_the_off_season_between(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(["--seed", "2", "--clubs", "4", "--seasons", "2"]) == EXIT_OK
+    output = capsys.readouterr().out
+    assert "2031/32: 12 matches played" in output
+    assert "2032/33: 12 matches played" in output
+    assert "now 2033-06-02" in output

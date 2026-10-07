@@ -1,14 +1,17 @@
-"""L01-L03: a running league is internally consistent (money, results, schedule)."""
+"""L01-L05: a running league is consistent (money, results, schedule, squads, players)."""
 
 from __future__ import annotations
 
 from collections import defaultdict
 from collections.abc import Sequence
+from dataclasses import dataclass
 
 from footystreams.domain.club import Club
 from footystreams.domain.finance import LedgerEntry
 from footystreams.domain.fixture import Fixture, FixtureStatus
 from footystreams.domain.match import Match, MatchStatus
+from footystreams.domain.player import MAX_DEVELOPMENT_LOG, Player, PlayerStatus
+from footystreams.domain.types import ClubId, Position
 from footystreams.events.summary import MatchSummary
 from footystreams.verify.violation import Violation
 from footystreams.verify.world_refs import Findings
@@ -80,5 +83,61 @@ def check_season_complete(fixtures: Sequence[Fixture]) -> list[Violation]:
             fixture.id,
             f"fixture is {fixture.status.value}, not played",
             holds=fixture.status is FixtureStatus.PLAYED,
+        )
+    return findings.problems
+
+
+@dataclass(frozen=True, slots=True)
+class SquadRules:
+    """The squad-size rules a league must keep (they come from the league configuration)."""
+
+    min_senior: int
+    max_senior: int
+    min_goalkeepers: int
+
+
+def check_squads(
+    players: Sequence[Player], clubs: Sequence[ClubId], rules: SquadRules
+) -> list[Violation]:
+    """L04: every club has a legal number of senior players and enough goalkeepers."""
+    findings = Findings("L04")
+    seniors: dict[str, list[Player]] = defaultdict(list)
+    for player in players:
+        if player.contract and not player.is_youth and player.status is PlayerStatus.ACTIVE:
+            seniors[str(player.contract.club_id)].append(player)
+    for club in clubs:
+        squad = seniors[str(club)]
+        findings.expect(
+            club,
+            f"{len(squad)} senior players, not {rules.min_senior}-{rules.max_senior}",
+            holds=rules.min_senior <= len(squad) <= rules.max_senior,
+        )
+        keepers = sum(p.primary_position is Position.GK for p in squad)
+        findings.expect(
+            club,
+            f"{keepers} goalkeepers, fewer than {rules.min_goalkeepers}",
+            holds=keepers >= rules.min_goalkeepers,
+        )
+    return findings.problems
+
+
+def check_development(players: Sequence[Player]) -> list[Violation]:
+    """L05: ability never exceeds potential, the journal stays bounded, retirees have no club."""
+    findings = Findings("L05")
+    for player in players:
+        findings.expect(
+            player.id,
+            f"ability {player.ability_current} exceeds potential {player.ability_potential}",
+            holds=player.ability_current <= player.ability_potential,
+        )
+        findings.expect(
+            player.id,
+            f"development log has {len(player.development_log)} entries",
+            holds=len(player.development_log) <= MAX_DEVELOPMENT_LOG,
+        )
+        findings.expect(
+            player.id,
+            "retired player still has a contract",
+            holds=player.status is not PlayerStatus.RETIRED or player.contract is None,
         )
     return findings.problems

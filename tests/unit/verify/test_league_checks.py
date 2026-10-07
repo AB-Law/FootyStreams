@@ -1,16 +1,27 @@
-"""L01-L03: each league invariant passes on a played season and fails on a canary."""
+"""L01-L05: each league invariant passes on a played season and fails on a canary."""
 
 from __future__ import annotations
 
+import datetime as dt
 from typing import NamedTuple
 
 from footystreams.domain.club import Club
+from footystreams.domain.development import DevelopmentEntry
 from footystreams.domain.finance import LedgerCategory, LedgerEntry
 from footystreams.domain.fixture import Fixture, FixtureStatus
 from footystreams.domain.match import Match, MatchStatus
+from footystreams.domain.player import Player, PlayerStatus
+from footystreams.domain.types import ClubId, Position
 from footystreams.events.summary import MatchSummary
-from footystreams.verify import check_ledger, check_results, check_season_complete
-from tests.factories.league_run import cached_small_season
+from footystreams.verify import (
+    SquadRules,
+    check_development,
+    check_ledger,
+    check_results,
+    check_season_complete,
+    check_squads,
+)
+from tests.factories.league_run import cached_rolled_over, cached_small_season
 from tests.helpers.assertions import assert_no_violations
 
 
@@ -95,3 +106,46 @@ def test_check_season_complete__unplayed_fixture__is_l03() -> None:
         *fixtures[1:],
     ]
     assert {v.code for v in check_season_complete(open_season)} == {"L03"}
+
+
+RULES = SquadRules(min_senior=22, max_senior=28, min_goalkeepers=2)
+
+
+def _rolled_players() -> tuple[list[Player], list[ClubId]]:
+    _, factory = cached_rolled_over()
+    with factory() as uow:
+        return uow.players.all(), [club.id for club in uow.clubs.all()]
+
+
+def test_check_squads_and_development__after_a_rollover__are_clean() -> None:
+    players, clubs = _rolled_players()
+    assert_no_violations(check_squads(players, clubs, RULES))
+    assert_no_violations(check_development(players))
+
+
+def test_check_squads__too_few_seniors_or_keepers__is_l04() -> None:
+    players, clubs = _rolled_players()
+    first = clubs[0]
+    keepers_gone = [
+        p for p in players
+        if not (p.contract and p.contract.club_id == first and p.primary_position is Position.GK)
+    ]  # fmt: skip
+    messages = " ".join(v.message for v in check_squads(keepers_gone, clubs, RULES))
+    assert "goalkeepers" in messages
+    short = [p for p in players if not (p.contract and p.contract.club_id == first)]
+    assert any("senior players" in v.message for v in check_squads(short, clubs, RULES))
+    assert {v.code for v in check_squads(short, clubs, RULES)} == {"L04"}
+
+
+def test_check_development__broken_players__are_l05() -> None:
+    players, _ = _rolled_players()
+    over = players[0].model_copy(update={"ability_current": 99, "ability_potential": 50})
+    entry = DevelopmentEntry(date=dt.date(2032, 1, 1), attr="pace", delta=1, cause="training")
+    long_log = players[1].model_copy(update={"development_log": (entry,) * 25})
+    ghost = next(p for p in players if p.contract).model_copy(
+        update={"status": PlayerStatus.RETIRED}
+    )
+    messages = " ".join(v.message for v in check_development([over, long_log, ghost]))
+    assert "exceeds potential" in messages
+    assert "development log has" in messages
+    assert "retired player still has a contract" in messages
