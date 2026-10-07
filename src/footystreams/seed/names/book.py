@@ -106,6 +106,13 @@ class NameBook:
         """True when no person already uses ``known_as``."""
         return known_as not in self._known_as
 
+    def claim(self, known_as: str) -> bool:
+        """Reserve a known_as for a renamed person; False when it is already taken."""
+        if not self.is_free(known_as):
+            return False
+        self._known_as.add(known_as)
+        return True
+
     def person(
         self,
         rng: WorldRng,
