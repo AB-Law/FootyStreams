@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0059** Add repository ports, table specs, codec and in-memory repositories *(M3; scope: persistence)*
 - **0057** Commit the default world (seed 1) with a regeneration test *(M2; scope: seed)*
 - **0055** Add canonical world IO, content hashing and the seed CLI *(M2; scope: cli)*
 - **0054** Add verify_world, the world coherence checks, and senior-squad nationality quotas *(M2; scope: seed)*
