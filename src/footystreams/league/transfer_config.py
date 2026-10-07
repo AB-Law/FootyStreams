@@ -88,6 +88,15 @@ class OutsideConfig(_Config):
     bid_min_ability: float = Field(ge=0.0)
 
 
+class RenewalConfig(_Config):
+    """Contract renewal talks."""
+
+    role_tolerance: dict[str, int]
+    max_age: int
+    loyalty_weight: float
+    dispute_magnitude: float = Field(ge=0.0, le=1.0)
+
+
 class TransferConfig(_Config):
     """Everything in ``transfer.yaml``."""
 
@@ -99,3 +108,4 @@ class TransferConfig(_Config):
     window: WindowConfig
     sales: SalesConfig
     outside: OutsideConfig
+    renewal: RenewalConfig

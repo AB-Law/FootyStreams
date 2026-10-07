@@ -53,3 +53,9 @@ outside:
   bid_rate: 0.01                  # daily chance per player an outside club bids, at reputation 100
   bid_premium: 1.10
   bid_min_ability: 1.0            # only players at least this share of the league level draw bids
+
+renewal:
+  role_tolerance: {key: 99, rotation: 12, prospect: 8, backup: 4}  # CA below the position median a club tolerates
+  max_age: 35
+  loyalty_weight: 0.20            # loyalty of the player to his current club adds to willingness
+  dispute_magnitude: 0.6          # contract_dispute strength when talks fail
