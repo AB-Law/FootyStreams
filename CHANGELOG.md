@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0050** Resolve dribbles and clearances *(M4; scope: sim)*
 - **0049** Resolve passes: completion, interception, loose ball and out of play *(M4; scope: sim)*
 - **0048** Add the match clock helpers and the event emitter *(M4; scope: sim, events)*
 - **0047** Add the carrier decision model *(M4; scope: sim)*
