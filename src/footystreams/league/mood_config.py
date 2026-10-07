@@ -43,6 +43,18 @@ class SensitivityWeights(_Config):
     positive: dict[str, float]
 
 
+class RuleConfig(_Config):
+    """Thresholds and strengths of the modifiers created from facts."""
+
+    confidence_goals: int = Field(ge=1)
+    confidence_rating: float
+    confidence_magnitude: float = Field(ge=0.0, le=1.0)
+    derby_hero_magnitude: float = Field(ge=0.0, le=1.0)
+    blamed_magnitude: float = Field(ge=0.0, le=1.0)
+    return_joy_min_days: int = Field(ge=1)
+    return_joy_magnitude: float = Field(ge=0.0, le=1.0)
+
+
 class MoodConfig(_Config):
     """Everything in ``mood.yaml``."""
 
@@ -52,3 +64,4 @@ class MoodConfig(_Config):
     kind_sensitivity: dict[str, dict[str, float]]
     sensitivity_floor: float = Field(gt=0.0)
     sensitivity_ceiling: float = Field(gt=0.0)
+    rules: RuleConfig

@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0147** Add rule-based modifiers and the world-event generator *(M9; scope: league)*
 - **0146** Add WorldDelta and stateless derived ids *(M9; scope: league)*
 - **0145** Add the mood resolver *(M9; scope: league)*
 - **0144** Add the MatchSimulator seam and the result-only simulator *(M9; scope: league)*
