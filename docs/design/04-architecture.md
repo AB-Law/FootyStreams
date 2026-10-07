@@ -291,3 +291,10 @@ Domain validation errors surface as Pydantic `ValidationError`; the CLI converts
 - Single entry point: `uv run check [--tier fast|pr|nightly|release]` runs the right set; pre-commit runs T0.
 - Windows + Linux (+ Python 3.12/3.13) in CI; determinism across platforms is a stated requirement.
 - Details of standards and budgets: 11-engineering-standards.md; test strategy: 10-testing-strategy.md.
+
+## 10. As built (M3)
+
+- The schema is generated from declarative `TableSpec`s (`persistence/specs*.py`): the same specs build the SQLAlchemy Core tables, the in-memory index columns and the migration parity check. Adding a table = one spec + one Alembic migration.
+- Ports live in `persistence/ports.py`; `UnitOfWork` is an abstract base class; `RepositoryWorldReader` implements `WorldReader` for any backend. Optimistic concurrency: `save(entity, expected_rev=n)`.
+- Append-only tables (`ledger_entries`, `match_events`) have no update/delete in the ports and UPDATE/DELETE-blocking triggers in SQLite.
+- Details and deviations: `docs/milestones/M3.md`.
