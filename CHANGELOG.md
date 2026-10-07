@@ -9,6 +9,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0035** Add match summary and MatchResult *(M1; scope: events; schema version minor)*
+- **0034** Add match event models and discriminated union *(M1; scope: events; schema version minor)*
+- **0033** Add media and voice profile models *(M1; scope: domain; schema version minor)*
+- **0032** Add world social transfer and development models *(M1; scope: domain; schema version minor)*
 - **0031** Add match stack with ResolvedMood and sheets *(M1; scope: domain; schema version minor)*
 - **0030** Add competition fixture and standings models *(M1; scope: domain; schema version minor)*
 - **0029** Add Club Stadium Fanbase Finance and Board *(M1; scope: domain; schema version minor)*

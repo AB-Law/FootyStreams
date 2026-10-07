@@ -20,6 +20,7 @@ from footystreams.domain.attributes import (
 )
 from footystreams.domain.base import DomainModel, UsageTag
 from footystreams.domain.contract import Contract
+from footystreams.domain.development import DevelopmentEntry, TrainingPlan
 from footystreams.domain.injury import Discipline, Injury, InjuryRecord, MoraleFactor, Suspension
 from footystreams.domain.person import Person
 from footystreams.domain.types import (
@@ -50,6 +51,7 @@ MAX_PREFERRED_ROLES = 4
 MAX_TRAITS = 6
 MAX_FORM_HISTORY = 10
 MAX_MORALE_FACTORS = 12
+MAX_DEVELOPMENT_LOG = 24
 DEFAULT_ROLE_FAMILIARITY = 35
 
 
@@ -125,6 +127,8 @@ class Player(Person):
         "contract": "L",
         "market_value": "L",
         "career_history": "L",
+        "training": "L",
+        "development_log": "L",
         "status": "L",
         "squad_status": "L",
         "is_youth": "L",
@@ -161,6 +165,8 @@ class Player(Person):
     contract: Contract | None = None
     market_value: Money = 0
     career_history: tuple[CareerStint, ...] = ()
+    training: TrainingPlan = Field(default_factory=TrainingPlan)
+    development_log: tuple[DevelopmentEntry, ...] = ()
     status: PlayerStatus = PlayerStatus.ACTIVE
     squad_status: SquadStatus = SquadStatus.FIRST_TEAM
     is_youth: bool = False
@@ -223,4 +229,7 @@ class Player(Person):
             raise ValueError(msg)
         if len(self.morale_factors) > MAX_MORALE_FACTORS:
             msg = f"morale_factors max {MAX_MORALE_FACTORS}"
+            raise ValueError(msg)
+        if len(self.development_log) > MAX_DEVELOPMENT_LOG:
+            msg = f"development_log keeps at most {MAX_DEVELOPMENT_LOG} entries"
             raise ValueError(msg)
