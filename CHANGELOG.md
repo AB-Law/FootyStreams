@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0149** Add match setup building and the lineup AI *(M9; scope: league)*
 - **0148** Add weather generation and attendance *(M9; scope: league)*
 - **0147** Add rule-based modifiers and the world-event generator *(M9; scope: league)*
 - **0146** Add WorldDelta and stateless derived ids *(M9; scope: league)*

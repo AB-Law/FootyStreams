@@ -12,6 +12,7 @@ from footystreams.events.result import MatchResult
 from footystreams.events.summary import MatchSummaryEvent
 from footystreams.league.simulator import EventSimulator, MatchSimulator, ResultOnlySimulator
 from tests.factories.league_config import make_league_config
+from tests.factories.league_inputs import make_world_setup
 from tests.factories.league_match import make_leveled_setup, with_mood
 from tests.factories.world import cached_static_tables
 
@@ -121,3 +122,9 @@ def test_simulate__sent_off_player__plays_fewer_minutes_and_scores_nothing_after
             assert all(s.minutes < 90 for s in sent_off)
             return
     pytest.fail("no red card in 400 matches")
+
+
+def test_simulate__real_world_setup__plays_a_full_match(simulator: MatchSimulator) -> None:
+    result = simulator.simulate(make_world_setup(), 11)
+    assert result.summary.score_home + result.summary.score_away < 12
+    assert len(result.summary.player_stats) == 22
