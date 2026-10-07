@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0164** Add season awards, club year-end and the income estimate *(M10; scope: league)*
 - **0163** Add squad rebalancing and squad entries *(M10; scope: league)*
 - **0162** Add youth intake, promotion and the prospect factory *(M10; scope: league)*
 - **0160** Add retirement *(M10; scope: league)*
