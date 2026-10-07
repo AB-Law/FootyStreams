@@ -1,7 +1,7 @@
 # 02 — Simulation Design
 
 Status: **PROPOSED (Phase 1).**
-Entry point: `simulate_match(setup: MatchSetup, seed: int, config: SimConfig) -> Iterator[MatchEvent]` (plus a `run_match()` wrapper returning `MatchResult{events, summary, end_state}`). Pure: no I/O, no clock, no global state, no logging, no `numpy`.
+Entry point: `simulate_match(setup: MatchSetup, seed: int, config: SimConfig) -> Iterator[MatchEvent]` (plus a `run_match()` wrapper returning `MatchResult{events, summary, setup_ref, seed, sim_version, config_hash, log_digest}` — no sim-internal `end_state`). Pure: no I/O, no clock, no global state, no logging, no `numpy`.
 
 ## 1. Guarantees and what "pure" means here
 

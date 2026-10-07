@@ -126,7 +126,7 @@ league = "footystreams.cli.league:app"          # = engine --pace instant --max-
 seed = "footystreams.cli.seed:app"
 verify = "footystreams.cli.verify:app"
 health = "footystreams.cli.health:app"
-export-schemas = "footystreams.cli.export_schemas:app"
+export-schemas = "footystreams.cli.export_schemas:main"  # argparse; Typer deferred
 balance = "footystreams.cli.balance:app"
 changelog = "footystreams.tools.changelog:app"
 check = "footystreams.tools.check:app"
