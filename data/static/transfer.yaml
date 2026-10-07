@@ -1,0 +1,55 @@
+# Contracts and the transfer market (docs/design/07 sections 5-6).
+scouting:
+  noise_at_zero_judging: 12       # standard deviation of the ability estimate at judging 0
+  potential_factor: 1.6           # potential is judged this many times more noisily
+  default_judging: 50             # a club with no scout or manager judgement
+  confidence_floor: 0.2
+
+valuation:
+  rounds: 3
+  desire_weight: 0.25             # bid premium per unit of desire
+  urgency_weight: 0.40            # bid premium per unit of urgency
+  bid_noise: 0.05
+  reservation_floor: 0.90         # a seller accepts at 0.90-1.00 of his reservation price
+  financial_discount: 0.15        # a seller in trouble asks this much less
+  role_stubbornness: {key: 1.25, rotation: 1.05, prospect: 1.15, backup: 0.90}
+  round_concession: 0.5           # the seller gives up this share of the gap each round
+
+needs:
+  position_minimum: {GK: 2, DEF: 7, MID: 7, FWD: 4}
+  upgrade_margin: 4               # a player must beat the weakest starter in the slot by this
+  max_age: 34
+  max_signing_share: 0.5          # largest share of the transfer budget one deal may use
+
+terms:
+  wage_rounds: [1.0, 1.1, 1.2]    # wage offered as a multiple of the market wage, by round
+  length_years: [1, 4]
+  ambition_weight: 0.30
+  wage_weight: 1.5
+  free_agent_bonus: 0.15
+  mood_weight: 0.2
+  threshold: 0.0
+
+medical:
+  base_failure: 0.02
+  proneness_weight: 0.08          # extra failure chance at injury proneness 100
+  injured_failure: 0.50
+
+window:
+  buyers_per_day: 3
+  deals_per_club: 3
+  panic_days: 3                   # the last days of a window: clubs short of players buy anyone
+  listing_markup: 1.10
+
+sales:
+  surplus_over: 26                # clubs list their weakest seniors above this many
+  financial_balance_share: 0.5    # a club lists players while its balance is below -credit limit x this
+  unhappy_kinds: [transfer_unrest, contract_dispute]
+
+outside:
+  supply_size: 24
+  supply_ability: [0.80, 1.15]    # of the league level
+  supply_age: [21, 31]
+  bid_rate: 0.01                  # daily chance per player an outside club bids, at reputation 100
+  bid_premium: 1.10
+  bid_min_ability: 1.0            # only players at least this share of the league level draw bids
