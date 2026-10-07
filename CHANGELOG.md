@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0073** Add the world clock and daily recovery *(M9; scope: league)*
 - **0071** Add post-match world deltas *(M9; scope: league)*
 - **0070** Add club finance and the ledger *(M9; scope: league)*
 - **0069** Add match setup building and the lineup AI *(M9; scope: league)*
@@ -59,6 +60,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0072** Derive fixture ids and flag derbies when scheduling *(M9; scope: league)*
 - **0040** Tune valuation peak/contract and document rating constants *(M1; scope: domain; schema version patch)*
 - **0020** Deliver each milestone as one branch and one PR; PR size becomes informational *(M0; scope: design, ci)*
 - **0006** Make .claude/rules the source of agent rules and generate .cursor/rules from it; remove docs/rules. *(design; scope: design, tools)*

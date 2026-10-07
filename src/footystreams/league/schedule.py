@@ -6,7 +6,7 @@ import datetime as dt
 from collections.abc import Collection, Sequence
 
 from footystreams.domain.fixture import Fixture
-from footystreams.domain.ids import IdMint
+from footystreams.domain.ids import derive_id
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.types import ClubId, CompetitionId, FixtureId, SeasonId, StadiumId
 from footystreams.verify.schedule import MAX_STREAK, check_schedule
@@ -171,16 +171,20 @@ def schedule_fixtures(
     rounds: Sequence[Round],
     season: tuple[CompetitionId, SeasonId],
     dates: Sequence[dt.date],
-    ids: IdMint,
+    derbies: Collection[frozenset[ClubId]] = (),
 ) -> list[Fixture]:
-    """Dated fixtures with minted ids; ``dates`` has one date per matchday."""
+    """Dated fixtures; ``dates`` has one date per matchday.
+
+    Ids are derived from the season, matchday and pairing, so the same schedule always gets the
+    same ids; fixtures between derby rivals are flagged.
+    """
     competition_id, season_id = season
     fixtures = []
     for matchday, matches in enumerate(rounds, start=1):
         for home, away in matches:
             fixtures.append(
                 Fixture(
-                    id=FixtureId(ids.next("fixture")),
+                    id=FixtureId(derive_id("fixture", season_id, str(matchday), home, away)),
                     competition_id=competition_id,
                     season_id=season_id,
                     matchday=matchday,
@@ -188,6 +192,7 @@ def schedule_fixtures(
                     home_club_id=home,
                     away_club_id=away,
                     stadium_id=stadium_id_for(home),
+                    is_derby=frozenset((home, away)) in derbies,
                 )
             )
     return fixtures
