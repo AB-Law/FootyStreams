@@ -20,6 +20,7 @@ from footystreams.sim.geometry import Point, frame_coordinate, goal_distance_m
 from footystreams.sim.mathx import PERCENT
 from footystreams.sim.options import ActionKind, Option
 from footystreams.sim.play import Play, actor, take_possession
+from footystreams.sim.setpiece_shape import free_kick_layout, settle
 from footystreams.sim.side import Side
 from footystreams.sim.state import PlayerState
 
@@ -66,6 +67,10 @@ def take_free_kick(
         return seconds
     direction = state.team(side).attack_dir
     frame_point = (frame_coordinate(spot[0], direction), frame_coordinate(spot[1], direction))
+    shooting = goal_distance_m(*frame_point) <= cfg.restarts.direct_range_m
+    taking = state.team(side)
+    layout = free_kick_layout(state, taking, taker, frame_point, shooting=shooting)
+    settle(play, taking, layout, seconds, keyframe=True)
     roll = play.setpiece.u()
     if goal_distance_m(*frame_point) <= cfg.restarts.direct_range_m:
         if roll < cfg.restarts.direct_share:

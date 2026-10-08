@@ -138,6 +138,14 @@ def _kind_bias(kind: PassKind, situation: Situation) -> float:
     return 0.0
 
 
+def _return_pass_penalty(situation: Situation, mate: PlayerState) -> float:
+    """Return the utility lost for passing straight back to the man who gave the ball."""
+    state = situation.state
+    if mate is not state.assist_from:
+        return 0.0
+    return situation.cfg.decision.return_pass_penalty * (state.return_streak + 1) ** 2
+
+
 def _final_third_penalty(situation: Situation, mate: PlayerState, gain: float) -> float:
     """Return the utility a pass loses for shuffling the ball about in the final third.
 
@@ -151,6 +159,27 @@ def _final_third_penalty(situation: Situation, mate: PlayerState, gain: float) -
     if mate is situation.state.assist_from:
         penalty += decision.ping_pong_penalty
     return penalty
+
+
+def _ground_gained(situation: Situation, end_fx: float) -> float:
+    """Return the utility of the ground a pass gains (or the cost of the ground it gives up).
+
+    Going backward is cheaper the more the passer is pressed: a back pass out of trouble is fine.
+    """
+    decision = situation.cfg.decision
+    metres = (end_fx - situation.fx) * PITCH_LENGTH_M
+    spans = clamp(metres / decision.advance_span_m, -1.0, 1.0)
+    if spans >= 0.0:
+        return decision.advance_value * spans
+    return decision.retreat_cost * spans * (1.0 - situation.pressure)
+
+
+def _open_runner_bonus(kind: PassKind, openness: float, cfg: SimConfig) -> float:
+    """Return the appeal of a through or long ball to a receiver who is in space."""
+    if kind not in (PassKind.THROUGH, PassKind.LONG):
+        return 0.0
+    decision = cfg.decision
+    return decision.through_open_bonus * max(0.0, openness - decision.through_open_floor)
 
 
 def _pass_option(situation: Situation, mate: PlayerState) -> Option | None:
@@ -175,6 +204,8 @@ def _pass_option(situation: Situation, mate: PlayerState) -> Option | None:
     probability = pass_success_probability(attempt, cfg.passing)
     gain = threat(end_fx, end_fy) - threat(situation.fx, situation.fy)
     bias = _kind_bias(kind, situation) - _final_third_penalty(situation, mate, gain)
+    bias -= _return_pass_penalty(situation, mate)
+    bias += _open_runner_bonus(kind, attempt.openness, cfg) + _ground_gained(situation, end_fx)
     utility = _utility(situation, gain, probability, bias)
     return Option(
         ActionKind.PASS, utility, probability, end, situation.pressure, mate, kind, length

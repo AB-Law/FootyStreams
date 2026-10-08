@@ -74,7 +74,7 @@ INJURY_HEAVY = {
 def injury_heavy_log() -> tuple[MatchEvent, ...]:
     """A match with plenty of injuries, forced changes and sides playing short."""
     config = merge_config(SimConfig(), INJURY_HEAVY)
-    return run_match(demo_setup(), 5, config, default_tables()).events
+    return run_match(demo_setup(), 2, config, default_tables()).events
 
 
 @cache

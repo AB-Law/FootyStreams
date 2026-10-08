@@ -7,6 +7,8 @@ and no `sin`/`cos` (only exact arithmetic) so a match is identical on every plat
 
 from __future__ import annotations
 
+from math import sqrt
+
 from footystreams.sim.config import PositionConfig
 from footystreams.sim.geometry import (
     PITCH_LENGTH_M,
@@ -57,18 +59,27 @@ def wander(
     )
 
 
-def choose_pressers(team: TeamState, ball: Point, cfg: PositionConfig) -> frozenset[int]:
-    """Return the slots of the outfield players who close the ball down (nearest first).
+def choose_pressers(
+    team: TeamState, ball: Point, cfg: PositionConfig, *, keeper_has_it: bool = False
+) -> tuple[int, ...]:
+    """Return the slots of the outfield players who close the ball down, nearest first.
 
-    A team that presses hard sends more men: `press_count` at average intensity.
+    A team that presses hard sends more men: `press_count` at average intensity. Only players
+    within `press_range_m` go, the nearest always; one man shows a goalkeeper the way, no more.
     """
     count = max(1, round(cfg.press_count * (_PRESS_INTENSITY_FLOOR + team.view.press_intensity)))
+    if keeper_has_it:
+        count = 1
     ranked = sorted(
         (squared_distance_m(player.x, player.y, ball[0], ball[1]), player.slot)
         for player in team.players
         if player.line is not Line.KEEPER
     )
-    return frozenset(slot for _, slot in ranked[:count])
+    reach = cfg.press_range_m**2
+    chosen = [
+        slot for index, (gap, slot) in enumerate(ranked[:count]) if index == 0 or gap <= reach
+    ]
+    return tuple(chosen)
 
 
 def assign_marks(
@@ -107,3 +118,37 @@ def assign_marks(
                 frame_coordinate(rival.y, team.attack_dir),
             )
     return spots
+
+
+def spread_out(
+    aim: Point,
+    crowd: list[tuple[int, float, float, float]],
+    cfg: PositionConfig,
+    own_slot: int = -1,
+) -> Point:
+    """Move a target away from team-mates standing too close to it (frame coordinates).
+
+    `crowd` lists every team-mate as (slot, x, y, room): his place and the room he needs
+    (`spacing_m`, or `carrier_space_m` for the man on the ball); `own_slot` is skipped. The push is
+    the overlap times `spacing_push`, away from each, so a bunch spreads out and a lone player is
+    left where he was.
+    """
+    x, y = aim
+    # Perf: M8-sim-profile - this ran 20 times per position step and was 12% of a match through
+    # distance_m calls and list building; the test is on squared metres and only a real overlap
+    # takes a root.
+    for slot, spot_x, spot_y, room in crowd:
+        if slot == own_slot:
+            continue
+        dx = (aim[0] - spot_x) * PITCH_LENGTH_M
+        dy = (aim[1] - spot_y) * PITCH_WIDTH_M
+        gap_squared = dx * dx + dy * dy
+        if gap_squared >= room * room:
+            continue
+        gap = sqrt(gap_squared)
+        # Exactly on top of one another is split along the pitch; the order of `crowd` is stable.
+        along = (dx / gap, dy / gap) if gap > 0 else (1.0, 0.0)
+        shift = (room - gap) * cfg.spacing_push
+        x += along[0] * shift / PITCH_LENGTH_M
+        y += along[1] * shift / PITCH_WIDTH_M
+    return x, y

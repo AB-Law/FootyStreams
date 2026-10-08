@@ -73,13 +73,13 @@ class DisciplineConfig(DomainModel):
     }
 
     # Chance a challenge involves foul-worthy contact, for an average man (0 switches fouls off).
-    contact_base: NonNegative = 0.78
+    contact_base: NonNegative = 0.68
     aggression_weight: NonNegative = 0.8
     dirtiness_weight: NonNegative = 0.5
     tackling_weight: NonNegative = 0.5  # better tacklers foul less
     derby_factor: NonNegative = 1.2
     booked_caution: Share = 0.5  # a booked player challenges half as recklessly
-    box_caution: NonNegative = 0.5  # defenders in their own box tackle far more carefully
+    box_caution: NonNegative = 0.08  # defenders in their own box tackle far more carefully
     severity_base: float = 0.25
     severity_spread: NonNegative = 0.5
     severity_aggression: NonNegative = 0.25

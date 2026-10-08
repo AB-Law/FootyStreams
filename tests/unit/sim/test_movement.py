@@ -1,6 +1,6 @@
 from footystreams.sim.config import PositionConfig
 from footystreams.sim.geometry import PITCH_LENGTH_M, distance_m, frame_coordinate
-from footystreams.sim.movement import assign_marks, choose_pressers, wander
+from footystreams.sim.movement import assign_marks, choose_pressers, spread_out, wander
 from footystreams.sim.positioning import update_positions
 from footystreams.sim.state import Line, MatchState
 from tests.factories.match import make_setup
@@ -111,3 +111,39 @@ def test_update_positions__the_nearest_defender_closes_on_the_carrier() -> None:
     before = distance_m(nearest.x, nearest.y, carrier.x, carrier.y)
     update_positions(state, 4.0, CFG)
     assert distance_m(nearest.x, nearest.y, carrier.x, carrier.y) < before
+
+
+def test_spread_out__a_target_crowding_a_team_mate_is_moved_clear_of_him() -> None:
+    crowd = [(0, 0.5, 0.5, CFG.spacing_m)]
+    moved = spread_out((0.5 + 1.0 / PITCH_LENGTH_M, 0.5), crowd, CFG)
+    assert distance_m(moved[0], moved[1], 0.5, 0.5) > distance_m(
+        0.5 + 1.0 / PITCH_LENGTH_M, 0.5, 0.5, 0.5
+    )
+
+
+def test_spread_out__a_target_with_room_is_left_alone() -> None:
+    far = [(0, 0.9, 0.9, CFG.spacing_m)]
+    assert spread_out((0.2, 0.2), far, CFG) == (0.2, 0.2)
+
+
+def test_spread_out__the_ball_carrier_is_given_his_own_wider_room() -> None:
+    near = (0.5 + (CFG.carrier_space_m - 1.0) / PITCH_LENGTH_M, 0.5)
+    moved = spread_out(near, [(0, 0.5, 0.5, CFG.carrier_space_m)], CFG)
+    assert moved[0] > near[0]
+
+
+def test_spread_out__two_players_on_one_spot_are_split_not_divided_by_zero() -> None:
+    assert spread_out((0.5, 0.5), [(0, 0.5, 0.5, CFG.spacing_m)], CFG)[0] > 0.5
+
+
+def test_choose_pressers__only_one_man_shows_a_goalkeeper_the_way() -> None:
+    state = _state()
+    pressers = choose_pressers(state.home, (0.5, 0.5), CFG, keeper_has_it=True)
+    assert len(pressers) == 1
+
+
+def test_choose_pressers__a_man_beyond_press_range_stays_home_but_the_nearest_always_goes() -> None:
+    state = _state()
+    short = CFG.model_copy(update={"press_range_m": 1.0, "press_count": 6.0})
+    pressers = choose_pressers(state.home, (0.5, 0.5), short)
+    assert len(pressers) == 1

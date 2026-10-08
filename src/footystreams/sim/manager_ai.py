@@ -24,13 +24,13 @@ from footystreams.sim.subs import Window, can_change, make_substitution, replace
 from footystreams.sim.tactics_view import mentality_name, shift_mentality
 
 SIDES: tuple[Side, Side] = ("home", "away")
+# Moments where the ball is dead, so a change can be made. A foul or a card alone is not one: the
+# referee may be playing advantage, and the fouled side then keeps the ball (their restart, a free
+# kick or a penalty, is the stoppage), and an offside flag always ends in a free kick.
 DEAD_BALLS = frozenset(
     {
         "goal",
-        "foul",
-        "card",
         "injury",
-        "offside",
         "throw_in",
         "goal_kick",
         "corner",
@@ -70,7 +70,7 @@ class ManagerAI:
         if any(self._is_trigger(event) for event in events):
             for agent in self._agents.values():
                 agent.triggered = True
-        if not any(event.type in DEAD_BALLS for event in events):
+        if not any(event.type in DEAD_BALLS or self._is_trigger(event) for event in events):
             return 0.0
         return sum(self._review_if_due(side) for side in SIDES)
 

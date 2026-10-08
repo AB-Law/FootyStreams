@@ -101,8 +101,10 @@ def _receive(
     behind = option.pass_kind in _BEHIND_KINDS
     if play.cfg.offside.enabled and offside_called(play, passer, receiver, runs_in_behind=behind):
         return punish_offside(play, receiver, pass_id)
-    take_possession(play.state, receiver, option.end[0], option.end[1])
-    play.state.assist_from = passer
+    state = play.state
+    take_possession(state, receiver, option.end[0], option.end[1])
+    state.return_streak = state.return_streak + 1 if state.assist_from is receiver else 0
+    state.assist_from = passer
     return 0.0
 
 

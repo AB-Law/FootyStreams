@@ -13,7 +13,11 @@ import pytest
 from footystreams.sim import SimConfig, default_tables, run_match
 from tests.factories.sim_teams import make_demo_setup
 
-TRIPWIRE_S = 0.5
+# Raised from 0.5 s by the living-movement work (SIM 0.6.0): a match went from 0.23 s to about
+# 0.33 s of CPU alone (0.53 s under the gate's parallel load) for pressing, marking, spacing and
+# set-piece shapes. Still an order-of-magnitude tripwire: the 150 ms budget stays for the M8
+# optimisation pass.
+TRIPWIRE_S = 0.75
 RUNS = 3
 
 

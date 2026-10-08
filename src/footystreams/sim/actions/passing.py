@@ -76,6 +76,12 @@ class PassAttempt:
     environment: float = 0.0  # success lost to weather and pitch (long balls only)
 
 
+def difficulty_of(length_m: float, cfg: PassConfig) -> float:
+    """Return how much pressure and a marked receiver matter at this length: more on a long ball."""
+    share = min(length_m / cfg.difficulty_span_m, 1.0)
+    return cfg.difficulty_floor + (cfg.difficulty_peak - cfg.difficulty_floor) * share
+
+
 def pass_success_probability(attempt: PassAttempt, cfg: PassConfig) -> float:
     """Return the chance the pass reaches its target.
 
@@ -89,11 +95,14 @@ def pass_success_probability(attempt: PassAttempt, cfg: PassConfig) -> float:
     touch_term = cfg.receiver_touch_weight * (attempt.receiver_touch - cfg.skill_pivot) / PERCENT
     probability = (
         _base(attempt.kind, cfg)
-        - cfg.length_penalty_per_m * attempt.length_m
+        - cfg.length_penalty_per_m * max(0.0, attempt.length_m - cfg.length_free_m)
         + skill_term
         + touch_term
-        - cfg.pressure_penalty * attempt.pressure
-        - cfg.openness_penalty * (1.0 - attempt.openness)
+        - difficulty_of(attempt.length_m, cfg)
+        * (
+            cfg.pressure_penalty * attempt.pressure**cfg.pressure_exponent
+            + cfg.openness_penalty * (1.0 - attempt.openness) ** cfg.openness_exponent
+        )
         - (attempt.environment if attempt.kind in _WEATHER_SENSITIVE else 0.0)
     )
     return clamp(probability, cfg.min_probability, cfg.max_probability)

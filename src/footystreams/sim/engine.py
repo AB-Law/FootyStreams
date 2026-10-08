@@ -110,6 +110,7 @@ class MatchEngine:
             else None
         )
         self._frames = FrameRecorder(config.frame_interval_s) if config.emit_frames else None
+        self._state.record_keyframes = config.emit_frames
         self._pending_move_s = 0.0
 
     @property

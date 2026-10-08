@@ -11,9 +11,16 @@ from math import sqrt
 
 from footystreams.sim.config import PositionConfig
 from footystreams.sim.config_rules import OffsideConfig
-from footystreams.sim.geometry import CENTRE, PITCH_LENGTH_M, PITCH_WIDTH_M, Point, frame_coordinate
+from footystreams.sim.geometry import (
+    CENTRE,
+    PENALTY_AREA_DEPTH,
+    PITCH_LENGTH_M,
+    PITCH_WIDTH_M,
+    Point,
+    frame_coordinate,
+)
 from footystreams.sim.mathx import PERCENT, clamp
-from footystreams.sim.movement import assign_marks, choose_pressers, wander
+from footystreams.sim.movement import assign_marks, choose_pressers, spread_out, wander
 from footystreams.sim.offside import offside_line
 from footystreams.sim.side import Side, opposite
 from footystreams.sim.state import Line, MatchState, PlayerState, TeamState
@@ -86,10 +93,12 @@ Intent = tuple[PlayerState, Point, float]  # player, target in the team's frame,
 
 def _inside(point: Point, cfg: PositionConfig) -> Point:
     """Keep a target on the pitch, off the touchlines by the edge margin."""
-    return (
-        clamp(point[0], _MIN_TARGET_FRAME_X, _MAX_TARGET_FRAME_X),
-        clamp(point[1], cfg.edge_margin, 1.0 - cfg.edge_margin),
-    )
+    # Perf: M8-sim-profile - called for every player every step; plain comparisons beat clamp().
+    x, y = point
+    low, high = cfg.edge_margin, 1.0 - cfg.edge_margin
+    x = _MIN_TARGET_FRAME_X if x < _MIN_TARGET_FRAME_X else min(x, _MAX_TARGET_FRAME_X)
+    y = low if y < low else min(y, high)
+    return x, y
 
 
 def _toward(slot: Point, spot: Point | None, weight: float) -> Point:
@@ -97,6 +106,36 @@ def _toward(slot: Point, spot: Point | None, weight: float) -> Point:
     if spot is None:
         return slot
     return slot[0] + weight * (spot[0] - slot[0]), slot[1] + weight * (spot[1] - slot[1])
+
+
+def _crowd(
+    state: MatchState, team: TeamState, cfg: PositionConfig
+) -> list[tuple[int, float, float, float]]:
+    """Each team-mate as (slot, x, y, room): his place in the team's frame and the room he needs."""
+    flip = team.attack_dir < 0
+    return [
+        (
+            player.slot,
+            1.0 - player.x if flip else player.x,
+            1.0 - player.y if flip else player.y,
+            cfg.carrier_space_m if player is state.carrier else cfg.spacing_m,
+        )
+        for player in team.players
+    ]
+
+
+def _cover_spots(close_in: Point, ball: Point, count: int, cfg: PositionConfig) -> list[Point]:
+    """Where each presser goes: the first on the ball, the others covering behind and inside.
+
+    Without this they all aim at one spot, arrive together and stand in a heap on the carrier.
+    """
+    toward_middle = 1.0 if ball[1] < CENTRE else -1.0
+    spots = [close_in]
+    for rank in range(1, count):
+        depth = rank * cfg.cover_depth_m / PITCH_LENGTH_M
+        side = (rank if rank % 2 else -rank) * cfg.cover_width_m / PITCH_WIDTH_M
+        spots.append((close_in[0] - depth, ball[1] + toward_middle * side))
+    return spots
 
 
 def _intents(
@@ -112,21 +151,31 @@ def _intents(
         for player in team.players
         if player is not state.carrier
     ]
-    pressers: frozenset[int] = frozenset()
+    pressers: tuple[int, ...] = ()
     marks: dict[int, Point] = {}
     if not in_possession:
-        pressers = choose_pressers(team, (state.ball_x, state.ball_y), cfg)
+        keeper_has_it = state.carrier.line is Line.KEEPER
+        pressers = choose_pressers(
+            team, (state.ball_x, state.ball_y), cfg, keeper_has_it=keeper_has_it
+        )
         free = [(p, t) for p, t in slots if p.slot not in pressers and cfg.marking_weight[p.line]]
         marks = assign_marks(team, state.team(opposite(team.side)), free, cfg)
-    close_in = (ball[0] - cfg.press_gap_m / PITCH_LENGTH_M, ball[1])
+    # Nobody follows a keeper into his own box: the man closing him down stops at its edge.
+    reach = (1.0 - PENALTY_AREA_DEPTH) if state.carrier.line is Line.KEEPER else _MAX_TARGET_FRAME_X
+    close_in = (min(ball[0] - cfg.press_gap_m / PITCH_LENGTH_M, reach), ball[1])
+    cover = _cover_spots(close_in, ball, len(pressers), cfg)
+    crowd = _crowd(state, team, cfg)
     intents: list[Intent] = []
     for player, slot in slots:
         if player.slot in pressers:
-            intents.append((player, _inside(close_in, cfg), cfg.press_speed_bonus))
+            spot = cover[pressers.index(player.slot)]
+            intents.append((player, _inside(spot, cfg), cfg.press_speed_bonus))
             continue
         aim = _toward(slot, marks.get(player.slot), cfg.marking_weight[player.line])
         loop = wander(player, state.elapsed_s, in_possession=in_possession, cfg=cfg)
-        intents.append((player, _inside((aim[0] + loop[0], aim[1] + loop[1]), cfg), 1.0))
+        wanted = (aim[0] + loop[0], aim[1] + loop[1])
+        spread = spread_out(wanted, crowd, cfg, own_slot=player.slot)
+        intents.append((player, _inside(spread, cfg), 1.0))
     return intents
 
 
@@ -143,14 +192,15 @@ def _plan_team_moves(
     # pass (nobody has moved yet), so it is found once instead of once per player (was 11% of CPU).
     line = offside_line(opponents, team.attack_dir) if offside is not None else 0.0
     moves: list[Move] = []
+    flip = team.attack_dir < 0
     for player, target, sprint in _intents(state, team, cfg, in_possession=in_possession):
         ceiling = ceiling_below_line(line, player, offside) if offside is not None else 1.0
         frame_x = target[0] if player.line is Line.KEEPER else min(target[0], ceiling)
         moves.append(
             (
                 player,
-                frame_coordinate(frame_x, team.attack_dir),
-                frame_coordinate(target[1], team.attack_dir),
+                1.0 - frame_x if flip else frame_x,
+                1.0 - target[1] if flip else target[1],
                 speed_mps(player, cfg) * sprint * dt,
             )
         )

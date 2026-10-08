@@ -15,6 +15,7 @@ from footystreams.sim.emit import Meta
 from footystreams.sim.geometry import CENTRE, PITCH_LENGTH_M, frame_coordinate
 from footystreams.sim.mathx import clamp
 from footystreams.sim.play import Play, actor, label, take_possession
+from footystreams.sim.setpiece_shape import penalty_layout, settle
 from footystreams.sim.side import Side, opposite
 from footystreams.sim.state import PlayerState, TeamState
 
@@ -81,6 +82,7 @@ def take_penalty(play: Play, side: Side, foul_id: str) -> float:
         state, PenaltyEvent, meta, taker_id=taker.player_id, outcome=outcome
     )
     seconds = restart_delay(play, play.cfg.discipline.free_kick_s * 0.5, 5.0)
+    settle(play, team, penalty_layout(state, team, taker), seconds, keyframe=True)
     if outcome == "goal":
         return seconds + score_goal(play, penalty_id, None)
     if outcome == "saved":

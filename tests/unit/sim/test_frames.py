@@ -6,7 +6,7 @@ from footystreams.domain.types import PlayerId
 from footystreams.events.result import MatchResult
 from footystreams.events.structure import FrameEvent
 from footystreams.sim import SimConfig, default_tables, merge_config, run_match
-from footystreams.sim.frames import FrameRecorder, Snapshot, _FrameView
+from footystreams.sim.frames import FrameRecorder, Snapshot, _FrameView, _Moment
 from tests.factories.sim_play import make_play
 from tests.factories.sim_teams import make_demo_setup
 from tests.helpers.logs import without_frames_renumbered
@@ -91,26 +91,47 @@ def test_frames__with_context_on_they_still_change_no_other_event() -> None:
 A, B, C = PlayerId("a"), PlayerId("b"), PlayerId("c")
 
 
-def test_frame_view__the_ball_and_its_new_carrier_arrive_before_the_rest_of_the_moment_ends() -> (
-    None
-):
-    start = Snapshot(
-        t=0.0,
-        ball=(0.2, 0.5),
-        carrier=A,
-        players={A: (0.2, 0.5), B: (0.5, 0.5), C: (0.7, 0.2)},
+def _snapshot(t: float, ball: float, carrier: PlayerId, c_x: float) -> Snapshot:
+    return Snapshot(
+        t=t,
+        ball=(ball, 0.5),
+        carrier=carrier,
+        players={A: (0.2, 0.5), B: (ball if carrier == B else 0.5, 0.5), C: (c_x, 0.2)},
     )
-    end = Snapshot(
-        t=14.0,
-        ball=(0.5, 0.5),
-        carrier=B,
-        players={A: (0.2, 0.5), B: (0.5, 0.5), C: (0.9, 0.2)},
-    )
-    early = _FrameView(start, end, fraction=0.1, ball_fraction=1.0)
+
+
+def test_moment__a_short_pass_is_held_and_jogged_then_flies_and_lands_with_the_receiver() -> None:
+    start, end = _snapshot(0.0, 0.2, A, 0.7), _snapshot(4.0, 0.5, B, 0.9)
+    moment = _Moment.of(start, end)
+    early = _FrameView(moment, 1.0)
+    assert early.carrier() == A
+    assert early.ball()[0] > 0.2  # he jogs on with it toward the man he will pass to
+    assert early.positions()[A][0] > 0.2
+    landed = _FrameView(moment, 4.0)
+    assert landed.carrier() == B
+    assert landed.ball() == (0.5, 0.5)
+    assert landed.positions()[A] == (0.2, 0.5)  # back where the sim has him: no jump next moment
+    assert landed.positions()[B] == (0.5, 0.5)
+
+
+def test_moment__the_passer_never_jogs_further_than_the_cap() -> None:
+    moment = _Moment.of(_snapshot(0.0, 0.1, A, 0.7), _snapshot(4.0, 0.9, B, 0.9))
+    furthest = max(abs(_FrameView(moment, t / 10).positions()[A][0] - 0.2) for t in range(41))
+    assert furthest * 105 <= 4.0 + 0.1
+
+
+def test_moment__a_long_moment_shows_the_ball_arrive_first_and_then_the_wait() -> None:
+    start, end = _snapshot(0.0, 0.2, A, 0.7), _snapshot(14.0, 0.5, B, 0.9)
+    moment = _Moment.of(start, end)
+    early = _FrameView(moment, 2.0)
     assert early.ball() == (0.5, 0.5)
     assert early.carrier() == B
-    positions = early.positions()
-    assert positions[B] == (0.5, 0.5)
-    assert positions[C][0] < 0.75  # a team-mate is still walking to his place
-    late = _FrameView(start, end, fraction=0.1, ball_fraction=0.5)
-    assert late.carrier() == A
+    assert early.positions()[B] == (0.5, 0.5)
+    assert early.positions()[C][0] < 0.75  # a team-mate is still walking to his place
+
+
+def test_moment__a_carried_ball_travels_with_its_carrier_all_the_way() -> None:
+    start, end = _snapshot(0.0, 0.2, A, 0.7), _snapshot(3.0, 0.3, A, 0.7)
+    half = _FrameView(_Moment.of(start, end), 1.5)
+    assert abs(half.ball()[0] - 0.25) < 1e-9
+    assert half.carrier() == A
