@@ -22,7 +22,7 @@ from itertools import pairwise
 from footystreams.domain.match import MatchSetup
 from footystreams.events.clock import period_elapsed_s
 from footystreams.events.open_play import GoalEvent
-from footystreams.events.structure import FulltimeEvent, KickoffEvent
+from footystreams.events.structure import FrameEvent, FulltimeEvent, KickoffEvent
 from footystreams.events.summary import MatchSummaryEvent
 from footystreams.events.types import MatchEvent
 from footystreams.verify.discipline import (
@@ -144,33 +144,39 @@ def check_rosters(setup: MatchSetup) -> list[Violation]:
     return [Violation("M05", "player is on both teams", player_id) for player_id in shared]
 
 
-_EVENT_CHECKS: tuple[Check, ...] = (
+_LOG_CHECKS: tuple[Check, ...] = (
     check_sequence,
     check_ids,
     check_time,
     check_scores,
     check_positions,
     check_ending,
+    check_events_validate,
+    check_ratings,
+    check_digest,
+    check_ranges,
+)
+# Rules about play read the log without tracking frames, which sit between the real events.
+_PLAY_CHECKS: tuple[Check, ...] = (
     check_dismissed_players_stay_off,
     check_card_logic,
     check_men_counts,
     check_sequencing,
     check_substitution_limits,
-    check_events_validate,
-    check_ratings,
-    check_digest,
-    check_ranges,
 )
 
 
 def verify_match(events: Sequence[MatchEvent], setup: MatchSetup | None = None) -> list[Violation]:
     """Return every violated match invariant (empty when the log is sound).
 
-    `setup` enables the roster checks; the log checks need only the events.
+    `setup` enables the roster, pitch-state and summary checks; the log checks need only the
+    events. Tracking frames (when present) are checked as events but ignored by the rules of play.
     """
-    found = [violation for check in _EVENT_CHECKS for violation in check(events)]
+    play = [event for event in events if not isinstance(event, FrameEvent)]
+    found = [violation for check in _LOG_CHECKS for violation in check(events)]
+    found.extend(violation for check in _PLAY_CHECKS for violation in check(play))
     if setup is not None:
         found.extend(check_rosters(setup))
-        found.extend(check_pitch_state(events, setup))
+        found.extend(check_pitch_state(play, setup))
         found.extend(check_summary_recomputes(events, setup))
     return found

@@ -33,6 +33,7 @@ from footystreams.sim.config_rules import OffsideConfig
 from footystreams.sim.decision import decide
 from footystreams.sim.emit import EventEmitter, Meta, TeamLabel
 from footystreams.sim.fatigue import advance_exhaustion, final_exhaustion, halftime_recovery
+from footystreams.sim.frames import FrameRecorder
 from footystreams.sim.injury import injure_without_contact, injury_reports
 from footystreams.sim.manager_ai import ManagerAI
 from footystreams.sim.options import ActionKind, Option
@@ -102,6 +103,7 @@ class MatchEngine:
             if config.manager.enabled
             else None
         )
+        self._frames = FrameRecorder(config.frame_interval_s) if config.emit_frames else None
         self._pending_move_s = 0.0
 
     @property
@@ -153,6 +155,8 @@ class MatchEngine:
         if period != PERIODS[0]:
             state.home.attack_dir, state.away.attack_dir = -1, 1
         place_for_kickoff(state, kicking)
+        if self._frames is not None:
+            self._frames.reset(state)
         state.chain += 1
         self._pending_move_s = 0.0
         self._emit_marker(KickoffEvent, period=period, team=kicking)
@@ -186,6 +190,8 @@ class MatchEngine:
             pause_s += self._manager.after_action(self._emitter.events[mark:])
         state.t_period += duration + pause_s
         self._pending_move_s += duration
+        if self._frames is not None:
+            self._frames.record(state, self._emitter)
 
     def _offside_rule(self) -> OffsideConfig | None:
         return self._config.offside if self._config.offside.enabled else None

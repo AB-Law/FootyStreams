@@ -26,7 +26,7 @@ from footystreams.events.derive.presence import Spell, injured_players, player_s
 from footystreams.events.derive.ratings import player_of_the_match, rate_match
 from footystreams.events.derive.tally import PlayerTally, SideTally, Tally, tally_events
 from footystreams.events.open_play import GoalEvent
-from footystreams.events.structure import HalftimeEvent
+from footystreams.events.structure import FrameEvent, HalftimeEvent
 from footystreams.events.summary import MatchSummary, PlayerMatchStats, TeamStats
 from footystreams.events.summary_rows import InjuryReport
 from footystreams.events.types import MatchEvent
@@ -170,7 +170,11 @@ def _player_rows(
 def build_summary(
     events: Sequence[MatchEvent], setup: MatchSetup, inputs: SummaryInputs
 ) -> MatchSummary:
-    """Fold the events (everything before the summary event) into a `MatchSummary`."""
+    """Fold the events (everything before the summary event) into a `MatchSummary`.
+
+    Tracking frames are ignored: a log with frames summarises exactly like one without.
+    """
+    events = [event for event in events if not isinstance(event, FrameEvent)]
     tally = tally_events(events, setup)
     duration = match_duration_s(events)
     ht_home, ht_away = halftime_score(events)
