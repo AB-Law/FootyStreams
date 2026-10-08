@@ -227,6 +227,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0231** Add the studio, social and stream layer to the roadmap wishlist *(design; scope: design)*
 - **0230** Write the M8 calibration report and record the sensitivity matrices *(M8; scope: docs, design)*
 - **0217** Write the M12 report and the as-built runtime section of design 13 *(M12; scope: docs, design)*
 - **0205** Write the M8 report, the as-built calibration sections of design 02 and the status page *(M8; scope: docs, design)*
