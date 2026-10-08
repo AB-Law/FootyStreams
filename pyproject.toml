@@ -22,6 +22,7 @@ sim = "footystreams.cli.sim:main"
 golden = "footystreams.cli.golden:main"
 league = "footystreams.cli.league:main"
 balance = "footystreams.cli.balance:main"
+engine = "footystreams.cli.engine:main"
 
 [dependency-groups]
 dev = [

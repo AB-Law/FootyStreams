@@ -9,9 +9,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
-- **0211** Let balance fit count only the metrics named by --metrics *(M8; scope: cli)*
-- **0208** Add balance --min-gap to play only mismatched pairings for strength studies *(M8; scope: cli)*
-- **0206** Make the balance sensitivity sweep resumable, with one-sided nudges and a report file *(M8; scope: cli, tools)*
+- **0222** Let balance fit count only the metrics named by --metrics *(M8; scope: cli)*
+- **0219** Add balance --min-gap to play only mismatched pairings for strength studies *(M8; scope: cli)*
+- **0218** Make the balance sensitivity sweep resumable, with one-sided nudges and a report file *(M8; scope: cli, tools)*
+- **0216** Add uv run engine: the channel as a process, with the world stepped in a worker process *(M12; scope: cli, runtime)*
+- **0215** Add the Engine: lock, supervised buffer and broadcast, resume from the cursor, filler, graceful stop *(M12; scope: runtime)*
+- **0214** Add the simulation buffer (world ahead of the broadcast, verified, quarantine) and the world stepper *(M12; scope: runtime)*
+- **0213** Add the supervisor (restart with backoff and a circuit breaker) and keep filler out of the cursor *(M12; scope: runtime)*
+- **0212** Add the match player: paced replay of stored logs with half-time, resume and clock-jump handling *(M12; scope: runtime)*
+- **0211** Add the programme: played matchdays laid out as pre-match, match, post-match and magazine blocks *(M12; scope: runtime)*
+- **0210** Add the single-instance lock, the persisted playback cursor and the health heartbeat *(M12; scope: runtime)*
+- **0209** Add the EventBus with per-sink bounded queues and the NDJSON, file and in-memory sinks *(M12; scope: runtime)*
+- **0208** Add the broadcast event contract: segments, world notices and engine markers *(M12; scope: events, runtime)*
+- **0206** Add the engine clocks (system, scaled, virtual) and EngineConfig with pace parsing *(M12; scope: runtime)*
 - **0200** Add balance fit: search chosen knobs for the lowest loss and write a candidate config *(M8; scope: cli, tools)*
 - **0199** Add balance sensitivity: nudge each knob and show which metric it moves *(M8; scope: cli, tools)*
 - **0198** Add the balance command: scenarios over every pairing, a process-pool runner, --config and --set *(M8; scope: cli, tools)*
@@ -132,12 +142,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
-- **0217** Calibrate stage 3: discipline, home advantage and the on-target share *(M8; scope: sim; sim version minor)*
-- **0216** Allow five substitution windows and move the five-plus goals bands *(M8; scope: sim, data, design; sim version patch)*
-- **0215** Calibrate stage 2: tactics leverage and the shot level *(M8; scope: sim; sim version minor)*
-- **0213** Keep elite clubs' drama managers attacking *(M8; scope: seed, data)*
-- **0212** Calibrate shot volume and quality: stage 1 defaults *(M8; scope: sim; sim version minor)*
-- **0209** Move the yellow-card substitution window to minutes 60-85 *(M8; scope: sim; sim version minor; schema version patch)*
+- **0228** Calibrate stage 3: discipline, home advantage and the on-target share *(M8; scope: sim; sim version minor)*
+- **0227** Allow five substitution windows and move the five-plus goals bands *(M8; scope: sim, data, design; sim version patch)*
+- **0226** Calibrate stage 2: tactics leverage and the shot level *(M8; scope: sim; sim version minor)*
+- **0224** Keep elite clubs' drama managers attacking *(M8; scope: seed, data)*
+- **0223** Calibrate shot volume and quality: stage 1 defaults *(M8; scope: sim; sim version minor)*
+- **0220** Move the yellow-card substitution window to minutes 60-85 *(M8; scope: sim; sim version minor; schema version patch)*
 - **0178** Fund transfer budgets from income and scale final-fill wages to the club's budget *(M11; scope: league, data)*
 - **0169** Scale intake from the league's own recorded level; split the rollover modules *(M10; scope: league)*
 - **0168** Tune development, intake and squad wages; add league health and a 20-season test *(M10; scope: league)*
@@ -159,8 +169,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
-- **0214** Count a denied goal-scoring chance only when it was a clear chance *(M8; scope: sim; sim version patch)*
-- **0210** Hold attackers on the offside line and mistime runs only on balls in behind *(M8; scope: sim; sim version patch)*
+- **0225** Count a denied goal-scoring chance only when it was a clear chance *(M8; scope: sim; sim version patch)*
+- **0221** Hold attackers on the offside line and mistime runs only on balls in behind *(M8; scope: sim; sim version patch)*
 - **0207** Strip git's repository variables from every test so a hook cannot steer them into the real repo *(M12; scope: tools)*
 - **0204** Count only changes before the break as early tactical substitutions in the balance metric *(M8; scope: tools)*
 - **0203** Count first-half stoppage time in player minutes so a late-first-half substitute never gets negative minutes *(M8; scope: events, sim; sim version patch)*
@@ -205,7 +215,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0062** Share the one-player-on-two-teams check between sim and verify *(M4; scope: domain, verify, sim)*
 
 ### Tests
-- **0218** Add the balance profile and metamorphic statistical tests *(M8; scope: tools)*
+- **0229** Add the balance profile and metamorphic statistical tests *(M8; scope: tools)*
 - **0183** Skip the world-gen wall-clock tripwire under coverage *(M9; scope: seed)*
 - **0171** Stop the season tests timing out under coverage *(M10; scope: league)*
 - **0135** Share cached worlds across seed tests *(M2; scope: cli)*
@@ -217,7 +227,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
-- **0219** Write the M8 calibration report and record the sensitivity matrices *(M8; scope: docs, design)*
+- **0230** Write the M8 calibration report and record the sensitivity matrices *(M8; scope: docs, design)*
+- **0217** Write the M12 report and the as-built runtime section of design 13 *(M12; scope: docs, design)*
 - **0205** Write the M8 report, the as-built calibration sections of design 02 and the status page *(M8; scope: docs, design)*
 - **0195** Record the Join integration in the status page and milestones *(M8; scope: docs)*
 - **0189** Clarify --transfers and refresh the status tip *(M11; scope: docs)*

@@ -1,13 +1,13 @@
 ---
-id: 0206
+id: 0209
 date: 2026-10-08
 type: added
-scope: [cli, tools]
-milestone: M8
+scope: [runtime]
+milestone: M12
 breaking: false
 schema_version_impact: none
 sim_version_impact: none
 config_impact: false
 migration: false
-summary: Make the balance sensitivity sweep resumable, with one-sided nudges and a report file
+summary: Add the EventBus with per-sink bounded queues and the NDJSON, file and in-memory sinks
 ---

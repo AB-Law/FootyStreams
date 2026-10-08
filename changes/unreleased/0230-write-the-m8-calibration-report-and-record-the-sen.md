@@ -1,13 +1,13 @@
 ---
-id: 0208
+id: 0230
 date: 2026-10-08
-type: added
-scope: [cli]
+type: docs
+scope: [docs, design]
 milestone: M8
 breaking: false
 schema_version_impact: none
 sim_version_impact: none
 config_impact: false
 migration: false
-summary: Add balance --min-gap to play only mismatched pairings for strength studies
+summary: Write the M8 calibration report and record the sensitivity matrices
 ---
