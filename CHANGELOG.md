@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0194** Add friendly matches between any two clubs of a world *(M8; scope: league)*
 - **0192** Add league --simulator to play fixtures on the real match engine *(M8; scope: cli, league)*
 - **0191** Build the sim's static tables from the world's formation catalogue *(M8; scope: sim)*
 - **0177** Add the transfer-leg invariant L06 and the transfers report *(M11; scope: verify)*
