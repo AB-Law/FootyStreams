@@ -25,6 +25,15 @@ class PositionConfig(DomainModel):
         "base_speed_mps": "S",
         "speed_range_mps": "S",
         "step_s": "S",
+        "wander_m": "S",
+        "wander_period_s": "S",
+        "press_count": "S",
+        "press_speed_bonus": "S",
+        "press_gap_m": "S",
+        "marking_weight": "S",
+        "marking_goalside_m": "S",
+        "marking_range_m": "S",
+        "edge_margin": "S",
     }
 
     push_in_possession: NonNegative = 0.09
@@ -36,7 +45,18 @@ class PositionConfig(DomainModel):
     width_max: Positive = 1.25
     base_speed_mps: Positive = 4.5
     speed_range_mps: NonNegative = 3.5
-    step_s: Positive = 4.0  # positions are refreshed once this much match time has passed
+    step_s: Positive = 2.0  # positions are refreshed once this much match time has passed
+    # Off-ball life (M8 realism pass): nobody stands still, the nearest defenders close the ball
+    # down and the rest pick up a man instead of holding a slot (docs/design/02 section 4).
+    wander_m: tuple[float, float, float, float] = (0.0, 1.5, 3.0, 4.0)  # loop radius: GK, DEF...ATT
+    wander_period_s: Positive = 11.0  # seconds one loop around the slot takes
+    press_count: Positive = 1.5  # defenders who close the ball down at average press intensity
+    press_speed_bonus: Positive = 1.3  # a presser sprints at this multiple of his pace
+    press_gap_m: Positive = 3.0  # a presser closes to this far goal-side of the carrier
+    marking_weight: tuple[float, float, float, float] = (0.0, 0.4, 0.3, 0.0)  # GK, DEF, MID, ATT
+    marking_goalside_m: NonNegative = 3.5  # a marker stands this far goal-side of his man
+    marking_range_m: Positive = 22.0  # a man further than this from the marker's slot is not marked
+    edge_margin: Share = 0.035  # nobody is sent closer than this to a touchline (fraction of width)
 
 
 class PressureConfig(DomainModel):
@@ -220,6 +240,10 @@ class DecisionConfig(DomainModel):
         "cross_bias": "S",
         "dribble_bias": "S",
         "recycle_bias": "S",
+        "box_frame_x": "S",
+        "box_min_gain": "S",
+        "box_recycle_penalty": "S",
+        "ping_pong_penalty": "S",
         "mentality_swing": "S",
         "urgency_swing": "S",
         "temperature_base": "S",
@@ -235,16 +259,23 @@ class DecisionConfig(DomainModel):
     loss_cost_own_third: float = 0.55  # extra cost of losing the ball at the own goal line
     lead_frame_x: float = 0.012  # passes are aimed slightly ahead of the receiver
     min_pass_m: float = 4.0
-    shot_scale: float = 10.2152
+    shot_scale: float = 13.0
     shoot_on_sight_swing: float = 0.8
     clear_pressure: float = 0.422
     clear_max_frame_x: float = 0.30
     clear_base: float = 0.9
     clear_slope: float = 1.5
     directness_bias: float = 0.0723
-    cross_bias: float = 0.6
+    cross_bias: float = 1.1
     dribble_bias: float = 0.5
     recycle_bias: float = 0.4  # extra appeal of a back pass per unit of pressure
+    # Attackers in the box do not shuffle the ball sideways: a pass there that gains no threat, or
+    # that hands the ball straight back to the man who gave it, loses utility, so a forward ball,
+    # a dribble or a shot wins (M8 realism pass).
+    box_frame_x: float = 0.82  # the final third from this frame x
+    box_min_gain: float = 0.02  # threat a final-third pass must gain to count as going forward
+    box_recycle_penalty: float = 1.0
+    ping_pong_penalty: float = 1.5
     mentality_swing: float = 0.0116
     urgency_swing: float = 0.3
     temperature_base: Positive = 0.35
@@ -301,8 +332,8 @@ class ChallengeConfig(DomainModel):
         "clearance_spread": "S",
     }
 
-    attempt_rate: NonNegative = 0.10  # per moment, times the pressure on the carrier
-    attempt_radius_m: Positive = 3.0
+    attempt_rate: NonNegative = 0.14  # per moment, times the pressure on the carrier
+    attempt_radius_m: Positive = 4.0
     tackle_base: Share = 0.45
     tackle_swing: float = 0.10
     tackle_scale: Positive = 20.0

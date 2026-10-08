@@ -143,6 +143,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0241** Stop attackers in the final third passing the ball sideways and straight back *(M8; scope: sim; sim version minor)*
+- **0240** Make players press, mark and keep moving; keep everyone off the touchline *(M8; scope: sim; sim version minor)*
 - **0228** Calibrate stage 3: discipline, home advantage and the on-target share *(M8; scope: sim; sim version minor)*
 - **0227** Allow five substitution windows and move the five-plus goals bands *(M8; scope: sim, data, design; sim version patch)*
 - **0226** Calibrate stage 2: tactics leverage and the shot level *(M8; scope: sim; sim version minor)*

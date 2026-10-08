@@ -138,6 +138,21 @@ def _kind_bias(kind: PassKind, situation: Situation) -> float:
     return 0.0
 
 
+def _final_third_penalty(situation: Situation, mate: PlayerState, gain: float) -> float:
+    """Return the utility a pass loses for shuffling the ball about in the final third.
+
+    A pass that gains no threat loses `box_recycle_penalty`; handing the ball straight back to
+    the man it came from loses `ping_pong_penalty` on top.
+    """
+    decision = situation.cfg.decision
+    if situation.fx < decision.box_frame_x:
+        return 0.0
+    penalty = decision.box_recycle_penalty if gain < decision.box_min_gain else 0.0
+    if mate is situation.state.assist_from:
+        penalty += decision.ping_pong_penalty
+    return penalty
+
+
 def _pass_option(situation: Situation, mate: PlayerState) -> Option | None:
     state, cfg, direction = situation.state, situation.cfg, situation.direction
     carrier = state.carrier
@@ -159,7 +174,8 @@ def _pass_option(situation: Situation, mate: PlayerState) -> Option | None:
     )
     probability = pass_success_probability(attempt, cfg.passing)
     gain = threat(end_fx, end_fy) - threat(situation.fx, situation.fy)
-    utility = _utility(situation, gain, probability, _kind_bias(kind, situation))
+    bias = _kind_bias(kind, situation) - _final_third_penalty(situation, mate, gain)
+    utility = _utility(situation, gain, probability, bias)
     return Option(
         ActionKind.PASS, utility, probability, end, situation.pressure, mate, kind, length
     )
