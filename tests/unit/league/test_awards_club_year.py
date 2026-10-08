@@ -150,15 +150,20 @@ def test_income_estimate__grows_with_a_bigger_ground_and_more_sponsors() -> None
     assert income_estimate(bigger, FINANCE) > income_estimate(club, FINANCE) > 0
 
 
-def test_reset_budgets__wage_budget_follows_income_and_transfer_budget_the_bank() -> None:
+def test_reset_budgets__wage_budget_follows_income_and_transfer_budget_the_bank_and_income() -> (
+    None
+):
     club = WORLD.clubs[0].model_copy(
         update={"finances": WORLD.clubs[0].finances.model_copy(update={"balance": 10_000_000})}
     )
+    income = income_estimate(club, FINANCE)
     reset = reset_budgets(club, FINANCE, ROLLOVER)
-    expected = round(
-        income_estimate(club, FINANCE) * ROLLOVER.wage_budget_ratio / FINANCE.weeks_per_year
+    assert reset.finances.wage_budget_weekly == round(
+        income * ROLLOVER.wage_budget_ratio / FINANCE.weeks_per_year
     )
-    assert reset.finances.wage_budget_weekly == expected
-    assert reset.finances.transfer_budget == round(10_000_000 * ROLLOVER.transfer_budget_share)
+    from_income = round(income * ROLLOVER.transfer_budget_income_share)
+    assert reset.finances.transfer_budget == (
+        round(10_000_000 * ROLLOVER.transfer_budget_share) + from_income
+    )
     broke = club.model_copy(update={"finances": club.finances.model_copy(update={"balance": -5})})
-    assert reset_budgets(broke, FINANCE, ROLLOVER).finances.transfer_budget == 0
+    assert reset_budgets(broke, FINANCE, ROLLOVER).finances.transfer_budget == from_income

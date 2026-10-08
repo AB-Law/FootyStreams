@@ -21,6 +21,7 @@ from footystreams.league.rollover_state import (
 from footystreams.league.squad import (
     SquadContext,
     assign_numbers,
+    on_budget,
     rebalance,
     squad_entries,
     squad_value,
@@ -29,7 +30,6 @@ from footystreams.league.tables import LeagueTables
 from footystreams.league.youth import intake_requests, signed_prospect
 
 FREE_AGENT_REPUTATION = 30
-MIN_WEEKLY_WAGE = 600
 
 
 def mean_ability(players: Sequence[Player]) -> float:
@@ -121,15 +121,6 @@ def trim_pool(work: Work, context: tuple[RolloverServices, dt.date]) -> None:
         work.events.append(retirement_news(player, today, "left_the_game"))
 
 
-def _on_budget(player: Player, scale: float) -> Player:
-    """A new senior contract scaled to what the club can afford (never below the youth wage)."""
-    contract = player.contract
-    if contract is None or scale >= 1.0:
-        return player
-    wage = max(MIN_WEEKLY_WAGE, round(contract.wage_weekly * scale))
-    return player.model_copy(update={"contract": contract.model_copy(update={"wage_weekly": wage})})
-
-
 def squads(work: Work, data: RolloverData, context: tuple[RolloverServices, dt.date]) -> None:
     """Rebalance every club's squad, then number the newcomers and sync the squad entries."""
     services, today = context
@@ -145,7 +136,7 @@ def squads(work: Work, data: RolloverData, context: tuple[RolloverServices, dt.d
         scale = min(1.0, wage_scale(work, club_id, services.tables.development.rollover))
         moves = rebalance(club_id, members, pool, squad_context)
         for player in (*moves.promoted, *moves.signed):
-            work.players[player.id] = _on_budget(player, scale)
+            work.players[player.id] = on_budget(player, scale)
         for player in moves.released:
             work.players[player.id] = player
         final = assign_numbers(seniors_of(work, club_id))

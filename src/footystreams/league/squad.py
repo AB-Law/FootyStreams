@@ -215,3 +215,15 @@ def squad_entries(
         f"{e.club_id}:{e.player_id}" for e in existing if f"{e.club_id}:{e.player_id}" not in keep
     ]
     return wanted, stale
+
+
+MIN_WEEKLY_WAGE = 600
+
+
+def on_budget(player: Player, scale: float) -> Player:
+    """A new contract scaled to what the club can afford (never below the minimum wage)."""
+    contract = player.contract
+    if contract is None or scale >= 1.0:
+        return player
+    wage = max(MIN_WEEKLY_WAGE, round(contract.wage_weekly * scale))
+    return player.model_copy(update={"contract": contract.model_copy(update={"wage_weekly": wage})})
