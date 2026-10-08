@@ -105,6 +105,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0100** Record the M11 market calibration numbers in the report *(M11; scope: docs)*
 - **0099** Document contracts and transfers (M11 report, design and status) *(M11; scope: docs, design)*
 - **0090** Write the M10 milestone report and refresh status and design *(M10; scope: league)*
 - **0077** Write the M9 milestone report and refresh status and design docs *(M9; scope: league)*
