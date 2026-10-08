@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from enum import StrEnum
 from pathlib import Path
 
 from footystreams.league.climate import ClimateCatalog
@@ -9,7 +10,7 @@ from footystreams.league.config import LeagueConfig
 from footystreams.league.development_config import DevelopmentConfig
 from footystreams.league.matchday import MatchdayEngine
 from footystreams.league.mood_config import MoodConfig
-from footystreams.league.simulator import ResultOnlySimulator
+from footystreams.league.simulator import EventSimulator, MatchSimulator, ResultOnlySimulator
 from footystreams.league.tables import LeagueTables
 from footystreams.league.transfer_config import TransferConfig
 from footystreams.persistence.ports import Repositories
@@ -17,6 +18,8 @@ from footystreams.seed.players.context import Geography
 from footystreams.seed.prospects import SeedProspectFactory
 from footystreams.seed.static.files import read_yaml
 from footystreams.seed.static.tables import StaticTables, load_static_tables
+from footystreams.sim import SimConfig, run_match
+from footystreams.sim.tables import tables_from_catalog
 
 
 def load_league_tables(
@@ -36,10 +39,28 @@ def load_league_tables(
     )
 
 
-def build_engine(tables: LeagueTables, world_seed: int) -> MatchdayEngine:
-    """The matchday engine with the result-only simulator (the event simulator plugs in here)."""
-    simulator = ResultOnlySimulator(tables.roles, tables.config.result_only)
-    return MatchdayEngine(tables=tables, simulator=simulator, world_seed=world_seed)
+class SimulatorKind(StrEnum):
+    """Which match simulator plays the fixtures."""
+
+    RESULT = "result"  # score only, fast: the default and the production fallback
+    EVENT = "event"  # the real simulator with full event logs
+
+
+def build_simulator(tables: LeagueTables, kind: SimulatorKind) -> MatchSimulator:
+    """The simulator of ``kind``; the event simulator plays the formations the world defines."""
+    if kind is SimulatorKind.RESULT:
+        return ResultOnlySimulator(tables.roles, tables.config.result_only)
+    config, sim_tables = SimConfig(), tables_from_catalog(tables.formations)
+    return EventSimulator(lambda setup, seed: run_match(setup, seed, config, sim_tables))
+
+
+def build_engine(
+    tables: LeagueTables, world_seed: int, kind: SimulatorKind = SimulatorKind.RESULT
+) -> MatchdayEngine:
+    """The matchday engine over the chosen simulator."""
+    return MatchdayEngine(
+        tables=tables, simulator=build_simulator(tables, kind), world_seed=world_seed
+    )
 
 
 def build_prospects(repositories: Repositories, static: StaticTables) -> SeedProspectFactory:

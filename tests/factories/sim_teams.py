@@ -37,6 +37,7 @@ from footystreams.domain.types import (
     RoleId,
 )
 from footystreams.domain.weather import Weather, WeatherCondition
+from footystreams.seed.static.simple_tables import load_formations
 from footystreams.sim.formations import BUILTIN_FORMATIONS
 from tests.factories.match import make_player_snapshot, make_team_sheet
 from tests.factories.player import (
@@ -193,6 +194,13 @@ def _flat_physical(strength: int) -> dict[str, int]:
     return {**dict.fromkeys(names, _bounded(strength)), "natural_fitness": 60}
 
 
+def _formation_positions(formation: str) -> list[Position]:
+    """Slot positions: the sim's built-ins first (the goldens), then the world's formations."""
+    if formation in BUILTIN_FORMATIONS:
+        return [Position(code) for code, _, _ in BUILTIN_FORMATIONS[formation]]
+    return list(load_formations().formations[FormationId(formation)].positions())
+
+
 def make_demo_sheet(  # noqa: PLR0913 - a demo team is described by these independent knobs
     side: str,
     *,
@@ -204,8 +212,7 @@ def make_demo_sheet(  # noqa: PLR0913 - a demo team is described by these indepe
 ) -> TeamSheet:
     """Build a position-aware sheet; `club` is `(club_id, name, short_code)`."""
     club_id, club_name, code = club or (f"clb_{side}01", side.title(), side[:3].upper())
-    rows = BUILTIN_FORMATIONS[formation]
-    positions = [Position(code_) for code_, _, _ in rows]
+    positions = _formation_positions(formation)
     offset = 0 if side == "home" else len(_FIRST_NAMES) // 2
     ids = [PlayerId(f"plr_{side}{index:04d}") for index in range(len(positions) + 3)]
     squad: dict[PlayerId, PlayerSnapshot] = {}

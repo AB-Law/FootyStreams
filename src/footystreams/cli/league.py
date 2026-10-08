@@ -8,7 +8,12 @@ from pathlib import Path
 
 from sqlalchemy import Engine
 
-from footystreams.cli.league_wiring import build_engine, build_prospects, load_league_tables
+from footystreams.cli.league_wiring import (
+    SimulatorKind,
+    build_engine,
+    build_prospects,
+    load_league_tables,
+)
 from footystreams.domain.competition import Season
 from footystreams.domain.transfer import OUTSIDE_WORLD
 from footystreams.domain.types import ClubId, PlayerId
@@ -46,6 +51,13 @@ def _parser() -> argparse.ArgumentParser:
         "--transfers",
         action="store_true",
         help="print every completed transfer (the market always runs with --seasons)",
+    )
+    parser.add_argument(
+        "--simulator",
+        type=SimulatorKind,
+        choices=list(SimulatorKind),
+        default=SimulatorKind.RESULT,
+        help="result: score only, fast (default); event: the real match simulator, slower",
     )
     parser.add_argument(
         "--season-only", action="store_true", help="play the current season to its end (default)"
@@ -144,8 +156,9 @@ def _run(arguments: argparse.Namespace) -> int:
                 if club.id != OUTSIDE_WORLD
             }
             prospects = build_prospects(uow, static)
+        engine_tables = load_league_tables(static=static)
         runner = SeasonRunner(
-            factory, build_engine(load_league_tables(static=static), world_seed), prospects
+            factory, build_engine(engine_tables, world_seed, arguments.simulator), prospects
         )
         _print_results(
             _play(arguments, runner, season), factory, opening, show_transfers=arguments.transfers

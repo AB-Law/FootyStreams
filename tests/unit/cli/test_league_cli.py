@@ -86,3 +86,21 @@ def test_league__transfers_option__lists_the_completed_transfers(
     assert "Date" in output
     assert "Fee" in output
     assert "The Wider World" not in output.split("Balance")[1].split("Date")[0]
+
+
+def test_league__event_simulator__plays_the_real_match_engine_deterministically(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    arguments = ["--seed", "2", "--clubs", "4", "--matchday", "1", "--simulator", "event"]
+    assert main(arguments) == EXIT_OK
+    first = capsys.readouterr().out
+    assert main(arguments) == EXIT_OK
+    second = capsys.readouterr().out
+    assert "2 matches played" in first
+    assert first == second
+
+
+def test_league__unknown_simulator__is_a_usage_error() -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        main(["--simulator", "oracle"])
+    assert exit_info.value.code == EXIT_USAGE
