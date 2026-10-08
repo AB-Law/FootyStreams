@@ -9,6 +9,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0177** Add the transfer-leg invariant L06 and the transfers report *(M11; scope: verify)*
+- **0176** Add the transfer market *(M11; scope: league)*
+- **0175** Add the rules of a deal *(M11; scope: league)*
+- **0174** Add transfer windows and needs analysis *(M11; scope: league)*
+- **0173** Add contract renewal talks and expiry *(M11; scope: league)*
+- **0172** Add the transfer config and noisy scouting *(M11; scope: league)*
 - **0167** Add squad and development invariants L04 and L05; league --seasons *(M10; scope: verify)*
 - **0165** Add the season rollover and multi-season runs *(M10; scope: league)*
 - **0164** Add season awards, club year-end and the income estimate *(M10; scope: league)*
@@ -114,6 +120,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0178** Fund transfer budgets from income and scale final-fill wages to the club's budget *(M11; scope: league, data)*
 - **0169** Scale intake from the league's own recorded level; split the rollover modules *(M10; scope: league)*
 - **0168** Tune development, intake and squad wages; add league health and a 20-season test *(M10; scope: league)*
 - **0152** Derive fixture ids and flag derbies when scheduling *(M9; scope: league)*
@@ -134,6 +141,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0188** Export check_schedule from the verify package *(M11; scope: verify)*
+- **0187** Flag orphan transfer ledger legs as L06 *(M11; scope: verify)*
+- **0186** Exclude OUTSIDE_WORLD from league health and squad checks *(M11; scope: league)*
+- **0185** Export check_transfers from the verify package *(M11; scope: verify)*
+- **0181** Write clubs before the players that name them when applying a delta *(M11; scope: league)*
 - **0166** Create academy players relative to the rollover date *(M10; scope: league)*
 - **0138** Merge verify exports, renumber M2 fragments, and retie goldens after Track A rebase *(M2; scope: verify, schemas, sim; sim version patch; schema version patch)*
 - **0120** Fix own-goal tags and bound the M7 context knobs *(M7; scope: events, sim)*
@@ -151,6 +163,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0041** Close M1 test gaps for union usage and aggregates *(M1; scope: domain, events, docs; schema version patch)*
 
 ### Removed
+- **0190** Drop the duplicate season-timeout fragment 0182 *(M11; scope: docs)*
 - **0008** Remove the Cursor rules generator; keep plain, hand-maintained .cursor/rules copies. *(design; scope: tools, design)*
 
 ### Performance
@@ -168,7 +181,6 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 
 ### Tests
 - **0183** Skip the world-gen wall-clock tripwire under coverage *(M9; scope: seed)*
-- **0182** Stop the season tests timing out under coverage *(M9; scope: league)*
 - **0171** Stop the season tests timing out under coverage *(M10; scope: league)*
 - **0135** Share cached worlds across seed tests *(M2; scope: cli)*
 - **0119** Add the M7 slow-tier sweeps; write the M7 report, design notes and status *(M7; scope: sim)*
@@ -179,6 +191,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0189** Clarify --transfers and refresh the status tip *(M11; scope: docs)*
+- **0180** Record the M11 market calibration numbers in the report *(M11; scope: docs)*
+- **0179** Document contracts and transfers (M11 report, design and status) *(M11; scope: docs, design)*
 - **0170** Write the M10 milestone report and refresh status and design *(M10; scope: league)*
 - **0157** Write the M9 milestone report and refresh status and design docs *(M9; scope: league)*
 - **0141** Write the M3 milestone report and refresh status and architecture docs *(M3; scope: design)*

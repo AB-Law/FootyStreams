@@ -23,6 +23,7 @@ from tests.factories.league_config import (
     make_development_config,
     make_league_config,
     make_mood_config,
+    make_transfer_config,
 )
 from tests.factories.match import make_setup
 from tests.factories.world import cached_static_tables, make_world
@@ -113,4 +114,5 @@ def make_league_tables() -> LeagueTables:
         config=make_league_config(),
         mood=make_mood_config(),
         development=make_development_config(),
+        transfer=make_transfer_config(),
     )

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime as dt
+from functools import cache
 from typing import NamedTuple
 
 import pytest
@@ -13,6 +14,7 @@ from footystreams.domain.finance import LedgerCategory, LedgerEntry
 from footystreams.domain.fixture import Fixture, FixtureStatus
 from footystreams.domain.match import Match, MatchStatus
 from footystreams.domain.player import Player, PlayerStatus
+from footystreams.domain.transfer import OUTSIDE_WORLD, Transfer
 from footystreams.domain.types import ClubId, Position
 from footystreams.events.summary import MatchSummary
 from footystreams.verify import (
@@ -22,8 +24,10 @@ from footystreams.verify import (
     check_results,
     check_season_complete,
     check_squads,
+    check_transfers,
 )
 from tests.factories.league_run import cached_rolled_over, cached_small_season
+from tests.factories.league_transfers import run_until, runner_for
 from tests.helpers.assertions import assert_no_violations
 
 pytestmark = pytest.mark.timeout(120)  # these build whole seasons; allow for a loaded machine
@@ -118,7 +122,8 @@ RULES = SquadRules(min_senior=22, max_senior=28, min_goalkeepers=2)
 def _rolled_players() -> tuple[list[Player], list[ClubId]]:
     _, factory = cached_rolled_over()
     with factory() as uow:
-        return uow.players.all(), [club.id for club in uow.clubs.all()]
+        league = [club.id for club in uow.clubs.all() if club.id != OUTSIDE_WORLD]
+        return uow.players.all(), league
 
 
 def test_check_squads_and_development__after_a_rollover__are_clean() -> None:
@@ -153,3 +158,31 @@ def test_check_development__broken_players__are_l05() -> None:
     assert "exceeds potential" in messages
     assert "development log has" in messages
     assert "retired player still has a contract" in messages
+
+
+@cache
+def _market_state() -> tuple[list[Transfer], list[LedgerEntry]]:
+    runner, factory = runner_for(2, 4)
+    run_until(runner, dt.date(2031, 8, 15), factory)
+    with factory() as uow:
+        return uow.transfers.all(), uow.ledger.all()
+
+
+def test_check_transfers__a_played_window_is_clean() -> None:
+    transfers, entries = _market_state()
+    assert any(t.fee > 0 for t in transfers)
+    assert_no_violations(check_transfers(transfers, entries))
+
+
+def test_check_transfers__missing_wrong_or_stray_legs_are_l06() -> None:
+    transfers, entries = _market_state()
+    paid = next(t for t in transfers if t.fee > 0)
+    without = [e for e in entries if e.ref.get("transfer_id") != paid.id]
+    assert {v.code for v in check_transfers(transfers, without)} == {"L06"}
+    one_leg = [e for e in entries if not (e.ref.get("transfer_id") == paid.id and e.amount > 0)]
+    assert any("seller's leg" in v.message for v in check_transfers(transfers, one_leg))
+    free = paid.model_copy(update={"fee": 0})
+    assert any("free transfer" in v.message for v in check_transfers([free], entries))
+    orphaned = [e for e in entries if e.ref.get("transfer_id") == paid.id]
+    without_deal = [t for t in transfers if t != paid]
+    assert any("orphan ledger legs" in v.message for v in check_transfers(without_deal, orphaned))

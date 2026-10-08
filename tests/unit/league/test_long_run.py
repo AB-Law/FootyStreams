@@ -6,6 +6,7 @@ import datetime as dt
 
 import pytest
 
+from footystreams.domain.transfer import OUTSIDE_WORLD
 from footystreams.league.health import Health, health
 from footystreams.verify import SquadRules, check_development, check_squads
 from tests.factories.league_config import make_development_config
@@ -31,7 +32,8 @@ def test_twenty_seasons__ability_age_squads_and_retirements_stay_in_band() -> No
     for _ in range(SEASONS):
         results = runner.run_seasons(1)
         with factory() as uow:
-            players, clubs = uow.players.all(), uow.clubs.all()
+            players = uow.players.all()
+            clubs = [c for c in uow.clubs.all() if c.id != OUTSIDE_WORLD]
             today = uow.meta.require("current_date").value
             day = dt.date.fromisoformat(today)
             states.append(health(players, clubs, day))

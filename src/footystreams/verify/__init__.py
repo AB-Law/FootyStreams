@@ -11,8 +11,10 @@ from footystreams.verify.league import (
     check_results,
     check_season_complete,
     check_squads,
+    check_transfers,
 )
 from footystreams.verify.match import verify_match
+from footystreams.verify.schedule import check_schedule
 from footystreams.verify.violation import Violation, format_violations
 from footystreams.verify.world import verify_world
 from footystreams.verify.world_targets import WorldChecks, WorldTargets
@@ -25,8 +27,10 @@ __all__ = [
     "check_development",
     "check_ledger",
     "check_results",
+    "check_schedule",
     "check_season_complete",
     "check_squads",
+    "check_transfers",
     "format_violations",
     "verify_match",
     "verify_world",
