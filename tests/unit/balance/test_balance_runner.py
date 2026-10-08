@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import pytest
 
-from footystreams.balance.runner import BalanceRunner, _slices
-from footystreams.sim import SimConfig
+from footystreams.balance.runner import BalanceRunner, _slices, play_only
+from footystreams.balance.sample import sample_from
+from footystreams.sim import SimConfig, run_match
 from tests.factories.balance_runs import make_balance_scenarios, make_balance_tables
 
 pytestmark = pytest.mark.timeout(240)
@@ -47,3 +48,16 @@ def test_run__a_changed_knob_changes_the_samples_and_the_same_config_repeats() -
 
     assert base == again
     assert neutral_venue != base
+
+
+def test_play_only__samples_are_identical_with_and_without_the_causal_context() -> None:
+    scenarios = make_balance_scenarios()[:6]
+    tables = make_balance_tables()
+    with_context = [
+        sample_from(run_match(s.setup, s.seed, SimConfig(), tables), s.gap) for s in scenarios
+    ]
+    with BalanceRunner(scenarios, tables, 1) as runner:
+        lean = runner.run(SimConfig())
+
+    assert lean == with_context
+    assert play_only(SimConfig()).context.enabled is False

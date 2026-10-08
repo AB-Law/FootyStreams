@@ -52,6 +52,18 @@ def _play_in_worker(config: SimConfig, start: int, stop: int) -> list[MatchSampl
     return _play(_CONTEXT, config, start, stop)
 
 
+def play_only(config: SimConfig) -> SimConfig:
+    """``config`` without the causal context and event enrichment, which nothing in play reads.
+
+    # Perf: M8-balance-run - context and enrichment cost about 15% of a match and feed only the
+    # summary's maps, tags and ratings; no balance metric reads them. The samples are identical
+    # with and without (tests/unit/balance/test_balance_runner.py), so the harness skips them.
+    """
+    return config.model_copy(
+        update={"context": config.context.model_copy(update={"enabled": False})}
+    )
+
+
 def default_workers() -> int:
     """One worker per core, leaving one free for the machine."""
     return max(1, (os.cpu_count() or 1) - 1)
@@ -91,6 +103,7 @@ class BalanceRunner:
 
     def run(self, config: SimConfig) -> list[MatchSample]:
         """Play every scenario with ``config``; samples follow scenario order."""
+        config = play_only(config)
         count = len(self._context.scenarios)
         if self._pool is None or count == 0:
             return _play(self._context, config, 0, count)
