@@ -42,6 +42,11 @@ class Cursor:
     phase: Phase
     after_seq: int = NO_EVENT
 
+    @property
+    def order(self) -> tuple[str, int, int]:
+        """Where this cursor stands: later block, then finished, then further into the block."""
+        return (self.block, 0 if self.phase is Phase.STARTED else 1, self.after_seq)
+
     def encode(self) -> str:
         """The JSON stored in the database."""
         return json.dumps(asdict(self), sort_keys=True)
@@ -68,6 +73,19 @@ def load_cursor(repositories: Repositories) -> Cursor | None:
 def save_cursor(repositories: Repositories, cursor: Cursor) -> None:
     """Store the cursor (the caller commits)."""
     repositories.meta.save(MetaEntry(key=CURSOR_KEY, value=cursor.encode()))
+
+
+def advance_cursor(repositories: Repositories, cursor: Cursor) -> Cursor:
+    """Store ``cursor`` unless the stored one is already further on; returns what is stored.
+
+    Saves can overlap (a save in flight when playback is cancelled still finishes in its thread),
+    and a late older save must never move the broadcast back.
+    """
+    current = load_cursor(repositories)
+    if current is not None and current.order > cursor.order:
+        return current
+    save_cursor(repositories, cursor)
+    return cursor
 
 
 def require_cursor(repositories: Repositories) -> Cursor:

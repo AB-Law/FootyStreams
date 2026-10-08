@@ -13,6 +13,7 @@ from footystreams.runtime.cursor import (
     NO_EVENT,
     Cursor,
     Phase,
+    advance_cursor,
     load_cursor,
     require_cursor,
     save_cursor,
@@ -167,3 +168,34 @@ def test_lock__a_grace_period_waits_for_a_holder_that_lets_go(tmp_path: Path) ->
     holder.release()
     waiter.acquire(grace_s=0.1)
     waiter.release()
+
+
+def test_cursor__ordering_is_later_block_then_finished_then_further_in() -> None:
+    started = Cursor("b", Phase.STARTED, 10)
+
+    assert Cursor("b", Phase.STARTED, 30).order > started.order
+    assert Cursor("b", Phase.DONE).order > Cursor("b", Phase.STARTED, 999).order
+    assert Cursor("c", Phase.STARTED).order > Cursor("b", Phase.DONE).order
+
+
+def test_advance_cursor__a_late_older_save_never_moves_the_broadcast_back() -> None:
+    factory = make_league_db(2, 4)
+    with factory() as uow:
+        advance_cursor(uow, Cursor("b", Phase.STARTED, 40))
+        stored = advance_cursor(uow, Cursor("b", Phase.STARTED, 10))
+        uow.commit()
+
+    assert stored == Cursor("b", Phase.STARTED, 40)
+    with factory() as uow:
+        assert require_cursor(uow).after_seq == 40
+
+
+def test_advance_cursor__moving_on_and_repeating_are_both_stored() -> None:
+    factory = make_league_db(2, 4)
+    with factory() as uow:
+        advance_cursor(uow, Cursor("b", Phase.STARTED, 40))
+        advance_cursor(uow, Cursor("b", Phase.STARTED, 40))
+        stored = advance_cursor(uow, Cursor("b", Phase.DONE))
+        uow.commit()
+
+    assert stored.phase is Phase.DONE
