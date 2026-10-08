@@ -85,6 +85,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0074** Record the digest decision (ADR 0006), the M4 perf exception and the review round *(M4; scope: design, docs)*
 - **0061** Write the M4 report and the Track A status section *(M4; scope: docs, sim)*
 - **0039** Record M1 decisions and refresh design paths *(M1; scope: design, docs)*
 - **0021** Add the parallel match-engine track to the milestone plan *(M0; scope: design)*
