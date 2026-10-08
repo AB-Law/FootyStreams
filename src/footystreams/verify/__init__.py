@@ -5,7 +5,13 @@ Design: docs/design/10-testing-strategy.md section 9.
 """
 
 from footystreams.verify.league import (
-from footystreams.verify.league import check_ledger, check_results, check_season_complete
+    SquadRules,
+    check_development,
+    check_ledger,
+    check_results,
+    check_season_complete,
+    check_squads,
+)
 from footystreams.verify.match import verify_match
 from footystreams.verify.violation import Violation, format_violations
 from footystreams.verify.world import verify_world
