@@ -5,6 +5,7 @@ from __future__ import annotations
 from functools import cache
 
 from footystreams.league.config import LeagueConfig
+from footystreams.league.development_config import DevelopmentConfig
 from footystreams.league.mood_config import MoodConfig
 from footystreams.seed.static.files import read_yaml
 
@@ -19,3 +20,9 @@ def make_league_config() -> LeagueConfig:
 def make_mood_config() -> MoodConfig:
     """The committed ``data/static/mood.yaml``."""
     return MoodConfig.model_validate(read_yaml("mood.yaml"))
+
+
+@cache
+def make_development_config() -> DevelopmentConfig:
+    """The committed ``data/static/development.yaml``."""
+    return DevelopmentConfig.model_validate(read_yaml("development.yaml"))

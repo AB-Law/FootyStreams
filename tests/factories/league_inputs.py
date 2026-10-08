@@ -19,7 +19,11 @@ from footystreams.league.simulator import ResultOnlySimulator
 from footystreams.league.tables import LeagueTables
 from footystreams.seed.static.files import read_yaml
 from tests.factories.league import make_fixture
-from tests.factories.league_config import make_league_config, make_mood_config
+from tests.factories.league_config import (
+    make_development_config,
+    make_league_config,
+    make_mood_config,
+)
 from tests.factories.match import make_setup
 from tests.factories.world import cached_static_tables, make_world
 
@@ -108,4 +112,5 @@ def make_league_tables() -> LeagueTables:
         climate=ClimateCatalog.model_validate(read_yaml("climate.yaml")),
         config=make_league_config(),
         mood=make_mood_config(),
+        development=make_development_config(),
     )

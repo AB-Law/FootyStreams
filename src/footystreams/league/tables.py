@@ -8,6 +8,7 @@ from footystreams.domain.roles import RoleCatalog
 from footystreams.domain.static_tables import FormationCatalog, InjuryCatalog
 from footystreams.league.climate import ClimateCatalog
 from footystreams.league.config import LeagueConfig
+from footystreams.league.development_config import DevelopmentConfig
 from footystreams.league.mood_config import MoodConfig
 from footystreams.league.post_match import PostMatchTables
 from footystreams.league.setup import SetupTables
@@ -23,6 +24,7 @@ class LeagueTables:
     climate: ClimateCatalog
     config: LeagueConfig
     mood: MoodConfig
+    development: DevelopmentConfig
 
     @property
     def setup(self) -> SetupTables:

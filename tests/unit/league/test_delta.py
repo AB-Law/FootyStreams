@@ -3,6 +3,7 @@ from __future__ import annotations
 from footystreams.domain.finance import LedgerCategory, LedgerEntry
 from footystreams.domain.ids import derive_id
 from footystreams.domain.types import ClubId
+from footystreams.domain.world import SquadEntry
 from footystreams.league.delta import WorldDelta, apply_delta, merge_all
 from tests.factories.league_db import make_league_db
 from tests.factories.mood import TODAY, make_modifier
@@ -59,3 +60,24 @@ def test_apply_delta__empty__writes_nothing() -> None:
     with factory() as uow:
         apply_delta(uow, WorldDelta())
         assert uow.modifiers.count() == 0
+
+
+def test_apply_delta__deletions__are_applied_before_upserts_so_keys_can_be_reused() -> None:
+    factory = make_league_db()
+    with factory() as uow:
+        entry = uow.squad_entries.all()[0]
+        delta = WorldDelta(
+            squad_entries=(entry.model_copy(update={"squad_number": 98}),),
+            deletions=(("squad_entries", f"{entry.club_id}:{entry.player_id}"),),
+        )
+        apply_delta(uow, delta)
+        stored = uow.squad_entries.get(f"{entry.club_id}:{entry.player_id}")
+    assert isinstance(stored, SquadEntry)
+    assert stored.squad_number == 98
+
+
+def test_content_hash__covers_deletions() -> None:
+    assert (
+        WorldDelta(deletions=(("squad_entries", "a:b"),)).content_hash()
+        != WorldDelta().content_hash()
+    )

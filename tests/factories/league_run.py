@@ -16,8 +16,9 @@ from footystreams.persistence.sql.engine import create_sqlite_engine
 from footystreams.persistence.sql.migrate import upgrade
 from footystreams.persistence.sql.uow import SqlUnitOfWork
 from footystreams.persistence.world_store import save_world
+from footystreams.seed.prospects import SeedProspectFactory
 from tests.factories.league_inputs import make_league_tables
-from tests.factories.world import make_world
+from tests.factories.world import make_generation_context, make_world
 
 
 def make_engine(world_seed: int) -> MatchdayEngine:
@@ -84,5 +85,34 @@ def season_fingerprint(factory: UnitOfWorkFactory) -> str:
             "standings": [s.model_dump(mode="json") for s in uow.standings.all()],
             "ledger": [e.model_dump(mode="json") for e in uow.ledger.all()],
             "matches": [[m.id, m.log_digest] for m in uow.matches.all()],
+            "players": [p.model_dump(mode="json") for p in uow.players.all()],
         }
     return hashlib.sha256(canonical_json(document).encode()).hexdigest()
+
+
+def make_prospects(seed: int = 1, clubs: int = 8) -> SeedProspectFactory:
+    """The seed adapter that creates academy players and journeymen for the rollover."""
+    context = make_generation_context(seed)
+    return SeedProspectFactory(context.tables, context.geography)
+
+
+def make_multi_runner(
+    seed: int = 1, clubs: int = 8, backend: str = "memory"
+) -> tuple[SeasonRunner, UnitOfWorkFactory]:
+    """Like ``make_runner`` but with the rollover enabled."""
+    factory = make_factory(make_world(seed, clubs), backend)
+    return SeasonRunner(factory, make_engine(seed), make_prospects(seed, clubs)), factory
+
+
+def play_seasons(
+    count: int, seed: int = 2, clubs: int = 4, backend: str = "memory"
+) -> tuple[list[SeasonResult], UnitOfWorkFactory]:
+    """Run ``count`` seasons with the off-season rollover after each."""
+    runner, factory = make_multi_runner(seed, clubs, backend)
+    return runner.run_seasons(count), factory
+
+
+@cache
+def cached_rolled_over() -> tuple[list[SeasonResult], UnitOfWorkFactory]:
+    """One four-club season plus its rollover; do not write to its database."""
+    return play_seasons(1)

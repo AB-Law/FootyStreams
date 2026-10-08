@@ -9,6 +9,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0167** Add squad and development invariants L04 and L05; league --seasons *(M10; scope: verify)*
+- **0165** Add the season rollover and multi-season runs *(M10; scope: league)*
+- **0164** Add season awards, club year-end and the income estimate *(M10; scope: league)*
+- **0163** Add squad rebalancing and squad entries *(M10; scope: league)*
+- **0162** Add youth intake, promotion and the prospect factory *(M10; scope: league)*
+- **0160** Add retirement *(M10; scope: league)*
+- **0159** Add weekly training micro-steps *(M10; scope: league)*
+- **0158** Add player progression and development config *(M10; scope: league)*
 - **0156** Add the league command *(M9; scope: cli)*
 - **0155** Add league invariants L01 to L03 *(M9; scope: verify)*
 - **0154** Add the daily tick, matchday play and the season runner *(M9; scope: league)*
@@ -106,6 +114,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0169** Scale intake from the league's own recorded level; split the rollover modules *(M10; scope: league)*
+- **0168** Tune development, intake and squad wages; add league health and a 20-season test *(M10; scope: league)*
 - **0152** Derive fixture ids and flag derbies when scheduling *(M9; scope: league)*
 - **0118** Enable the M7 context and event enrichment by default (SIM_VERSION stays 0.4.0, goldens re-pinned) *(M7; scope: sim; sim version minor)*
 - **0115** sim: show story tags, the player of the match, top ratings, injuries and stories; add --frames and --frame-interval *(M7; scope: cli)*
@@ -124,6 +134,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0166** Create academy players relative to the rollover date *(M10; scope: league)*
 - **0138** Merge verify exports, renumber M2 fragments, and retie goldens after Track A rebase *(M2; scope: verify, schemas, sim; sim version patch; schema version patch)*
 - **0120** Fix own-goal tags and bound the M7 context knobs *(M7; scope: events, sim)*
 - **0102** Do not announce a mentality change that changes nothing *(M6; scope: sim)*
@@ -147,6 +158,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0052** Speed up option generation and refresh positions every 4 seconds *(M4; scope: sim)*
 
 ### Refactoring
+- **0161** Move the value and wage formulas into domain.valuation *(M10; scope: domain)*
 - **0128** Move IdMint to domain and add checkpoints for discarded generation attempts *(M2; scope: seed)*
 - **0104** Move the summary fold from sim to events/derive so verify and analytics can recompute it *(M7; scope: events, sim)*
 - **0091** Build the state from a BuildContext and add the bench, injury stream and ManagerConfig *(M6; scope: sim)*
@@ -157,6 +169,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ### Tests
 - **0183** Skip the world-gen wall-clock tripwire under coverage *(M9; scope: seed)*
 - **0182** Stop the season tests timing out under coverage *(M9; scope: league)*
+- **0171** Stop the season tests timing out under coverage *(M10; scope: league)*
 - **0135** Share cached worlds across seed tests *(M2; scope: cli)*
 - **0119** Add the M7 slow-tier sweeps; write the M7 report, design notes and status *(M7; scope: sim)*
 - **0100** Add the M6 sweeps and metamorphic tests; write the M6 report *(M6; scope: sim)*
@@ -166,6 +179,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0170** Write the M10 milestone report and refresh status and design *(M10; scope: league)*
 - **0157** Write the M9 milestone report and refresh status and design docs *(M9; scope: league)*
 - **0141** Write the M3 milestone report and refresh status and architecture docs *(M3; scope: design)*
 - **0137** Write the M2 milestone report and refresh design docs and status *(M2; scope: design)*
