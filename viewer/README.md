@@ -51,6 +51,8 @@ Open `http://127.0.0.1:5173/`. Options in the address: `?replay=replays/other` (
   the ball so players and tackles are drawn large. Its position depends only on the time, so
   scrubbing is exact. The ball itself is drawn at the carrier's feet and passes carry it between
   players (`src/interpolate.ts`); only shots keep their own flight.
+- `src/deadtime.ts`: stoppages where the ball stands still (throw-ins, goal kicks, injuries,
+  celebrations) are played 3x faster after a short lead-in, shown by `>>` in the corner.
 - `src/pitch.ts`, `src/sprites.ts`, `src/palette.ts`, `src/font.ts`: everything is drawn in code from
   the kit colours and appearance (skin tone, hair, facial hair); no art assets, and a 3x5 bitmap font.
 - `src/events.ts`, `src/meta.ts`: hand-written types for only the events used, each pointing at its

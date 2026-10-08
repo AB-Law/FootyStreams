@@ -7,10 +7,10 @@ export class Playback {
   speed: Speed = 1;
   playing = false;
 
-  /** Move on by `realSeconds`; stops at `duration`. */
-  advance(realSeconds: number, duration: number): void {
+  /** Move on by `realSeconds` (times `boost`, to hurry through dead time); stops at `duration`. */
+  advance(realSeconds: number, duration: number, boost = 1): void {
     if (!this.playing) return;
-    this.t = Math.min(this.t + realSeconds * this.speed, duration);
+    this.t = Math.min(this.t + realSeconds * this.speed * boost, duration);
     if (this.t >= duration) this.playing = false;
   }
 

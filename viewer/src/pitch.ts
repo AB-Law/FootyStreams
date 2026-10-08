@@ -77,15 +77,79 @@ function drawEnd(ctx: CanvasRenderingContext2D, leftEnd: boolean): void {
   outline(ctx, leftEnd ? edge - GOAL_DEPTH_PX : edge, middle - goalHeight / 2, GOAL_DEPTH_PX, goalHeight);
 }
 
-/** Draw the backdrop, striped grass and markings. */
-export function drawPitch(ctx: CanvasRenderingContext2D): void {
-  ctx.fillStyle = BACKDROP;
-  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+function hash(x: number, y: number): number {
+  let value = Math.imul(x + 1, 374761393) ^ Math.imul(y + 1, 668265263);
+  value = Math.imul(value ^ (value >>> 13), 1274126177);
+  return (value ^ (value >>> 16)) >>> 0;
+}
+
+const CROWD = ["#3a2a3f", "#2f3e5e", "#5a2f35", "#6b6f78", "#4d5a3c", "#7a6a3a", "#2b3a4a", "#8a8f98"];
+const BOARDS = ["#c8102e", "#0b3d91", "#f2c200", "#e8e8e8", "#006b3c"];
+const BOARD_DEPTH = 4;
+const FLAG = "#ffd23f";
+
+/** The stands: a dark crowd of speckled colour behind the boards that ring the pitch. */
+function drawSurround(ctx: CanvasRenderingContext2D): void {
+  for (let y = 0; y < HEIGHT; y++) {
+    for (let x = 0; x < WIDTH; x++) {
+      const noise = hash(x, y);
+      ctx.fillStyle = noise % 5 === 0 ? (CROWD[noise % CROWD.length] ?? BACKDROP) : BACKDROP;
+      ctx.fillRect(x, y, 1, 1);
+    }
+  }
+  const left = PITCH.x - BOARD_DEPTH - 1;
+  const top = PITCH.y - BOARD_DEPTH - 1;
+  const width = PITCH.width + 2 * (BOARD_DEPTH + 1);
+  const height = PITCH.height + 2 * (BOARD_DEPTH + 1);
+  for (let x = left; x < left + width; x += 1) {
+    const colour = BOARDS[Math.floor(x / 24) % BOARDS.length] ?? "#ffffff";
+    ctx.fillStyle = colour;
+    ctx.fillRect(x, top, 1, BOARD_DEPTH);
+    ctx.fillRect(x, top + height - BOARD_DEPTH, 1, BOARD_DEPTH);
+  }
+  for (let y = top; y < top + height; y += 1) {
+    const colour = BOARDS[Math.floor(y / 14) % BOARDS.length] ?? "#ffffff";
+    ctx.fillStyle = colour;
+    ctx.fillRect(left, y, BOARD_DEPTH, 1);
+    ctx.fillRect(left + width - BOARD_DEPTH, y, BOARD_DEPTH, 1);
+  }
+}
+
+/** Speckle over the grass so large areas are not flat colour. */
+function drawGrassTexture(ctx: CanvasRenderingContext2D): void {
+  for (let y = PITCH.y; y < PITCH.y + PITCH.height; y++) {
+    for (let x = PITCH.x; x < PITCH.x + PITCH.width; x++) {
+      const noise = hash(x, y) % 23;
+      if (noise === 0) ctx.fillStyle = "rgba(255, 255, 255, 0.07)";
+      else if (noise === 1) ctx.fillStyle = "rgba(0, 20, 0, 0.10)";
+      else continue;
+      ctx.fillRect(x, y, 1, 1);
+    }
+  }
+}
+
+function drawCornerFlags(ctx: CanvasRenderingContext2D): void {
+  ctx.fillStyle = FLAG;
+  for (const x of [PITCH.x, PITCH.x + PITCH.width - 1]) {
+    for (const y of [PITCH.y, PITCH.y + PITCH.height - 1]) ctx.fillRect(x, y - 3, 1, 4);
+  }
+}
+
+let cached: HTMLCanvasElement | null = null;
+
+function render(): HTMLCanvasElement {
+  const canvas = document.createElement("canvas");
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
+  const ctx = canvas.getContext("2d");
+  if (ctx === null) return canvas;
+  drawSurround(ctx);
   const stripe = PITCH.width / STRIPES;
   for (let index = 0; index < STRIPES; index++) {
     ctx.fillStyle = index % 2 === 0 ? GRASS_LIGHT : GRASS_DARK;
     rect(ctx, PITCH.x + index * stripe, PITCH.y, stripe + 1, PITCH.height);
   }
+  drawGrassTexture(ctx);
   ctx.fillStyle = LINE;
   outline(ctx, PITCH.x, PITCH.y, PITCH.width, PITCH.height);
   rect(ctx, PITCH.x + PITCH.width / 2, PITCH.y, 1, PITCH.height);
@@ -93,4 +157,12 @@ export function drawPitch(ctx: CanvasRenderingContext2D): void {
   rect(ctx, PITCH.x + PITCH.width / 2 - 1, PITCH.y + PITCH.height / 2 - 1, 3, 3);
   drawEnd(ctx, true);
   drawEnd(ctx, false);
+  drawCornerFlags(ctx);
+  return canvas;
+}
+
+/** Draw the stands, boards, striped and speckled grass and markings (rendered once, then copied). */
+export function drawPitch(ctx: CanvasRenderingContext2D): void {
+  cached ??= render();
+  ctx.drawImage(cached, 0, 0);
 }

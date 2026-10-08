@@ -16,12 +16,14 @@ export interface Extras {
   referee: Pos | null;
   /** True while the referee has just stopped play for a foul or a card. */
   whistle: boolean;
+  /** True when the camera is zoomed in, so the large sprites are used. */
+  big: boolean;
 }
 
 const REFEREE_KIT = { pattern: "solid", primary: "#d8c04a", secondary: "#14171c" } as const;
 const REFEREE_LOOK = { skin_tone: 3, hair_style: "short", hair_colour: "black", facial_hair: "none", build: "lean" };
 /** The feet stay this far inside the touchline so the head does not draw over the line. */
-const TOP_CLEARANCE_PX = 6;
+const TOP_CLEARANCE_PX = 11;
 /** The ball sits at a player's feet, not under them. */
 const BALL_AT_FEET_PX = 2;
 const LABEL_COLOUR = "#d8c04a";
@@ -57,7 +59,7 @@ export class Scene {
         appearance: meta.appearance,
       };
       const at = this.onPitch(toScreen(player.x, player.y));
-      drawPlayer(ctx, at.x, at.y, dress, player.running, extras.t);
+      drawPlayer(ctx, at.x, at.y, dress, { running: player.running, phase: extras.t, big: extras.big });
     }
     if (extras.referee !== null) this.drawReferee(ctx, extras.referee, extras);
     this.drawTheBall(ctx, sample, extras);
@@ -66,7 +68,7 @@ export class Scene {
   private drawTheBall(ctx: CanvasRenderingContext2D, sample: Sample, extras: Extras): void {
     if (extras.flight === null) {
       const carrier = sample.carrierId === null ? null : this.screenPosition(sample, sample.carrierId);
-      if (carrier !== null) drawCarrierMark(ctx, carrier.x, carrier.y);
+      if (carrier !== null) drawCarrierMark(ctx, carrier.x, carrier.y, extras.big);
       const resting = toScreen(sample.ballX, sample.ballY);
       drawBall(ctx, resting.x + BALL_AT_FEET_PX, resting.y, sample.ballHeight);
       return;
@@ -84,8 +86,8 @@ export class Scene {
   private drawReferee(ctx: CanvasRenderingContext2D, spot: Pos, extras: Extras): void {
     const t = extras.t;
     const at = this.onPitch(toScreen(spot.x, spot.y));
-    drawPlayer(ctx, at.x, at.y, { kit: REFEREE_KIT, keeper: null, appearance: REFEREE_LOOK }, true, t);
-    if (extras.whistle) drawText(ctx, "!", at.x - 1, at.y - 13, LABEL_COLOUR);
+    drawPlayer(ctx, at.x, at.y, { kit: REFEREE_KIT, keeper: null, appearance: REFEREE_LOOK }, { running: true, phase: t, big: extras.big });
+    if (extras.whistle) drawText(ctx, "!", at.x - 1, at.y - 19, LABEL_COLOUR);
   }
 
   /** Keep a player's feet far enough inside the touchlines that he is drawn on the pitch. */

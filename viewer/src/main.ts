@@ -1,4 +1,6 @@
 import { ZOOMS, cameraAt, type Zoom } from "./camera.ts";
+import { deadSpans, isDead } from "./deadtime.ts";
+import { drawText } from "./font.ts";
 import { drawOverlays, drawScoreboard } from "./hud.ts";
 import { sampleAt } from "./interpolate.ts";
 import type { ReplayMeta } from "./meta.ts";
@@ -15,6 +17,8 @@ import { MatchStore } from "./store.ts";
 const FRAME_MILLISECONDS = 1000 / 30;
 const DEFAULT_REPLAY = "replays/replay";
 const DEFAULT_ZOOM: Zoom = 2;
+/** Dead ball time (throw-ins, goal kicks, injuries) is played this much faster. */
+const DEAD_TIME_BOOST = 3;
 
 function element<T extends HTMLElement>(id: string): T {
   const found = document.getElementById(id);
@@ -76,6 +80,9 @@ async function start(): Promise<void> {
     return button;
   });
 
+  const stoppages = deadSpans(store.frames);
+  const hurrying = (): boolean => playback.playing && isDead(stoppages, playback.t);
+
   const render = (): void => {
     const sample = sampleAt(store.frames, playback.t);
     const overlays = overlaysAt(store.marks, playback.t, playback.speed);
@@ -88,10 +95,12 @@ async function start(): Promise<void> {
       flight: activeFlight(store.flights, playback.t),
       referee: referee === null ? null : referee.spot,
       whistle: referee?.incident ?? false,
+      big: camera.zoom > 1,
     });
     context.restore();
     drawScoreboard(context, sample, meta, kits, playback.t >= store.duration);
     drawOverlays(context, overlays, meta, scene, sample, camera);
+    if (hurrying()) drawText(context, ">>", WIDTH - 14, 24, "#ffd23f", 2);
     scrubber.value = String(Math.floor(playback.t));
     playButton.textContent = playback.playing ? "Pause" : "Play";
     time.textContent = `${formatTime(playback.t)} / ${formatTime(store.duration)}`;
@@ -123,7 +132,7 @@ async function start(): Promise<void> {
   let drawn = 0;
   const frame = (now: number): void => {
     if (now - drawn >= FRAME_MILLISECONDS) {
-      playback.advance((now - last) / 1000, store.duration);
+      playback.advance((now - last) / 1000, store.duration, hurrying() ? DEAD_TIME_BOOST : 1);
       last = now;
       drawn = now;
       render();

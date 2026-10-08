@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import type { AnyEvent } from "./events.ts";
+import { deadSpans, isDead } from "./deadtime.ts";
 import { sampleAt } from "./interpolate.ts";
 import { overlaysAt } from "./overlays.ts";
 import { Playback } from "./playback.ts";
@@ -154,4 +155,16 @@ test("the ball never jumps between two samples a tenth of a second apart", () =>
     assert.ok(Math.abs(ball - previous) * 105 <= 105 * 0.4 * 0.2, `jump at ${step / 10}`);
     previous = ball;
   }
+});
+
+test("deadSpans finds a long stoppage, keeps a lead-in and ignores short pauses", () => {
+  const moving = (x: number): AnyEvent => frame(x);
+  const events = [moving(0.1), moving(0.2), ...Array.from({ length: 10 }, () => moving(0.3)), moving(0.4), moving(0.41), moving(0.41), moving(0.5)];
+  const store = loaded(...events);
+  const spans = deadSpans(store.frames);
+  assert.equal(spans.length, 1);
+  assert.equal(spans[0]?.start, 3.5);
+  assert.equal(isDead(spans, 5), true);
+  assert.equal(isDead(spans, 2), false);
+  assert.equal(isDead(spans, 13), false);
 });
