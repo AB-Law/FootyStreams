@@ -41,7 +41,7 @@ The match engine can be built by a second agent in parallel with the rest of the
 |-------|------------------------|---------------------------|
 | **A. Match engine** | **M4** sim kernel → **M5** dead balls and discipline → **M6** fatigue, injuries, weather, AI manager → **M7** summary, ratings, frames | `sim/`, match checks in `verify/`, `tests/unit/sim`, `tests/golden`, `tests/statistical` |
 | **B. World** | **M2** seed and static data → **M3** persistence → **M9** league layer → **M10** development and rollover → **M11** contracts and transfers | `seed/`, `persistence/`, `league/`, world checks in `verify/`, `data/` |
-| **Join** | **M8** balance (needs A through M7 and B's M2) → **M12** engine (needs both) → **M13** → **M14** | `tools/balance`, `runtime/`, `extensions/` |
+| **Join** | **M8** balance (needs A through M7 and B's M2) → **M12** engine (needs both) → **M13** → **M14** | `balance/`, `runtime/`, `extensions/` |
 
 Track A's milestones stay sequential: M5, M6 and M7 all edit the same simulation state, decision and emit code.
 
