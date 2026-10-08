@@ -109,7 +109,8 @@ FootyStreams/
 │  ├─ runtime/               # THE ENGINE (13): main.py (composition root), config.py, clock.py, supervisor.py, world_driver.py, sim_buffer.py, scheduler.py, match_player.py, bus.py + sinks/, health.py, lock.py
 │  ├─ verify/                # THE invariant catalogue (10 §9): verify_match, verify_world, verify_season → list[Violation]; used by tests, --strict, soak, production pre-air gate
 │  ├─ analytics/             # read-only pass maps / xT / pressing metrics from events (M7+)
-│  ├─ tools/                 # export_schemas.py, balance.py (numpy), changelog.py, golden.py, profile.py, digest.py
+│  ├─ tools/                 # export_schemas.py, changelog.py, golden.py, profile.py, digest.py (import no project code)
+│  ├─ balance/               # the balance harness (M8): samples, metrics, targets, runner, sensitivity, fit (pure Python, no numpy)
 │  └─ cli/                   # sim.py, league.py, seed.py, export_schemas.py, balance.py, render.py (text play-by-play)
 └─ tests/
    ├─ unit/  property/  invariants/  golden/  statistical/ (marker: slow)  persistence/  architecture/  cli/

@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0196** Add balance samples and the metrics of design 02 section 14 *(M8; scope: tools)*
 - **0194** Add friendly matches between any two clubs of a world *(M8; scope: league)*
 - **0193** Play a friendly between two clubs of a world with sim --home --away --world *(M8; scope: cli, league)*
 - **0192** Add league --simulator to play fixtures on the real match engine *(M8; scope: cli, league)*
