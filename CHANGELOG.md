@@ -205,6 +205,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0062** Share the one-player-on-two-teams check between sim and verify *(M4; scope: domain, verify, sim)*
 
 ### Tests
+- **0218** Add the balance profile and metamorphic statistical tests *(M8; scope: tools)*
 - **0183** Skip the world-gen wall-clock tripwire under coverage *(M9; scope: seed)*
 - **0171** Stop the season tests timing out under coverage *(M10; scope: league)*
 - **0135** Share cached worlds across seed tests *(M2; scope: cli)*
