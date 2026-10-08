@@ -54,7 +54,7 @@ Track A (match engine) is built separately; the sections above predate both trac
 | M3 persistence | `feat/m3-persistence` | done; see `docs/milestones/M3.md` |
 | M9 league layer | `feat/m9-league-layer` | done; see `docs/milestones/M9.md` |
 | M10 development and rollover | `feat/m10-development-rollover` | done; see `docs/milestones/M10.md` |
-| M11 contracts and transfers | `feat/m11-contracts-transfers` | pending |
+| M11 contracts and transfers | `feat/m11-contracts-transfers` | done; see `docs/milestones/M11.md` |
 
 ### What M2 added
 - `uv run seed --seed N [--out DIR] [--name NAME] [--clubs K] [--validate] [--world DIR]`; the committed `data/worlds/default` is seed 1 (`content_sha256` in its manifest).
@@ -73,7 +73,11 @@ Track A (match engine) is built separately; the sections above predate both trac
 ### What M10 added
 - `uv run league --seasons N`: seasons back to back with the rollover (awards, retirements, renewals, progression, intake, squads, next season) the day after each season ends.
 - `league/`: `development`, `progression`, `training`, `retirement`, `youth`, `squad`, `awards`, `club_year`, `rollover*`, `health`; `domain/prospects` (request/factory contract) with `seed/prospects`; `verify` L04/L05; `development.yaml`.
-- Known: the economy diverges slowly (rich clubs hoard, three small clubs stay overdrawn); M11's transfers and financial sales address it.
+- Known: the economy diverged slowly before M11 (rich clubs hoard, small clubs overdrawn).
+
+### What M11 added
+- `uv run league --seasons N --transfers`: contract talks at the rollover, expiry, summer and mid-season windows with needs, noisy scouting, negotiated fees, medicals, listings, an outside-world club, a final-day squad fill; `verify` L06; `transfer.yaml`.
+- Known: money is closed (outside fees are mirrored legs) but the rich/poor gap is only narrowed, not closed.
 
 ### Track B caveats
 - `WorldRng` stands in for track A's `SimRng` (same interface); unify when both tracks merge.

@@ -201,3 +201,13 @@ Determinism of a multi-season run (hash of standings + ledger + squads after N s
 - Rollover order as built: awards, club year-end (reputation, support, board confidence, sponsors, budgets), retirement, contract renewal (scaled to the wage budget), progression, academy intake, free-agent pool top-up, squad rebalance, pool trim, next season. Parameters: `data/static/development.yaml`.
 - Intake and journeymen are scaled from the league's own level at its first rollover (`world_meta.reference_ability`), not the current mean: scaling from the current mean is a positive feedback loop (ability drifted +8 over 20 seasons).
 - Targets met by the 20-season test: ability within 1.5, mean age 24-28.5, squads 22-28 with 2 keepers, natural retirements 3-10% of seniors a year.
+
+## 12. As built (M11)
+
+- Parameters: `data/static/transfer.yaml` (scouting, valuation, needs, terms, medical, window, sales, outside, renewal).
+- Scouting: a club sees another club's player through `perceive`: noise sigma 12 x (1 - judging/100), potential x 1.6; seeded per (scout, player, day), so a re-run gives the same view.
+- Contracts: one willingness rule (wage vs market wage, role, club standing, ambition, loyalty bonus) is shared by renewals and transfers; negotiation is at most three wage rounds. Renewals run in the rollover (1 June); `ContractExpiryStage` releases contracts that ended on 30 June.
+- Deals: the buyer's desire (weights for quality gain and urgency, youth premium) sets the opening bid and the reservation price; the fee is negotiated for at most three rounds up to the ceiling; a medical can fail; an unaffordable bid is logged and dropped. Completion is atomic: contract, squad entry, two ledger legs, `Transfer` / `Bid` / `ContractOffer` rows, public `transfer_completed` event, `new_signing_enthusiasm` modifier. L06 checks the legs.
+- Windows: summer and mid-season, from the calendar (a mid-season window is clamped for short seasons). Each day a few clubs with a need shop (`buyers_per_day`, `deals_per_club`); the last days (`panic_days`) relax the price limits; the final day fills squads to the league's rules.
+- Outside world: the reserved `clb_outside` club supplies free agents and bids for listed players, so fees to and from abroad are mirrored legs (closed money system); its pool is trimmed to a bound.
+- Budgets: the transfer budget at the rollover is a share of the bank balance plus a share of estimated income (`transfer_budget_income_share`).
