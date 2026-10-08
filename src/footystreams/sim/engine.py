@@ -39,7 +39,7 @@ from footystreams.sim.manager_ai import ManagerAI
 from footystreams.sim.options import ActionKind, Option
 from footystreams.sim.play import Play
 from footystreams.sim.positioning import place_for_kickoff, update_positions
-from footystreams.sim.pressure import pressure_on
+from footystreams.sim.pressure import NEAREST_PRESSERS, nearest_opponents, pressure_from
 from footystreams.sim.referee import referee_profile
 from footystreams.sim.rng import SimRng
 from footystreams.sim.side import Side
@@ -64,6 +64,10 @@ _RESOLVERS = {
     ActionKind.SHOOT: resolve_shot,
     ActionKind.CLEAR: resolve_clearance,
 }
+
+
+def _goals(state: MatchState) -> int:
+    return state.home.score + state.away.score
 
 
 class MatchEngine:
@@ -155,6 +159,7 @@ class MatchEngine:
         if period != PERIODS[0]:
             state.home.attack_dir, state.away.attack_dir = -1, 1
         place_for_kickoff(state, kicking)
+        state.assist_from = None
         if self._frames is not None:
             self._frames.reset(state)
         state.chain += 1
@@ -179,8 +184,11 @@ class MatchEngine:
             pause_s = injure_without_contact(play, self._pending_move_s)
             self._pending_move_s = 0.0
         state.tick += 1
-        pressure = pressure_on(state.carrier, state.defenders, self._config.pressure)
-        challenged = attempt_press_tackle(play, pressure)
+        goals_before = _goals(state)
+        carrier = state.carrier
+        nearest = nearest_opponents(state.defenders, carrier.x, carrier.y, NEAREST_PRESSERS)
+        pressure = pressure_from(nearest, state.defenders, self._config.pressure)
+        challenged = attempt_press_tackle(play, pressure, nearest[0])
         if challenged is not None:
             duration = challenged
         else:
@@ -189,7 +197,12 @@ class MatchEngine:
         if self._manager is not None:
             pause_s += self._manager.after_action(self._emitter.events[mark:])
         state.t_period += duration + pause_s
-        self._pending_move_s += duration
+        if _goals(state) == goals_before:
+            self._pending_move_s += duration
+        else:
+            # The clock ran through the celebration, but place_for_kickoff already walked everyone
+            # back to the kick-off formation; moving them again would undo it.
+            self._pending_move_s = 0.0
         if self._frames is not None:
             self._frames.record(state, self._emitter)
 

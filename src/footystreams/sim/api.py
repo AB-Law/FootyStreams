@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 
-from footystreams.domain.match import MatchSetup
+from footystreams.domain.match import MatchSetup, players_on_both_sheets
 from footystreams.domain.referee import Referee
 from footystreams.events.derive.summary import setup_ref
 from footystreams.events.result import MatchResult
@@ -16,19 +16,25 @@ from footystreams.events.summary import MatchSummaryEvent
 from footystreams.events.types import MatchEvent
 from footystreams.sim.config import SimConfig, config_hash
 from footystreams.sim.engine import MatchEngine
-from footystreams.sim.errors import InvalidSetupError
+from footystreams.sim.errors import EngineError, InvalidSetupError
 from footystreams.sim.tables import StaticTables
 
 
 def validate_setup(setup: MatchSetup) -> None:
     """Reject a setup that cannot be simulated, before any event is produced."""
-    home_ids = set(setup.home.squad)
-    shared = sorted(home_ids & set(setup.away.squad))
+    shared = players_on_both_sheets(setup)
     if shared:
         msg = f"players on both sheets of {setup.match_id}: {', '.join(shared)}"
         raise InvalidSetupError(msg)
     if setup.home.club.id == setup.away.club.id:
         msg = f"home and away are the same club {setup.home.club.id} in {setup.match_id}"
+        raise InvalidSetupError(msg)
+
+
+def validate_referee(setup: MatchSetup, referee: Referee | None) -> None:
+    """Reject a referee other than the one the setup names (None means the neutral referee)."""
+    if referee is not None and referee.id != setup.referee_id:
+        msg = f"referee {referee.id} is not {setup.referee_id}, the official of {setup.match_id}"
         raise InvalidSetupError(msg)
 
 
@@ -45,6 +51,7 @@ def simulate_match(
     caller resolves it. Without one a neutral referee officiates.
     """
     validate_setup(setup)
+    validate_referee(setup, referee)
     return MatchEngine(setup, seed, config, tables, referee).run()
 
 
@@ -60,7 +67,7 @@ def run_match(
     last = events[-1]
     if not isinstance(last, MatchSummaryEvent):
         msg = f"match {setup.match_id} ended without a summary"
-        raise InvalidSetupError(msg)
+        raise EngineError(msg)
     summary = last.summary
     return MatchResult(
         events=events,

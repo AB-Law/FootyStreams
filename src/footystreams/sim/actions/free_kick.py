@@ -17,13 +17,13 @@ from footystreams.sim.actions.setpieces import choose_free_kick_taker, restart_d
 from footystreams.sim.actions.shooting import geometry_xg
 from footystreams.sim.emit import Meta
 from footystreams.sim.geometry import Point, frame_coordinate, goal_distance_m
+from footystreams.sim.mathx import PERCENT
 from footystreams.sim.options import ActionKind, Option
 from footystreams.sim.play import Play, actor, take_possession
 from footystreams.sim.side import Side
 from footystreams.sim.state import PlayerState
 
 FreeKickKind = Literal["direct", "indirect"]
-_PERCENT = 100.0
 _ATTACKING_HALF = 0.6  # frame x beyond which a long free kick is crossed
 _DEAD_BALL_MIX = (0.6, 0.4)  # set piece delivery, long shots
 _KICK_PRESSURE = 0.3
@@ -38,7 +38,7 @@ def dead_ball_skill(taker: PlayerState) -> float:
 def free_kick_xg(play: Play, taker: PlayerState, frame_point: Point) -> float:
     """Return the quality of a direct kick: geometry x wall factor x dead-ball skill factor."""
     wall = play.cfg.restarts.wall_factor
-    skill = 0.8 + 0.4 * dead_ball_skill(taker) / _PERCENT
+    skill = 0.8 + 0.4 * dead_ball_skill(taker) / PERCENT
     return geometry_xg(frame_point[0], frame_point[1], play.cfg.shot) * wall * skill
 
 

@@ -1,5 +1,6 @@
 from footystreams.domain.types import PlayerId, Position
 from footystreams.events.discipline import SubstitutionEvent
+from footystreams.sim.actions.cards import dismiss
 from footystreams.sim.config import ManagerConfig
 from footystreams.sim.play import Play
 from footystreams.sim.state import TeamState
@@ -140,3 +141,16 @@ def test_make_substitution__a_substitute_is_fresh_and_in_the_same_formation_slot
     newcomer = team.players[10]
     assert (newcomer.base_x, newcomer.base_y) == (off.base_x, off.base_y)
     assert newcomer.position is off.position
+
+
+def test_make_substitution__a_bench_keeper_takes_over_goal_from_an_emergency_keeper() -> None:
+    play = _play()
+    team = play.state.home
+    bench_keeper = _bench_keeper(team)
+    dismiss(team, team.keeper)
+    stand_in = team.keeper
+    make_substitution(play, stand_in, bench_keeper, "injury", Window.FORCED)
+    assert [p.position for p in team.players].count(Position.GK) == 1
+    assert team.keeper.player_id == bench_keeper
+    assert team.keeper.slot == stand_in.slot
+    assert (team.keeper.base_x, team.keeper.base_y) == (stand_in.base_x, stand_in.base_y)

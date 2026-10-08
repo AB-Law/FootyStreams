@@ -13,7 +13,7 @@ from footystreams.events.structure import AddedTimeEvent
 from footystreams.sim import SimConfig, default_tables, run_match
 from footystreams.verify import verify_match
 from tests.factories.referee import make_referee
-from tests.factories.sim_teams import make_demo_setup
+from tests.factories.sim_teams import DEMO_REFEREE_ID, make_demo_setup
 
 pytestmark = [pytest.mark.slow, pytest.mark.statistical, pytest.mark.timeout(1200)]
 
@@ -77,7 +77,7 @@ def test_sweep__cards_are_consistent_and_added_time_is_sensible() -> None:
 
 
 def _foul_card_rate(strictness: float, matches: int) -> tuple[float, float]:
-    referee = make_referee(strictness=strictness, card_tendency=strictness)
+    referee = make_referee(id=DEMO_REFEREE_ID, strictness=strictness, card_tendency=strictness)
     fouls = cards = 0
     for index in range(matches):
         setup = make_demo_setup()
@@ -95,7 +95,7 @@ def test_referee__a_strict_referee_gives_more_fouls_and_cards_than_a_lenient_one
 
 
 def test_referee__a_home_biased_referee_punishes_the_away_side_more() -> None:
-    biased = make_referee(home_bias=0.5)
+    biased = make_referee(id=DEMO_REFEREE_ID, home_bias=0.5)
     home_fouls = away_fouls = 0
     for index in range(100):
         result = run_match(make_demo_setup(), 1300 + index, CFG, TABLES, biased)

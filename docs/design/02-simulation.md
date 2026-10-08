@@ -211,8 +211,8 @@ Constraints: window limits, cooldown (≥ 8 min between formation changes), max 
 ## 13. Determinism and numerics (implementation notes)
 
 - **`SimRng`** is a self-contained integer generator (xoshiro256** seeded through splitmix64, ADR 0005) because the architecture rules forbid importing `random` in `sim/`. It exposes only `u()` (uniform [0,1) from 53 random bits), `u_int(n)`, `choice_weighted`, `gauss()` (Irwin–Hall: `(Σ4 u − 2)·√3`), `bernoulli(p)`, and a `draws` counter. `fork(label)` derives a child seed via `blake2b(seed‖label)`; child streams are independent instances.
-- Float outputs rounded at emit (`pos` 4 dp, probabilities 4 dp, seconds int). Serialization via `canonical_json()` (sorted keys, `ensure_ascii=False`, `separators=(",",":")`).
-- The final `match_summary` contains `log_digest = sha256(canonical NDJSON of all prior events)`; the golden test pins digests for 5 seed/team pairs; CI runs on Windows and Linux.
+- Float outputs rounded at emit (`pos` 4 dp, probabilities 4 dp, seconds int). Events serialise through the model (`model_dump_json()`: field-declaration key order, shortest round-trip floats, no whitespace); `canonical_json()` (sorted keys, `ensure_ascii=False`, `separators=(",",":")`) is used for config hashes and golden files (ADR 0006).
+- The final `match_summary` contains `log_digest = sha256(model_dump_json() lines of all prior events, newline-terminated)` (ADR 0006); the golden test pins digests for 5 seed/team pairs; CI runs on Windows and Linux.
 - Everything is ordered: players iterated in slot order; dicts avoided in hot paths or iterated sorted.
 - No `set` iteration; no `hash()`; no `id()`.
 
@@ -299,7 +299,8 @@ What the code does where it differs from, or fills in, the text above. Deviation
 - *Setup.* `MatchSetup` carries `referee_id` only; the referee model (M5) takes an optional `Referee` argument to `simulate_match`. Formations come from `StaticTables` (eight built-ins in `sim/formations.py` until the YAML loaders of M2 exist); `MatchSetup` has no `rules` field, so the substitution limits are `SimConfig` knobs (M6).
 - *Moment loop.* Positions refresh once 4 s of match time have passed (`PositionConfig.step_s`), not after every action. A moment is: press tackle attempt, else carrier decision (4 candidate receivers plus one safe outlet, a dribble, a shot in range, a clearance under pressure) and its resolver. One random draw per decision, one per resolution step, all from the `play` stream.
 - *Calibration.* xG geometry is `cap * u^3 / (u^3 + half)` with `cap = 0.40` (section 5.3 quotes the unscaled anchors); pass, dribble and tackle skill swings are damped (0.12, 0.12, 0.10) so a 5-point team gap is roughly even and a 15-point gap wins about 75%. Defaults give about 3.0 goals, 14 shots a side, 43% on target, 85% pass completion. These are rough: the balance harness (M8) fits them.
-- *Digest.* `log_digest` is sha256 over the NDJSON of `model_dump_json()` lines (field-declaration key order), not sorted-key canonical JSON: a pure function of the validated model, about 7x faster.
+- *Digest.* `log_digest` is sha256 over the NDJSON of `model_dump_json()` lines (field-declaration key order), not sorted-key canonical JSON: a pure function of the validated model, about 7x faster (ADR 0006, pending owner sign-off).
+- *Restarts.* A goal's celebration advances the match clock but not the position update: `place_for_kickoff` is the walk back, and the first action after the restart starts from the kick-off formation.
 - *RNG.* Own xoshiro256** generator (ADR 0005) because `random` is banned in `sim/`.
 - *Not yet.* Out-of-play restarts, fouls, offsides, cards (M5); fatigue, injuries, substitutions, weather, home advantage (M6); momentum, tags, ratings, frames (M7). `model_profile` is recorded in the config but there is a single implementation; the Protocol seams are introduced when a second implementation exists.
 

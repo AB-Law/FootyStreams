@@ -16,7 +16,7 @@ from footystreams.sim.actions.shooting import finishing_skill
 from footystreams.sim.emit import Meta
 from footystreams.sim.enrich import shot_fields
 from footystreams.sim.geometry import frame_coordinate, goal_distance_m
-from footystreams.sim.mathx import clamp
+from footystreams.sim.mathx import PERCENT, clamp, signed_unit
 from footystreams.sim.options import Option
 from footystreams.sim.play import Play, action_duration, actor, label, take_possession
 from footystreams.sim.positioning import place_for_kickoff
@@ -24,7 +24,6 @@ from footystreams.sim.pressure import nearest_opponents
 from footystreams.sim.side import Side, opposite
 from footystreams.sim.state import PlayerState
 
-_PERCENT = 100.0
 _SKILL_PIVOT = 50.0
 _KEEPER_PIVOT = 55.0
 _KEEPER_MIX = (0.6, 0.2, 0.2)  # shot stopping, handling, positioning
@@ -54,7 +53,7 @@ def shot_shares(play: Play, pressure: float, shooter_skill: float) -> ShotShares
     blocked = cfg.block_base + cfg.block_pressure * pressure
     skill_edge = (shooter_skill - _SKILL_PIVOT) / _SKILL_PIVOT
     off_target = cfg.off_target_base - cfg.off_target_skill_swing * skill_edge
-    off_target = clamp(off_target, 0.05, 0.6)
+    off_target = clamp(off_target, cfg.off_target_min, cfg.off_target_max)
     on_frame = 1.0 - blocked - off_target
     woodwork = cfg.woodwork_share * on_frame
     return ShotShares(blocked, blocked + off_target, blocked + off_target + woodwork)
@@ -64,7 +63,7 @@ def goal_given_on_target(play: Play, xg: float, shares: ShotShares, keeper: Play
     """Return the chance an on-target shot beats this keeper (xG divided by the on-target share)."""
     on_target = 1.0 - shares.woodwork
     keeper_factor = (
-        1.0 - play.cfg.shot.keeper_swing * (keeper_rating(keeper) - _KEEPER_PIVOT) / _PERCENT
+        1.0 - play.cfg.shot.keeper_swing * (keeper_rating(keeper) - _KEEPER_PIVOT) / PERCENT
     )
     return clamp(xg / on_target * keeper_factor, 0.0, play.cfg.shot.max_goal_given_on_target)
 
@@ -121,6 +120,7 @@ def _after_shot(play: Play, outcome: str, shot_id: str, assist: str | None) -> f
     state = play.state
     if outcome == "goal":
         return score_goal(play, shot_id, assist)
+    state.assist_from = None  # a rebound is a new chance: the earlier pass does not assist it
     if outcome == "saved":
         return _record_save(play, shot_id)
     if outcome == "off_target":
@@ -218,6 +218,6 @@ def score_goal(play: Play, shot_id: str, assist: str | None) -> float:
     state.chain_started_at = state.elapsed_s
     state.assist_from = None
     tempo = play.cfg.tempo
-    seconds = tempo.celebration_s + tempo.celebration_spread_s * (play.rng.u() - 0.5) * 2.0
+    seconds = tempo.celebration_s + tempo.celebration_spread_s * signed_unit(play.rng.u())
     state.stoppage_s += seconds
     return seconds

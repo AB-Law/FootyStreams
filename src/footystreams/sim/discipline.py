@@ -13,14 +13,13 @@ from typing import Literal
 from footystreams.sim.config import DisciplineConfig, RefereeConfig
 from footystreams.sim.effective import Skills
 from footystreams.sim.geometry import CENTRE, frame_coordinate, in_penalty_area
-from footystreams.sim.mathx import clamp
+from footystreams.sim.mathx import PERCENT, clamp
 from footystreams.sim.play import Play
 from footystreams.sim.referee import crowd_pressure, home_tilt, is_called
 from footystreams.sim.state import PlayerState
 from footystreams.sim.tactics_view import TacticsView
 
 SeverityLabel = Literal["careless", "reckless", "violent"]
-_PERCENT = 100.0
 _BASE_FACTOR = 0.6  # foul-proneness of an average man is 0.6 + 0.4 + 0.25 - 0.25 = 1.0
 
 
@@ -43,9 +42,9 @@ def contact_probability(
     """
     proneness = (
         _BASE_FACTOR
-        + cfg.aggression_weight * tackler.aggression / _PERCENT
-        + cfg.dirtiness_weight * tackler.dirtiness / _PERCENT
-        - cfg.tackling_weight * tackler.tackling / _PERCENT
+        + cfg.aggression_weight * tackler.aggression / PERCENT
+        + cfg.dirtiness_weight * tackler.dirtiness / PERCENT
+        - cfg.tackling_weight * tackler.tackling / PERCENT
     )
     derby_factor = cfg.derby_factor if derby else 1.0
     caution = cfg.booked_caution if booked else 1.0
@@ -58,8 +57,8 @@ def severity_of(tackler: Skills, draw: float, cfg: DisciplineConfig) -> float:
     raw = (
         cfg.severity_base
         + cfg.severity_spread * draw
-        + cfg.severity_aggression * tackler.aggression / _PERCENT
-        + cfg.severity_dirtiness * tackler.dirtiness / _PERCENT
+        + cfg.severity_aggression * tackler.aggression / PERCENT
+        + cfg.severity_dirtiness * tackler.dirtiness / PERCENT
         - (cfg.severity_aggression + cfg.severity_dirtiness) / 2.0
     )
     return clamp(raw, 0.0, 1.0)

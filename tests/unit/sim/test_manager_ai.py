@@ -76,6 +76,14 @@ def test_after_action__mentality_waits_out_the_cooldown() -> None:
     assert play.state.home.view.mentality == first
 
 
+def test_after_action__a_side_already_all_out_announces_no_change_of_mentality() -> None:
+    play, manager = _late_trailing_play()
+    play.state.home.view = shift_mentality(play.state.home.view, 9)
+    manager.after_action([_goal()])
+    assert not [e for e in _of_type(play, TacticalChangeEvent) if e.team == "home"]
+    assert play.state.home.view.mentality == 1.0
+
+
 def test_after_action__with_an_empty_bench_only_the_mentality_changes() -> None:
     play, manager = _late_trailing_play()
     play.state.home.bench.clear()

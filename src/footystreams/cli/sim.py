@@ -13,9 +13,9 @@ import sys
 from collections.abc import Sequence
 from enum import StrEnum
 
-from footystreams.cli.render import Verbosity, names_for, render_events, render_summary
 from footystreams.domain.match import MatchSetup
 from footystreams.sim import SimConfig, default_tables, run_match
+from footystreams.sim.render import Verbosity, names_for, render_events, render_summary
 from footystreams.tools.paths import PROJECT_ROOT
 
 DEFAULT_STRENGTH = 62

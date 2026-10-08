@@ -12,6 +12,7 @@ from footystreams.events.open_play import OffsideEvent
 from footystreams.sim.actions.free_kick import take_free_kick
 from footystreams.sim.emit import Meta
 from footystreams.sim.geometry import frame_coordinate
+from footystreams.sim.mathx import PERCENT
 from footystreams.sim.offside import call_probability, in_offside_position, offside_line
 from footystreams.sim.play import Play, actor
 from footystreams.sim.side import opposite
@@ -39,7 +40,7 @@ def _mistimed_run(play: Play, receiver: PlayerState, ahead: float, line: float) 
     cfg = play.cfg.offside
     if cfg.mistime_base <= 0.0 or ahead < line - cfg.mistime_zone:
         return False
-    flaw = cfg.mistime_base * (1.3 - receiver.skills.off_ball_movement / 100.0)
+    flaw = cfg.mistime_base * (1.3 - receiver.skills.off_ball_movement / PERCENT)
     return play.discipline.u() < flaw
 
 

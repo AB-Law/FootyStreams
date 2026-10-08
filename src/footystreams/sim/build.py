@@ -20,7 +20,7 @@ from footystreams.sim.homeadv import NO_CROWD, Crowd, apply_crowd, crowd_of
 from footystreams.sim.rng import SimRng
 from footystreams.sim.side import Side
 from footystreams.sim.state import MatchState, PlayerState, TeamState, line_of
-from footystreams.sim.tables import Formation, StaticTables
+from footystreams.sim.tables import FormationSlot, StaticTables
 from footystreams.sim.tactics_view import build_view
 from footystreams.sim.weather import Conditions, apply_conditions, conditions_for
 
@@ -65,7 +65,9 @@ def _build_team(
         raise InvalidSetupError(msg)
     attack_dir = 1 if side == "home" else -1
     ordered = sorted(sheet.lineup, key=lambda lineup_slot: lineup_slot.slot)
-    players = [build_player(side, sheet, formation, item, context) for item in ordered]
+    players = [
+        build_player(side, sheet, formation.slots[item.slot], item, context) for item in ordered
+    ]
     team = TeamState(side, sheet, formation, build_view(sheet), attack_dir, players)
     team.bench = list(sheet.bench)
     return team
@@ -74,13 +76,16 @@ def _build_team(
 def build_player(
     side: Side,
     sheet: TeamSheet,
-    formation: Formation,
+    formation_slot: FormationSlot,
     lineup_slot: LineupSlot,
     context: BuildContext,
 ) -> PlayerState:
-    """Build one player standing on a formation slot (starters and substitutes alike)."""
+    """Build one player standing on a pitch spot (starters and substitutes alike).
+
+    `formation_slot` is the spot he fills: usually his slot in the formation, but a substitute for
+    a stand-in goalkeeper takes the goalkeeper's spot, not the outfield slot the stand-in came from.
+    """
     snapshot: PlayerSnapshot = sheet.squad[lineup_slot.player_id]
-    formation_slot = formation.slots[lineup_slot.slot]
     day = day_form_multiplier(snapshot.hidden.consistency, context.day_rng)
     mult = multipliers(snapshot, formation_slot.position, lineup_slot.role, day)
     attack_dir = 1 if side == "home" else -1

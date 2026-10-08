@@ -18,6 +18,7 @@ from footystreams.sim.config_manager import ManagerConfig
 from footystreams.sim.emit import Meta
 from footystreams.sim.play import Play, actor, label
 from footystreams.sim.state import PlayerState, TeamState
+from footystreams.sim.tables import FormationSlot
 
 KEEPER_COMPETENCE = 80  # competence at goalkeeper above which a bench player counts as a keeper
 
@@ -82,7 +83,8 @@ def make_substitution(
     team = state.team(off.side)
     _register_window(team, state.elapsed_s, window, cfg)
     entry = LineupSlot(slot=off.slot, player_id=on_id, role=off.role, duty=Duty.SUPPORT)
-    newcomer = build_player(off.side, team.sheet, team.formation, entry, play.build)
+    spot = FormationSlot(off.position, off.base_x, off.base_y)
+    newcomer = build_player(off.side, team.sheet, spot, entry, play.build)
     newcomer.x, newcomer.y = off.x, off.y
     team.players[team.players.index(off)] = newcomer
     team.bench.remove(on_id)
