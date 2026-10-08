@@ -85,3 +85,34 @@ def test_balance__a_missing_world_is_a_usage_error(
 ) -> None:
     assert main(_run(tmp_path / "nowhere")) == EXIT_USAGE
     assert "balance: error" in capsys.readouterr().err
+
+
+def test_balance_sensitivity__prints_a_matrix_and_the_strongest_knobs(
+    world_directory: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    code = main(
+        [
+            "sensitivity",
+            *_run(world_directory),
+            "--knobs",
+            "shot.xg_cap",
+            "--metrics",
+            "goals_per_match",
+        ]
+    )
+
+    output = capsys.readouterr().out
+    assert code == 0
+    assert "shot.xg_cap" in output
+    assert "moves goals_per_match: shot.xg_cap" in output
+
+
+@pytest.mark.parametrize(
+    "extra",
+    [[], ["--knobs", "shot.nope"], ["--knobs", "shot.xg_cap", "--metrics", "not_a_metric"]],
+)
+def test_balance_sensitivity__bad_input_is_a_usage_error(
+    world_directory: Path, extra: list[str], capsys: pytest.CaptureFixture[str]
+) -> None:
+    assert main(["sensitivity", *_run(world_directory), *extra]) == EXIT_USAGE
+    assert "balance: error" in capsys.readouterr().err

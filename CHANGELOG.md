@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0199** Add balance sensitivity: nudge each knob and show which metric it moves *(M8; scope: cli, tools)*
 - **0198** Add the balance command: scenarios over every pairing, a process-pool runner, --config and --set *(M8; scope: cli, tools)*
 - **0197** Add balance targets, profiles, evaluation with intervals, and the report *(M8; scope: tools, data)*
 - **0196** Add balance samples and the metrics of design 02 section 14 *(M8; scope: tools)*
