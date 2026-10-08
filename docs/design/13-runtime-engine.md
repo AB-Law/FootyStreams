@@ -87,3 +87,16 @@ All are small classes with constructor-injected dependencies, wired in a single 
 ## 7. Milestone and tests (see 06 M12)
 
 Delivered in **M12**: runtime package, virtual-clock engine tests (season in seconds), crash/restart, single-instance, shutdown signals, starvation, sink isolation, pacing accuracy (±50 ms over a match on the virtual clock; ±250 ms drift per hour on a real-clock smoke test), `engine` end-to-end (E12: start the real process, consume NDJSON from stdout for one accelerated matchday, SIGTERM, restart, verify continuity), plus the Dockerfile/compose and restart policy in M14.
+
+## 8. As built (M12)
+
+What the code does where it differs from, or fills in, the text above (details and reasons: `docs/milestones/M12.md`).
+
+- **Layout.** `runtime/` holds `clock`, `config`, `bus` + `sinks`, `lock`, `cursor`, `health`, `programme`, `player`, `supervisor`, `buffer`, `world` and `engine`; the broadcast event models are `events/broadcast.py`. The composition root is `cli/engine.py` + `cli/engine_wiring.py` (the runtime layer may not import the CLI wiring or `seed`).
+- **Nothing on the live path.** The `SimulationBuffer` runs the league's daily tick, which already plays, stores and applies the day's matches; it does so in **one worker process** (`WorldStepper` inside a `ProcessPoolExecutor`), so playback never waits behind a simulation on the interpreter lock. Matches inside a matchday are still simulated one after another; the design's matchday parallelism is a performance item.
+- **Programme.** `programme.build_programme` lays the played matchdays out as `pre_match`, `match`, `post_match` and, once a matchday is complete, `matchday_magazine`; block ids (`date:matchday:fixture:ordinal`) sort in broadcast order. Quarantined matches become `filler`; filler made up on the spot (`filler:NNNNNN`) never touches the cursor.
+- **Cursor.** `world_meta.engine_cursor` = `{block, phase, after_seq}`, saved at block start and end, every `--cursor-every` events (25) and on cancellation. Saves are serialised and only move forward. Replay after a crash is at-least-once within that window, preceded by a `resume` marker; ids are `(match_id, seq)`.
+- **Pacing.** An event is due at its playing second (periods at the length they really ran) plus the half-time break for the second half. `realtime` / `scaled:N` / `instant` pick the clock; a stall of more than `max_lag_s` re-anchors instead of bursting.
+- **Bus.** Critical sinks (the file archive by default) make the producer wait up to one second per event and retry a failing write three times, then count the event as lost; best-effort sinks (stdout) drop the oldest queued event or the failing one. Counters are in `health.json`.
+- **Failure handling as built.** Task crash: backoff restart, circuit after five failures (`degraded`, channel stays up on what exists). Verification failure: quarantine and filler (the fallback profile and result-only fallback are M14). Starvation: filler after `--starve-grace-s` real seconds (30). Clock jump: re-anchor. Process kill: resume from the cursor. DB trouble: SQLite WAL with a 5 s busy timeout; the read-only degraded mode is M14.
+- **Not yet.** `schemas/broadcast.schema.json`, `uv run health`, `uv run verify --db`, the Dockerfile and compose (M14); `uv run league` as the engine in instant mode.
