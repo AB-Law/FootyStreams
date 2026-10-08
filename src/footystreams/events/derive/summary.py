@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 from footystreams.domain.match import MatchSetup, SetupRef, TeamSheet
 from footystreams.domain.types import PlayerId
 from footystreams.events.clock import period_elapsed_s
+from footystreams.events.derive.hooks import narrative_hooks
 from footystreams.events.derive.maps import (
     key_moments,
     momentum_timeline,
@@ -183,6 +184,7 @@ def build_summary(
         row.model_copy(update={"rating": rating.rating})
         for row, rating in zip(rows, ratings, strict=True)
     )
+    teams = (_team_stats(tally.home, tally.away), _team_stats(tally.away, tally.home))
     return MatchSummary(
         config_hash=inputs.config_hash,
         seed=inputs.seed,
@@ -193,12 +195,13 @@ def build_summary(
         ht_away=ht_away,
         attendance=setup.attendance,
         duration_s=duration,
-        team_stats_home=_team_stats(tally.home, tally.away),
-        team_stats_away=_team_stats(tally.away, tally.home),
+        team_stats_home=teams[0],
+        team_stats_away=teams[1],
         player_stats=rated,
         ratings=ratings,
         player_of_the_match=player_of_the_match(rows, ratings),
         injuries=inputs.injuries,
+        hooks=narrative_hooks(events, rated, teams, is_derby=setup.is_derby),
         momentum_timeline=momentum_timeline(events, duration),
         xg_timeline=xg_timeline(events),
         key_moments=key_moments(events),
