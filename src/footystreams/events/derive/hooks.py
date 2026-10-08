@@ -37,7 +37,7 @@ def _hook(kind: str, event_ids: Sequence[str], magnitude: float) -> Hook:
     )
 
 
-def _decisive_goal(goals: Sequence[GoalEvent], winner: str) -> tuple[GoalEvent | None, int]:
+def decisive_goal(goals: Sequence[GoalEvent], winner: str) -> tuple[GoalEvent | None, int]:
     """Return the goal that put the winner ahead for good, and the deepest deficit it overcame."""
     score = {"home": 0, "away": 0}
     other = "away" if winner == "home" else "home"
@@ -52,7 +52,7 @@ def _decisive_goal(goals: Sequence[GoalEvent], winner: str) -> tuple[GoalEvent |
 
 
 def _winner_hooks(goals: Sequence[GoalEvent], winner: str) -> list[Hook]:
-    decisive, deficit = _decisive_goal(goals, winner)
+    decisive, deficit = decisive_goal(goals, winner)
     if decisive is None:
         return []
     minute = match_elapsed_s(decisive.clock) / _SECONDS_PER_MINUTE
