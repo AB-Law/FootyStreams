@@ -2,10 +2,11 @@ from functools import cache
 
 import pytest
 
+from footystreams.domain.types import PlayerId
 from footystreams.events.result import MatchResult
 from footystreams.events.structure import FrameEvent
 from footystreams.sim import SimConfig, default_tables, merge_config, run_match
-from footystreams.sim.frames import FrameRecorder
+from footystreams.sim.frames import FrameRecorder, Snapshot, _FrameView
 from tests.factories.sim_play import make_play
 from tests.factories.sim_teams import make_demo_setup
 from tests.helpers.logs import without_frames_renumbered
@@ -85,3 +86,31 @@ def test_frames__with_context_on_they_still_change_no_other_event() -> None:
     off = run_match(make_demo_setup(), 5, plain, default_tables()).events
     on = run_match(make_demo_setup(), 5, tracked, default_tables()).events
     assert without_frames_renumbered(on) == without_frames_renumbered(off)
+
+
+A, B, C = PlayerId("a"), PlayerId("b"), PlayerId("c")
+
+
+def test_frame_view__the_ball_and_its_new_carrier_arrive_before_the_rest_of_the_moment_ends() -> (
+    None
+):
+    start = Snapshot(
+        t=0.0,
+        ball=(0.2, 0.5),
+        carrier=A,
+        players={A: (0.2, 0.5), B: (0.5, 0.5), C: (0.7, 0.2)},
+    )
+    end = Snapshot(
+        t=14.0,
+        ball=(0.5, 0.5),
+        carrier=B,
+        players={A: (0.2, 0.5), B: (0.5, 0.5), C: (0.9, 0.2)},
+    )
+    early = _FrameView(start, end, fraction=0.1, ball_fraction=1.0)
+    assert early.ball() == (0.5, 0.5)
+    assert early.carrier() == B
+    positions = early.positions()
+    assert positions[B] == (0.5, 0.5)
+    assert positions[C][0] < 0.75  # a team-mate is still walking to his place
+    late = _FrameView(start, end, fraction=0.1, ball_fraction=0.5)
+    assert late.carrier() == A

@@ -170,6 +170,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0243** Move the frame ball at ball speed through long dead moments *(M8; scope: sim)*
 - **0225** Count a denied goal-scoring chance only when it was a clear chance *(M8; scope: sim; sim version patch)*
 - **0221** Hold attackers on the offside line and mistime runs only on balls in behind *(M8; scope: sim; sim version patch)*
 - **0207** Strip git's repository variables from every test so a hook cannot steer them into the real repo *(M12; scope: tools)*

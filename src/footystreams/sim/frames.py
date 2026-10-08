@@ -19,6 +19,11 @@ from footystreams.sim.mathx import clamp, lerp
 from footystreams.sim.state import MatchState
 
 PRECISION = 4
+# A moment can last far longer than the ball takes to move (a throw-in delay, a goal celebration).
+# The ball, and the player it ends up with, cover their distance at this speed and then wait, so a
+# long moment shows a quick move and a hold instead of a ball crawling for the whole span.
+BALL_SPEED_MPS = 25.0
+MIN_TRAVEL_S = 0.4
 
 
 @dataclass(frozen=True, slots=True)
@@ -74,9 +79,13 @@ class FrameRecorder:
             return
         current = snapshot(state)
         span = current.t - base.t
+        travel = max(MIN_TRAVEL_S, distance_m(*base.ball, *current.ball) / BALL_SPEED_MPS)
         while self._next_t <= current.t:
-            fraction = (self._next_t - base.t) / span if span > 0 else 1.0
-            self._emit(state, emitter, float(self._next_t), _FrameView(base, current, fraction))
+            elapsed = self._next_t - base.t
+            fraction = elapsed / span if span > 0 else 1.0
+            ball_fraction = min(1.0, elapsed / travel) if span > 0 else 1.0
+            view = _FrameView(base, current, fraction, ball_fraction)
+            self._emit(state, emitter, float(self._next_t), view)
             self._next_t += self._interval
         self._base = current
 
@@ -121,19 +130,24 @@ class _FrameView:
 
     start: Snapshot
     end: Snapshot
-    fraction: float
+    fraction: float  # of the whole moment, for players walking to their places
+    ball_fraction: float  # of the ball's own journey, for the ball and the player who gets it
 
     def positions(self) -> dict[PlayerId, tuple[float, float]]:
         """Return each player's interpolated position (new arrivals appear where they are)."""
         return {
-            pid: _blend(self.start.players.get(pid, spot), spot, self.fraction)
+            pid: _blend(
+                self.start.players.get(pid, spot),
+                spot,
+                self.ball_fraction if pid == self.end.carrier else self.fraction,
+            )
             for pid, spot in self.end.players.items()
         }
 
     def ball(self) -> tuple[float, float]:
         """Return the interpolated ball position."""
-        return _blend(self.start.ball, self.end.ball, self.fraction)
+        return _blend(self.start.ball, self.end.ball, self.ball_fraction)
 
     def carrier(self) -> PlayerId:
         """The man on the ball: the old carrier until the step completes, then the new one."""
-        return self.end.carrier if self.fraction >= 1.0 else self.start.carrier
+        return self.end.carrier if self.ball_fraction >= 1.0 else self.start.carrier
