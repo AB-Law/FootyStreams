@@ -15,11 +15,15 @@ from footystreams.cli.render import (
     render_summary,
 )
 from footystreams.cli.sim import main
+from footystreams.domain.injury import InjurySeverity
 from footystreams.events.clock import match_clock
+from footystreams.events.open_play import GoalEvent
+from footystreams.events.summary_rows import Hook, InjuryReport
 from footystreams.events.types import MATCH_EVENT_ADAPTER
 from footystreams.sim import SimConfig, default_tables, run_match
 from footystreams.tools.paths import PROJECT_ROOT
 from tests.factories.sim_teams import make_demo_setup
+from tests.helpers.logs import context_result
 
 SETUP = make_demo_setup()
 RESULT = run_match(SETUP, 7, SimConfig(), default_tables())
@@ -64,7 +68,52 @@ def test_render_summary__has_a_final_line_and_one_row_per_statistic() -> None:
     lines = render_summary(RESULT.summary, NAMES)
     assert lines[0].startswith("Final: KES")
     assert any(line.startswith("Possession") for line in lines)
-    assert len(lines) == 12
+    assert any(line.startswith("Field tilt") for line in lines)
+    assert len(lines[: lines.index("")]) >= 14  # score line, header and a row per statistic
+
+
+def test_render_summary__names_the_player_of_the_match_and_the_top_rated() -> None:
+    lines = render_summary(RESULT.summary, NAMES)
+    index = next(i for i, line in enumerate(lines) if line.startswith("Player of the match"))
+    assert lines[index].endswith(NAMES.player(RESULT.summary.player_of_the_match))
+    assert [line.split()[0] for line in lines[index + 1 : index + 4]] == [
+        f"{rating.rating:.1f}"
+        for rating in sorted(RESULT.summary.ratings, key=lambda r: (-r.rating, r.player_id))[:3]
+    ]
+
+
+def test_render_summary__lists_injuries_and_stories_when_there_are_some() -> None:
+    summary = RESULT.summary.model_copy(
+        update={
+            "injuries": (
+                InjuryReport(
+                    player_id=RESULT.summary.ratings[0].player_id,
+                    type="hamstring strain",
+                    body_part="hamstring",
+                    severity=InjurySeverity.MINOR,
+                ),
+            ),
+            "hooks": (Hook(kind="late_winner"),),
+        }
+    )
+    lines = render_summary(summary, NAMES)
+    assert any(line.startswith("Injury:") and "hamstring strain" in line for line in lines)
+    assert "Story: late winner" in lines
+
+
+def test_render_event__story_tags_are_shown_in_brackets_and_time_tags_are_not() -> None:
+    goal = next(e for e in context_result().events if isinstance(e, GoalEvent))
+    line = render_event(goal, names_for(SETUP))
+    assert "opening_goal" in line
+    assert "late_game" not in line
+
+
+def test_render_events__frames_are_never_printed() -> None:
+    config = SimConfig(emit_frames=True, frame_interval_s=30)
+    events = run_match(SETUP, 7, config, default_tables()).events
+    lines = list(render_events(events, NAMES, Verbosity.FULL))
+    assert not any(line.strip().endswith("frame") for line in lines)
+    assert len(lines) < len(events)
 
 
 def test_main__text_output_ends_with_the_summary_table(capsys: pytest.CaptureFixture[str]) -> None:
@@ -80,6 +129,17 @@ def test_main__ndjson_lines_are_valid_events_in_order(capsys: pytest.CaptureFixt
     events = [MATCH_EVENT_ADAPTER.validate_python(json.loads(line)) for line in lines]
     assert [e.seq for e in events] == list(range(len(events)))
     assert events[-1].type == "match_summary"
+
+
+def test_main__frames_flag_adds_frame_events_to_the_ndjson(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert (
+        main(["--demo", "--seed", "3", "--format", "ndjson", "--frames", "--frame-interval", "60"])
+        == 0
+    )
+    types = [json.loads(line)["type"] for line in capsys.readouterr().out.splitlines()]
+    assert types.count("frame") > 80
 
 
 def test_main__without_demo_explains_what_is_missing(capsys: pytest.CaptureFixture[str]) -> None:

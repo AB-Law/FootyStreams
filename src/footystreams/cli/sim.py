@@ -36,6 +36,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--format", type=OutputFormat, choices=list(OutputFormat), default="text")
     parser.add_argument("--verbosity", type=Verbosity, choices=list(Verbosity), default="key")
+    parser.add_argument("--frames", action="store_true", help="emit tracking frames (ndjson only)")
+    parser.add_argument("--frame-interval", type=int, default=1, help="seconds between frames")
     parser.add_argument("--home-strength", type=int, default=DEFAULT_STRENGTH)
     parser.add_argument("--away-strength", type=int, default=DEFAULT_STRENGTH)
     parser.add_argument("--home-formation", default="433")
@@ -69,7 +71,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         return EXIT_USAGE
     setup = _demo_setup(arguments)
-    result = run_match(setup, arguments.seed, SimConfig(), default_tables())
+    config = SimConfig(emit_frames=arguments.frames, frame_interval_s=arguments.frame_interval)
+    result = run_match(setup, arguments.seed, config, default_tables())
     if arguments.format is OutputFormat.NDJSON:
         for event in result.events:
             print(event.model_dump_json())
