@@ -7,6 +7,7 @@ from functools import cache
 
 from footystreams.domain.match import MatchSetup
 from footystreams.events.discipline import CardEvent
+from footystreams.events.open_play import ShotEvent
 from footystreams.events.result import MatchResult
 from footystreams.events.types import MatchEvent
 from footystreams.sim import SimConfig, default_tables, merge_config, run_match
@@ -44,6 +45,9 @@ def log_with(feature: str) -> tuple[MatchEvent, ...]:
         "yellow": lambda log: _has_card(log, ("yellow",)),
         "penalty": lambda log: _has(log, "penalty"),
         "goal": lambda log: _has(log, "goal"),
+        "scoring_shot": lambda log: any(
+            isinstance(event, ShotEvent) and event.outcome == "goal" for event in log
+        ),
         "save": lambda log: _has(log, "save"),
         "offside": lambda log: _has(log, "offside"),
         "free_kick": lambda log: _has(log, "free_kick"),

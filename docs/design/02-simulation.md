@@ -198,7 +198,7 @@ choice  := softmax_sample(utility(options, manager_profile), τ = f(tactical_kno
 3. *Chase game* (trailing, minute ≥ 55; strength ∝ `chase_game_bias`, gap, minutes left): replace a DM/CB/FB with an attacker; raise mentality; raise line/press; if flexible enough and has a fallback formation with more forwards, change formation (cost: transient cohesion dip `−2%` for 8 minutes scaled by `formation_proficiency` and `adaptability`).
 4. *Protect lead* (leading, minute ≥ 70; ∝ `protect_lead_bias`): replace a forward with a defender/anchor, drop line, `time_wasting ↑`, mentality ↓.
 5. *Red card reshape* (own player sent off): drop an attacker for a defender/pivot; switch to a 4-4-1 / 5-3-1-like fallback; or (opponent sent off) push mentality up.
-6. *Yellow-risk sub*: replace a booked player with high `dirtiness`/`aggression` in the first 70 minutes if `reacts_to_cards` high.
+6. *Yellow-risk sub*: replace a booked player with high `dirtiness`/`aggression` between minutes 60 and 85 if `reacts_to_cards` high (managers pull a booked player late, not in the first half).
 7. *Opponent threat response*: if the opponent winger/formation exploits a flank (xG-share by lane), shift roles/instructions on that side or swap a fullback.
 8. *Half-time talk*: choose `style` by manager personality/`motivation` and the situation (praise/calm/fire-up/tactical); morale delta ∈ [−0.04, +0.06] on mental effective attributes for the second half, scaled by `man_management`/`motivation` and each player's `ego/resilience`. Recorded in the `halftime` event.
 

@@ -60,7 +60,7 @@ class ManagerConfig(DomainModel):
     shift_cooldown_s: float = 480.0  # a manager lets a change of mentality settle
     tactical_gain: float = 2.0  # appeal of chasing or protecting per goal of margin (up to 2)
     card_gain: float = 2.0  # appeal of reshaping after a dismissal
-    yellow_from_min: float = 25.0
-    yellow_until_min: float = 70.0
+    yellow_from_min: float = 60.0  # managers pull a booked player late, not before the hour
+    yellow_until_min: float = 85.0
     yellow_aggression: float = 60.0  # booked players at least this aggressive are a risk
     yellow_gain: float = 1.5
