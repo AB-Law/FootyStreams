@@ -73,13 +73,13 @@ class DisciplineConfig(DomainModel):
     }
 
     # Chance a challenge involves foul-worthy contact, for an average man (0 switches fouls off).
-    contact_base: NonNegative = 0.9
+    contact_base: NonNegative = 1.0
     aggression_weight: NonNegative = 0.8
     dirtiness_weight: NonNegative = 0.5
     tackling_weight: NonNegative = 0.5  # better tacklers foul less
     derby_factor: NonNegative = 1.2
     booked_caution: Share = 0.5  # a booked player challenges half as recklessly
-    box_caution: NonNegative = 0.35  # defenders in their own box tackle far more carefully
+    box_caution: NonNegative = 0.5  # defenders in their own box tackle far more carefully
     severity_base: float = 0.25
     severity_spread: NonNegative = 0.5
     severity_aggression: NonNegative = 0.25
@@ -96,10 +96,10 @@ class DisciplineConfig(DomainModel):
     dogso_min_xg: Share = 0.15
     free_kick_s: NonNegative = 25.0
     free_kick_spread_s: NonNegative = 10.0
-    yellow_base: float = 0.70  # severity above which an average referee books a foul
+    yellow_base: float = 0.665  # severity above which an average referee books a foul
     yellow_tendency_swing: NonNegative = 0.20  # a card-happy referee books milder fouls
     yellow_strictness_swing: NonNegative = 0.10
-    second_booking_margin: NonNegative = 0.04  # referees hesitate to send a booked player off
+    second_booking_margin: NonNegative = 0.10  # referees hesitate to send a booked player off
     red_threshold: Share = 0.90  # severity above which a foul is a straight red
     dogso_red_share: Share = 0.60  # share of denied goal-scoring chances punished with a red
     card_s: NonNegative = 30.0

@@ -148,7 +148,7 @@ class ShotConfig(DomainModel):
     long_range_m: Positive = 20.0  # beyond this the shooter's long_shots replaces finishing
     block_base: Share = 0.12  # share of shots a defender gets in the way of
     block_pressure: Share = 0.15  # extra blocked share at full pressure
-    off_target_base: Share = 0.43
+    off_target_base: Share = 0.48
     off_target_skill_swing: Share = 0.12  # a better finisher misses the frame less
     off_target_min: Share = 0.05  # floor and ceiling of the off-target share after skill
     off_target_max: Share = 0.6

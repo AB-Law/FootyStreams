@@ -47,7 +47,8 @@ def test_decide_card__a_booked_player_who_offends_again_gets_a_second_yellow() -
     play = make_play()
     offender = play.state.away.players[3]
     offender.yellow_cards = 1
-    assert decide_card(play, offender, _contact(0.75)) == CardDecision(
+    severity = play.cfg.discipline.yellow_base + play.cfg.discipline.second_booking_margin + 0.03
+    assert decide_card(play, offender, _contact(severity)) == CardDecision(
         "second_yellow", "second_yellow"
     )
 

@@ -130,7 +130,7 @@ class HomeAdvantageConfig(DomainModel):
     }
 
     enabled: bool = True
-    crowd_lift: float = 0.12  # share of mental attributes a full, loud crowd adds at home
+    crowd_lift: float = 0.25  # share of mental attributes a full, loud crowd adds at home
     away_pressure: float = 0.07  # share of away composure a full, hostile crowd removes
     default_capacity: int = 40_000  # used when the home sheet carries no stadium
     default_axis: float = 0.5  # atmosphere, proximity, passion, weight when unknown
