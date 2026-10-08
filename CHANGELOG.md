@@ -9,23 +9,23 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
-- **0082** Add match checks M06 (pitch state) and M08 (substitution limits); test exhaustion never falls in a half *(M6; scope: verify)*
-- **0081** Run the AI manager: checkpoints, triggers, changes at stoppages and half-time *(M6; scope: sim)*
-- **0080** Add the AI manager's assessment, candidate plans and mentality ladder *(M6; scope: sim)*
-- **0079** Roll injuries in fouls, tackles and open play; verify injured players leave *(M6; scope: sim, verify)*
-- **0078** Add the injury model: hazard, types, forced changes (not yet rolled) *(M6; scope: sim)*
-- **0077** Add substitution mechanics (not yet triggered) *(M6; scope: sim)*
-- **0075** Add home advantage through the crowd *(M6; scope: sim)*
-- **0074** Add fatigue: exhaustion that only rises in play and weakens skills *(M6; scope: sim)*
-- **0073** Add weather and pitch conditions *(M6; scope: sim)*
-- **0070** Extend verify_match with M07 (dismissed players), M11 (card logic, men counts) and M12 (sequencing) *(M5; scope: verify, sim)*
-- **0069** Add announced added time *(M5; scope: sim)*
-- **0068** Add offside: line-hugging attackers and flagged passes with an indirect free kick *(M5; scope: sim)*
-- **0067** Add penalties and free-kick shots and crosses *(M5; scope: sim)*
-- **0066** Add throw-ins, goal kicks, corners with an aerial duel and out-of-play detection *(M5; scope: sim)*
-- **0065** Add cards: yellow, red, second yellow, dismissals and the emergency keeper *(M5; scope: sim)*
-- **0064** Add fouls, advantage and free-kick restarts (off by default until M5 is enabled) *(M5; scope: sim)*
-- **0062** Add the referee profile, call model and the discipline and setpiece streams *(M5; scope: sim)*
+- **0097** Add match checks M06 (pitch state) and M08 (substitution limits); test exhaustion never falls in a half *(M6; scope: verify)*
+- **0096** Run the AI manager: checkpoints, triggers, changes at stoppages and half-time *(M6; scope: sim)*
+- **0095** Add the AI manager's assessment, candidate plans and mentality ladder *(M6; scope: sim)*
+- **0094** Roll injuries in fouls, tackles and open play; verify injured players leave *(M6; scope: sim, verify)*
+- **0093** Add the injury model: hazard, types, forced changes (not yet rolled) *(M6; scope: sim)*
+- **0092** Add substitution mechanics (not yet triggered) *(M6; scope: sim)*
+- **0090** Add home advantage through the crowd *(M6; scope: sim)*
+- **0089** Add fatigue: exhaustion that only rises in play and weakens skills *(M6; scope: sim)*
+- **0088** Add weather and pitch conditions *(M6; scope: sim)*
+- **0083** Extend verify_match with M07 (dismissed players), M11 (card logic, men counts) and M12 (sequencing) *(M5; scope: verify, sim)*
+- **0082** Add announced added time *(M5; scope: sim)*
+- **0081** Add offside: line-hugging attackers and flagged passes with an indirect free kick *(M5; scope: sim)*
+- **0080** Add penalties and free-kick shots and crosses *(M5; scope: sim)*
+- **0079** Add throw-ins, goal kicks, corners with an aerial duel and out-of-play detection *(M5; scope: sim)*
+- **0078** Add cards: yellow, red, second yellow, dismissals and the emergency keeper *(M5; scope: sim)*
+- **0077** Add fouls, advantage and free-kick restarts (off by default until M5 is enabled) *(M5; scope: sim)*
+- **0075** Add the referee profile, call model and the discipline and setpiece streams *(M5; scope: sim)*
 - **0058** Add the golden tool and the cross-process determinism test *(M4; scope: cli, sim)*
 - **0056** Add verify_match with invariants M01-M05, M10 and M17 *(M4; scope: verify)*
 - **0055** Add the sim command and the text renderer *(M4; scope: cli)*
@@ -65,8 +65,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
-- **0084** Enable the M6 behaviours (fatigue, weather, home advantage, injuries, AI manager), plan both teams' moves from the same positions, bump SIM_VERSION to 0.3.0 *(M6; scope: sim, schemas; sim version minor; schema version patch)*
-- **0071** Enable and calibrate the M5 behaviours; SIM_VERSION 0.2.0 *(M5; scope: sim, schemas; sim version minor; schema version patch)*
+- **0099** Enable the M6 behaviours (fatigue, weather, home advantage, injuries, AI manager), plan both teams' moves from the same positions, bump SIM_VERSION to 0.3.0 *(M6; scope: sim, schemas; sim version minor; schema version patch)*
+- **0084** Enable and calibrate the M5 behaviours; SIM_VERSION 0.2.0 *(M5; scope: sim, schemas; sim version minor; schema version patch)*
+- **0072** Bound the SimConfig knobs and move the remaining magic numbers into it *(M4; scope: sim; sim version patch)*
 - **0059** Bump SIM_VERSION to 0.1.0 and SCHEMA_VERSION to 0.1.3 *(M4; scope: schemas, sim; sim version minor; schema version patch)*
 - **0057** Damp skill effects and add the totality, strength and performance tests *(M4; scope: sim)*
 - **0053** Calibrate default shot model to about 2.9 goals a match *(M4; scope: sim)*
@@ -78,26 +79,39 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
-- **0083** Roll a foul injury before the card so a dismissed fouler is not named afterwards *(M6; scope: sim)*
-- **0063** Ignore the config hash when comparing golden digests *(M5; scope: cli)*
+- **0098** Roll a foul injury before the card so a dismissed fouler is not named afterwards *(M6; scope: sim)*
+- **0087** Reject a referee other than the one the setup names *(M5; scope: sim)*
+- **0086** Bound the M5 SimConfig knobs like the M4 ones *(M5; scope: sim)*
+- **0076** Ignore the config hash when comparing golden digests *(M5; scope: cli)*
+- **0071** A shot that is not a goal clears the assist, and a new period starts without one *(M4; scope: sim; sim version patch)*
+- **0070** Keep players in the kick-off formation after a goal; the clock still runs through the celebration *(M4; scope: sim; sim version patch)*
+- **0065** M17 now rejects a log that has no fulltime or does not end with the match summary *(M4; scope: verify)*
+- **0064** Derive SimRng forks from the wrapped seed so equal-mod-2^64 seeds fork alike *(M4; scope: sim)*
+- **0063** Raise EngineError, not InvalidSetupError, when a match ends without a summary *(M4; scope: sim)*
 - **0041** Close M1 test gaps for union usage and aggregates *(M1; scope: domain, events, docs; schema version patch)*
 
 ### Removed
 - **0008** Remove the Cursor rules generator; keep plain, hand-maintained .cursor/rules copies. *(design; scope: tools, design)*
 
 ### Performance
+- **0067** Rank the carrier's nearest opponents once per moment instead of twice *(M4; scope: sim)*
 - **0052** Speed up option generation and refresh positions every 4 seconds *(M4; scope: sim)*
 
 ### Refactoring
-- **0076** Build the state from a BuildContext and add the bench, injury stream and ManagerConfig *(M6; scope: sim)*
+- **0091** Build the state from a BuildContext and add the bench, injury stream and ManagerConfig *(M6; scope: sim)*
+- **0068** Move the text renderer from cli to sim so cli stays a thin wrapper *(M4; scope: sim, cli)*
+- **0066** Remove duplicated constants from the simulation modules *(M4; scope: sim)*
+- **0062** Share the one-player-on-two-teams check between sim and verify *(M4; scope: domain, verify, sim)*
 
 ### Tests
-- **0085** Add the M6 sweeps and metamorphic tests; write the M6 report *(M6; scope: sim)*
-- **0072** Add the M5 sweeps and write the M5 report *(M5; scope: sim, docs)*
+- **0100** Add the M6 sweeps and metamorphic tests; write the M6 report *(M6; scope: sim)*
+- **0085** Add the M5 sweeps and write the M5 report *(M5; scope: sim, docs)*
+- **0069** Replace a near-vacuous equal-teams assertion with meaningful strength checks *(M4; scope: sim)*
 - **0060** Pin the M4 golden digests *(M4; scope: sim; sim version minor)*
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0074** Record the digest decision (ADR 0006), the M4 perf exception and the review round *(M4; scope: design, docs)*
 - **0061** Write the M4 report and the Track A status section *(M4; scope: docs, sim)*
 - **0039** Record M1 decisions and refresh design paths *(M1; scope: design, docs)*
 - **0021** Add the parallel match-engine track to the milestone plan *(M0; scope: design)*
@@ -106,6 +120,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0001** Add the Phase 1 design document set (entities, simulation, events, architecture, seeding, milestones). *(design; scope: design)*
 
 ### Build and tooling
+- **0073** Bump SIM_VERSION to 0.1.1 and SCHEMA_VERSION to 0.1.4, add two golden cases *(M4; scope: schemas; sim version patch; schema version patch)*
 - **0018** Add the CI workflow and CODEOWNERS *(M0; scope: ci)*
 - **0010** Add test plugins, Hypothesis profiles, a coverage floor and the 'pr' tier of 'uv run check'. *(M0; scope: tools, ci)*
 - **0009** Replace .gitignore with a complete Python, tooling and project ruleset. *(M0; scope: tools)*

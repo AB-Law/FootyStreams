@@ -15,13 +15,12 @@ from footystreams.sim.actions.restarts import GOAL_KICK_FRAME_X, nearest_outfiel
 from footystreams.sim.actions.setpieces import restart_delay
 from footystreams.sim.emit import Meta
 from footystreams.sim.geometry import CENTRE, Point, frame_coordinate
-from footystreams.sim.mathx import clamp, squash
+from footystreams.sim.mathx import PERCENT, clamp, squash
 from footystreams.sim.options import ActionKind, Option
 from footystreams.sim.play import Play, actor, take_possession
 from footystreams.sim.side import Side, opposite
 from footystreams.sim.state import PlayerState, TeamState
 
-_PERCENT = 100.0
 DEFENDERS_IN_BOX = 5
 HEADER_FRAME_X = 0.93  # where a header is taken, in the attackers' frame
 HEADER_PRESSURE = 0.5
@@ -85,7 +84,7 @@ def build_duel(play: Play, side: Side, taker: PlayerState) -> Duel:
 def header_xg(play: Play, shooter: PlayerState, share: float) -> float:
     """Return the quality of a header from a corner: base x (0.6 + 0.8 share) x heading factor."""
     base = play.cfg.restarts.corner_xg_base
-    return base * (0.6 + 0.8 * share) * (0.8 + 0.4 * shooter.skills.heading / _PERCENT)
+    return base * (0.6 + 0.8 * share) * (0.8 + 0.4 * shooter.skills.heading / PERCENT)
 
 
 def _header(play: Play, duel: Duel, taker: PlayerState) -> float:

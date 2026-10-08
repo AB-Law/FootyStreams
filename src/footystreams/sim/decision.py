@@ -8,18 +8,18 @@ from __future__ import annotations
 
 from footystreams.sim.config import SimConfig
 from footystreams.sim.geometry import CENTRE
-from footystreams.sim.mathx import clamp, rational_weight
+from footystreams.sim.mathx import PERCENT, clamp, rational_weight
 from footystreams.sim.options import Option, Weights, generate_options
 from footystreams.sim.rng import SimRng
-from footystreams.sim.state import MatchState
+from footystreams.sim.state import REGULATION_PERIOD_S, MatchState
 
-REGULATION_S = 5400.0
+REGULATION_S = 2 * REGULATION_PERIOD_S
 LATE_START_S = 3000.0  # urgency starts to build around the 50th minute
-_PERCENT = 100.0
 _TEMPERATURE_DECISION_PIVOT = 1.3
 _MAX_MARGIN = 2.0
 _KEEP_URGENCY = 0.2
 _RISK_SWING = 0.3
+_MIN_TEMPERATURE = 1e-6  # guards the division in the softmax; never reached with a valid config
 
 
 def urgency(state: MatchState) -> float:
@@ -46,20 +46,21 @@ def team_weights(state: MatchState, cfg: SimConfig) -> Weights:
     )
     keep = 1.0 - _KEEP_URGENCY * push + (view.patience - CENTRE) * decision.directness_bias
     risk = 1.0 - _RISK_SWING * (view.risk_taking - CENTRE) * 2.0
-    return Weights(max(0.2, progress), max(0.2, keep), max(0.2, risk))
+    floor = decision.min_utility_weight
+    return Weights(max(floor, progress), max(floor, keep), max(floor, risk))
 
 
 def choice_temperature(decisions: float, pressure: float, cfg: SimConfig) -> float:
     """Return the softmax temperature: base x (1.3 - decisions/100) x (1 + k x pressure) x scale."""
     decision = cfg.decision
-    calm = decision.temperature_base * (_TEMPERATURE_DECISION_PIVOT - decisions / _PERCENT)
+    calm = decision.temperature_base * (_TEMPERATURE_DECISION_PIVOT - decisions / PERCENT)
     return calm * (1.0 + decision.temperature_pressure * pressure) * decision.temperature_scale
 
 
 def choose(options: list[Option], decisions: float, rng: SimRng, cfg: SimConfig) -> Option:
     """Pick one option by softmax over utility; consumes one draw."""
     pressure = options[0].pressure
-    temperature = max(1e-6, choice_temperature(decisions, pressure, cfg))
+    temperature = max(_MIN_TEMPERATURE, choice_temperature(decisions, pressure, cfg))
     best = max(option.utility for option in options)
     weights = [
         rational_weight(option.utility, best, 1.0 / temperature, cfg.decision.weight_floor)

@@ -1,13 +1,13 @@
 ---
-id: 0083
+id: 0094
 date: 2026-10-07
-type: fixed
-scope: [sim]
+type: added
+scope: [sim, verify]
 milestone: M6
 breaking: false
 schema_version_impact: none
 sim_version_impact: none
 config_impact: false
 migration: false
-summary: Roll a foul injury before the card so a dismissed fouler is not named afterwards
+summary: Roll injuries in fouls, tackles and open play; verify injured players leave
 ---

@@ -6,7 +6,7 @@ and the production pre-air gate, so no check is ever re-implemented elsewhere. C
   M01 seq contiguous from 0        M02 time (period, clock, tick) never goes backwards
   M03 ids unique and well formed   M04 score in every context equals the goals so far
   M05 no player on both sheets     M10 positions inside the pitch
-  M17 nothing after fulltime but the summary; log starts with a kickoff
+  M17 kickoff first; a fulltime; nothing after it but the summary, which ends the log
 
 The discipline checks (M07, M11) live in `verify/discipline.py`, the pitch and substitution
 checks (M06, M08) in `verify/substitutions.py` and the sequencing rules (M12) in
@@ -18,7 +18,7 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 from itertools import pairwise
 
-from footystreams.domain.match import MatchSetup
+from footystreams.domain.match import MatchSetup, players_on_both_sheets
 from footystreams.events.clock import period_elapsed_s
 from footystreams.events.open_play import GoalEvent
 from footystreams.events.structure import FulltimeEvent, KickoffEvent
@@ -116,10 +116,20 @@ def check_positions(events: Sequence[MatchEvent]) -> list[Violation]:
 
 
 def check_ending(events: Sequence[MatchEvent]) -> list[Violation]:
-    """M17: starts with a kickoff; after fulltime only the summary, and it is last."""
+    """M17: starts with a kickoff, has a fulltime, and after it only the summary, which is last.
+
+    A non-empty log that stops early (an engine crash mid-match) is a violation, so the pre-air
+    gate rejects it rather than broadcasting half a match.
+    """
     found: list[Violation] = []
-    if events and not isinstance(events[0], KickoffEvent):
+    if not events:
+        return found
+    if not isinstance(events[0], KickoffEvent):
         found.append(_violation("M17", "the log does not start with a kickoff", events[0]))
+    if not any(isinstance(event, FulltimeEvent) for event in events):
+        found.append(_violation("M17", "the log has no fulltime", events[-1]))
+    if not isinstance(events[-1], MatchSummaryEvent):
+        found.append(_violation("M17", "the log does not end with the match_summary", events[-1]))
     after_fulltime = False
     for index, event in enumerate(events):
         if after_fulltime and not isinstance(event, MatchSummaryEvent):
@@ -132,8 +142,10 @@ def check_ending(events: Sequence[MatchEvent]) -> list[Violation]:
 
 def check_rosters(setup: MatchSetup) -> list[Violation]:
     """M05: no player appears on both sheets."""
-    shared = sorted(set(setup.home.squad) & set(setup.away.squad))
-    return [Violation("M05", "player is on both teams", player_id) for player_id in shared]
+    return [
+        Violation("M05", "player is on both teams", player_id)
+        for player_id in players_on_both_sheets(setup)
+    ]
 
 
 _EVENT_CHECKS: tuple[Check, ...] = (

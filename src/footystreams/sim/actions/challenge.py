@@ -8,9 +8,8 @@ from footystreams.sim.actions.foul import contest_foul
 from footystreams.sim.emit import Meta
 from footystreams.sim.geometry import Point, segment_distance_m
 from footystreams.sim.injury import injure_in_tackle
-from footystreams.sim.mathx import squash
+from footystreams.sim.mathx import signed_unit, squash
 from footystreams.sim.play import Play, action_duration, actor, take_possession
-from footystreams.sim.pressure import nearest_opponents
 from footystreams.sim.state import PlayerState
 
 _INTERCEPTOR_CANDIDATES = 3
@@ -20,11 +19,16 @@ def tackle_win_probability(tackler: PlayerState, carrier: PlayerState, play: Pla
     """Return the chance a tackle takes the ball: defending rating against the carrier's rating."""
     cfg = play.cfg.challenge
     edge = (defending_rating(tackler.skills) - dribbling_rating(carrier.skills)) / cfg.tackle_scale
-    return cfg.tackle_base + cfg.tackle_swing * (squash(edge) - 0.5) * 2.0
+    return cfg.tackle_base + cfg.tackle_swing * signed_unit(squash(edge))
 
 
-def attempt_press_tackle(play: Play, pressure: float) -> float | None:
-    """Let the nearest defender challenge the carrier.
+def attempt_press_tackle(
+    play: Play, pressure: float, closest: tuple[float, PlayerState]
+) -> float | None:
+    """Let the closest defender challenge the carrier.
+
+    `closest` is the (distance_m, defender) pair the caller already ranked for the pressure
+    calculation, so the opponents are sorted once per moment.
 
     Returns the seconds the moment took when the challenge ended it (a won tackle or a foul), or
     None when play carries on (no challenge, or a missed one, emitted as a `tackle` with outcome
@@ -32,8 +36,8 @@ def attempt_press_tackle(play: Play, pressure: float) -> float | None:
     one to resolve it.
     """
     state, cfg = play.state, play.cfg.challenge
+    gap, tackler = closest
     carrier = state.carrier
-    gap, tackler = nearest_opponents(state.defenders, carrier.x, carrier.y, 1)[0]
     if play.rng.u() >= cfg.attempt_rate * pressure or gap > cfg.attempt_radius_m:
         return None
     stoppage = contest_foul(play, tackler, carrier, None)

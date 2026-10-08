@@ -1,13 +1,13 @@
 ---
-id: 0080
+id: 0100
 date: 2026-10-07
-type: added
+type: test
 scope: [sim]
 milestone: M6
 breaking: false
 schema_version_impact: none
 sim_version_impact: none
-config_impact: true
+config_impact: false
 migration: false
-summary: Add the AI manager's assessment, candidate plans and mentality ladder
+summary: Add the M6 sweeps and metamorphic tests; write the M6 report
 ---

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from footystreams.sim.config import DribbleConfig
 from footystreams.sim.effective import Skills
-from footystreams.sim.mathx import clamp, squash
+from footystreams.sim.mathx import clamp, signed_unit, squash
 
 _DRIBBLER_MIX = (0.60, 0.15, 0.15, 0.10)  # dribbling, agility, balance, flair
 _DEFENDER_MIX = (0.50, 0.25, 0.25)  # tackling, anticipation, positioning
@@ -29,7 +29,5 @@ def dribble_success_probability(
     if defender is None:
         return cfg.max_probability
     edge = (dribbling_rating(dribbler) - defending_rating(defender)) / cfg.scale
-    probability = (
-        cfg.base + cfg.swing * (squash(edge) - 0.5) * 2.0 - cfg.pressure_penalty * pressure
-    )
+    probability = cfg.base + cfg.swing * signed_unit(squash(edge)) - cfg.pressure_penalty * pressure
     return clamp(probability, cfg.min_probability, cfg.max_probability)

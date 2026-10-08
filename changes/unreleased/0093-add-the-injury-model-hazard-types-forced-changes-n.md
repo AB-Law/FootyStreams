@@ -1,13 +1,13 @@
 ---
-id: 0079
+id: 0093
 date: 2026-10-07
 type: added
-scope: [sim, verify]
+scope: [sim]
 milestone: M6
 breaking: false
 schema_version_impact: none
 sim_version_impact: none
-config_impact: false
+config_impact: true
 migration: false
-summary: Roll injuries in fouls, tackles and open play; verify injured players leave
+summary: 'Add the injury model: hazard, types, forced changes (not yet rolled)'
 ---

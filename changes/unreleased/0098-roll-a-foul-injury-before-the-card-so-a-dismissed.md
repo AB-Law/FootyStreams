@@ -1,13 +1,13 @@
 ---
-id: 0078
+id: 0098
 date: 2026-10-07
-type: added
+type: fixed
 scope: [sim]
 milestone: M6
 breaking: false
 schema_version_impact: none
 sim_version_impact: none
-config_impact: true
+config_impact: false
 migration: false
-summary: 'Add the injury model: hazard, types, forced changes (not yet rolled)'
+summary: Roll a foul injury before the card so a dismissed fouler is not named afterwards
 ---

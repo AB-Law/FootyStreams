@@ -46,3 +46,35 @@ def test_formation__has_eleven_slots_goalkeeper_first_and_valid_coordinates(
     assert slots[0].position is Position.GK
     assert all(0.0 <= slot.x <= 1.0 and 0.0 <= slot.y <= 1.0 for slot in slots)
     assert [slot.position for slot in slots].count(Position.GK) == 1
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"shot": {"block_base": 0.5, "block_pressure": 0.4}},
+        {"shot": {"off_target_min": 0.7}},
+        {"shot": {"woodwork_share": 1.0}},
+        {"passing": {"min_probability": 0.99, "max_probability": 0.5}},
+        {"dribble": {"min_probability": 0.9, "max_probability": 0.1}},
+        {"challenge": {"fail_intercept": 0.8, "fail_loose": 0.4}},
+        {"tempo": {"noise": 1.0}},
+        {"positioning": {"step_s": 0.0}},
+        {"referee": {"call_scale": 0.0}},
+        {"referee": {"consistency_noise": -0.1}},
+        {"discipline": {"careless_max": 0.9, "reckless_max": 0.5}},
+        {"discipline": {"red_threshold": 1.5}},
+        {"discipline": {"card_s": -1.0}},
+        {"restarts": {"overhit_min_m": 30.0, "overhit_max_m": 10.0}},
+        {"restarts": {"direct_range_m": 0.0}},
+        {"restarts": {"penalty_distance_m": 0.0}},
+        {"restarts": {"corner_keeper_claim": 1.2}},
+        {"offside": {"call_base": -0.1}},
+        {"stoppage": {"first_half_min": 9, "first_half_max": 8}},
+        {"stoppage": {"second_half_min": 11, "second_half_max": 10}},
+    ],
+)
+def test_merge_config__values_the_simulator_cannot_divide_by_are_rejected(
+    overrides: dict[str, dict[str, float]],
+) -> None:
+    with pytest.raises(ValidationError):
+        merge_config(SimConfig(), overrides)

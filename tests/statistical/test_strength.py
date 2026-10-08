@@ -30,9 +30,14 @@ def test_strength__much_stronger_home_side_wins_most_and_rarely_loses() -> None:
 
 @pytest.mark.slow
 @pytest.mark.statistical
-def test_strength__equal_teams_split_the_results_roughly_evenly() -> None:
-    wins, _, losses = _record(60, 60, 12)
-    assert abs(wins - losses) <= 7
+def test_strength__equal_teams_both_win_some_and_the_stronger_side_wins_more_than_it_loses() -> (
+    None
+):
+    even_wins, _, even_losses = _record(60, 60, 12)
+    strong_wins, _, strong_losses = _record(66, 54, 12)
+    assert even_wins >= 1
+    assert even_losses >= 1
+    assert strong_wins - strong_losses > even_wins - even_losses
 
 
 @pytest.mark.slow
@@ -61,3 +66,14 @@ def test_balance__goals_shots_and_conversion_sit_in_loose_sanity_bands() -> None
     assert 1.8 < goals / matches < 4.2
     assert 18 < shots / matches < 36
     assert 0.06 < goals / shots < 0.16
+
+
+@pytest.mark.slow
+@pytest.mark.statistical
+@pytest.mark.timeout(600)
+def test_strength__equal_teams_split_wins_evenly_over_a_large_sample() -> None:
+    matches = 80
+    wins, _, losses = _record(60, 60, matches)
+    # About 49 of 80 matches are decided; the difference has a standard deviation of about 7,
+    # so 15 is roughly two sd: loose enough for a fixed seed set, tight enough to catch a side bias.
+    assert abs(wins - losses) <= 15

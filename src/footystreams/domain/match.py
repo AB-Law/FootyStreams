@@ -210,6 +210,15 @@ class MatchSetup(DomainModel):
     importance: Unit = 0.5
 
 
+def players_on_both_sheets(setup: MatchSetup) -> list[PlayerId]:
+    """Return the ids of players who appear on both teams' sheets, sorted (empty when sound).
+
+    The one definition of the "no player on both teams" rule (invariant M05); the simulator rejects
+    such a setup up front and `verify` reports it on a log.
+    """
+    return sorted(set(setup.home.squad) & set(setup.away.squad))
+
+
 class SetupRef(DomainModel):
     """Lightweight identity of the setup used for a MatchResult."""
 

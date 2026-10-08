@@ -101,6 +101,8 @@ Each function does one thing, takes explicit inputs, returns a value, and states
 | CLI start-up (`--help`) | ≤ 400 ms | lazy imports of heavy modules |
 | Memory (league run) | RSS ≤ 250 MB; per-match sim peak ≤ 60 MB | `tracemalloc` test |
 
+*Exception, M4-M7 (Track A):* the simulate-one-match budget is not yet met (about 0.4 s CPU on the build container at M4); `tests/performance/test_sim_budget.py` is only an order-of-magnitude tripwire (0.5 s best of 3) until the M8 optimisation pass asserts the table above. The milestone reports carry the measured number.
+
 ### 6.2 How we get there without making code unreadable
 
 - **Architecture does most of the work:** pure data-in/data-out, no I/O in the sim, matchday parallelism, pre-simulation buffer (nothing is simulated on the live path).
