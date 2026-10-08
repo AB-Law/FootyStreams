@@ -60,6 +60,9 @@ def _base(kind: PassKind, cfg: PassConfig) -> float:
     }[kind]
 
 
+_WEATHER_SENSITIVE = (PassKind.LONG, PassKind.CROSS, PassKind.THROUGH)
+
+
 @dataclass(frozen=True, slots=True)
 class PassAttempt:
     """Everything the success model needs to know about one pass."""
@@ -70,6 +73,7 @@ class PassAttempt:
     receiver_touch: float  # receiver's first touch, 1-100
     pressure: float  # pressure on the passer, 0-1
     openness: float  # how free the receiver is, 0-1
+    environment: float = 0.0  # success lost to weather and pitch (long balls only)
 
 
 def pass_success_probability(attempt: PassAttempt, cfg: PassConfig) -> float:
@@ -90,5 +94,6 @@ def pass_success_probability(attempt: PassAttempt, cfg: PassConfig) -> float:
         + touch_term
         - cfg.pressure_penalty * attempt.pressure
         - cfg.openness_penalty * (1.0 - attempt.openness)
+        - (attempt.environment if attempt.kind in _WEATHER_SENSITIVE else 0.0)
     )
     return clamp(probability, cfg.min_probability, cfg.max_probability)

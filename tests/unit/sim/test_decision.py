@@ -11,16 +11,16 @@ from footystreams.sim.decision import (
 from footystreams.sim.options import ActionKind, Option, generate_options
 from footystreams.sim.positioning import place_for_kickoff
 from footystreams.sim.rng import SimRng
-from footystreams.sim.state import MatchState, build_state
-from footystreams.sim.tables import default_tables
+from footystreams.sim.state import MatchState
 from footystreams.sim.threat import threat
 from tests.factories.match import make_setup
+from tests.factories.sim_play import make_state
 
 CFG = SimConfig()
 
 
 def _state() -> MatchState:
-    state = build_state(make_setup(), default_tables(), SimRng(1))
+    state = make_state(make_setup())
     place_for_kickoff(state, "home")
     return state
 

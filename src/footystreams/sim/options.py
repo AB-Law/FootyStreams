@@ -155,6 +155,7 @@ def _pass_option(situation: Situation, mate: PlayerState) -> Option | None:
         receiver_touch=mate.skills.first_touch,
         pressure=situation.pressure,
         openness=openness(carrier, end[0], end[1], state.defenders, cfg.pressure),
+        environment=state.conditions.long_pass_penalty,
     )
     probability = pass_success_probability(attempt, cfg.passing)
     gain = threat(end_fx, end_fy) - threat(situation.fx, situation.fy)

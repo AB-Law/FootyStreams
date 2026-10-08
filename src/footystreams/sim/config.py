@@ -19,6 +19,7 @@ from pydantic import Field
 
 from footystreams.domain.base import DomainModel, UsageTag
 from footystreams.domain.canonical import canonical_json
+from footystreams.sim.config_manager import ManagerConfig
 from footystreams.sim.config_play import (
     ChallengeConfig,
     DecisionConfig,
@@ -36,6 +37,12 @@ from footystreams.sim.config_rules import (
     RestartConfig,
     StoppageConfig,
 )
+from footystreams.sim.config_world import (
+    FatigueConfig,
+    HomeAdvantageConfig,
+    InjuryConfig,
+    WeatherConfig,
+)
 
 CONFIG_HASH_LENGTH = 16
 
@@ -44,6 +51,10 @@ __all__ = [
     "DecisionConfig",
     "DisciplineConfig",
     "DribbleConfig",
+    "FatigueConfig",
+    "HomeAdvantageConfig",
+    "InjuryConfig",
+    "ManagerConfig",
     "OffsideConfig",
     "PassConfig",
     "PositionConfig",
@@ -54,6 +65,7 @@ __all__ = [
     "SimConfig",
     "StoppageConfig",
     "TempoConfig",
+    "WeatherConfig",
     "config_hash",
     "merge_config",
 ]
@@ -84,6 +96,11 @@ class SimConfig(DomainModel):
         "restarts": "S",
         "offside": "S",
         "stoppage": "S",
+        "weather": "S",
+        "fatigue": "S",
+        "home_advantage": "S",
+        "injury": "S",
+        "manager": "S",
     }
 
     model_profile: str = "v1"
@@ -103,6 +120,11 @@ class SimConfig(DomainModel):
     restarts: RestartConfig = Field(default_factory=RestartConfig)
     offside: OffsideConfig = Field(default_factory=OffsideConfig)
     stoppage: StoppageConfig = Field(default_factory=StoppageConfig)
+    weather: WeatherConfig = Field(default_factory=WeatherConfig)
+    fatigue: FatigueConfig = Field(default_factory=FatigueConfig)
+    home_advantage: HomeAdvantageConfig = Field(default_factory=HomeAdvantageConfig)
+    injury: InjuryConfig = Field(default_factory=InjuryConfig)
+    manager: ManagerConfig = Field(default_factory=ManagerConfig)
 
 
 def config_hash(config: SimConfig) -> str:

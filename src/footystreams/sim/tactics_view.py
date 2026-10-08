@@ -7,7 +7,7 @@ so new tactic modules can be added without changing the sim (docs/design/02 sect
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from footystreams.domain.match import TeamSheet
 from footystreams.domain.tactics import Mentality, ModuleKey, module_or_default
@@ -31,6 +31,7 @@ _MENTALITY_LEVEL = {
 }
 
 
+_MENTALITY_LADDER = tuple(_MENTALITY_LEVEL.items())
 _TACKLE_AGGRESSION = {"stay_on_feet": 0.8, "balanced": 1.0, "aggressive": 1.25}
 
 
@@ -84,6 +85,25 @@ def build_view(sheet: TeamSheet) -> TacticsView:
         corner_attackers=_module(sheet, ModuleKey.SET_PIECES, SetPieces).corner_attackers,
         tackle_aggression=_TACKLE_AGGRESSION[block.tackling],
     )
+
+
+def _ladder_index(view: TacticsView) -> int:
+    return min(
+        range(len(_MENTALITY_LADDER)),
+        key=lambda rung: abs(_MENTALITY_LADDER[rung][1] - view.mentality),
+    )
+
+
+def mentality_name(view: TacticsView) -> str:
+    """Return the mentality on the ladder nearest to the view's level."""
+    return _MENTALITY_LADDER[_ladder_index(view)][0].value
+
+
+def shift_mentality(view: TacticsView, rungs: int) -> TacticsView:
+    """Return the view moved `rungs` up (positive) or down the mentality ladder, clamped."""
+    top = len(_MENTALITY_LADDER) - 1
+    rung = max(0, min(top, _ladder_index(view) + rungs))
+    return replace(view, mentality=_MENTALITY_LADDER[rung][1])
 
 
 def _module[ModuleT](sheet: TeamSheet, key: ModuleKey, expected: type[ModuleT]) -> ModuleT:

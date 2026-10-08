@@ -4,26 +4,28 @@ import pytest
 
 from footystreams.domain.types import FormationId, Position
 from footystreams.sim.config import PositionConfig
+from footystreams.sim.config_rules import OffsideConfig
 from footystreams.sim.errors import InvalidSetupError
-from footystreams.sim.geometry import distance_m
+from footystreams.sim.geometry import distance_m, frame_coordinate
 from footystreams.sim.positioning import (
     KICKOFF_MAX_X,
     move_toward,
+    offside_ceiling,
     place_for_kickoff,
     speed_mps,
     target_in_frame,
     update_positions,
 )
 from footystreams.sim.rng import SimRng
-from footystreams.sim.state import Line, MatchState, build_state, line_of
-from footystreams.sim.tables import default_tables
+from footystreams.sim.state import Line, MatchState, line_of
 from tests.factories.match import make_setup, make_team_sheet
+from tests.factories.sim_play import make_state
 
 CFG = PositionConfig()
 
 
 def _state() -> MatchState:
-    return build_state(make_setup(), default_tables(), SimRng(1))
+    return make_state(make_setup())
 
 
 def test_build_state__eleven_players_per_side_in_slot_order_on_their_slots() -> None:
@@ -48,12 +50,12 @@ def test_build_state__unknown_formation__raises_invalid_setup_with_the_club_id()
         update={"tactics": sheet.tactics.model_copy(update={"formation": FormationId("999")})}
     )
     with pytest.raises(InvalidSetupError, match="clb_home01"):
-        build_state(make_setup(home=bad), default_tables(), SimRng(1))
+        make_state(make_setup(home=bad))
 
 
 def test_build_state__draws_one_day_form_per_player_from_the_given_stream() -> None:
     rng = SimRng(1)
-    build_state(make_setup(), default_tables(), rng)
+    make_state(make_setup(), rng=rng)
     assert rng.draws == 22 * 4
 
 
@@ -122,3 +124,15 @@ def test_place_for_kickoff__everyone_in_own_half_but_the_kicker_on_the_centre_sp
         assert player.x <= KICKOFF_MAX_X
     for player in state.away.players:
         assert player is state.carrier or player.x >= 1.0 - KICKOFF_MAX_X
+
+
+def test_update_positions__the_away_side_plans_from_positions_before_the_home_side_moved() -> None:
+    state = make_state()
+    state.carrier = state.home.players[9]
+    for player in state.home.players:
+        player.x = 0.45
+    attacker = next(p for p in state.away.players if p.line is Line.ATTACK)
+    rule = OffsideConfig()
+    ceiling = offside_ceiling(state.away, state.home, attacker, rule)
+    update_positions(state, 60.0, PositionConfig(), rule)
+    assert frame_coordinate(attacker.x, state.away.attack_dir) == pytest.approx(ceiling)

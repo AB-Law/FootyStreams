@@ -10,16 +10,14 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import IntEnum
 
-from footystreams.domain.match import LineupSlot, MatchSetup, TeamSheet
-from footystreams.domain.snapshot import PlayerSnapshot
-from footystreams.domain.types import FormationId, PlayerId, Position, RoleId
-from footystreams.sim.effective import Skills, build_skills, day_form_multiplier, multipliers
-from footystreams.sim.errors import InvalidSetupError
-from footystreams.sim.geometry import frame_coordinate
-from footystreams.sim.rng import SimRng
+from footystreams.domain.injury import InjurySeverity
+from footystreams.domain.match import TeamSheet
+from footystreams.domain.types import PlayerId, Position, RoleId
+from footystreams.sim.effective import Skills
 from footystreams.sim.side import Side, opposite
-from footystreams.sim.tables import Formation, StaticTables
-from footystreams.sim.tactics_view import TacticsView, build_view
+from footystreams.sim.tables import Formation
+from footystreams.sim.tactics_view import TacticsView
+from footystreams.sim.weather import NEUTRAL, Conditions
 
 REGULATION_PERIOD_S = 2700.0
 
@@ -69,6 +67,10 @@ class PlayerState:
     y: float
     shirt: int | None = None
     yellow_cards: int = 0
+    base_skills: Skills | None = None  # skills before fatigue; set when the sim builds the player
+    exhaustion: float = 0.0
+    drain: float = 0.0  # this player's share of the exhaustion rate (before team context)
+    energy_step: int = 0  # exhaustion bucket the current `skills` were built for
 
 
 @dataclass(slots=True)
@@ -83,6 +85,11 @@ class TeamState:
     players: list[PlayerState]
     score: int = 0
     sent_off: list[PlayerState] = field(default_factory=list)
+    bench: list[PlayerId] = field(default_factory=list)
+    substituted_off: list[PlayerState] = field(default_factory=list)  # replaced or injured off
+    subs_used: int = 0
+    windows_used: int = 0
+    last_window_s: float = -1e9  # elapsed_s of the latest substitution window
 
     @property
     def keeper(self) -> PlayerState:
@@ -99,6 +106,18 @@ class TeamState:
                 return candidate
         msg = f"player {player_id} is not on the pitch for {self.sheet.club.id}"
         raise KeyError(msg)
+
+
+@dataclass(frozen=True, slots=True)
+class InjuryCase:
+    """The true diagnosis of an in-match injury; the event shows only what a viewer could see."""
+
+    player_id: PlayerId
+    side: Side
+    name: str
+    body_part: str
+    severity: InjurySeverity
+    elapsed_s: float
 
 
 @dataclass(slots=True)
@@ -119,8 +138,10 @@ class MatchState:
     stoppage_s: float = 0.0  # dead time accumulated in the current period (goals, cards, ...)
     is_derby: bool = False
     attendance: int = 0
+    conditions: Conditions = NEUTRAL
     assist_from: PlayerState | None = None  # passer of the last completed pass in this chain
     last_turnover_s: float = field(default=-1e9)  # elapsed_s of the latest change of possession
+    injury_log: list[InjuryCase] = field(default_factory=list)
 
     def team(self, side: Side) -> TeamState:
         """Return the team on a side."""
@@ -145,52 +166,3 @@ class MatchState:
 def line_of(position: Position) -> Line:
     """Return the row a position belongs to."""
     return _LINE_OF[position]
-
-
-def build_state(setup: MatchSetup, tables: StaticTables, day_rng: SimRng) -> MatchState:
-    """Build the initial state: players on their slots, home to kick off in period 1."""
-    home = _build_team("home", setup.home, tables, day_rng)
-    away = _build_team("away", setup.away, tables, day_rng)
-    return MatchState(
-        home=home,
-        away=away,
-        carrier=home.players[0],
-        is_derby=setup.is_derby,
-        attendance=setup.attendance,
-    )
-
-
-def _build_team(side: Side, sheet: TeamSheet, tables: StaticTables, day_rng: SimRng) -> TeamState:
-    formation_id = sheet.tactics.formation
-    formation = tables.formations.get(FormationId(formation_id))
-    if formation is None:
-        msg = f"unknown formation {formation_id!r} on {sheet.club.id}"
-        raise InvalidSetupError(msg)
-    attack_dir = 1 if side == "home" else -1
-    ordered = sorted(sheet.lineup, key=lambda lineup_slot: lineup_slot.slot)
-    players = [_build_player(side, sheet, formation, item, day_rng) for item in ordered]
-    return TeamState(side, sheet, formation, build_view(sheet), attack_dir, players)
-
-
-def _build_player(
-    side: Side, sheet: TeamSheet, formation: Formation, lineup_slot: LineupSlot, day_rng: SimRng
-) -> PlayerState:
-    snapshot: PlayerSnapshot = sheet.squad[lineup_slot.player_id]
-    formation_slot = formation.slots[lineup_slot.slot]
-    day = day_form_multiplier(snapshot.hidden.consistency, day_rng)
-    mult = multipliers(snapshot, formation_slot.position, lineup_slot.role, day)
-    attack_dir = 1 if side == "home" else -1
-    return PlayerState(
-        player_id=lineup_slot.player_id,
-        side=side,
-        slot=lineup_slot.slot,
-        position=formation_slot.position,
-        line=line_of(formation_slot.position),
-        role=lineup_slot.role,
-        skills=build_skills(snapshot, mult),
-        base_x=formation_slot.x,
-        base_y=formation_slot.y,
-        x=frame_coordinate(formation_slot.x, attack_dir),
-        y=frame_coordinate(formation_slot.y, attack_dir),
-        shirt=snapshot.squad_number,
-    )

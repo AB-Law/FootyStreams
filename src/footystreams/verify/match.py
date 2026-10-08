@@ -8,8 +8,9 @@ and the production pre-air gate, so no check is ever re-implemented elsewhere. C
   M05 no player on both sheets     M10 positions inside the pitch
   M17 kickoff first; a fulltime; nothing after it but the summary, which ends the log
 
-The discipline checks (M07 in part, M11) live in `verify/discipline.py` and the sequencing rules
-(M12) in `verify/sequencing.py`; `verify_match` runs them all.
+The discipline checks (M07, M11) live in `verify/discipline.py`, the pitch and substitution
+checks (M06, M08) in `verify/substitutions.py` and the sequencing rules (M12) in
+`verify/sequencing.py`; `verify_match` runs them all.
 """
 
 from __future__ import annotations
@@ -29,6 +30,7 @@ from footystreams.verify.discipline import (
     check_men_counts,
 )
 from footystreams.verify.sequencing import check_sequencing
+from footystreams.verify.substitutions import check_pitch_state, check_substitution_limits
 from footystreams.verify.violation import Violation
 
 Check = Callable[[Sequence[MatchEvent]], list[Violation]]
@@ -157,6 +159,7 @@ _EVENT_CHECKS: tuple[Check, ...] = (
     check_card_logic,
     check_men_counts,
     check_sequencing,
+    check_substitution_limits,
 )
 
 
@@ -168,4 +171,5 @@ def verify_match(events: Sequence[MatchEvent], setup: MatchSetup | None = None) 
     found = [violation for check in _EVENT_CHECKS for violation in check(events)]
     if setup is not None:
         found.extend(check_rosters(setup))
+        found.extend(check_pitch_state(events, setup))
     return found

@@ -9,6 +9,7 @@ from footystreams.sim.actions.free_kick import take_free_kick
 from footystreams.sim.actions.penalty import take_penalty
 from footystreams.sim.discipline import Contact, roll_contact
 from footystreams.sim.emit import Meta
+from footystreams.sim.injury import injure_in_foul
 from footystreams.sim.play import Play, actor, label
 from footystreams.sim.state import PlayerState
 
@@ -67,7 +68,9 @@ def contest_foul(
         fouled_id=carrier.player_id,
         severity=contact.label,
     )
-    booking_s = show_card(play, tackler, contact, foul_id)
+    # The injury comes before the card: a dismissed fouler is no longer named after his card.
+    booking_s = injure_in_foul(play, tackler, carrier, foul_id)
+    booking_s += show_card(play, tackler, contact, foul_id)
     if plays_advantage(play, contact):
         return booking_s
     if contact.in_box and play.cfg.restarts.enabled:

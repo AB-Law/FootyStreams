@@ -7,6 +7,7 @@ from footystreams.sim.actions.dribbling import defending_rating, dribbling_ratin
 from footystreams.sim.actions.foul import contest_foul
 from footystreams.sim.emit import Meta
 from footystreams.sim.geometry import Point, segment_distance_m
+from footystreams.sim.injury import injure_in_tackle
 from footystreams.sim.mathx import signed_unit, squash
 from footystreams.sim.play import Play, action_duration, actor, take_possession
 from footystreams.sim.state import PlayerState
@@ -48,7 +49,7 @@ def attempt_press_tackle(
         participants=(actor(tackler, "tackler"), actor(carrier, "carrier")),
         pos=(carrier.x, carrier.y),
     )
-    play.emit.emit(
+    tackle_id = play.emit.emit(
         state,
         TackleEvent,
         meta,
@@ -59,7 +60,8 @@ def attempt_press_tackle(
     if not won:
         return None
     take_possession(state, tackler, carrier.x, carrier.y)
-    return action_duration(play, play.cfg.tempo.tackle_s)
+    hurt_s = injure_in_tackle(play, tackler, carrier, tackle_id)
+    return hurt_s + action_duration(play, play.cfg.tempo.tackle_s)
 
 
 def pick_interceptor(play: Play, start: Point, end: Point) -> PlayerState:

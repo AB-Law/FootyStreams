@@ -8,7 +8,7 @@ from functools import cache
 from footystreams.domain.match import MatchSetup
 from footystreams.events.discipline import CardEvent
 from footystreams.events.types import MatchEvent
-from footystreams.sim import SimConfig, default_tables, run_match
+from footystreams.sim import SimConfig, default_tables, merge_config, run_match
 from tests.factories.sim_config import CARD_HEAVY, m5_config
 from tests.factories.sim_teams import make_demo_setup
 
@@ -53,3 +53,20 @@ def log_with(feature: str) -> tuple[MatchEvent, ...]:
             return log
     msg = f"no card-heavy log with {feature!r} in {MAX_SEARCH} seeds"
     raise LookupError(msg)
+
+
+INJURY_HEAVY = {
+    "injury": {
+        "enabled": True,
+        "foul_contact": 0.3,
+        "tackle_contact": 0.05,
+        "non_contact_per_match": 6.0,
+    }
+}
+
+
+@cache
+def injury_heavy_log() -> tuple[MatchEvent, ...]:
+    """A match with plenty of injuries, forced changes and sides playing short."""
+    config = merge_config(SimConfig(), INJURY_HEAVY)
+    return run_match(demo_setup(), 5, config, default_tables()).events

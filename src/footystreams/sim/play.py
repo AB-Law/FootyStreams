@@ -10,6 +10,7 @@ from dataclasses import dataclass
 
 from footystreams.domain.types import PlayerId
 from footystreams.events.base import Participant
+from footystreams.sim.build import BuildContext
 from footystreams.sim.config import SimConfig
 from footystreams.sim.emit import EventEmitter, participant
 from footystreams.sim.geometry import CENTRE
@@ -34,6 +35,8 @@ class Play:
     discipline: SimRng
     setpiece: SimRng
     referee: RefereeProfile
+    injury: SimRng
+    build: BuildContext
 
 
 def take_possession(state: MatchState, player: PlayerState, x: float, y: float) -> None:

@@ -7,7 +7,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from footystreams.domain.snapshot import PlayerSnapshot
 from footystreams.domain.types import Position, RoleId
@@ -170,3 +170,29 @@ def build_skills(snapshot: PlayerSnapshot, mult: Multipliers) -> Skills:
         injury_proneness=float(h.injury_proneness),
         big_match=float(h.big_match),
     )
+
+
+TECHNICAL_FIELDS = (
+    "finishing", "long_shots", "heading", "first_touch", "dribbling", "short_passing",
+    "long_passing", "crossing", "tackling", "marking", "set_piece_delivery", "penalty_taking",
+    "handling", "shot_stopping", "aerial_command", "distribution", "one_on_ones", "sweeping",
+)  # fmt: skip
+MENTAL_FIELDS = (
+    "vision", "decisions", "composure", "anticipation", "positioning", "off_ball_movement",
+    "work_rate", "aggression", "bravery", "flair",
+)  # fmt: skip
+PHYSICAL_FIELDS = (
+    "pace", "acceleration", "stamina", "strength", "agility", "balance", "jumping_reach",
+)  # fmt: skip
+
+
+def scale_skills(base: Skills, multipliers_by_group: Multipliers) -> Skills:
+    """Return `base` with each group of attributes scaled by its multiplier."""
+    scaled: dict[str, float] = {}
+    for names, factor in (
+        (TECHNICAL_FIELDS, multipliers_by_group.technical),
+        (MENTAL_FIELDS, multipliers_by_group.mental),
+        (PHYSICAL_FIELDS, multipliers_by_group.physical),
+    ):
+        scaled.update({name: getattr(base, name) * factor for name in names})
+    return replace(base, **scaled)

@@ -25,10 +25,14 @@ from footystreams.sim.actions.challenge import attempt_press_tackle
 from footystreams.sim.actions.resolve_dribble import resolve_clearance, resolve_dribble
 from footystreams.sim.actions.resolve_pass import resolve_pass
 from footystreams.sim.actions.resolve_shot import resolve_shot
+from footystreams.sim.build import build_state, make_context
 from footystreams.sim.config import SimConfig, config_hash
 from footystreams.sim.config_rules import OffsideConfig
 from footystreams.sim.decision import decide
 from footystreams.sim.emit import EventEmitter, Meta, TeamLabel
+from footystreams.sim.fatigue import advance_exhaustion, halftime_recovery
+from footystreams.sim.injury import injure_without_contact
+from footystreams.sim.manager_ai import ManagerAI
 from footystreams.sim.options import ActionKind, Option
 from footystreams.sim.play import Play
 from footystreams.sim.positioning import place_for_kickoff, update_positions
@@ -36,7 +40,7 @@ from footystreams.sim.pressure import NEAREST_PRESSERS, nearest_opponents, press
 from footystreams.sim.referee import referee_profile
 from footystreams.sim.rng import SimRng
 from footystreams.sim.side import Side
-from footystreams.sim.state import REGULATION_PERIOD_S, MatchState, build_state
+from footystreams.sim.state import REGULATION_PERIOD_S, MatchState
 from footystreams.sim.stoppage import SECONDS_PER_MINUTE, added_minutes
 from footystreams.sim.summary import SummaryInputs, build_summary
 from footystreams.sim.tables import StaticTables
@@ -81,7 +85,8 @@ class MatchEngine:
         self._setup = setup
         self._seed = seed
         self._config = config
-        self._state: MatchState = build_state(setup, tables, streams["dayform"])
+        context = make_context(setup, streams["dayform"], config)
+        self._state: MatchState = build_state(setup, tables, context)
         self._emitter = EventEmitter(setup.match_id)
         self._play = Play(
             self._state,
@@ -91,8 +96,20 @@ class MatchEngine:
             streams["discipline"],
             streams["setpiece"],
             referee_profile(referee),
+            streams["injury"],
+            context,
+        )
+        self._manager = (
+            ManagerAI(self._play, streams["mgr_home"], streams["mgr_away"])
+            if config.manager.enabled
+            else None
         )
         self._pending_move_s = 0.0
+
+    @property
+    def state(self) -> MatchState:
+        """The live state, for diagnostics and tests that watch the match as it is played."""
+        return self._state
 
     def run(self) -> Iterator[MatchEvent]:
         """Play the whole match, yielding events as they are produced, summary last."""
@@ -107,8 +124,13 @@ class MatchEngine:
                 if not announced and state.t_period >= REGULATION_PERIOD_S:
                     added, announced = self._announce_added_time(period), True
                     yield from self._emitter.drain()
+            if period == PERIODS[0] and self._manager is not None:
+                self._manager.at_halftime()
+                yield from self._emitter.drain()
             state.played_before_s += REGULATION_PERIOD_S + added * SECONDS_PER_MINUTE
             if period == PERIODS[0]:
+                if self._config.fatigue.enabled:
+                    halftime_recovery(state, self._config.fatigue)
                 self._emit_marker(
                     HalftimeEvent, score_home=state.home.score, score_away=state.away.score
                 )
@@ -145,10 +167,15 @@ class MatchEngine:
 
     def _step(self) -> None:
         state, play = self._state, self._play
+        mark = len(self._emitter.events)
+        pause_s = 0.0
         if self._pending_move_s >= self._config.positioning.step_s:
             update_positions(
                 state, self._pending_move_s, self._config.positioning, self._offside_rule()
             )
+            if self._config.fatigue.enabled:
+                advance_exhaustion(state, self._pending_move_s, self._config.fatigue)
+            pause_s = injure_without_contact(play, self._pending_move_s)
             self._pending_move_s = 0.0
         state.tick += 1
         goals_before = _goals(state)
@@ -161,7 +188,9 @@ class MatchEngine:
         else:
             option: Option = decide(state, play.rng, self._config, pressure)
             duration = _RESOLVERS[option.kind](play, option)
-        state.t_period += duration
+        if self._manager is not None:
+            pause_s += self._manager.after_action(self._emitter.events[mark:])
+        state.t_period += duration + pause_s
         if _goals(state) == goals_before:
             self._pending_move_s += duration
         else:
