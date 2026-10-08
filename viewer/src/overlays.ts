@@ -4,6 +4,7 @@ import type { Mark } from "./store.ts";
 export const OVERLAY_SECONDS: Record<Mark["kind"], number> = {
   goal: 4.5,
   card: 2.5,
+  foul: 1.5,
   substitution: 4,
   halftime: 3,
   fulltime: 3,

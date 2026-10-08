@@ -5,6 +5,7 @@ import type { AnyEvent } from "./events.ts";
 import { sampleAt } from "./interpolate.ts";
 import { overlaysAt } from "./overlays.ts";
 import { Playback } from "./playback.ts";
+import { refereeTrack } from "./referee.ts";
 import { replayNdjson } from "./source.ts";
 import { MatchStore } from "./store.ts";
 
@@ -102,4 +103,26 @@ test("replayNdjson feeds every non-blank line and keeps order", () => {
   const seen: string[] = [];
   replayNdjson('{"type":"a"}\n\n{"type":"b"}\n', (event) => seen.push(event.type));
   assert.deepEqual(seen, ["a", "b"]);
+});
+
+test("refereeTrack never moves faster than a person can run, even when the ball and an incident jump", () => {
+  const events = Array.from({ length: 80 }, (_, second) => frame(second < 40 ? 0.1 : 0.9));
+  const foul = { type: "foul", team: "home", pos: { x: 0.6, y: 0.2 }, clock, ctx: { score_home: 0, score_away: 0, attack_dir: 1 }, participants: [] } as AnyEvent;
+  const store = loaded(...events.slice(0, 55), foul, ...events.slice(55));
+  let previous = refereeTrack(store.frames, store.marks, 0)?.spot;
+  for (let step = 1; step <= 790; step++) {
+    const spot = refereeTrack(store.frames, store.marks, step / 10)?.spot;
+    assert.ok(previous !== undefined && spot !== undefined);
+    const metres = Math.hypot((spot.x - previous.x) * 105, (spot.y - previous.y) * 68);
+    assert.ok(metres <= 0.65 + 1e-9, `jumped ${metres} m at ${step / 10}s`);
+    previous = spot;
+  }
+});
+
+test("refereeTrack reports the incident while he is at a foul", () => {
+  const foul = { type: "foul", team: "home", pos: { x: 0.6, y: 0.2 }, clock, ctx: { score_home: 0, score_away: 0, attack_dir: 1 }, participants: [] } as AnyEvent;
+  const store = loaded(...Array.from({ length: 30 }, () => frame(0.5)), foul, ...Array.from({ length: 30 }, () => frame(0.5)));
+  assert.equal(refereeTrack(store.frames, store.marks, 31)?.incident, true);
+  assert.equal(refereeTrack(store.frames, store.marks, 10)?.incident, false);
+  assert.equal(refereeTrack(store.frames, store.marks, 50)?.incident, false);
 });

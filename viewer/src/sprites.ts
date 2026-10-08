@@ -73,9 +73,19 @@ export function drawCarrierMark(ctx: CanvasRenderingContext2D, x: number, y: num
   pixel(ctx, CARRIER_MARK, x, top + 1);
 }
 
-export function drawBall(ctx: CanvasRenderingContext2D, x: number, y: number): void {
+/** The ball at ground point (x, y), lifted `height` pixels, with its shadow left on the grass. */
+export function drawBall(ctx: CanvasRenderingContext2D, x: number, y: number, height: number): void {
   ctx.fillStyle = SHADOW;
   ctx.fillRect(x, y + 1, 2, 2);
+  const lift = Math.round(height);
   ctx.fillStyle = "#ffffff";
-  ctx.fillRect(x - 1, y - 1, 2, 2);
+  ctx.fillRect(x - 1, y - 1 - lift, 2, 2);
+}
+
+/** Fading dots behind a fast ball, so a shot reads as speed. */
+export function drawTrail(ctx: CanvasRenderingContext2D, points: { x: number; y: number; height: number }[]): void {
+  points.forEach((point, index) => {
+    ctx.fillStyle = `rgba(255, 255, 255, ${0.5 - index * 0.15})`;
+    ctx.fillRect(point.x - 1, point.y - 1 - Math.round(point.height), 2, 2);
+  });
 }

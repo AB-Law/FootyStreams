@@ -1,4 +1,5 @@
-import type { AnyEvent, BroadcastEvent, FrameEvent, FramePlayer, MatchClock, Side } from "./events.ts";
+import type { AnyEvent, BroadcastEvent, FrameEvent, FramePlayer, MatchClock, Pos, Side } from "./events.ts";
+import { passFlight, shotFlight, startAfter, type Flight } from "./flights.ts";
 
 /** Tracking frames are one sim second apart; a frame's index is its time in seconds. */
 export const FRAME_INTERVAL_S = 1;
@@ -20,6 +21,7 @@ export type Mark =
   | { kind: "goal"; t: number; team: Side; scorerId: string; ownGoal: boolean; scoreHome: number; scoreAway: number; minute: number }
   | { kind: "card"; t: number; team: Side; playerId: string; colour: CardColour }
   | { kind: "substitution"; t: number; team: Side; offId: string; onId: string }
+  | { kind: "foul"; t: number; team: Side; pos: Pos | null }
   | { kind: "halftime"; t: number; scoreHome: number; scoreAway: number }
   | { kind: "fulltime"; t: number; scoreHome: number; scoreAway: number };
 
@@ -32,6 +34,7 @@ export type Mark =
 export class MatchStore {
   readonly frames: Frame[] = [];
   readonly marks: Mark[] = [];
+  readonly flights: Flight[] = [];
 
   /** The single entry point for events. Unknown types are ignored, never an error. */
   onEvent(event: AnyEvent): void {
@@ -50,6 +53,15 @@ export class MatchStore {
       case "substitution":
         this.marks.push({ kind: "substitution", t, team: known.team, offId: known.player_off_id, onId: known.player_on_id });
         break;
+      case "foul":
+        this.marks.push({ kind: "foul", t, team: known.team, pos: known.pos });
+        break;
+      case "pass":
+        this.addFlight(passFlight(known, this.start(t)));
+        break;
+      case "shot":
+        this.addFlight(shotFlight(known, this.start(t), attackedGoal(known)));
+        break;
       case "halftime":
       case "fulltime":
         this.marks.push({ kind: known.type, t, scoreHome: known.ctx.score_home, scoreAway: known.ctx.score_away });
@@ -57,6 +69,14 @@ export class MatchStore {
       default:
         break; // pass, shot, review, ... not drawn (yet)
     }
+  }
+
+  private start(eventTime: number): number {
+    return startAfter(eventTime, this.flights[this.flights.length - 1]);
+  }
+
+  private addFlight(flight: Flight | null): void {
+    if (flight !== null) this.flights.push(flight);
   }
 
   /** Seconds of match covered so far. */
@@ -76,4 +96,10 @@ export class MatchStore {
       players: event.players,
     });
   }
+}
+
+/** The end of the pitch (x = 0 or 1) a shot is at: the home side's direction is in the context. */
+function attackedGoal(event: BroadcastEvent): 0 | 1 {
+  const homeRight = event.ctx.attack_dir > 0;
+  return homeRight === (event.team === "home") ? 1 : 0;
 }

@@ -43,6 +43,11 @@ Open `http://127.0.0.1:5173/`. Options in the address: `?replay=replays/other` (
   and holds a position across a reset (kick-off, the half-time side swap) instead of sliding.
 - `src/overlays.ts`, `src/hud.ts`: scoreboard, clock, goal banner, yellow/red card flash,
   substitution note, half-time and full-time. Windows are in real seconds, stretched at 4x and 16x.
+- `src/flights.ts`: passes and shots fly as short animations between the event's start and end points
+  (a shot on a curve with a trail, long balls arcing), taking over from the 1 Hz ball while in the air.
+  Shots read `target`, `curve` and `speed_mps` when the sim provides them and otherwise go straight.
+- `src/referee.ts`: the referee is not in the sim's frames. He is a deterministic follower: he trails
+  the play at running speed (never faster than 6.5 m/s) and goes to fouls and bookings.
 - `src/pitch.ts`, `src/sprites.ts`, `src/palette.ts`, `src/font.ts`: everything is drawn in code from
   the kit colours and appearance (skin tone, hair, facial hair); no art assets, and a 3x5 bitmap font.
 - `src/events.ts`, `src/meta.ts`: hand-written types for only the events used, each pointing at its
@@ -51,14 +56,16 @@ Open `http://127.0.0.1:5173/`. Options in the address: `?replay=replays/other` (
 ## Deliberately missing
 
 Audio, commentary, TTS, LLM text, studio scenes, recording or encoding for a stream, any WebSocket or
-engine sink, replays of goals, shirt numbers on screen, a ball in flight (it is drawn flat), referee
-and linesmen, camera moves, formation-aware kits for goalkeepers beyond a plain colour, and other
+engine sink, replays of goals, shirt numbers on screen, linesmen (the referee is a drawn guess,
+not sim data), camera moves, formation-aware kits for goalkeepers beyond a plain colour, and other
 event types (pass, shot, foul and so on are accepted and ignored).
 
 ## Known limits
 
 - There are no frames during the half-time break, so the "half time" banner appears over the first
   seconds of the second half.
+- Flights start at the second of their event, queued one after another; a busy second can look
+  slightly out of step with the players, who are only known once a second.
 - Event overlays are timed to the latest frame before the event (one second resolution).
 - Playback time is the frame index (one frame per sim second); the scoreboard shows the match clock
   of the frame on screen, so the two differ by the break.

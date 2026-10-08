@@ -1,7 +1,9 @@
 import { drawOverlays, drawScoreboard } from "./hud.ts";
 import { sampleAt } from "./interpolate.ts";
 import type { ReplayMeta } from "./meta.ts";
+import { activeFlight } from "./flights.ts";
 import { overlaysAt } from "./overlays.ts";
+import { refereeTrack } from "./referee.ts";
 import { pickKits } from "./palette.ts";
 import { Playback, SPEEDS } from "./playback.ts";
 import { HEIGHT, WIDTH } from "./pitch.ts";
@@ -62,9 +64,16 @@ async function start(): Promise<void> {
 
   const render = (): void => {
     const sample = sampleAt(store.frames, playback.t);
-    scene.draw(context, sample, playback.t);
+    const overlays = overlaysAt(store.marks, playback.t, playback.speed);
+    const referee = refereeTrack(store.frames, store.marks, playback.t);
+    scene.draw(context, sample, {
+      t: playback.t,
+      flight: activeFlight(store.flights, playback.t),
+      referee: referee === null ? null : referee.spot,
+      whistle: referee?.incident ?? false,
+    });
     drawScoreboard(context, sample, meta, kits, playback.t >= store.duration);
-    drawOverlays(context, overlaysAt(store.marks, playback.t, playback.speed), meta, scene, sample);
+    drawOverlays(context, overlays, meta, scene, sample);
     scrubber.value = String(Math.floor(playback.t));
     playButton.textContent = playback.playing ? "Pause" : "Play";
     time.textContent = `${formatTime(playback.t)} / ${formatTime(store.duration)}`;

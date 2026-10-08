@@ -5,8 +5,8 @@
 //   EventBase, MatchClock, Participant ... src/footystreams/events/base.py
 //   EventContext ......................... src/footystreams/events/context.py
 //   FrameEvent, FramePlayer, Halftime/Fulltime ... src/footystreams/events/structure.py
-//   GoalEvent ............................ src/footystreams/events/open_play.py
-//   CardEvent, SubstitutionEvent ......... src/footystreams/events/discipline.py
+//   GoalEvent, PassEvent, ShotEvent ...... src/footystreams/events/open_play.py
+//   CardEvent, FoulEvent, SubstitutionEvent ... src/footystreams/events/discipline.py
 //
 // Pitch coordinates are absolute, 0..1: x along the length, y across the width. The home side
 // defends x=0 in period 1 and the sides swap at half-time (ctx.attack_dir is home's direction).
@@ -31,9 +31,15 @@ export interface Participant {
   role: string;
 }
 
+export interface Pos {
+  x: number;
+  y: number;
+}
+
 export interface EventBase {
   type: string;
   team: Side;
+  pos: Pos | null;
   clock: MatchClock;
   ctx: EventContext;
   participants: Participant[];
@@ -75,6 +81,36 @@ export interface SubstitutionEvent extends EventBase {
   player_on_id: string;
 }
 
+/** Pass: `pos` is where it starts, `end_pos` where it was played to (src/footystreams/events/open_play.py). */
+export interface PassEvent extends EventBase {
+  type: "pass";
+  from_player_id: string;
+  to_player_id: string | null;
+  outcome: "complete" | "incomplete" | "intercepted" | "out";
+  length_m: number;
+  end_pos: Pos | null;
+}
+
+/**
+ * Shot: `pos` is the shooter. `target`, `curve` and `speed_mps` come from the sim's flight model
+ * (schema 0.4.0 and later); older logs lack them and the viewer draws a straight shot at goal.
+ */
+export interface ShotEvent extends EventBase {
+  type: "shot";
+  player_id: string;
+  outcome: "goal" | "saved" | "blocked" | "off_target" | "woodwork";
+  target?: Pos | null;
+  curve?: number;
+  speed_mps?: number;
+  loft?: number;
+}
+
+export interface FoulEvent extends EventBase {
+  type: "foul";
+  fouler_id: string;
+  fouled_id: string;
+}
+
 export interface HalftimeEvent extends EventBase {
   type: "halftime";
 }
@@ -92,6 +128,9 @@ export type BroadcastEvent =
   | FrameEvent
   | GoalEvent
   | CardEvent
+  | PassEvent
+  | ShotEvent
+  | FoulEvent
   | SubstitutionEvent
   | HalftimeEvent
   | FulltimeEvent;
