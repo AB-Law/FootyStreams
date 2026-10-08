@@ -45,12 +45,57 @@ Hooks built now:
 | **Promotion/relegation, more divisions** | `LeagueFormat.promotion_spots/relegation_spots`; `Competition.tier`; `Season` supports multiple competitions |
 | **Manager sacking/appointment** | Board confidence, objectives; schema only for now (decision O1, 09) |
 | **Women's league / mixed squads** | `gender` on `Person`; names generator parameter |
-| **LLM commentary, TTS, renderer, server** | Protocols in 04 §5; `frame` events; `MediaPersonality`; `WorldEvent` feed; `StateModifier.public` storylines |
+| **LLM commentary, TTS, renderer, server** | Protocols in 04 §5; `frame` events; `MediaPersonality`; `WorldEvent` feed; `StateModifier.public` storylines (wishlist and proposed order: section 3a) |
 | **LLM-assisted world events and press** | `proposals`; `WorldEvent.origin=proposed`; mood bounds (07 §3.4) |
 | **Memory logic** | Full schema, decay/retrieval design (01 §7), proposals applier |
 | **Scouting game** | `ScoutReport`, noisy perceived ability already used internally by AI |
 | **Injuries depth** | `injury_types.yaml` extensible; rehab/medical staff effects |
 | **Analytics** | Read-only `analytics/` package over events (pass maps, xT, pressing metrics) — added as soon as the first v2 feature needs it |
+
+## 3a. Wishlist: the studio, social and stream layer (after M13)
+
+Status: **WISHLIST, not scheduled.** The owner wants the league to become a 24/7 pixel-art channel: a live broadcast with matches, studio shows, pundits, a ticker and replays, plus the media world around it. M12 (the engine) and M13 (the seams) are the foundation; everything below is built on them and needs its own design document ("14 - studio, social and stream") before any milestone is cut.
+
+### The intended shape
+
+A site around a live video stream in a styled "monitor" frame, with replays and a radio stream; the scenes are drawn in the browser in low-resolution pixel art scaled up without smoothing (a canvas, a cast of characters, a ticker, show timing). The pipeline is a browser scene, then a recording of it, then a stream encoder, then the host.
+
+### Wishes
+
+| Wish | What it is | Foundation that exists |
+|------|-----------|------------------------|
+| **Live match broadcast** | A pixel pitch drawn from `frame` events (22 players and the ball, 1 s apart, smoothed to about 30 fps), with goal, card and substitution overlays, a scoreboard, replays of goals | `frame` events (opt-in), M12 engine and sinks, player `appearance`, club `KitSpec` |
+| **Studio shows** | Desk, anchors, lower thirds, ticker, speech bubbles; pre-match, half-time, post-match and matchday magazine segments | M12 programme blocks and segment events, `MediaPersonality`, `broadcast_traits` |
+| **Pundit and news shows** | A panel of pundits and a news desk discussing the matchday, transfers, injuries and storylines | `WorldEvent` feed, `StateModifier.public` storylines, proposals (`origin=proposed`) |
+| **Commentary and voices** | LLM-phrased lines from facts only, spoken by TTS voices with word timings for the bubbles | M13 narrator and voice seams, `EchoNarrator` and `NullVoice` fallbacks |
+| **Social media** | Posts by players, reporters and fans on events (goal, red card, transfer): player voice from personality, fan tone from the fanbase's passion and toxicity; a feed page | Person traits, `Fanbase`, `WorldEvent` feed; posts stored with their source and never written back into the world without the proposals path |
+| **Newspapers** | A daily edition from results, tables, transfers and match reports, rendered as a page or an image | Standings, match summaries, `WorldEvent` feed |
+| **Streaming and site** | A recorder and encoder to the stream host; an own site with the live embed, replays, standings, the social feed and the papers | M12 health and heartbeat |
+
+### Ground rules for all of it
+
+- The simulation and the event log stay the single source of truth. Text, voice and pictures *phrase and show* facts; they never change them, and a failure or a slow layer is contained by timeouts, bounded queues and null fallbacks (design 10 section 7, E5).
+- No art assets are needed to start: sprites are drawn in code from the seeded appearance and kit data.
+- The renderer is TypeScript in the browser, in its own folder outside the Python package, with types generated from the broadcast JSON schema (the schema export M12 deferred to the next schema bump).
+- A fictional league has no real-world headlines to credit; every news item comes from the world's own events.
+
+### Proposed order (to confirm when the design is written)
+
+1. The design document and its decisions (below).
+2. A silent browser viewer fed by an engine sink: a live pixel match.
+3. Studio scenes with templated scripts (no LLM).
+4. LLM commentary and TTS behind the M13 seams, with fallbacks.
+5. Text products: social feed, newspapers, pundit shows.
+6. Recording, encoding and the site.
+7. **M14b**: soak, chaos, fault injection, shadow run, container and release notes across the whole chain, so they cover the renderer, encoder and narrator. The slices that harden what already exists (verify and health CLIs, the quarantine fallback profile, safe mode, the fuzz harness, the mutation job) may move earlier as **M14a**. Not yet agreed.
+
+### Decisions the design document must settle
+
+Where it goes live (YouTube, Twitch, an own site only); the LLM and TTS providers and a monthly cost ceiling; how the browser scene is recorded (a headless browser and ffmpeg, or frames rendered server side); how interviews and pundit shows are scripted and grounded; moderation of generated social content.
+
+### Simulation items that feed the broadcast
+
+From the M8 report (`docs/milestones/M8.md`): give tactical style choices their costs and raise their influence again (matches would vary more by manager); let the manager AI batch several substitutions into one stoppage; late-game dynamics so the second half is not thinner than the first (the goal timeline is the largest known calibration gap); the single-match performance budget.
 
 ## 4. Design principles that keep these cheap
 
