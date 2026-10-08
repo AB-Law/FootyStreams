@@ -15,7 +15,8 @@ from __future__ import annotations
 
 import math
 from collections.abc import Callable, Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from enum import StrEnum
 
 from footystreams.balance.evaluate import MetricResult
 from footystreams.balance.knobs import Knob, with_multipliers
@@ -71,23 +72,78 @@ def _effects(
     return result
 
 
-def sweep(
+class Sides(StrEnum):
+    """Which nudges a sweep plays: down and up (a central difference) or only up (half the cost)."""
+
+    BOTH = "both"
+    UP = "up"
+
+
+@dataclass(frozen=True, slots=True)
+class Baseline:
+    """The config being nudged and the metrics it produced on the scenarios."""
+
+    config: SimConfig
+    values: Mapping[str, float]
+
+
+@dataclass(frozen=True, slots=True)
+class SweepOptions:
+    """How a sweep runs: the nudge, its sides, knobs already done and a callback per new result."""
+
+    relative: float = DEFAULT_RELATIVE_STEP
+    sides: Sides = Sides.BOTH
+    done: Mapping[str, Sensitivity] = field(default_factory=dict)
+    record: Callable[[Sensitivity], None] | None = None
+
+
+def _nudged(
     play: Play,
     base: SimConfig,
+    knob: Knob,
+    names: Sequence[str],
+    options: SweepOptions,
+) -> tuple[Mapping[str, float] | None, Mapping[str, float] | None]:
+    """The metrics with the knob nudged (down, up); a side that is not played or illegal is None.
+
+    Playing up only, a knob that cannot go up (already at its maximum) is nudged down instead.
+    """
+
+    def side(multiplier: float) -> Mapping[str, float] | None:
+        config = _config_at(base, knob, multiplier)
+        return None if config is None else _values(play(config), names)
+
+    up = side(1.0 + options.relative)
+    if options.sides is Sides.BOTH:
+        return side(1.0 - options.relative), up
+    return (side(1.0 - options.relative) if up is None else None), up
+
+
+def sweep(
+    play: Play,
+    baseline: Baseline,
     knobs: Sequence[Knob],
     targets: Mapping[str, Target],
-    relative: float = DEFAULT_RELATIVE_STEP,
+    options: SweepOptions | None = None,
 ) -> list[Sensitivity]:
-    """Replay the scenarios with every knob nudged down and up; ``targets`` pick the metrics."""
+    """Replay the scenarios with each knob nudged away from ``baseline``.
+
+    Knobs in ``options.done`` are not replayed (a resumed run); each new result goes to
+    ``options.record`` the moment it exists, so an interrupted run loses at most one knob.
+    """
+    chosen = options or SweepOptions()
     names = list(targets)
-    base_values = _values(play(base), names)
     results = []
     for knob in knobs:
-        sides = []
-        for multiplier in (1.0 - relative, 1.0 + relative):
-            config = _config_at(base, knob, multiplier)
-            sides.append(None if config is None else _values(play(config), names))
-        results.append(Sensitivity(knob, _effects(sides[0], sides[1], base_values, targets)))
+        known = chosen.done.get(knob.path)
+        if known is not None:
+            results.append(known)
+            continue
+        low, high = _nudged(play, baseline.config, knob, names, chosen)
+        found = Sensitivity(knob, _effects(low, high, baseline.values, targets))
+        if chosen.record is not None:
+            chosen.record(found)
+        results.append(found)
     return results
 
 

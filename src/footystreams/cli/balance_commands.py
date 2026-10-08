@@ -2,31 +2,61 @@
 
 from __future__ import annotations
 
+import sys
 from collections.abc import Callable
 from pathlib import Path
 
 from footystreams.balance import knobs, overrides
+from footystreams.balance import state as sweep_state
 from footystreams.balance.evaluate import MetricResult, Verdict, evaluate, failures, total_loss
 from footystreams.balance.fit import DEFAULT_BOUNDS, FitResult, FitSettings, fit, format_candidate
 from footystreams.balance.report import format_failures, format_report
-from footystreams.balance.sensitivity import format_matrix, noise_floor, strongest, sweep
+from footystreams.balance.runner import BalanceRunner
+from footystreams.balance.sensitivity import (
+    Baseline,
+    Sensitivity,
+    Sides,
+    SweepOptions,
+    format_matrix,
+    noise_floor,
+    strongest,
+    sweep,
+)
 from footystreams.balance.targets import Target
 from footystreams.cli.balance_session import Session
+from footystreams.domain.versions import SIM_VERSION
+from footystreams.sim.config import config_hash
 
 EXIT_OK, EXIT_OFF_TARGET = 0, 1
 # The columns of the sensitivity matrix unless --metrics says otherwise: the headline numbers.
 MATRIX_METRICS = (
     "goals_per_match",
+    "home_goals_per_match",
+    "away_goals_per_match",
+    "draw_pct",
+    "home_win_pct",
+    "scoreless_pct",
+    "five_plus_goals_pct",
+    "second_half_goal_share_pct",
+    "late_goal_share_pct",
     "shots_per_team",
     "on_target_per_shot",
     "goals_per_shot_pct",
     "pass_completion_pct",
-    "draw_pct",
+    "possession_spread_pp",
+    "corners_per_match",
+    "offsides_per_match",
     "fouls_per_match",
     "yellows_per_match",
     "reds_per_match",
-    "corners_per_match",
-    "offsides_per_match",
+    "penalties_per_match",
+    "injuries_per_match",
+    "substitutions_per_team",
+    "early_tactical_subs_per_match",
+    "favourite_win_pct_medium",
+    "favourite_win_pct_large",
+    "underdog_win_pct_medium",
+    "home_favourite_edge_pp",
 )
 STRONGEST_PER_METRIC = 3
 VALIDATION_SEED_OFFSET = (
@@ -71,24 +101,81 @@ def _matrix_targets(session: Session) -> dict[str, Target]:
     return {name: metrics[name] for name in names}
 
 
+def _sweep_settings(session: Session, targets: dict[str, Target]) -> dict[str, object]:
+    """Everything that makes two sweeps comparable; a resumed run must match it exactly."""
+    arguments = session.arguments
+    return {
+        "profile": session.profile.name,
+        "world": str(arguments.world),
+        "matches": arguments.matches,
+        "seed": arguments.seed,
+        "relative": arguments.relative,
+        "sides": arguments.sides,
+        "metrics": list(targets),
+        "config_hash": config_hash(session.config),
+        "sim_version": SIM_VERSION,
+    }
+
+
+def _start(
+    session: Session, runner: BalanceRunner, targets: dict[str, Target]
+) -> tuple[sweep_state.Header, dict[str, Sensitivity]]:
+    """Resume from ``--state`` when it exists, else measure the base and begin the file."""
+    path: Path | None = session.arguments.state
+    settings = _sweep_settings(session, targets)
+    if path is not None and path.exists():
+        return sweep_state.load(path, settings)
+    base = evaluate(runner.run(session.config), targets)
+    header = sweep_state.Header(settings, {r.name: r.value for r in base}, noise_floor(base))
+    if path is not None:
+        sweep_state.write_header(path, header)
+    return header, {}
+
+
+def _progress(session: Session, total: int, finished: int) -> Callable[[Sensitivity], None]:
+    """Record each result to ``--state`` and say how far the sweep is on stderr."""
+    path: Path | None = session.arguments.state
+    count = [finished]
+
+    def record(item: Sensitivity) -> None:
+        if path is not None:
+            sweep_state.append(path, item)
+        count[0] += 1
+        print(f"[{count[0]}/{total}] {item.knob.path}", file=sys.stderr, flush=True)
+
+    return record
+
+
 def sensitivity(session: Session) -> int:
-    """Nudge the chosen knobs and print which metric each one moves."""
+    """Nudge the chosen knobs and print which metric each one moves (resumable with --state)."""
     arguments = session.arguments
     targets = _matrix_targets(session)
     chosen = chosen_knobs(session)
     with session.runner() as runner:
-        base = evaluate(runner.run(session.config), targets)
-        found = sweep(runner.run, session.config, chosen, targets, arguments.relative)
-    print(
-        f"profile {session.profile.name}, {arguments.matches} matches, +-{arguments.relative:.0%}"
-    )
-    print(format_matrix(found, list(targets), noise_floor(base)))
+        header, done = _start(session, runner, targets)
+        options = SweepOptions(
+            arguments.relative,
+            Sides(arguments.sides),
+            done,
+            _progress(session, len(chosen), sum(k.path in done for k in chosen)),
+        )
+        baseline = Baseline(session.config, header.base_values)
+        found = sweep(runner.run, baseline, chosen, targets, options)
+    lines = [
+        f"profile {session.profile.name}, {arguments.matches} matches, "
+        f"+-{arguments.relative:.0%}, sides {arguments.sides}",
+        format_matrix(found, list(targets), header.noise),
+    ]
     for name in targets:
         top = ", ".join(
             f"{s.knob.path} {(s.effects or {})[name]:+.2f}"
             for s in strongest(found, name, STRONGEST_PER_METRIC)
         )
-        print(f"moves {name}: {top}")
+        lines.append(f"moves {name}: {top}")
+    text = "\n".join(lines)
+    print(text)
+    if arguments.report is not None:
+        arguments.report.write_text(text + "\n", encoding="utf-8")
     return EXIT_OK
 
 
