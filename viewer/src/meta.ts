@@ -22,7 +22,7 @@ export interface KitMeta {
 export interface TeamMeta {
   name: string;
   short_code: string;
-  kit: KitMeta;
+  kits: { home: KitMeta; away: KitMeta };
   players: Record<string, PlayerMeta>;
 }
 

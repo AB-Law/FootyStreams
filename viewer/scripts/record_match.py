@@ -1,10 +1,10 @@
 """Record a friendly as a replay for the pixel viewer: `<out>.ndjson` plus `<out>.meta.json`.
 
 The NDJSON is the sim's own event log with one tracking frame per second. Frames only carry player
-ids, so the meta file adds what the viewer needs to dress them: club names, kits and, per player,
-name, shirt number, team and appearance. Run it from the repository root:
+ids, so the meta file adds what the viewer needs to dress them: club names, both kits and, per
+player, name, shirt number and appearance. Run it from the repository root:
 
-    uv run python viewer/scripts/record_match.py --home SEI --away BUK --out viewer/public/replay
+    uv run python viewer/scripts/record_match.py --home SEI --away BUK --seed 2
 """
 
 from __future__ import annotations
@@ -14,20 +14,23 @@ import json
 from pathlib import Path
 
 from footystreams.cli.sim_world import WorldMatch, resolve_world_match
+from footystreams.domain.club import KitSpec
 from footystreams.domain.match import TeamSheet
 from footystreams.domain.player import Player
 from footystreams.seed.world_io import read_world
 from footystreams.sim import SimConfig, run_match
 
 DEFAULT_WORLD = Path("data/worlds/default")
+DEFAULT_OUT = Path("viewer/replays/replay")
 
 
-def _team_meta(
-    sheet: TeamSheet, kit_name: str, appearances: dict[str, Player]
-) -> dict[str, object]:
-    """Club identity, kit and every squad player of one side."""
+def _kit_meta(kit: KitSpec) -> dict[str, object]:
+    return {"pattern": kit.pattern.value, "colours": list(kit.colours)}
+
+
+def _team_meta(sheet: TeamSheet, appearances: dict[str, Player]) -> dict[str, object]:
+    """Club identity, both kits and every squad player of one side."""
     colours = sheet.club.colours
-    kit = colours.home_kit if kit_name == "home" else colours.away_kit
     players = {}
     for player_id, snapshot in sheet.squad.items():
         look = appearances[player_id].appearance
@@ -39,7 +42,7 @@ def _team_meta(
     return {
         "name": sheet.club.name,
         "short_code": sheet.club.short_code,
-        "kit": {"pattern": kit.pattern.value, "colours": list(kit.colours)},
+        "kits": {"home": _kit_meta(colours.home_kit), "away": _kit_meta(colours.away_kit)},
         "players": players,
     }
 
@@ -49,8 +52,8 @@ def build_meta(found: WorldMatch, world_dir: Path) -> dict[str, object]:
     people = {player.id: player for player in read_world(world_dir).players}
     return {
         "match_id": found.setup.match_id,
-        "home": _team_meta(found.setup.home, "home", people),
-        "away": _team_meta(found.setup.away, "away", people),
+        "home": _team_meta(found.setup.home, people),
+        "away": _team_meta(found.setup.away, people),
     }
 
 
@@ -61,7 +64,7 @@ def main() -> None:
     parser.add_argument("--away", required=True)
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--world", type=Path, default=DEFAULT_WORLD)
-    parser.add_argument("--out", type=Path, required=True, help="path without extension")
+    parser.add_argument("--out", type=Path, default=DEFAULT_OUT, help="path without extension")
     arguments = parser.parse_args()
     arguments.db = None  # resolve_world_match also accepts a SQLite file; the viewer uses a world
     found = resolve_world_match(arguments)
