@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0094** Rate every player 3-10 from the log and pick the player of the match *(M7; scope: events)*
 - **0093** Derive the pass network, zone pass flow, shot map, xG and momentum timelines and key moments from the log *(M7; scope: events)*
 - **0092** Count the full team and player stats from the log; substitutes get rows with their minutes *(M7; scope: events, sim)*
 - **0091** Add the presence fold (minutes, starts, who left); verify reuses it *(M7; scope: events, verify)*

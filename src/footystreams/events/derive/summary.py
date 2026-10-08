@@ -22,6 +22,7 @@ from footystreams.events.derive.maps import (
     zone_pass_flow,
 )
 from footystreams.events.derive.presence import Spell, injured_players, player_spells
+from footystreams.events.derive.ratings import player_of_the_match, rate_match
 from footystreams.events.derive.tally import PlayerTally, SideTally, Tally, tally_events
 from footystreams.events.open_play import GoalEvent
 from footystreams.events.structure import HalftimeEvent
@@ -175,6 +176,13 @@ def build_summary(
     score_home = sum(isinstance(e, GoalEvent) and e.team == "home" for e in events)
     score_away = sum(isinstance(e, GoalEvent) and e.team == "away" for e in events)
     spells = player_spells(events, setup, duration)
+    rows = _player_rows(setup, tally, spells, inputs, injured_players(events))
+    sides = dict.fromkeys(setup.home.squad, "home") | dict.fromkeys(setup.away.squad, "away")
+    ratings = rate_match(rows, sides, score_home - score_away)
+    rated = tuple(
+        row.model_copy(update={"rating": rating.rating})
+        for row, rating in zip(rows, ratings, strict=True)
+    )
     return MatchSummary(
         config_hash=inputs.config_hash,
         seed=inputs.seed,
@@ -187,7 +195,9 @@ def build_summary(
         duration_s=duration,
         team_stats_home=_team_stats(tally.home, tally.away),
         team_stats_away=_team_stats(tally.away, tally.home),
-        player_stats=_player_rows(setup, tally, spells, inputs, injured_players(events)),
+        player_stats=rated,
+        ratings=ratings,
+        player_of_the_match=player_of_the_match(rows, ratings),
         injuries=inputs.injuries,
         momentum_timeline=momentum_timeline(events, duration),
         xg_timeline=xg_timeline(events),
