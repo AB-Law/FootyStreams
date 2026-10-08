@@ -94,6 +94,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0120** Fix own-goal tags and bound the M7 context knobs *(M7; scope: events, sim)*
 - **0102** Do not announce a mentality change that changes nothing *(M6; scope: sim)*
 - **0101** Put a bench goalkeeper in goal when he replaces a stand-in keeper *(M6; scope: sim)*
 - **0098** Roll a foul injury before the card so a dismissed fouler is not named afterwards *(M6; scope: sim)*

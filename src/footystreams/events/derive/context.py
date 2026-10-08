@@ -243,15 +243,16 @@ class ContextTracker:
             found.add(ContextTag.COMEBACK_GOAL)
         if own + other == 0:
             found.add(ContextTag.OPENING_GOAL)
-        scored = self._scorers[event.scorer_id] + 1
-        if scored == 2:  # noqa: PLR2004 - a brace
-            found.add(ContextTag.BRACE)
-        elif scored == 3:  # noqa: PLR2004 - a hat-trick
-            found.add(ContextTag.HAT_TRICK)
+        if event.own_goal:
+            found.add(ContextTag.OWN_GOAL)  # an own goal is nobody's brace or hat-trick
+        else:
+            scored = self._scorers[event.scorer_id] + 1
+            if scored == 2:  # noqa: PLR2004 - a brace
+                found.add(ContextTag.BRACE)
+            elif scored == 3:  # noqa: PLR2004 - a hat-trick
+                found.add(ContextTag.HAT_TRICK)
         if event.caused_by in self._penalties:
             found.add(ContextTag.PENALTY)
-        if event.own_goal:
-            found.add(ContextTag.OWN_GOAL)
 
     @staticmethod
     def _situation_tag(own: int, other: int) -> ContextTag:
@@ -280,7 +281,8 @@ class ContextTracker:
 
     def _count_goal(self, event: GoalEvent) -> None:
         self._goals[event.team] += 1
-        self._scorers[event.scorer_id] += 1
+        if not event.own_goal:
+            self._scorers[event.scorer_id] += 1
         if self._goals["home"] < self._goals["away"]:
             self._ever_behind["home"] = True
         elif self._goals["away"] < self._goals["home"]:

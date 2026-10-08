@@ -125,6 +125,16 @@ def test_tags__a_goal_from_a_penalty_and_an_own_goal() -> None:
     assert ContextTag.PENALTY not in tags[own.id]
 
 
+def test_tags__an_own_goal_is_not_a_brace_for_the_player_who_scored_it() -> None:
+    log = LogBuilder()
+    _goal(log, "home", HOME_SCORER)
+    own = log.add(GoalEvent, team="away", scorer_id=HOME_SCORER, own_goal=True)
+    later = _goal(log, "home", HOME_SCORER)
+    tags = {event.id: set(event.ctx.tags) for event in _replay(log.events)}
+    assert ContextTag.BRACE not in tags[own.id]
+    assert ContextTag.BRACE in tags[later.id]  # his second real goal, not his third
+
+
 def test_tags__men_advantage_goes_to_the_side_with_more_men() -> None:
     log = LogBuilder()
     home = log.add(PassEvent, from_player_id=HOME_SCORER, team="home", men=(11, 10))

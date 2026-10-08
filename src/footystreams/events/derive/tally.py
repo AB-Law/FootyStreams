@@ -14,6 +14,7 @@ from itertools import pairwise
 from footystreams.domain.match import MatchSetup
 from footystreams.domain.types import PlayerId
 from footystreams.events.clock import period_elapsed_s
+from footystreams.events.derive.context import BIG_CHANCE_XG
 from footystreams.events.derive.threat import frame_value
 from footystreams.events.discipline import CardEvent, FoulEvent, SubstitutionEvent
 from footystreams.events.open_play import (
@@ -31,7 +32,6 @@ from footystreams.events.restarts import CornerEvent
 from footystreams.events.types import MatchEvent
 
 MAX_POSSESSION_INTERVAL_S = 30  # longer gaps are dead time (celebrations, treatment), not play
-BIG_CHANCE_XG = 0.3
 FINAL_THIRD_X = 2 / 3
 ON_TARGET = ("goal", "saved")
 
