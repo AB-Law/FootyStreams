@@ -11,6 +11,7 @@ from footystreams.verify.league import (
     check_results,
     check_season_complete,
     check_squads,
+    check_transfers,
 )
 from footystreams.verify.match import verify_match
 from footystreams.verify.violation import Violation, format_violations
