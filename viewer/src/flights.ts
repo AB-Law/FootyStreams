@@ -1,17 +1,12 @@
-import type { PassEvent, Pos, ShotEvent } from "./events.ts";
+import type { Pos, ShotEvent } from "./events.ts";
 
 const PITCH_LENGTH_M = 105;
 const PITCH_WIDTH_M = 68;
-const PASS_SPEED_MPS = 17;
 const SHOT_SPEED_MPS = 26;
 const MIN_FLIGHT_S = 0.3;
 /** Peak height of a ball in the air, in screen pixels, for a full loft. */
 const MAX_LIFT_PX = 12;
-/** Balls longer than this start to leave the ground; a cross-field ball is fully lofted at 55 m. */
-const LOFT_FROM_M = 18;
-const LOFT_SPAN_M = 37;
 const DEFAULT_SHOT_LOFT = 0.15;
-const MAX_QUEUE_DELAY_S = 0.9;
 /** A curve of 1 bows the path sideways by a quarter of its length at the control point (an eighth on the ball). */
 const MAX_BEND = 0.25;
 
@@ -45,14 +40,6 @@ function duration(length: number, speed: number): number {
   return Math.max(length / speed, MIN_FLIGHT_S);
 }
 
-/** A pass flies at a steady speed and leaves the ground the longer it is. */
-export function passFlight(event: PassEvent, start: number): Flight | null {
-  if (event.pos === null || event.end_pos === null) return null;
-  const { length } = metres(event.pos, event.end_pos);
-  const loft = Math.min(Math.max((length - LOFT_FROM_M) / LOFT_SPAN_M, 0), 1);
-  return { t0: start, t1: start + duration(length, PASS_SPEED_MPS), from: event.pos, to: event.end_pos, bend: 0, lift: loft * MAX_LIFT_PX, fast: false };
-}
-
 /**
  * A shot flies fast along the curve the sim gave it. Without a `target` (older logs) it goes
  * straight at the middle of the goal being attacked, `goalX` being 0 or 1.
@@ -64,12 +51,6 @@ export function shotFlight(event: ShotEvent, start: number, goalX: 0 | 1): Fligh
   const speed = event.speed_mps ?? SHOT_SPEED_MPS;
   const lift = (event.loft ?? DEFAULT_SHOT_LOFT) * MAX_LIFT_PX;
   return { t0: start, t1: start + duration(length, speed), from: event.pos, to, bend: (event.curve ?? 0) * MAX_BEND, lift, fast: true };
-}
-
-/** Start a flight at the later of its own time and the end of the previous one, but no later than a beat. */
-export function startAfter(eventTime: number, previous: Flight | undefined): number {
-  const free = previous === undefined ? eventTime : Math.max(eventTime, previous.t1);
-  return Math.min(free, eventTime + MAX_QUEUE_DELAY_S);
 }
 
 /** The ball's place `t` seconds into the match on this flight (clamped to its ends). */

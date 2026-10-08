@@ -13,6 +13,7 @@
       #scrubber { flex: 1; min-width: 80px; }
       button { background: #243344; color: inherit; border: 1px solid #3b5068; border-radius: 4px; padding: 4px 10px; font: inherit; cursor: pointer; }
       button.on { background: #3b6ea5; }
+      .gap { width: 8px; }
       #time { font-variant-numeric: tabular-nums; min-width: 8em; text-align: right; }
       #status { margin: 8px 0 0; color: #8fa3b8; }
     </style>
@@ -22,6 +23,10 @@
       <canvas id="screen" width="320" height="180"></canvas>
       <div id="controls">
         <button id="play" type="button">Play</button>
+        <button id="zoom-1" type="button" title="Whole pitch">Full</button>
+        <button id="zoom-2" type="button" title="Follow the ball">2x</button>
+        <button id="zoom-3" type="button" title="Close in">3x</button>
+        <span class="gap"></span>
         <button id="speed-1" type="button">1x</button>
         <button id="speed-4" type="button">4x</button>
         <button id="speed-16" type="button">16x</button>

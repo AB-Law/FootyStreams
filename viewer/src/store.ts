@@ -1,5 +1,5 @@
 import type { AnyEvent, BroadcastEvent, FrameEvent, FramePlayer, MatchClock, Pos, Side } from "./events.ts";
-import { passFlight, shotFlight, startAfter, type Flight } from "./flights.ts";
+import { shotFlight, type Flight } from "./flights.ts";
 
 /** Tracking frames are one sim second apart; a frame's index is its time in seconds. */
 export const FRAME_INTERVAL_S = 1;
@@ -56,23 +56,16 @@ export class MatchStore {
       case "foul":
         this.marks.push({ kind: "foul", t, team: known.team, pos: known.pos });
         break;
-      case "pass":
-        this.addFlight(passFlight(known, this.start(t)));
-        break;
       case "shot":
-        this.addFlight(shotFlight(known, this.start(t), attackedGoal(known)));
+        this.addFlight(shotFlight(known, t, attackedGoal(known)));
         break;
       case "halftime":
       case "fulltime":
         this.marks.push({ kind: known.type, t, scoreHome: known.ctx.score_home, scoreAway: known.ctx.score_away });
         break;
       default:
-        break; // pass, shot, review, ... not drawn (yet)
+        break; // pass, tackle, review, ... not drawn as such (the carrier changing is the pass)
     }
-  }
-
-  private start(eventTime: number): number {
-    return startAfter(eventTime, this.flights[this.flights.length - 1]);
   }
 
   private addFlight(flight: Flight | null): void {

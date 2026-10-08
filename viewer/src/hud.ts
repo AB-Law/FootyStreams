@@ -4,6 +4,7 @@ import { playerName, type ReplayMeta, type TeamSide } from "./meta.ts";
 import type { ActiveOverlay } from "./overlays.ts";
 import type { Kit } from "./palette.ts";
 import { HEIGHT, PITCH, WIDTH } from "./pitch.ts";
+import { toView, type Camera } from "./camera.ts";
 import type { Scene } from "./scene.ts";
 import type { CardColour, Mark } from "./store.ts";
 
@@ -85,7 +86,7 @@ function drawGoal(
   drawCentred(ctx, line, WIDTH / 2, top + 43, MUTED, 1);
 }
 
-/** A card shown over the player, plus a coloured frame around the pitch while it flashes. */
+/** A card shown over the player, plus a coloured frame round the screen while it flashes. */
 function drawCard(
   ctx: CanvasRenderingContext2D,
   mark: Extract<Mark, { kind: "card" }>,
@@ -96,17 +97,17 @@ function drawCard(
   if (flashing(progress, 2.5)) {
     ctx.fillStyle = colour;
     for (const [x, y, w, h] of [
-      [PITCH.x, PITCH.y, PITCH.width, 2],
-      [PITCH.x, PITCH.y + PITCH.height - 2, PITCH.width, 2],
-      [PITCH.x, PITCH.y, 2, PITCH.height],
-      [PITCH.x + PITCH.width - 2, PITCH.y, 2, PITCH.height],
+      [0, 0, WIDTH, 2],
+      [0, HEIGHT - 2, WIDTH, 2],
+      [0, 0, 2, HEIGHT],
+      [WIDTH - 2, 0, 2, HEIGHT],
     ] as const) ctx.fillRect(x, y, w, h);
   }
   if (at === null) return;
   ctx.fillStyle = "#101418";
-  ctx.fillRect(at.x - 3, at.y - 21, 6, 9);
+  ctx.fillRect(at.x - 4, at.y - 30, 8, 12);
   ctx.fillStyle = colour;
-  ctx.fillRect(at.x - 2, at.y - 20, 4, 7);
+  ctx.fillRect(at.x - 3, at.y - 29, 6, 10);
 }
 
 function drawNote(ctx: CanvasRenderingContext2D, slot: number, title: string, detail: string, accent: string): void {
@@ -144,6 +145,7 @@ export function drawOverlays(
   meta: ReplayMeta,
   scene: Scene,
   sample: Sample | null,
+  camera: Camera,
 ): void {
   let slot = 0;
   for (const { mark, progress } of active) {
@@ -151,8 +153,8 @@ export function drawOverlays(
     else if (mark.kind === "halftime" || mark.kind === "fulltime") drawBreak(ctx, mark, meta);
     else {
       if (mark.kind === "card") {
-        const at = sample === null ? null : scene.screenPosition(sample, mark.playerId);
-        drawCard(ctx, mark, progress, at);
+        const world = sample === null ? null : scene.screenPosition(sample, mark.playerId);
+        drawCard(ctx, mark, progress, world === null ? null : toView(camera, world));
       }
       const note = noteText(mark, meta);
       if (note !== null) drawNote(ctx, slot++, note.title, note.detail, note.accent);

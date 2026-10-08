@@ -1,3 +1,4 @@
+import { ZOOMS, cameraAt, type Zoom } from "./camera.ts";
 import { drawOverlays, drawScoreboard } from "./hud.ts";
 import { sampleAt } from "./interpolate.ts";
 import type { ReplayMeta } from "./meta.ts";
@@ -13,6 +14,7 @@ import { MatchStore } from "./store.ts";
 
 const FRAME_MILLISECONDS = 1000 / 30;
 const DEFAULT_REPLAY = "replays/replay";
+const DEFAULT_ZOOM: Zoom = 2;
 
 function element<T extends HTMLElement>(id: string): T {
   const found = document.getElementById(id);
@@ -22,7 +24,7 @@ function element<T extends HTMLElement>(id: string): T {
 
 /** The largest whole-number scale that fits, so pixels stay square and crisp. */
 function fitCanvas(canvas: HTMLCanvasElement): void {
-  const scale = Math.max(1, Math.floor(Math.min(window.innerWidth / WIDTH, (window.innerHeight - 90) / HEIGHT)));
+  const scale = Math.max(1, Math.floor(Math.min(window.innerWidth / WIDTH, (window.innerHeight - 110) / HEIGHT)));
   canvas.style.width = `${WIDTH * scale}px`;
   canvas.style.height = `${HEIGHT * scale}px`;
 }
@@ -62,18 +64,34 @@ async function start(): Promise<void> {
   const time = element<HTMLElement>("time");
   scrubber.max = String(Math.floor(store.duration));
 
+  let zoom: Zoom = ZOOMS.includes(Number(params.get("zoom")) as Zoom) ? (Number(params.get("zoom")) as Zoom) : DEFAULT_ZOOM;
+  const zoomButtons = ZOOMS.map((level) => {
+    const button = element<HTMLButtonElement>(`zoom-${level}`);
+    button.addEventListener("click", () => {
+      zoom = level;
+      zoomButtons.forEach((other) => other.classList.toggle("on", other === button));
+      render();
+    });
+    button.classList.toggle("on", level === zoom);
+    return button;
+  });
+
   const render = (): void => {
     const sample = sampleAt(store.frames, playback.t);
     const overlays = overlaysAt(store.marks, playback.t, playback.speed);
     const referee = refereeTrack(store.frames, store.marks, playback.t);
+    const camera = cameraAt(store.frames, playback.t, zoom);
+    context.save();
+    context.setTransform(camera.zoom, 0, 0, camera.zoom, -camera.x * camera.zoom, -camera.y * camera.zoom);
     scene.draw(context, sample, {
       t: playback.t,
       flight: activeFlight(store.flights, playback.t),
       referee: referee === null ? null : referee.spot,
       whistle: referee?.incident ?? false,
     });
+    context.restore();
     drawScoreboard(context, sample, meta, kits, playback.t >= store.duration);
-    drawOverlays(context, overlays, meta, scene, sample);
+    drawOverlays(context, overlays, meta, scene, sample, camera);
     scrubber.value = String(Math.floor(playback.t));
     playButton.textContent = playback.playing ? "Pause" : "Play";
     time.textContent = `${formatTime(playback.t)} / ${formatTime(store.duration)}`;

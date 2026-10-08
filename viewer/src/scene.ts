@@ -22,6 +22,8 @@ const REFEREE_KIT = { pattern: "solid", primary: "#d8c04a", secondary: "#14171c"
 const REFEREE_LOOK = { skin_tone: 3, hair_style: "short", hair_colour: "black", facial_hair: "none", build: "lean" };
 /** The feet stay this far inside the touchline so the head does not draw over the line. */
 const TOP_CLEARANCE_PX = 6;
+/** The ball sits at a player's feet, not under them. */
+const BALL_AT_FEET_PX = 2;
 const LABEL_COLOUR = "#d8c04a";
 
 /** Draws the pitch, the 22 players and the ball for one sample. Overlays are drawn on top by hud.ts. */
@@ -66,7 +68,7 @@ export class Scene {
       const carrier = sample.carrierId === null ? null : this.screenPosition(sample, sample.carrierId);
       if (carrier !== null) drawCarrierMark(ctx, carrier.x, carrier.y);
       const resting = toScreen(sample.ballX, sample.ballY);
-      drawBall(ctx, resting.x, resting.y, 0);
+      drawBall(ctx, resting.x + BALL_AT_FEET_PX, resting.y, sample.ballHeight);
       return;
     }
     const flight = extras.flight;

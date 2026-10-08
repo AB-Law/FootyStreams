@@ -126,3 +126,32 @@ test("refereeTrack reports the incident while he is at a foul", () => {
   assert.equal(refereeTrack(store.frames, store.marks, 10)?.incident, false);
   assert.equal(refereeTrack(store.frames, store.marks, 50)?.incident, false);
 });
+
+function withCarrier(frameEvent: AnyEvent, carrier: string, positions: Record<string, number>): AnyEvent {
+  const base = frameEvent as unknown as { players: { player_id: string; x: number }[] };
+  base.players.forEach((player) => (player.x = positions[player.player_id] ?? player.x));
+  return { ...(frameEvent as object), carrier_id: carrier } as AnyEvent;
+}
+
+test("the ball stays on its carrier, and a pass carries it from one player to the other", () => {
+  const first = withCarrier(frame(0.2), "a", { a: 0.2, b: 0.4 });
+  const second = withCarrier(frame(0.2), "b", { a: 0.2, b: 0.4 });
+  const store = loaded(first, second, second);
+  assert.equal(sampleAt(store.frames, 0)?.ballX, 0.2);
+  assert.equal(sampleAt(store.frames, 0.05)?.ballX !== undefined && (sampleAt(store.frames, 0.05)?.ballX ?? 0) < 0.25, true);
+  const landed = sampleAt(store.frames, 0.9);
+  assert.ok(Math.abs((landed?.ballX ?? 0) - 0.4) < 1e-9);
+  assert.equal(sampleAt(store.frames, 1.5)?.ballX, 0.4);
+});
+
+test("the ball never jumps between two samples a tenth of a second apart", () => {
+  const first = withCarrier(frame(0.2), "a", { a: 0.2, b: 0.6 });
+  const second = withCarrier(frame(0.2), "b", { a: 0.2, b: 0.6 });
+  const store = loaded(first, second, second);
+  let previous = sampleAt(store.frames, 0)?.ballX ?? 0;
+  for (let step = 1; step <= 20; step++) {
+    const ball = sampleAt(store.frames, step / 10)?.ballX ?? 0;
+    assert.ok(Math.abs(ball - previous) * 105 <= 105 * 0.4 * 0.2, `jump at ${step / 10}`);
+    previous = ball;
+  }
+});

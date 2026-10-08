@@ -20,9 +20,20 @@ export interface Sample {
   scoreAway: number;
   ballX: number;
   ballY: number;
+  /** Height of the ball above the grass in screen pixels (a pass in the air). */
+  ballHeight: number;
   carrierId: string | null;
   players: SamplePlayer[];
 }
+
+/** A change of carrier is a pass: the ball covers the gap in this share of the second, then follows. */
+const PASS_SHARE = 0.85;
+/** Passes longer than this many metres (frame units are converted) leave the ground. */
+const LOFT_FROM_M = 16;
+const LOFT_SPAN_M = 40;
+const MAX_LIFT_PX = 10;
+const PITCH_LENGTH_M = 105;
+const PITCH_WIDTH_M = 68;
 
 function lerp(from: number, to: number, alpha: number): number {
   return from + (to - from) * alpha;
@@ -34,6 +45,36 @@ function blend(from: FramePlayer, to: FramePlayer | undefined, alpha: number): S
     return { id: from.player_id, x: from.x, y: from.y, running };
   }
   return { id: from.player_id, x: lerp(from.x, to.x, alpha), y: lerp(from.y, to.y, alpha), running };
+}
+
+interface BallPlace {
+  x: number;
+  y: number;
+  height: number;
+}
+
+/**
+ * The ball follows the player who has it; when the carrier changes within the second it travels
+ * from the old carrier to the new one (both still moving), so it never leaves the players.
+ * Without a carrier on both ends it falls back to the frame's own ball.
+ */
+function ballPlace(from: Frame, to: Frame | undefined, alpha: number, players: SamplePlayer[]): BallPlace {
+  const reset = to !== undefined && Math.hypot(to.ballX - from.ballX, to.ballY - from.ballY) > MAX_BALL_STEP;
+  const end = to === undefined || reset ? from : to;
+  const fallback = { x: lerp(from.ballX, end.ballX, alpha), y: lerp(from.ballY, end.ballY, alpha), height: 0 };
+  const holder = players.find((player) => player.id === from.carrierId);
+  if (holder === undefined) return fallback;
+  const receiver = to === undefined || to.carrierId === from.carrierId ? undefined : players.find((player) => player.id === to.carrierId);
+  if (receiver === undefined) return { x: holder.x, y: holder.y, height: 0 };
+  const share = Math.min(alpha / PASS_SHARE, 1);
+  const travelled = share; // a ball in the air does not ease in and out
+  const metres = Math.hypot((receiver.x - holder.x) * PITCH_LENGTH_M, (receiver.y - holder.y) * PITCH_WIDTH_M);
+  const loft = Math.min(Math.max((metres - LOFT_FROM_M) / LOFT_SPAN_M, 0), 1) * MAX_LIFT_PX;
+  return {
+    x: lerp(holder.x, receiver.x, travelled),
+    y: lerp(holder.y, receiver.y, travelled),
+    height: loft * 4 * share * (1 - share),
+  };
 }
 
 /**
@@ -51,15 +92,16 @@ export function sampleAt(frames: readonly Frame[], t: number): Sample | null {
   if (from === undefined) return null;
   const alpha = to === undefined ? 0 : position - index;
   const next = new Map((to?.players ?? []).map((player) => [player.player_id, player]));
-  const ballJumped = to !== undefined && Math.hypot(to.ballX - from.ballX, to.ballY - from.ballY) > MAX_BALL_STEP;
-  const ballTo = to === undefined || ballJumped ? from : to;
+  const players = from.players.map((player) => blend(player, next.get(player.player_id), alpha));
+  const ball = ballPlace(from, to, alpha, players);
   return {
     clock: from.clock,
     scoreHome: from.scoreHome,
     scoreAway: from.scoreAway,
-    ballX: lerp(from.ballX, ballTo.ballX, alpha),
-    ballY: lerp(from.ballY, ballTo.ballY, alpha),
+    ballX: ball.x,
+    ballY: ball.y,
+    ballHeight: ball.height,
     carrierId: from.carrierId,
-    players: from.players.map((player) => blend(player, next.get(player.player_id), alpha)),
+    players,
   };
 }
