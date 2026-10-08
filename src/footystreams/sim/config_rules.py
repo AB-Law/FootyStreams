@@ -58,6 +58,7 @@ class DisciplineConfig(DomainModel):
         "advantage_scale": "S",
         "dogso_min_frame_x": "S",
         "dogso_max_defenders_ahead": "S",
+        "dogso_min_xg": "S",
         "free_kick_s": "S",
         "free_kick_spread_s": "S",
         "yellow_base": "S",
@@ -91,6 +92,8 @@ class DisciplineConfig(DomainModel):
     dogso_min_frame_x: Share = 0.78  # fouled man must be this far up the pitch to be "through"
     # Defenders (keeper included) between the fouled man and the goal for it to count as denied.
     dogso_max_defenders_ahead: int = Field(ge=0, le=10, default=1)
+    # A clear scoring chance: the fouled man's unpressured xG from where he stood (0 turns it off).
+    dogso_min_xg: Share = 0.15
     free_kick_s: NonNegative = 25.0
     free_kick_spread_s: NonNegative = 10.0
     yellow_base: float = 0.70  # severity above which an average referee books a foul

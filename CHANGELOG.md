@@ -156,6 +156,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0214** Count a denied goal-scoring chance only when it was a clear chance *(M8; scope: sim; sim version patch)*
 - **0210** Hold attackers on the offside line and mistime runs only on balls in behind *(M8; scope: sim; sim version patch)*
 - **0207** Strip git's repository variables from every test so a hook cannot steer them into the real repo *(M12; scope: tools)*
 - **0204** Count only changes before the break as early tactical substitutions in the balance metric *(M8; scope: tools)*
