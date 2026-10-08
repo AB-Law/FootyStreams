@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 import time
 from collections import Counter
 from itertools import pairwise
@@ -48,6 +49,10 @@ def test_generate_world__same_seed__identical_content_within_the_time_budget() -
     fresh = generate_world(2, tables=cached_static_tables())
     elapsed = time.perf_counter() - started
     assert _everything(fresh) == _everything(_world(2))
+    # Coverage (and other tracers) slow generation about 4x; the wall-clock tripwire is
+    # only meaningful on a bare interpreter (same idea as tests/performance/test_sim_budget.py).
+    if sys.gettrace() is not None:
+        return
     assert elapsed < 10  # budget is 5 s (docs/design/11 section 6); slow shared runners get slack
 
 
