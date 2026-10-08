@@ -29,7 +29,7 @@ class PositionConfig(DomainModel):
 
     push_in_possession: NonNegative = 0.09
     drop_out_of_possession: NonNegative = 0.07
-    line_range: NonNegative = 0.20  # x shift of the defensive line between line_height 0 and 1
+    line_range: NonNegative = 0.0225  # x shift of the defensive line between line_height 0 and 1
     pull_x: tuple[float, float, float, float] = (0.10, 0.28, 0.40, 0.35)  # GK, DEF, MID, ATT
     pull_y: Share = 0.22
     width_min: Positive = 0.80
@@ -52,7 +52,7 @@ class PressureConfig(DomainModel):
     }
 
     radius_base_m: Positive = 3.0
-    radius_range_m: NonNegative = 8.0  # extra radius at full pressing intensity
+    radius_range_m: NonNegative = 0.61  # extra radius at full pressing intensity
     presser_floor: Share = 0.4  # share of a presser's pressure that every defender brings
     open_distance_m: Positive = 8.0  # distance to the nearest opponent that counts as fully open
     lane_clear_m: Positive = 4.0  # defender distance to the passing lane that counts as clear
@@ -88,7 +88,7 @@ class PassConfig(DomainModel):
     base_long: Share = 0.80
     base_through: Share = 0.74
     base_cross: Share = 0.62
-    base_back: Share = 0.925
+    base_back: Share = 0.9025
     length_penalty_per_m: float = 0.0035
     skill_swing: float = 0.12  # damped: skill gaps must not compound into lopsided matches
     skill_pivot: float = 55.0
@@ -139,7 +139,7 @@ class ShotConfig(DomainModel):
     }
 
     range_m: Positive = 35.0
-    xg_cap: Positive = 0.40
+    xg_cap: Positive = 0.4101
     xg_half: Positive = 0.44  # geometry constant: larger means lower xG from every spot
     pressure_penalty: Share = 0.7
     finishing_floor: Positive = 0.80
@@ -183,13 +183,13 @@ class DribbleConfig(DomainModel):
         "distance_m": "S",
     }
 
-    base: Share = 0.3235
+    base: Share = 0.3223
     swing: float = 0.12
     scale: Positive = 20.0
     pressure_penalty: float = 0.15
     min_probability: Share = 0.05
     max_probability: Share = 0.95
-    distance_m: Positive = 8.54  # how far a dribble carries the ball
+    distance_m: Positive = 8.2947  # how far a dribble carries the ball
 
     @model_validator(mode="after")
     def _probability_bounds_are_ordered(self) -> Self:
@@ -230,22 +230,22 @@ class DecisionConfig(DomainModel):
     }
 
     candidates: int = Field(ge=1, le=10, default=4)
-    progress_scale: float = 12.94  # utility per unit of threat gained
+    progress_scale: float = 12.7166  # utility per unit of threat gained
     loss_cost_base: float = 0.15
     loss_cost_own_third: float = 0.55  # extra cost of losing the ball at the own goal line
     lead_frame_x: float = 0.012  # passes are aimed slightly ahead of the receiver
     min_pass_m: float = 4.0
-    shot_scale: float = 10.68
+    shot_scale: float = 10.2152
     shoot_on_sight_swing: float = 0.8
-    clear_pressure: float = 0.61
+    clear_pressure: float = 0.422
     clear_max_frame_x: float = 0.30
     clear_base: float = 0.9
     clear_slope: float = 1.5
-    directness_bias: float = 0.6
+    directness_bias: float = 0.0723
     cross_bias: float = 0.6
     dribble_bias: float = 0.5
     recycle_bias: float = 0.4  # extra appeal of a back pass per unit of pressure
-    mentality_swing: float = 0.5
+    mentality_swing: float = 0.0116
     urgency_swing: float = 0.3
     temperature_base: Positive = 0.35
     temperature_scale: Positive = 2.0

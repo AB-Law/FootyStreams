@@ -56,7 +56,7 @@ def test_with_multipliers__scales_the_default_and_leaves_the_rest() -> None:
 
     config = knobs.with_multipliers(SimConfig(), chosen, {"shot.xg_cap": 0.5})
 
-    assert config.shot.xg_cap == pytest.approx(0.2)
+    assert config.shot.xg_cap == pytest.approx(0.5 * SimConfig().shot.xg_cap)
     assert config.shot.range_m == SimConfig().shot.range_m
 
 
@@ -136,7 +136,7 @@ def test_sweep__up_only_plays_half_the_configs_and_doubles_the_difference() -> N
 
     (result,) = sweep(counting, _base(), chosen, GOALS, SweepOptions(sides=Sides.UP))
 
-    assert played == [pytest.approx(0.48)]
+    assert played == [pytest.approx(1.2 * SimConfig().shot.xg_cap)]
     assert result.effects is not None
     assert result.effects["goals_per_match"] == pytest.approx(2.0 * (5 - 4))
 

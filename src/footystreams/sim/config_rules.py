@@ -210,7 +210,7 @@ class OffsideConfig(DomainModel):
     margin_min: NonNegative = 0.002  # frame-x distance a sharp mover keeps from the line
     margin_range: NonNegative = 0.015  # extra distance for a player with no off-ball movement
     mistime_zone: NonNegative = 0.03  # receivers this close to the line may have mistimed the run
-    mistime_base: Share = 0.5  # chance a near-line receiver is judged offside (x timing flaw)
+    mistime_base: Share = 0.2139  # chance a near-line receiver is judged offside (x timing flaw)
 
 
 class StoppageConfig(DomainModel):

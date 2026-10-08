@@ -132,6 +132,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0215** Calibrate stage 2: tactics leverage and the shot level *(M8; scope: sim; sim version minor)*
 - **0213** Keep elite clubs' drama managers attacking *(M8; scope: seed, data)*
 - **0212** Calibrate shot volume and quality: stage 1 defaults *(M8; scope: sim; sim version minor)*
 - **0209** Move the yellow-card substitution window to minutes 60-85 *(M8; scope: sim; sim version minor; schema version patch)*
