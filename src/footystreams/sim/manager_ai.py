@@ -113,14 +113,18 @@ class ManagerAI:
     def _carry_out(self, side: Side, plan: Plan, window: Window) -> float:
         agent = self._agents[side]
         now_s = self._play.state.elapsed_s
-        if plan.rungs and now_s - agent.last_shift_s >= self._play.cfg.manager.shift_cooldown_s:
+        settled = now_s - agent.last_shift_s >= self._play.cfg.manager.shift_cooldown_s
+        if plan.rungs and settled and self._change_mentality(side, plan):
             agent.last_shift_s = now_s
-            self._change_mentality(side, plan)
         return self._change_player(side, plan, window)
 
-    def _change_mentality(self, side: Side, plan: Plan) -> None:
+    def _change_mentality(self, side: Side, plan: Plan) -> bool:
+        """Move his mentality along the ladder; False, and no event, when he is at the end of it."""
         team = self._play.state.team(side)
-        team.view = shift_mentality(team.view, plan.rungs)
+        shifted = shift_mentality(team.view, plan.rungs)
+        if mentality_name(shifted) == mentality_name(team.view):
+            return False
+        team.view = shifted
         meta = Meta(team=side, headline=f"{team.sheet.club.short_code} change mentality")
         self._play.emit.emit(
             self._play.state,
@@ -128,6 +132,7 @@ class ManagerAI:
             meta,
             changes=(TacticsChange(field="mentality", value=mentality_name(team.view)),),
         )
+        return True
 
     def _change_player(self, side: Side, plan: Plan, window: Window) -> float:
         play = self._play
