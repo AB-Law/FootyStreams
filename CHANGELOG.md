@@ -89,6 +89,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0101** Write clubs before the players that name them when applying a delta *(M11; scope: league)*
 - **0086** Create academy players relative to the rollover date *(M10; scope: league)*
 - **0041** Close M1 test gaps for union usage and aggregates *(M1; scope: domain, events, docs; schema version patch)*
 

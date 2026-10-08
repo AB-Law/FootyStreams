@@ -38,6 +38,7 @@ if TYPE_CHECKING:
     )
 
 APPEND_ONLY = frozenset({"ledger", "events"})  # the field names written with append, not save
+WRITTEN_FIRST = ("clubs",)  # rows other tables point at (a player's contract names a club)
 
 
 @dataclass(frozen=True, slots=True)
@@ -101,14 +102,18 @@ def apply_delta(repositories: Repositories, delta: WorldDelta) -> None:
     """Write the delta through the repositories (the caller owns the transaction)."""
     for table, key in delta.deletions:
         getattr(repositories, table).delete(key)
-    for field in fields(delta):
-        if field.name == "deletions":
-            continue
-        rows = getattr(delta, field.name)
+    for name in _write_order():
+        rows = getattr(delta, name)
         if not rows:
             continue
-        target = getattr(repositories, field.name)
-        if field.name in APPEND_ONLY:
+        target = getattr(repositories, name)
+        if name in APPEND_ONLY:
             target.append_many(rows)
         else:
             target.save_many(rows)
+
+
+def _write_order() -> list[str]:
+    """Table names in write order: referenced tables first, then the rest in field order."""
+    names = [field.name for field in fields(WorldDelta) if field.name != "deletions"]
+    return [*WRITTEN_FIRST, *(name for name in names if name not in WRITTEN_FIRST)]
