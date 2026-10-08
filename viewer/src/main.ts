@@ -97,7 +97,7 @@ async function start(): Promise<void> {
       referee: referee === null ? null : referee.spot,
       whistle: referee?.incident ?? false,
       big: camera.zoom > 1,
-      poses: posesAt(store.contests, sample, playback.t),
+      poses: posesAt(store.contests, sample, playback.t, store.frames),
     });
     context.restore();
     drawScoreboard(context, sample, meta, kits, playback.t >= store.duration);

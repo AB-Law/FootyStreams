@@ -6,6 +6,7 @@
 //   EventContext ......................... src/footystreams/events/context.py
 //   FrameEvent, FramePlayer, Halftime/Fulltime ... src/footystreams/events/structure.py
 //   GoalEvent, PassEvent, ShotEvent ...... src/footystreams/events/open_play.py
+//   RestartEvent (throw_in ... penalty) ... src/footystreams/events/restarts.py
 //   CardEvent, FoulEvent, SubstitutionEvent ... src/footystreams/events/discipline.py
 //   TackleEvent, DribbleEvent ............ src/footystreams/events/open_play.py
 //
@@ -119,6 +120,12 @@ export interface DribbleEvent extends EventBase {
   outcome: "success" | "tackled" | "lost";
 }
 
+/** A dead-ball restart: the taker stands over the ball and the rest take up their shapes. */
+export interface RestartEvent extends EventBase {
+  type: "throw_in" | "goal_kick" | "corner" | "free_kick" | "penalty";
+  taker_id: string;
+}
+
 export interface FoulEvent extends EventBase {
   type: "foul";
   fouler_id: string;
@@ -146,6 +153,7 @@ export type BroadcastEvent =
   | ShotEvent
   | FoulEvent
   | TackleEvent
+  | RestartEvent
   | DribbleEvent
   | SubstitutionEvent
   | HalftimeEvent

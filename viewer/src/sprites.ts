@@ -152,6 +152,8 @@ function drawSmall(ctx: CanvasRenderingContext2D, x: number, y: number, dress: D
 export interface DrawOptions {
   /** Lying flat (a slide or a fall) when set; `facing` is the side the feet point to. */
   lying?: 1 | -1;
+  /** Both arms raised over the head (a throw-in). */
+  arms?: boolean;
   running: boolean;
   /** The clock in seconds, for the stride. */
   phase: number;
@@ -178,6 +180,15 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, x: number, y: number, 
   }
   const stride = Math.floor(options.phase / STRIDE_SECONDS) % 2 === 0 ? "stepA" : "stepB";
   ctx.drawImage(sprite(dress, options.running ? stride : "stand"), x - 4, y - BIG_HEIGHT);
+  if (options.arms === true) {
+    const skin = skinColour(dress.appearance);
+    for (const side of [-3, 3]) {
+      ctx.fillStyle = OUTLINE;
+      ctx.fillRect(x + side - 1, y - BIG_HEIGHT - 4, 3, 7);
+      ctx.fillStyle = skin;
+      ctx.fillRect(x + side, y - BIG_HEIGHT - 3, 1, 5);
+    }
+  }
 }
 
 /** A small arrow above the head of the player on the ball. */

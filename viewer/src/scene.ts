@@ -25,8 +25,8 @@ export interface Extras {
 
 const REFEREE_KIT = { pattern: "solid", primary: "#d8c04a", secondary: "#14171c" } as const;
 const REFEREE_LOOK = { skin_tone: 3, hair_style: "short", hair_colour: "black", facial_hair: "none", build: "lean" };
-/** The feet stay this far inside the touchline so the head does not draw over the line. */
-const TOP_CLEARANCE_PX = 11;
+/** The feet may stand right on the touchline (a throw-in is taken there); the sim keeps others off it. */
+const TOP_CLEARANCE_PX = 0;
 /** The ball sits at a player's feet, not under them. */
 const BALL_AT_FEET_PX = 2;
 const LABEL_COLOUR = "#d8c04a";
@@ -64,8 +64,8 @@ export class Scene {
       const pose = extras.poses.get(player.id);
       const base = toScreen(player.x, player.y);
       const at = this.onPitch({ x: base.x + (pose?.dx ?? 0), y: base.y + (pose?.dy ?? 0) });
-      const lying = pose !== undefined && pose.name !== "stand" ? pose.facing : undefined;
-      drawPlayer(ctx, at.x, at.y, dress, { running: player.running || pose !== undefined, phase: extras.t, big: extras.big, lying });
+      const lying = pose !== undefined && (pose.name === "slide" || pose.name === "fall") ? pose.facing : undefined;
+      drawPlayer(ctx, at.x, at.y, dress, { running: player.running || pose !== undefined, phase: extras.t, big: extras.big, lying, arms: pose?.name === "throw" });
     }
     if (extras.referee !== null) this.drawReferee(ctx, extras.referee, extras);
     this.drawTheBall(ctx, sample, extras);
@@ -77,7 +77,10 @@ export class Scene {
       if (carrier !== null) drawCarrierMark(ctx, carrier.x, carrier.y, extras.big);
       const resting = toScreen(sample.ballX, sample.ballY);
       const carried = extras.poses.get(sample.carrierId ?? "");
-      drawBall(ctx, resting.x + BALL_AT_FEET_PX + (carried?.dx ?? 0), resting.y + (carried?.dy ?? 0), sample.ballHeight);
+      const follows = carried?.ballFollows !== false;
+      const shiftX = follows ? (carried?.dx ?? 0) : 0;
+      const shiftY = follows ? (carried?.dy ?? 0) : 0;
+      drawBall(ctx, resting.x + BALL_AT_FEET_PX + shiftX, resting.y + shiftY, sample.ballHeight + (carried?.ballLift ?? 0));
       return;
     }
     const flight = extras.flight;

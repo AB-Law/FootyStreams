@@ -55,6 +55,10 @@ Open `http://127.0.0.1:5173/`. Options in the address: `?replay=replays/other` (
   the man on the ball; a tackle sends the tackler in (a slide when the tackle is won, a foul puts the
   other player on the ground, a missed one is sidestepped) and a take-on sways the carrier, all from
   the real `tackle` and `dribble` events.
+- Set pieces (`src/poses.ts`): the taker of a corner, free kick, goal kick or penalty takes a run-up and
+  lunges at the kick; a throw-in is taken with both arms over the head and the ball held up, on
+  the line. The kick is found where the still ball first moves again. The sim places the wall, the
+  box crowd and the throw-in outlets (`sim/setpiece_shape.py`) and the frames show them walking in.
 - `src/deadtime.ts`: stoppages where the ball stands still (throw-ins, goal kicks, injuries,
   celebrations) are played 3x faster after a short lead-in, shown by `>>` in the corner.
 - `src/pitch.ts`, `src/sprites.ts`, `src/palette.ts`, `src/font.ts`: everything is drawn in code from

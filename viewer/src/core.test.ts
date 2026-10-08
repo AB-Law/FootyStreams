@@ -4,7 +4,7 @@ import { test } from "node:test";
 import type { AnyEvent } from "./events.ts";
 import { deadSpans, isDead } from "./deadtime.ts";
 import { sampleAt, separate } from "./interpolate.ts";
-import { posesAt } from "./poses.ts";
+import { kickTime, posesAt } from "./poses.ts";
 import { overlaysAt } from "./overlays.ts";
 import { Playback } from "./playback.ts";
 import { refereeTrack } from "./referee.ts";
@@ -207,4 +207,16 @@ test("a tackle sends the tackler in and a foul puts the player down", () => {
   assert.equal(poses.get("t")?.name, "slide");
   assert.equal(posesAt(store.contests, sample, 3.5).get("c")?.name, "fall");
   assert.equal(posesAt(store.contests, sample, 9).size, 0);
+});
+
+test("kickTime finds where a still ball starts to move, and a throw-in raises the thrower's arms", () => {
+  const still = Array.from({ length: 12 }, () => frame(0.3, 0, ["t", "c"]));
+  const moving = [frame(0.35, 0, ["t", "c"]), frame(0.45, 0, ["t", "c"]), frame(0.55, 0, ["t", "c"])];
+  const throwIn = { type: "throw_in", team: "home", clock, ctx: { score_home: 0, score_away: 0, attack_dir: 1 }, participants: [], pos: null, taker_id: "t" } as AnyEvent;
+  const store = loaded(still[0] as AnyEvent, throwIn, ...still.slice(1), ...moving);
+  const kick = kickTime(store.frames, 0);
+  assert.equal(kick, 11);
+  const sample = sampleAt(store.frames, kick);
+  assert.equal(posesAt(store.contests, sample, kick - 0.2, store.frames).get("t")?.name, "throw");
+  assert.equal(posesAt(store.contests, sample, kick - 5, store.frames).get("t"), undefined);
 });

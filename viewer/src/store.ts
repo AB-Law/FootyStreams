@@ -4,7 +4,8 @@ import { shotFlight, type Flight } from "./flights.ts";
 /** A contest worth animating: a tackle (won, missed or a foul) or a take-on. */
 export type Contest =
   | { kind: "tackle"; t: number; tacklerId: string; targetId: string; outcome: "won" | "foul" | "missed" }
-  | { kind: "dribble"; t: number; playerId: string; outcome: "success" | "tackled" | "lost" };
+  | { kind: "dribble"; t: number; playerId: string; outcome: "success" | "tackled" | "lost" }
+  | { kind: "restart"; t: number; restart: "throw_in" | "goal_kick" | "corner" | "free_kick" | "penalty"; takerId: string; team: Side };
 
 /** Tracking frames are one sim second apart; a frame's index is its time in seconds. */
 export const FRAME_INTERVAL_S = 1;
@@ -64,6 +65,13 @@ export class MatchStore {
         break;
       case "dribble":
         this.contests.push({ kind: "dribble", t, playerId: known.player_id, outcome: known.outcome });
+        break;
+      case "throw_in":
+      case "goal_kick":
+      case "corner":
+      case "free_kick":
+      case "penalty":
+        this.contests.push({ kind: "restart", t, restart: known.type, takerId: known.taker_id, team: known.team });
         break;
       case "foul":
         this.marks.push({ kind: "foul", t, team: known.team, pos: known.pos });
