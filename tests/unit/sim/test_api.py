@@ -82,7 +82,8 @@ def test_run_match__summary_team_stats_are_consistent_with_the_log() -> None:
     assert 0 <= home.shots_on_target <= home.shots
     assert 0.0 <= home.pass_accuracy <= 1.0
     assert summary.duration_s >= 5400
-    assert len(summary.player_stats) == 22
+    assert sum(row.starts for row in summary.player_stats) == 22
+    assert len(summary.player_stats) >= 22
     assert sum(row.goals for row in summary.player_stats) == summary.score_home + summary.score_away
 
 

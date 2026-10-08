@@ -32,8 +32,8 @@ from footystreams.sim.config import SimConfig, config_hash
 from footystreams.sim.config_rules import OffsideConfig
 from footystreams.sim.decision import decide
 from footystreams.sim.emit import EventEmitter, Meta, TeamLabel
-from footystreams.sim.fatigue import advance_exhaustion, halftime_recovery
-from footystreams.sim.injury import injure_without_contact
+from footystreams.sim.fatigue import advance_exhaustion, final_exhaustion, halftime_recovery
+from footystreams.sim.injury import injure_without_contact, injury_reports
 from footystreams.sim.manager_ai import ManagerAI
 from footystreams.sim.options import ActionKind, Option
 from footystreams.sim.play import Play
@@ -192,7 +192,13 @@ class MatchEngine:
 
     def _summary_event(self) -> MatchEvent:
         events = list(self._emitter.events)
-        inputs = SummaryInputs(self._seed, config_hash(self._config), log_digest(events))
+        inputs = SummaryInputs(
+            self._seed,
+            config_hash(self._config),
+            log_digest(events),
+            injuries=injury_reports(self._state),
+            end_exhaustion=final_exhaustion(self._state),
+        )
         summary = build_summary(events, self._setup, inputs)
         self._emitter.emit(self._state, MatchSummaryEvent, Meta(), summary=summary)
         return self._emitter.drain()[0]

@@ -13,13 +13,14 @@ from dataclasses import dataclass
 
 from footystreams.domain.injury import InjurySeverity
 from footystreams.events.discipline import InjuryEvent
+from footystreams.events.summary_rows import InjuryReport
 from footystreams.sim.actions.cards import remove_from_pitch
 from footystreams.sim.actions.nearest import closest_of
 from footystreams.sim.config_world import InjuryConfig
 from footystreams.sim.emit import Meta
-from footystreams.sim.injury_types import InjuryCause, InjuryType, types_for
+from footystreams.sim.injury_types import InjuryCause, InjuryType, base_days_of, types_for
 from footystreams.sim.play import Play, actor, label, take_possession
-from footystreams.sim.state import REGULATION_PERIOD_S, InjuryCase, PlayerState
+from footystreams.sim.state import REGULATION_PERIOD_S, InjuryCase, MatchState, PlayerState
 from footystreams.sim.subs import Window, can_change, make_substitution, replacement_for
 from footystreams.sim.weather import Conditions
 
@@ -197,3 +198,21 @@ def injure_without_contact(play: Play, dt_s: float) -> float:
     weights = [hazard_multiplier(player, state.conditions, cfg) for player in players]
     victim = players[play.injury.choice_weighted(weights)]
     return injure(play, Incident(victim, "non_contact", None, None))
+
+
+def injury_reports(state: MatchState) -> tuple[InjuryReport, ...]:
+    """Return the true diagnosis of every in-match injury, in the order they happened.
+
+    `expected_return_days` is the typical layoff of the injury type; the league layer scales it by
+    proneness and medical staff (docs/design/02 section 9).
+    """
+    return tuple(
+        InjuryReport(
+            player_id=case.player_id,
+            type=case.name,
+            body_part=case.body_part,
+            severity=case.severity,
+            expected_return_days=base_days_of(case.name),
+        )
+        for case in state.injury_log
+    )
