@@ -51,4 +51,4 @@ Also: committed `schemas/` (drift-tested), factories/strategies under `tests/`, 
 
 ### Track A update at the end of M5
 - **M5 done locally** on `feat/m5-dead-balls-discipline` (based on the M4 branch): referee model, fouls, advantage, cards and dismissals, throw-ins, goal kicks, corners with an aerial duel, penalties, free-kick shots and crosses, offside, announced added time; `verify_match` gains M07 (in part), M11, M12. `SIM_VERSION` 0.2.0, `SCHEMA_VERSION` 0.1.5. Report: `docs/milestones/M5.md`.
-- Known gaps: red cards about 2x the band; second-half added time short (substitutions and injuries arrive in M6); 0.37 s CPU a match.
+- Known gaps: red cards in band for even teams, about 2x the band in the varied sweep; second-half added time short (substitutions and injuries arrive in M6); 0.37 s CPU a match.
