@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FootyStreams pixel replay</title>
+    <style>
+      :root { color-scheme: dark; }
+      body { margin: 0; background: #0a0f15; color: #d7e0ea; font: 14px system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+      #stage { margin-top: 12px; padding: 10px; background: #1a222c; border-radius: 10px; box-shadow: 0 0 0 2px #2c3a4a; }
+      canvas { display: block; image-rendering: pixelated; width: 960px; height: 540px; background: #000; }
+      #controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; width: 100%; }
+      #scrubber { flex: 1; min-width: 80px; }
+      button { background: #243344; color: inherit; border: 1px solid #3b5068; border-radius: 4px; padding: 4px 10px; font: inherit; cursor: pointer; }
+      button.on { background: #3b6ea5; }
+      #time { font-variant-numeric: tabular-nums; min-width: 8em; text-align: right; }
+      #status { margin: 8px 0 0; color: #8fa3b8; }
+    </style>
+  </head>
+  <body>
+    <div id="stage">
+      <canvas id="screen" width="320" height="180"></canvas>
+      <div id="controls">
+        <button id="play" type="button">Play</button>
+        <button id="speed-1" type="button">1x</button>
+        <button id="speed-4" type="button">4x</button>
+        <button id="speed-16" type="button">16x</button>
+        <input id="scrubber" type="range" min="0" max="0" value="0" step="1" aria-label="Position" />
+        <span id="time">0:00 / 0:00</span>
+      </div>
+    </div>
+    <p id="status">Loading the replay...</p>
+    <script type="module" src="dist/main.js"></script>
+  </body>
+</html>
