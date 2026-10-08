@@ -1,12 +1,14 @@
 # Project status
 
-Updated on the Track B tip (M11 contracts and transfers — 2026-10-08). Read this first; then the design section for your task.
+Updated on the Join integration branch (2026-10-08). Read this first; then the design section for your task.
 
 ## Where we are
 - Design is complete (`docs/design/`, index in `docs/design/README.md`; decisions in `09-schema-decisions.md`).
 - **M0 is merged** to `main` (scaffold, quality gate, changelog, CI, ADRs).
-- **Track A (M1, M4–M7)** and **Track B (M2, M3, M9–M11)** are open as stacked draft PRs; see the tables below.
-- Tip of Track B is `feat/m11-contracts-transfers` (PR #25). Tip of Track A is on `main` through M7.
+- **Track A (M1, M4–M7)** and **Track B (M2, M3, M9–M11)** are both merged to `main`.
+- **Join track** is next: the integration branch (`feat/join-world-sim-integration`) joins the tracks, then **M8** balance → M12 engine → M13 → M14.
+- Integration done: the sim plays the world's own formations (`sim.tables.tables_from_catalog`), `league --simulator event` plays a season on the real engine (deterministic; about 14 s for 4 clubs), and `sim --home A --away B --world DIR|--db FILE` plays a friendly (`league/friendly.py`).
+- For M8: the real engine scores about 4.1 goals a match in generated worlds (the realistic target is about 2.7), and the league's `EventSimulator` does not yet pass the match referee to `run_match` (a neutral one officiates; `sim --world` does pass it).
 
 ## How to work here
 ```bash
@@ -27,9 +29,9 @@ uv run pr-size --base origin/main      # informational for milestone PRs
 |---------|-------|
 | `domain` | Full M1 models: types, person/player, ratings/valuation, tactics, club, competition, match, world/transfer/dev, media; `SCHEMA_VERSION` / `SIM_VERSION`; usage registry |
 | `events` | MatchEvent discriminated union, summary, MatchResult |
-| `cli` | `export-schemas` (argparse) |
-| `sim`, `league`, `persistence`, `extensions`, `analytics`, `runtime`, `seed` | Empty skeletons; layering rules enforced |
-| `verify` | `Violation` type only |
+| `cli` | `export-schemas`, `seed`, `sim`, `league`, `golden` (argparse) |
+| `sim`, `league`, `persistence`, `seed`, `verify` | Built by tracks A and B (see the sections below) |
+| `extensions`, `analytics`, `runtime` | Empty skeletons; layering rules enforced |
 | `tools` | `check`, `architecture`, `changelog` (incl. SCHEMA_VERSION bump policy), `commitmsg`, `prsize` |
 
 Also: committed `schemas/` (drift-tested), factories/strategies under `tests/`, `tools/hooks/gate.py`,
@@ -79,5 +81,4 @@ Track A (match engine) is built separately; the sections above predate both trac
 
 ### Track B caveats
 - `WorldRng` stands in for track A's `SimRng` (same interface); unify when both tracks merge.
-- Fragment ids from 0042 may collide with track A's; the second merger renumbers.
-- The fast gate takes about 40 s (budget 60 s); `--tier pr` about 2 min.
+- The fast gate took 63-90 s on the dev machine in the Join session (budget 60 s): over budget, profile before M8 adds tests; `--tier pr` about 2 min.

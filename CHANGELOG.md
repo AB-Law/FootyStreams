@@ -195,6 +195,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0195** Record the Join integration in the status page and milestones *(M8; scope: docs)*
 - **0189** Clarify --transfers and refresh the status tip *(M11; scope: docs)*
 - **0180** Record the M11 market calibration numbers in the report *(M11; scope: docs)*
 - **0179** Document contracts and transfers (M11 report, design and status) *(M11; scope: docs, design)*

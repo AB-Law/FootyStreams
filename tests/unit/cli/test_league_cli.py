@@ -104,3 +104,17 @@ def test_league__unknown_simulator__is_a_usage_error() -> None:
     with pytest.raises(SystemExit) as exit_info:
         main(["--simulator", "oracle"])
     assert exit_info.value.code == EXIT_USAGE
+
+
+@pytest.mark.slow
+@pytest.mark.timeout(240)
+def test_league__event_simulator__a_whole_season_replays_identically(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    arguments = ["--seed", "2", "--clubs", "4", "--simulator", "event"]
+    assert main(arguments) == EXIT_OK
+    first = capsys.readouterr().out
+    assert main(arguments) == EXIT_OK
+
+    assert "2031/32: 12 matches played" in first
+    assert first == capsys.readouterr().out

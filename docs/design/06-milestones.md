@@ -47,7 +47,7 @@ Track A's milestones stay sequential: M5, M6 and M7 all edit the same simulation
 
 **What changes in the plan to make the tracks independent**
 - **M4 no longer builds `league.setup.build_match_setup` or the lineup AI.** They move to M9 (track B). Track A's tests build setups with `tests/factories` (`make_setup`, `make_team_sheet`, `make_player`).
-- **M4's `sim` CLI** runs on factory teams (`uv run sim --demo --seed 7`) until a world exists; loading `--home/--away` from a world (`--world` / `--db`) is a small integration commit made by whichever track merges second.
+- **M4's `sim` CLI** runs on factory teams (`uv run sim --demo --seed 7`) until a world exists; loading `--home/--away` from a world (`--world` / `--db`) is a small integration commit made by whichever track merges second (done on the Join integration branch: `sim --home/--away --world|--db`, the sim reading the world's formations via `tables_from_catalog`, and `league --simulator event`).
 - **M9 does not wait for the real simulator.** The league layer depends on a `MatchSimulator` Protocol with two implementations: `ResultOnlySimulator` (deterministic score from team ratings, no events; built in M9, and the same fallback the production quarantine path needs, 10 section 7) and `EventSimulator` (wraps `simulate_match`, wired in at M12 or earlier). M9's season-level acceptance runs on `ResultOnlySimulator` until A is merged, then once more on the real one.
 - **M8 needs both:** statistical runs use the generated league (M2) and the full sim (M7); its calibration is the first end-to-end proof that the tracks fit together.
 
