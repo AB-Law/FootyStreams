@@ -1,4 +1,4 @@
-"""Open-play knobs: positioning, pressure, passing, shooting, dribbling, decisions, tempo."""
+"""Open-play knobs: passing, shooting, dribbling, decisions, tempo and challenges."""
 
 from __future__ import annotations
 
@@ -9,54 +9,6 @@ from pydantic import Field, model_validator
 
 from footystreams.domain.base import DomainModel, UsageTag
 from footystreams.sim.config_types import NonNegative, Positive, Share
-
-
-class PositionConfig(DomainModel):
-    """How the 22 players drift around their formation slots (docs/design/02 section 4)."""
-
-    __usage__: ClassVar[Mapping[str, UsageTag]] = {
-        "push_in_possession": "S",
-        "drop_out_of_possession": "S",
-        "line_range": "S",
-        "pull_x": "S",
-        "pull_y": "S",
-        "width_min": "S",
-        "width_max": "S",
-        "base_speed_mps": "S",
-        "speed_range_mps": "S",
-        "step_s": "S",
-    }
-
-    push_in_possession: NonNegative = 0.09
-    drop_out_of_possession: NonNegative = 0.07
-    line_range: NonNegative = 0.0225  # x shift of the defensive line between line_height 0 and 1
-    pull_x: tuple[float, float, float, float] = (0.10, 0.28, 0.40, 0.35)  # GK, DEF, MID, ATT
-    pull_y: Share = 0.22
-    width_min: Positive = 0.80
-    width_max: Positive = 1.25
-    base_speed_mps: Positive = 4.5
-    speed_range_mps: NonNegative = 3.5
-    step_s: Positive = 4.0  # positions are refreshed once this much match time has passed
-
-
-class PressureConfig(DomainModel):
-    """Pressure on the carrier and openness of a pass target (docs/design/02 section 4.2)."""
-
-    __usage__: ClassVar[Mapping[str, UsageTag]] = {
-        "radius_base_m": "S",
-        "radius_range_m": "S",
-        "presser_floor": "S",
-        "open_distance_m": "S",
-        "lane_clear_m": "S",
-        "open_weight": "S",
-    }
-
-    radius_base_m: Positive = 3.0
-    radius_range_m: NonNegative = 0.61  # extra radius at full pressing intensity
-    presser_floor: Share = 0.4  # share of a presser's pressure that every defender brings
-    open_distance_m: Positive = 8.0  # distance to the nearest opponent that counts as fully open
-    lane_clear_m: Positive = 4.0  # defender distance to the passing lane that counts as clear
-    open_weight: Share = 0.55  # share of openness from the receiver's own space vs the lane
 
 
 class PassConfig(DomainModel):
@@ -75,8 +27,14 @@ class PassConfig(DomainModel):
         "receiver_touch_weight": "S",
         "pressure_penalty": "S",
         "openness_penalty": "S",
+        "openness_exponent": "S",
+        "pressure_exponent": "S",
+        "length_free_m": "S",
         "min_probability": "S",
         "max_probability": "S",
+        "difficulty_floor": "S",
+        "difficulty_peak": "S",
+        "difficulty_span_m": "S",
         "long_pass_m": "S",
         "cross_min_frame_x": "S",
         "cross_wide_offset": "S",
@@ -84,20 +42,33 @@ class PassConfig(DomainModel):
         "through_min_length_m": "S",
     }
 
-    base_short: Share = 0.98
+    base_short: Share = 0.96
     base_long: Share = 0.80
     base_through: Share = 0.74
     base_cross: Share = 0.62
     base_back: Share = 0.9025
-    length_penalty_per_m: float = 0.0035
+    length_penalty_per_m: float = 0.0055
     skill_swing: float = 0.12  # damped: skill gaps must not compound into lopsided matches
     skill_pivot: float = 55.0
     skill_scale: Positive = 25.0
     receiver_touch_weight: float = 0.04
-    pressure_penalty: float = 0.30
+    pressure_penalty: float = 0.60
     openness_penalty: float = 0.20
+    # A moderately marked receiver costs little; only a really closed one does. Squaring the
+    # closedness (exponent 2) keeps a clear pass near-certain and leaves the misses to pressure
+    # on the passer and to receivers who are properly marked.
+    openness_exponent: Positive = 2.0
+    # Likewise pressure on the passer: a free man hardly misses (exponent 1.5), a hurried one does.
+    pressure_exponent: Positive = 1.5
+    length_free_m: float = 8.0  # a pass this short loses nothing to distance
     min_probability: Share = 0.02
     max_probability: Share = 0.985
+    # Pressure and an unmarked receiver matter less on a short pass: a five-metre ball is rarely
+    # lost whoever is closing in, a long one often is. The penalties are scaled from
+    # `difficulty_floor` at no length to `difficulty_peak` at `difficulty_span_m` and beyond.
+    difficulty_floor: Share = 0.5
+    difficulty_peak: Positive = 1.8
+    difficulty_span_m: Positive = 30.0
     long_pass_m: Positive = 32.0
     cross_min_frame_x: float = 0.62
     cross_wide_offset: float = 0.28
@@ -142,8 +113,8 @@ class ShotConfig(DomainModel):
     xg_cap: Positive = 0.4101
     xg_half: Positive = 0.44  # geometry constant: larger means lower xG from every spot
     pressure_penalty: Share = 0.7
-    finishing_floor: Positive = 0.80
-    finishing_span: NonNegative = 0.40
+    finishing_floor: Positive = 0.40
+    finishing_span: NonNegative = 0.52
     min_xg: Share = 0.06  # below this a chance is not worth taking: no 20 m punts
     long_range_m: Positive = 20.0  # beyond this the shooter's long_shots replaces finishing
     block_base: Share = 0.12  # share of shots a defender gets in the way of
@@ -220,6 +191,16 @@ class DecisionConfig(DomainModel):
         "cross_bias": "S",
         "dribble_bias": "S",
         "recycle_bias": "S",
+        "box_frame_x": "S",
+        "box_min_gain": "S",
+        "box_recycle_penalty": "S",
+        "advance_value": "S",
+        "advance_span_m": "S",
+        "retreat_cost": "S",
+        "through_open_floor": "S",
+        "through_open_bonus": "S",
+        "ping_pong_penalty": "S",
+        "return_pass_penalty": "S",
         "mentality_swing": "S",
         "urgency_swing": "S",
         "temperature_base": "S",
@@ -235,20 +216,43 @@ class DecisionConfig(DomainModel):
     loss_cost_own_third: float = 0.55  # extra cost of losing the ball at the own goal line
     lead_frame_x: float = 0.012  # passes are aimed slightly ahead of the receiver
     min_pass_m: float = 4.0
-    shot_scale: float = 10.2152
+    shot_scale: float = 8.6
     shoot_on_sight_swing: float = 0.8
     clear_pressure: float = 0.422
     clear_max_frame_x: float = 0.30
     clear_base: float = 0.9
     clear_slope: float = 1.5
     directness_bias: float = 0.0723
-    cross_bias: float = 0.6
+    cross_bias: float = 1.1
     dribble_bias: float = 0.5
     recycle_bias: float = 0.4  # extra appeal of a back pass per unit of pressure
+    # Attackers in the box do not shuffle the ball sideways: a pass there that gains no threat, or
+    # that hands the ball straight back to the man who gave it, loses utility, so a forward ball,
+    # a dribble or a shot wins (M8 realism pass).
+    box_frame_x: float = 0.82  # the final third from this frame x
+    box_min_gain: float = 0.02  # threat a final-third pass must gain to count as going forward
+    box_recycle_penalty: float = 1.0
+    # Gaining ground is worth something in its own right: the threat map is nearly flat in the own
+    # and middle thirds, so a pass sideways scored almost as well as one to a free man ahead and the
+    # choice between them was a coin flip. A pass earns `advance_value` per `advance_span_m` gained
+    # (up to one and a half spans) and pays `retreat_cost` per span given up, less the more the
+    # passer is pressed.
+    advance_value: float = 0.12
+    advance_span_m: float = 25.0
+    retreat_cost: float = 0.1
+    # A runner in space is worth finding: a through ball or a long ball to a receiver who is more
+    # open than `through_open_floor` gains `through_open_bonus` per unit of openness above it.
+    through_open_floor: float = 0.55
+    through_open_bonus: float = 3.0
+    ping_pong_penalty: float = 1.5
+    # Anywhere on the pitch, a pass straight back to the man who just gave the ball loses
+    # `return_pass_penalty` times the square of the returns already played in a row plus one: a
+    # one-two is fine, the third and fourth pass between the same two are not.
+    return_pass_penalty: float = 0.3
     mentality_swing: float = 0.0116
     urgency_swing: float = 0.3
     temperature_base: Positive = 0.35
-    temperature_scale: Positive = 2.0
+    temperature_scale: Positive = 1.4
     temperature_pressure: float = 0.4
     weight_floor: Positive = 0.02
     min_utility_weight: Positive = 0.2  # floor of the progress, keep and risk weights
@@ -301,8 +305,8 @@ class ChallengeConfig(DomainModel):
         "clearance_spread": "S",
     }
 
-    attempt_rate: NonNegative = 0.10  # per moment, times the pressure on the carrier
-    attempt_radius_m: Positive = 3.0
+    attempt_rate: NonNegative = 0.14  # per moment, times the pressure on the carrier
+    attempt_radius_m: Positive = 4.0
     tackle_base: Share = 0.45
     tackle_swing: float = 0.10
     tackle_scale: Positive = 20.0

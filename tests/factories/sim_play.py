@@ -57,4 +57,5 @@ def make_play(
         referee_profile(referee),
         root.fork("injury"),
         context,
+        root.fork("flight"),
     )

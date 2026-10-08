@@ -120,6 +120,16 @@ class InjuryCase:
     elapsed_s: float
 
 
+@dataclass(frozen=True, slots=True)
+class Keyframe:
+    """Where everyone and the ball were at one moment (absolute), for tracking frames."""
+
+    t: float
+    ball: tuple[float, float]
+    carrier: PlayerId
+    players: dict[PlayerId, tuple[float, float]]
+
+
 @dataclass(slots=True)
 class MatchState:
     """The whole live match: both teams, the clock, the ball and who has it."""
@@ -140,12 +150,28 @@ class MatchState:
     attendance: int = 0
     conditions: Conditions = NEUTRAL
     assist_from: PlayerState | None = None  # passer of the last completed pass in this chain
+    return_streak: int = 0  # consecutive passes straight back to the man who gave the ball
     last_turnover_s: float = field(default=-1e9)  # elapsed_s of the latest change of possession
     injury_log: list[InjuryCase] = field(default_factory=list)
+    keyframes: list[Keyframe] = field(default_factory=list)  # mid-moment snapshots (frames only)
+    record_keyframes: bool = False  # set by the engine when tracking frames are on
 
     def team(self, side: Side) -> TeamState:
         """Return the team on a side."""
         return self.home if side == "home" else self.away
+
+    def keyframe(self, at: float) -> Keyframe:
+        """Capture the positions of every player and the ball as of `at` seconds into the period."""
+        return Keyframe(
+            t=at,
+            ball=(self.ball_x, self.ball_y),
+            carrier=self.carrier.player_id,
+            players={
+                player.player_id: (player.x, player.y)
+                for team in (self.home, self.away)
+                for player in team.players
+            },
+        )
 
     @property
     def elapsed_s(self) -> float:

@@ -33,7 +33,16 @@ def _without_context(event: MatchEvent) -> dict[str, object]:
     data = event.model_dump()
     for name in ("momentum", "intensity", "significance", "tags"):
         data["ctx"].pop(name)
-    for name in ("end_pos", "progressive", "xt_gain", "big_chance"):
+    for name in (
+        "end_pos",
+        "progressive",
+        "xt_gain",
+        "big_chance",
+        "target",
+        "curve",
+        "speed_mps",
+        "loft",
+    ):
         data.pop(name, None)
     return data
 

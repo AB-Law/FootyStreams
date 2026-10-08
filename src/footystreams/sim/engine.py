@@ -57,6 +57,7 @@ STREAM_NAMES = (
     "mgr_away",
     "dayform",
     "review",
+    "flight",
 )
 _RESOLVERS = {
     ActionKind.PASS: resolve_pass,
@@ -101,6 +102,7 @@ class MatchEngine:
             referee_profile(referee),
             streams["injury"],
             context,
+            streams["flight"],
         )
         self._manager = (
             ManagerAI(self._play, streams["mgr_home"], streams["mgr_away"])
@@ -108,6 +110,7 @@ class MatchEngine:
             else None
         )
         self._frames = FrameRecorder(config.frame_interval_s) if config.emit_frames else None
+        self._state.record_keyframes = config.emit_frames
         self._pending_move_s = 0.0
 
     @property

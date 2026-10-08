@@ -21,13 +21,12 @@ from footystreams.domain.base import DomainModel, UsageTag
 from footystreams.domain.canonical import canonical_json
 from footystreams.sim.config_context import ContextConfig
 from footystreams.sim.config_manager import ManagerConfig
+from footystreams.sim.config_movement import PositionConfig, PressureConfig
 from footystreams.sim.config_play import (
     ChallengeConfig,
     DecisionConfig,
     DribbleConfig,
     PassConfig,
-    PositionConfig,
-    PressureConfig,
     ShotConfig,
     TempoConfig,
 )

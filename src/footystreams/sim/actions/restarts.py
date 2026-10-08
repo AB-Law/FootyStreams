@@ -11,6 +11,7 @@ from footystreams.sim.actions.setpieces import restart_delay
 from footystreams.sim.emit import Meta
 from footystreams.sim.geometry import CENTRE, Point, distance_m, frame_coordinate
 from footystreams.sim.play import Play, actor, take_possession
+from footystreams.sim.setpiece_shape import goal_kick_layout, settle, throw_in_layout
 from footystreams.sim.side import Side
 from footystreams.sim.state import PlayerState, TeamState
 
@@ -37,6 +38,11 @@ def nearest_outfielder(team: TeamState, spot: Point) -> PlayerState:
     return min(outfield, key=lambda p: (distance_m(spot[0], spot[1], p.x, p.y), p.slot))
 
 
+def _frame(team: TeamState, spot: Point) -> Point:
+    """A point of the pitch in the team's own frame."""
+    return frame_coordinate(spot[0], team.attack_dir), frame_coordinate(spot[1], team.attack_dir)
+
+
 def throw_in(play: Play, side: Side, spot: Point) -> float:
     """Restart with a throw-in for `side` at a touchline spot; return the stoppage seconds."""
     state, cfg = play.state, play.cfg.restarts
@@ -44,7 +50,11 @@ def throw_in(play: Play, side: Side, spot: Point) -> float:
     meta = Meta(team=side, participants=(actor(taker, "taker"),), pos=spot)
     play.emit.emit(state, ThrowInEvent, meta, taker_id=taker.player_id)
     take_possession(state, taker, spot[0], spot[1])
-    return restart_delay(play, cfg.throw_in_s, cfg.throw_in_spread_s)
+    seconds = restart_delay(play, cfg.throw_in_s, cfg.throw_in_spread_s)
+    taking = state.team(side)
+    layout = throw_in_layout(state, taking, taker, _frame(taking, spot))
+    settle(play, taking, layout, seconds, keyframe=False)
+    return seconds
 
 
 def goal_kick(play: Play, side: Side) -> float:
@@ -56,4 +66,6 @@ def goal_kick(play: Play, side: Side) -> float:
     meta = Meta(team=side, participants=(actor(keeper, "taker"),), pos=spot)
     play.emit.emit(state, GoalKickEvent, meta, taker_id=keeper.player_id)
     take_possession(state, keeper, spot[0], spot[1])
-    return restart_delay(play, cfg.goal_kick_s, cfg.goal_kick_spread_s)
+    seconds = restart_delay(play, cfg.goal_kick_s, cfg.goal_kick_spread_s)
+    settle(play, team, goal_kick_layout(state, team), seconds, keyframe=False)
+    return seconds

@@ -18,6 +18,7 @@ from footystreams.sim.geometry import CENTRE, Point, frame_coordinate
 from footystreams.sim.mathx import PERCENT, clamp, squash
 from footystreams.sim.options import ActionKind, Option
 from footystreams.sim.play import Play, actor, take_possession
+from footystreams.sim.setpiece_shape import corner_layout, settle
 from footystreams.sim.side import Side, opposite
 from footystreams.sim.state import PlayerState, TeamState
 
@@ -25,7 +26,7 @@ DEFENDERS_IN_BOX = 5
 HEADER_FRAME_X = 0.93  # where a header is taken, in the attackers' frame
 HEADER_PRESSURE = 0.5
 SECOND_BALL_ATTACKER_SHARE = 0.40
-CLEARANCE_FRAME_X = 0.30
+CLEARANCE_FRAME_X = 0.74  # the top of the box: a headed clearance carries 25 m or so, not 70
 DELIVERY_PIVOT = 55.0
 DELIVERY_SCALE = 25.0
 CLAIM_BASE = 1.5  # keeper claims more often when the attackers' share is small
@@ -159,4 +160,11 @@ def corner(play: Play, side: Side, flag: Point) -> float:
     )
     take_possession(state, taker, flag[0], flag[1])
     seconds = restart_delay(play, cfg.corner_s, cfg.corner_spread_s)
+    taking = state.team(side)
+    flag_frame = (
+        frame_coordinate(flag[0], taking.attack_dir),
+        frame_coordinate(flag[1], taking.attack_dir),
+    )
+    layout = corner_layout(state, taking, taker, flag_frame, taking.view.corner_attackers)
+    settle(play, taking, layout, seconds, keyframe=True)
     return seconds + deliver(play, side, taker)

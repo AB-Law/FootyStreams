@@ -73,13 +73,13 @@ class DisciplineConfig(DomainModel):
     }
 
     # Chance a challenge involves foul-worthy contact, for an average man (0 switches fouls off).
-    contact_base: NonNegative = 1.0
+    contact_base: NonNegative = 0.68
     aggression_weight: NonNegative = 0.8
     dirtiness_weight: NonNegative = 0.5
     tackling_weight: NonNegative = 0.5  # better tacklers foul less
     derby_factor: NonNegative = 1.2
     booked_caution: Share = 0.5  # a booked player challenges half as recklessly
-    box_caution: NonNegative = 0.5  # defenders in their own box tackle far more carefully
+    box_caution: NonNegative = 0.08  # defenders in their own box tackle far more carefully
     severity_base: float = 0.25
     severity_spread: NonNegative = 0.5
     severity_aggression: NonNegative = 0.25
@@ -96,7 +96,7 @@ class DisciplineConfig(DomainModel):
     dogso_min_xg: Share = 0.15
     free_kick_s: NonNegative = 25.0
     free_kick_spread_s: NonNegative = 10.0
-    yellow_base: float = 0.665  # severity above which an average referee books a foul
+    yellow_base: float = 0.685  # severity above which an average referee books a foul
     yellow_tendency_swing: NonNegative = 0.20  # a card-happy referee books milder fouls
     yellow_strictness_swing: NonNegative = 0.10
     second_booking_margin: NonNegative = 0.10  # referees hesitate to send a booked player off
@@ -161,11 +161,11 @@ class RestartConfig(DomainModel):
     corner_spread_s: NonNegative = 6.0
     overhit_min_m: NonNegative = 6.0  # how far past its target an overhit pass travels
     overhit_max_m: NonNegative = 20.0
-    blocked_corner_share: Share = 0.5  # blocked shots deflected behind
-    parry_corner_share: Share = 0.5  # parried shots tipped behind
+    blocked_corner_share: Share = 1.0  # blocked shots deflected behind
+    parry_corner_share: Share = 1.0  # parried shots tipped behind
     clearance_out_share: Share = 0.5  # clearances that go into touch
-    cross_corner_share: Share = 0.5  # blocked crosses deflected behind
-    clearance_behind_share: Share = 0.35  # of clearances out near the own goal, over the line
+    cross_corner_share: Share = 1.0  # blocked crosses deflected behind
+    clearance_behind_share: Share = 0.8  # of clearances out near the own goal, over the line
     dribble_out_share: Share = 0.60  # heavy touches that run out of play
     direct_range_m: Positive = 32.0  # farthest a direct free kick is shot from
     direct_share: Share = 0.50  # chance a kick in range is shot rather than played
@@ -210,7 +210,7 @@ class OffsideConfig(DomainModel):
     margin_min: NonNegative = 0.002  # frame-x distance a sharp mover keeps from the line
     margin_range: NonNegative = 0.015  # extra distance for a player with no off-ball movement
     mistime_zone: NonNegative = 0.03  # receivers this close to the line may have mistimed the run
-    mistime_base: Share = 0.2139  # chance a near-line receiver is judged offside (x timing flaw)
+    mistime_base: Share = 0.42  # chance a near-line receiver is judged offside (x timing flaw)
 
 
 class StoppageConfig(DomainModel):

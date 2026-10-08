@@ -8,7 +8,7 @@ from typing import ClassVar, Literal
 from pydantic import Field
 
 from footystreams.domain.base import UsageTag
-from footystreams.domain.types import PlayerId, Pos, Unit
+from footystreams.domain.types import PlayerId, Pos, Signed, Unit
 from footystreams.events.base import EventBase, event_usage
 from footystreams.events.context import EventContext
 
@@ -104,6 +104,10 @@ class ShotEvent(EventBase):
         outcome="S",
         assist_id="S",
         big_chance="S",
+        target="S",
+        curve="S",
+        speed_mps="S",
+        loft="S",
     )
 
     type: Literal["shot"] = "shot"
@@ -113,6 +117,12 @@ class ShotEvent(EventBase):
     outcome: Literal["goal", "saved", "blocked", "off_target", "woodwork"] = "off_target"
     assist_id: PlayerId | None = None
     big_chance: bool = False  # xG at or above 0.3
+    # How the shot travels (presentation only; the outcome is already decided). Absent with the
+    # context off, and in logs written before schema 0.4.0.
+    target: Pos | None = None  # where the ball ends up (absolute)
+    curve: Signed = 0.0  # bend of the path in -1..1; the sign is the side it bows toward
+    speed_mps: float = Field(ge=0.0, default=0.0)
+    loft: Unit = 0.0  # peak height of the flight, 0 flat to 1 high
 
 
 class SaveEvent(EventBase):

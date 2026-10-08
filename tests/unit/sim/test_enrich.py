@@ -21,7 +21,8 @@ def _play(config: SimConfig) -> Play:
 def test_pass_fields__off_records_nothing() -> None:
     assert pass_fields(_play(OFF), (0.4, 0.5), _option((0.7, 0.5))) == {}
     assert dribble_fields(_play(OFF), _option((0.5, 0.5)), kept_ball=True) == {}
-    assert shot_fields(_play(OFF), 0.9) == {}
+    off = _play(OFF)
+    assert shot_fields(off, 0.9, off.state.carrier, "goal") == {}
 
 
 def test_pass_fields__a_long_forward_pass_is_progressive_and_gains_threat() -> None:
@@ -48,8 +49,9 @@ def test_dribble_fields__only_a_kept_ball_has_an_end() -> None:
 
 def test_shot_fields__big_chance_starts_at_the_configured_xg() -> None:
     play = _play(ON)
-    assert shot_fields(play, 0.29) == {"big_chance": False}
-    assert shot_fields(play, 0.30) == {"big_chance": True}
+    shooter = play.state.carrier
+    assert shot_fields(play, 0.29, shooter, "goal")["big_chance"] is False
+    assert shot_fields(play, 0.30, shooter, "goal")["big_chance"] is True
 
 
 def test_run_match__enriched_events_carry_their_fields() -> None:

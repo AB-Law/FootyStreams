@@ -9,6 +9,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0245** Give dead balls a shape: wall, box crowd, throw-in outlets, goal-kick spread *(M8; scope: sim; sim version minor)*
+- **0242** Record how a shot travels: target, curve, speed and loft *(M8; scope: events; sim version minor; schema version minor)*
 - **0232** Add a pixel-art replay viewer prototype (silent, file replay only) *(design; scope: tools)*
 - **0222** Let balance fit count only the metrics named by --metrics *(M8; scope: cli)*
 - **0219** Add balance --min-gap to play only mismatched pairings for strength studies *(M8; scope: cli)*
@@ -143,6 +145,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0246** Make pass accuracy follow pressure and stop the same two players passing back and forth *(M8; scope: sim; sim version minor)*
+- **0244** Give the ball carrier room: team-mates keep apart and nobody swarms a goalkeeper *(M8; scope: sim; sim version minor)*
+- **0241** Stop attackers in the final third passing the ball sideways and straight back *(M8; scope: sim; sim version minor)*
+- **0240** Make players press, mark and keep moving; keep everyone off the touchline *(M8; scope: sim; sim version minor)*
 - **0228** Calibrate stage 3: discipline, home advantage and the on-target share *(M8; scope: sim; sim version minor)*
 - **0227** Allow five substitution windows and move the five-plus goals bands *(M8; scope: sim, data, design; sim version patch)*
 - **0226** Calibrate stage 2: tactics leverage and the shot level *(M8; scope: sim; sim version minor)*
@@ -170,6 +176,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0247** Substitute only at a real stoppage and clear corners to the top of the box *(M8; scope: sim; sim version patch)*
+- **0243** Move the frame ball at ball speed through long dead moments *(M8; scope: sim)*
 - **0225** Count a denied goal-scoring chance only when it was a clear chance *(M8; scope: sim; sim version patch)*
 - **0221** Hold attackers on the offside line and mistime runs only on balls in behind *(M8; scope: sim; sim version patch)*
 - **0207** Strip git's repository variables from every test so a hook cannot steer them into the real repo *(M12; scope: tools)*
