@@ -24,6 +24,8 @@ ALLOWED_IMPORTS: dict[str, frozenset[str]] = {
     "runtime": frozenset(
         {"domain", "events", "sim", "league", "verify", "persistence", "extensions"}
     ),
+    # The balance harness is an analysis tool over the whole stack; nothing imports it but cli.
+    "balance": frozenset({"domain", "events", "sim", "league", "seed", "persistence", "verify"}),
     "cli": frozenset({"*"}),
     "tools": frozenset(),
 }

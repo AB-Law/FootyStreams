@@ -12,7 +12,8 @@ from dataclasses import dataclass
 
 from footystreams.domain.match import MatchSetup
 from footystreams.domain.types import PlayerId
-from footystreams.events.clock import match_elapsed_s
+from footystreams.events.base import MatchClock
+from footystreams.events.clock import period_elapsed_s
 from footystreams.events.discipline import CardEvent, InjuryEvent, SubstitutionEvent
 from footystreams.events.types import MatchEvent
 
@@ -56,16 +57,32 @@ def leaver(events: Sequence[MatchEvent], position: int) -> PlayerId | None:
     return None
 
 
+def _period_lengths(events: Sequence[MatchEvent]) -> dict[int, int]:
+    """How long each period really ran: the clock of its last event, stoppage time included."""
+    return {event.clock.period: period_elapsed_s(event.clock) for event in events}
+
+
+def _playing_second(clock: MatchClock, lengths: dict[int, int]) -> int:
+    """Playing seconds since kick-off: the periods before this one at their real length.
+
+    `match_elapsed_s` counts every earlier period at its nominal length, so a second-half clock
+    could read earlier than a first-half stoppage-time one and a spell could end before it began.
+    """
+    before = sum(length for period, length in lengths.items() if period < clock.period)
+    return before + period_elapsed_s(clock)
+
+
 def player_spells(
     events: Sequence[MatchEvent], setup: MatchSetup, match_end_s: int
 ) -> dict[PlayerId, Spell]:
     """Return a spell for every player who took part (starters first, then those who came on)."""
+    lengths = _period_lengths(events)
     open_spells: dict[PlayerId, tuple[int, bool]] = {
         slot.player_id: (0, True) for sheet in (setup.home, setup.away) for slot in sheet.lineup
     }
     closed: dict[PlayerId, Spell] = {}
     for position, event in enumerate(events):
-        moment = match_elapsed_s(event.clock)
+        moment = _playing_second(event.clock, lengths)
         gone = leaver(events, position)
         if gone is not None and gone in open_spells:
             start, started = open_spells.pop(gone)

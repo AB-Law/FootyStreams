@@ -9,6 +9,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0200** Add balance fit: search chosen knobs for the lowest loss and write a candidate config *(M8; scope: cli, tools)*
+- **0199** Add balance sensitivity: nudge each knob and show which metric it moves *(M8; scope: cli, tools)*
+- **0198** Add the balance command: scenarios over every pairing, a process-pool runner, --config and --set *(M8; scope: cli, tools)*
+- **0197** Add balance targets, profiles, evaluation with intervals, and the report *(M8; scope: tools, data)*
+- **0196** Add balance samples and the metrics of design 02 section 14 *(M8; scope: tools)*
 - **0194** Add friendly matches between any two clubs of a world *(M8; scope: league)*
 - **0193** Play a friendly between two clubs of a world with sim --home --away --world *(M8; scope: cli, league)*
 - **0192** Add league --simulator to play fixtures on the real match engine *(M8; scope: cli, league)*
@@ -145,6 +150,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0204** Count only changes before the break as early tactical substitutions in the balance metric *(M8; scope: tools)*
+- **0203** Count first-half stoppage time in player minutes so a late-first-half substitute never gets negative minutes *(M8; scope: events, sim; sim version patch)*
 - **0188** Export check_schedule from the verify package *(M11; scope: verify)*
 - **0187** Flag orphan transfer ledger legs as L06 *(M11; scope: verify)*
 - **0186** Exclude OUTSIDE_WORLD from league health and squad checks *(M11; scope: league)*
@@ -171,6 +178,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0008** Remove the Cursor rules generator; keep plain, hand-maintained .cursor/rules copies. *(design; scope: tools, design)*
 
 ### Performance
+- **0202** Skip the causal context in balance runs; no metric reads it and samples are identical *(M8; scope: tools)*
+- **0201** Find the offside line once per team in a position update, not once per player *(M8; scope: sim)*
 - **0067** Rank the carrier's nearest opponents once per moment instead of twice *(M4; scope: sim)*
 - **0052** Speed up option generation and refresh positions every 4 seconds *(M4; scope: sim)*
 
@@ -195,6 +204,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0205** Write the M8 report, the as-built calibration sections of design 02 and the status page *(M8; scope: docs, design)*
 - **0195** Record the Join integration in the status page and milestones *(M8; scope: docs)*
 - **0189** Clarify --transfers and refresh the status tip *(M11; scope: docs)*
 - **0180** Record the M11 market calibration numbers in the report *(M11; scope: docs)*
