@@ -28,7 +28,7 @@ from footystreams.sim.geometry import (
     frame_coordinate,
     goal_distance_m,
 )
-from footystreams.sim.mathx import clamp
+from footystreams.sim.mathx import PERCENT, clamp
 from footystreams.sim.pressure import nearest_opponents, openness
 from footystreams.sim.state import Line, MatchState, PlayerState
 from footystreams.sim.threat import threat
@@ -36,11 +36,10 @@ from footystreams.sim.threat import threat
 _FORWARD_WEIGHT = 1.0
 _LENGTH_WEIGHT = 0.012  # per metre when ranking candidate receivers
 _KEEPER_PENALTY = 0.6
-_PERCENT = 100.0
 _DRIBBLE_CENTRING = 0.3  # share of the way toward the centre line a dribble drifts
 _CLEARANCE_DISTANCE = 0.35  # frame-x a clearance travels
-_CLEARANCE_MAX_FRAME_X = 0.8
-_MAX_FRAME_X = 0.99
+_CLEARANCE_MAX_END_FRAME_X = 0.8
+_MAX_END_FRAME_X = 0.99
 
 
 class ActionKind(StrEnum):
@@ -142,7 +141,7 @@ def _kind_bias(kind: PassKind, situation: Situation) -> float:
 def _pass_option(situation: Situation, mate: PlayerState) -> Option | None:
     state, cfg, direction = situation.state, situation.cfg, situation.direction
     carrier = state.carrier
-    end_fx = min(frame_coordinate(mate.x, direction) + cfg.decision.lead_frame_x, _MAX_FRAME_X)
+    end_fx = min(frame_coordinate(mate.x, direction) + cfg.decision.lead_frame_x, _MAX_END_FRAME_X)
     end_fy = frame_coordinate(mate.y, direction)
     end = (frame_coordinate(end_fx, direction), frame_coordinate(end_fy, direction))
     length = distance_m(carrier.x, carrier.y, end[0], end[1])
@@ -192,7 +191,7 @@ def _dribble_option(situation: Situation) -> Option:
     state, cfg, direction = situation.state, situation.cfg, situation.direction
     carrier = state.carrier
     step = cfg.dribble.distance_m / PITCH_LENGTH_M
-    end_fx = min(situation.fx + step, _MAX_FRAME_X)
+    end_fx = min(situation.fx + step, _MAX_END_FRAME_X)
     end_fy = clamp(situation.fy + (CENTRE - situation.fy) * _DRIBBLE_CENTRING, 0.0, 1.0)
     end = (frame_coordinate(end_fx, direction), frame_coordinate(end_fy, direction))
     nearest = nearest_opponents(state.defenders, end[0], end[1], 1)
@@ -203,7 +202,7 @@ def _dribble_option(situation: Situation) -> Option:
     gain = threat(end_fx, end_fy) - threat(situation.fx, situation.fy)
     view = state.attackers.view
     bias = (view.dribbling_freedom - CENTRE) * cfg.decision.dribble_bias
-    bias += (carrier.skills.flair / _PERCENT - CENTRE) * cfg.decision.dribble_bias
+    bias += (carrier.skills.flair / PERCENT - CENTRE) * cfg.decision.dribble_bias
     utility = _utility(situation, gain, probability, bias)
     return Option(ActionKind.DRIBBLE, utility, probability, end, situation.pressure)
 
@@ -234,7 +233,7 @@ def _clear_option(situation: Situation) -> Option | None:
     utility = decision.clear_base + decision.clear_slope * (
         situation.pressure - decision.clear_pressure
     )
-    target_fx = min(situation.fx + _CLEARANCE_DISTANCE, _CLEARANCE_MAX_FRAME_X)
+    target_fx = min(situation.fx + _CLEARANCE_DISTANCE, _CLEARANCE_MAX_END_FRAME_X)
     end = (frame_coordinate(target_fx, situation.direction), situation.state.carrier.y)
     return Option(ActionKind.CLEAR, utility, 1.0 - situation.pressure, end, situation.pressure)
 

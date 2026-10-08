@@ -14,7 +14,6 @@ from footystreams.sim.mathx import clamp
 from footystreams.sim.state import PlayerState, TeamState
 
 NEAREST_PRESSERS = 3
-_PERCENT = 100.0
 _FAR_SQUARED = 1e12  # larger than any squared pitch distance
 _ATTRIBUTE_PAIR_SCALE = 200.0  # work_rate + aggression, each on 1-100
 

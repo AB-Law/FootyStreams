@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import hashlib
 from collections.abc import Mapping
-from typing import Any, ClassVar
+from typing import ClassVar
 
 from pydantic import Field
 
@@ -324,13 +324,13 @@ def config_hash(config: SimConfig) -> str:
     return hashlib.sha256(text.encode()).hexdigest()[:CONFIG_HASH_LENGTH]
 
 
-def merge_config(base: SimConfig, overrides: Mapping[str, Any]) -> SimConfig:
+def merge_config(base: SimConfig, overrides: Mapping[str, object]) -> SimConfig:
     """Return `base` with a partial, possibly nested, mapping of overrides applied and validated."""
     merged = _deep_merge(base.model_dump(mode="python"), overrides)
     return SimConfig.model_validate(merged)
 
 
-def _deep_merge(base: Mapping[str, Any], overrides: Mapping[str, Any]) -> dict[str, Any]:
+def _deep_merge(base: Mapping[str, object], overrides: Mapping[str, object]) -> dict[str, object]:
     result = dict(base)
     for key, value in overrides.items():
         current = result.get(key)

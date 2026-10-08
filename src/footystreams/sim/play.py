@@ -12,10 +12,10 @@ from footystreams.domain.types import PlayerId
 from footystreams.events.base import Participant
 from footystreams.sim.config import SimConfig
 from footystreams.sim.emit import EventEmitter, participant
+from footystreams.sim.geometry import CENTRE
+from footystreams.sim.mathx import signed_unit
 from footystreams.sim.rng import SimRng
 from footystreams.sim.state import MatchState, PlayerState, TeamState
-
-_CENTRE = 0.5
 
 
 @dataclass(slots=True)
@@ -43,8 +43,8 @@ def take_possession(state: MatchState, player: PlayerState, x: float, y: float) 
 def action_duration(play: Play, base_s: float) -> float:
     """Return how long an action takes: base x tempo scale x (1 +- noise); consumes one draw."""
     tempo = play.state.attackers.view.tempo
-    scale = 1.0 + play.cfg.tempo.tempo_swing * (_CENTRE - tempo)
-    spread = play.cfg.tempo.noise * (play.rng.u() - _CENTRE) * 2.0
+    scale = 1.0 + play.cfg.tempo.tempo_swing * (CENTRE - tempo)
+    spread = play.cfg.tempo.noise * signed_unit(play.rng.u())
     return base_s * scale * (1.0 + spread)
 
 

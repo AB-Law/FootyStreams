@@ -8,6 +8,9 @@ from __future__ import annotations
 
 from math import sqrt
 
+PERCENT = 100.0  # attributes are on a 1-100 scale; divide by this for a 0-1 share
+_HALF = 0.5
+
 
 def clamp(value: float, low: float, high: float) -> float:
     """Limit `value` to the closed interval [low, high]."""
@@ -43,3 +46,8 @@ def rational_weight(utility: float, best: float, sharpness: float, floor: float)
     base = max(floor, 1.0 + sharpness * (utility - best))
     square = base * base
     return square * square
+
+
+def signed_unit(fraction: float) -> float:
+    """Map a fraction in [0, 1] onto [-1, 1] (0.5 becomes 0); used for symmetric noise."""
+    return (fraction - _HALF) * 2.0

@@ -6,7 +6,7 @@ from footystreams.events.open_play import InterceptionEvent, TackleEvent
 from footystreams.sim.actions.dribbling import defending_rating, dribbling_rating
 from footystreams.sim.emit import Meta
 from footystreams.sim.geometry import Point, distance_m, segment_distance_m
-from footystreams.sim.mathx import squash
+from footystreams.sim.mathx import signed_unit, squash
 from footystreams.sim.play import Play, actor, take_possession
 from footystreams.sim.pressure import nearest_opponents
 from footystreams.sim.state import PlayerState
@@ -18,7 +18,7 @@ def tackle_win_probability(tackler: PlayerState, carrier: PlayerState, play: Pla
     """Return the chance a tackle takes the ball: defending rating against the carrier's rating."""
     cfg = play.cfg.challenge
     edge = (defending_rating(tackler.skills) - dribbling_rating(carrier.skills)) / cfg.tackle_scale
-    return cfg.tackle_base + cfg.tackle_swing * (squash(edge) - 0.5) * 2.0
+    return cfg.tackle_base + cfg.tackle_swing * signed_unit(squash(edge))
 
 
 def attempt_press_tackle(play: Play, pressure: float) -> bool:

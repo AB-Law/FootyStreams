@@ -14,7 +14,7 @@ from footystreams.sim.actions.challenge import closest_of
 from footystreams.sim.actions.shooting import finishing_skill
 from footystreams.sim.emit import Meta
 from footystreams.sim.geometry import frame_coordinate, goal_distance_m
-from footystreams.sim.mathx import clamp
+from footystreams.sim.mathx import PERCENT, clamp, signed_unit
 from footystreams.sim.options import Option
 from footystreams.sim.play import Play, action_duration, actor, label, take_possession
 from footystreams.sim.positioning import place_for_kickoff
@@ -22,7 +22,6 @@ from footystreams.sim.pressure import nearest_opponents
 from footystreams.sim.side import opposite
 from footystreams.sim.state import PlayerState
 
-_PERCENT = 100.0
 _SKILL_PIVOT = 50.0
 _KEEPER_PIVOT = 55.0
 _KEEPER_MIX = (0.6, 0.2, 0.2)  # shot stopping, handling, positioning
@@ -62,7 +61,7 @@ def goal_given_on_target(play: Play, xg: float, shares: ShotShares, keeper: Play
     """Return the chance an on-target shot beats this keeper (xG divided by the on-target share)."""
     on_target = 1.0 - shares.woodwork
     keeper_factor = (
-        1.0 - play.cfg.shot.keeper_swing * (keeper_rating(keeper) - _KEEPER_PIVOT) / _PERCENT
+        1.0 - play.cfg.shot.keeper_swing * (keeper_rating(keeper) - _KEEPER_PIVOT) / PERCENT
     )
     return clamp(xg / on_target * keeper_factor, 0.0, play.cfg.shot.max_goal_given_on_target)
 
@@ -187,4 +186,4 @@ def _score_goal(play: Play, shot_id: str, assist: str | None) -> float:
     state.chain_started_at = state.elapsed_s
     state.assist_from = None
     tempo = play.cfg.tempo
-    return tempo.celebration_s + tempo.celebration_spread_s * (play.rng.u() - 0.5) * 2.0
+    return tempo.celebration_s + tempo.celebration_spread_s * signed_unit(play.rng.u())

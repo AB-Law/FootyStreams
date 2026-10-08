@@ -2,7 +2,7 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
-from footystreams.sim.mathx import clamp, distance, lerp, rational_weight, squash
+from footystreams.sim.mathx import clamp, distance, lerp, rational_weight, signed_unit, squash
 
 
 @given(st.floats(min_value=-1e6, max_value=1e6))
@@ -41,3 +41,12 @@ def test_rational_weight__best_option_gets_the_largest_weight() -> None:
 
 def test_rational_weight__never_below_floor_power() -> None:
     assert rational_weight(-100.0, 1.0, 2.0, 0.1) > 0.0
+
+
+@pytest.mark.parametrize(
+    ("fraction", "expected"), [(0.0, -1.0), (0.25, -0.5), (0.5, 0.0), (1.0, 1.0)]
+)
+def test_signed_unit__maps_unit_interval_onto_minus_one_to_one(
+    fraction: float, expected: float
+) -> None:
+    assert signed_unit(fraction) == expected

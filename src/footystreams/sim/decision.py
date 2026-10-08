@@ -8,14 +8,13 @@ from __future__ import annotations
 
 from footystreams.sim.config import SimConfig
 from footystreams.sim.geometry import CENTRE
-from footystreams.sim.mathx import clamp, rational_weight
+from footystreams.sim.mathx import PERCENT, clamp, rational_weight
 from footystreams.sim.options import Option, Weights, generate_options
 from footystreams.sim.rng import SimRng
-from footystreams.sim.state import MatchState
+from footystreams.sim.state import REGULATION_PERIOD_S, MatchState
 
-REGULATION_S = 5400.0
+REGULATION_S = 2 * REGULATION_PERIOD_S
 LATE_START_S = 3000.0  # urgency starts to build around the 50th minute
-_PERCENT = 100.0
 _TEMPERATURE_DECISION_PIVOT = 1.3
 _MAX_MARGIN = 2.0
 _KEEP_URGENCY = 0.2
@@ -52,7 +51,7 @@ def team_weights(state: MatchState, cfg: SimConfig) -> Weights:
 def choice_temperature(decisions: float, pressure: float, cfg: SimConfig) -> float:
     """Return the softmax temperature: base x (1.3 - decisions/100) x (1 + k x pressure) x scale."""
     decision = cfg.decision
-    calm = decision.temperature_base * (_TEMPERATURE_DECISION_PIVOT - decisions / _PERCENT)
+    calm = decision.temperature_base * (_TEMPERATURE_DECISION_PIVOT - decisions / PERCENT)
     return calm * (1.0 + decision.temperature_pressure * pressure) * decision.temperature_scale
 
 
