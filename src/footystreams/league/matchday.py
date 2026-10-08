@@ -13,6 +13,7 @@ from dataclasses import dataclass
 
 from footystreams.domain.club import Club
 from footystreams.domain.fixture import Fixture, FixtureStatus
+from footystreams.domain.match import MatchSetup
 from footystreams.domain.rng import WorldRng, derive_seed
 from footystreams.domain.standings import MatchScore, StandingRow
 from footystreams.domain.types import ClubId, RefereeId, SeasonId
@@ -87,11 +88,14 @@ def _crowd(
     return attendance(inputs, rng.fork("attendance"), engine.tables.config.attendance)
 
 
-def play_fixture(
-    repositories: Repositories, fixture: Fixture, engine: MatchdayEngine, today: dt.date
-) -> WorldDelta:
-    """Play one fixture and write its delta through ``repositories``; returns the delta."""
-    rng = WorldRng(derive_seed(engine.world_seed, f"match:{fixture.id}"))
+def build_fixture_setup(
+    repositories: Repositories,
+    fixture: Fixture,
+    engine: MatchdayEngine,
+    today: dt.date,
+    rng: WorldRng,
+) -> tuple[MatchSetup, tuple[TeamInputs, TeamInputs]]:
+    """The frozen setup of ``fixture`` and the two sides it came from; ``rng`` is the match's."""
     teams = (
         load_team(repositories, fixture.home_club_id),
         load_team(repositories, fixture.away_club_id),
@@ -104,7 +108,15 @@ def play_fixture(
         attendance=_crowd(teams[0], fixture, weather, engine, rng.fork("context")),
         today=today,
     )
-    setup = build_match_setup(teams, context, engine.tables.setup)
+    return build_match_setup(teams, context, engine.tables.setup), teams
+
+
+def play_fixture(
+    repositories: Repositories, fixture: Fixture, engine: MatchdayEngine, today: dt.date
+) -> WorldDelta:
+    """Play one fixture and write its delta through ``repositories``; returns the delta."""
+    rng = WorldRng(derive_seed(engine.world_seed, f"match:{fixture.id}"))
+    setup, teams = build_fixture_setup(repositories, fixture, engine, today, rng)
     result = engine.simulator.simulate(setup, rng.fork("simulate").seed % SEED_LIMIT)
     played = PlayedFixture(fixture, setup, result, teams, today)
     delta = derive_world_delta(played, engine.tables.post_match, rng.fork("after"))

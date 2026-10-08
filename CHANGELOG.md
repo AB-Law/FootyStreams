@@ -9,6 +9,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0194** Add friendly matches between any two clubs of a world *(M8; scope: league)*
+- **0193** Play a friendly between two clubs of a world with sim --home --away --world *(M8; scope: cli, league)*
+- **0192** Add league --simulator to play fixtures on the real match engine *(M8; scope: cli, league)*
+- **0191** Build the sim's static tables from the world's formation catalogue *(M8; scope: sim)*
 - **0177** Add the transfer-leg invariant L06 and the transfers report *(M11; scope: verify)*
 - **0176** Add the transfer market *(M11; scope: league)*
 - **0175** Add the rules of a deal *(M11; scope: league)*
@@ -191,6 +195,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0195** Record the Join integration in the status page and milestones *(M8; scope: docs)*
 - **0189** Clarify --transfers and refresh the status tip *(M11; scope: docs)*
 - **0180** Record the M11 market calibration numbers in the report *(M11; scope: docs)*
 - **0179** Document contracts and transfers (M11 report, design and status) *(M11; scope: docs, design)*
