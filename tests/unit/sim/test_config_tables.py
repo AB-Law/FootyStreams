@@ -46,3 +46,23 @@ def test_formation__has_eleven_slots_goalkeeper_first_and_valid_coordinates(
     assert slots[0].position is Position.GK
     assert all(0.0 <= slot.x <= 1.0 and 0.0 <= slot.y <= 1.0 for slot in slots)
     assert [slot.position for slot in slots].count(Position.GK) == 1
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"shot": {"block_base": 0.5, "block_pressure": 0.4}},
+        {"shot": {"off_target_min": 0.7}},
+        {"shot": {"woodwork_share": 1.0}},
+        {"passing": {"min_probability": 0.99, "max_probability": 0.5}},
+        {"dribble": {"min_probability": 0.9, "max_probability": 0.1}},
+        {"challenge": {"fail_intercept": 0.8, "fail_loose": 0.4}},
+        {"tempo": {"noise": 1.0}},
+        {"positioning": {"step_s": 0.0}},
+    ],
+)
+def test_merge_config__values_the_simulator_cannot_divide_by_are_rejected(
+    overrides: dict[str, dict[str, float]],
+) -> None:
+    with pytest.raises(ValidationError):
+        merge_config(SimConfig(), overrides)

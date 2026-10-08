@@ -24,6 +24,8 @@ CASES: tuple[GoldenCase, ...] = (
     GoldenCase("even_433", 60, 60, "433", "433", 7),
     GoldenCase("favourite_442_v_532", 72, 54, "442", "532", 11),
     GoldenCase("mirror_4231_v_352", 62, 62, "4231", "352", 23),
+    GoldenCase("underdog_343_v_4141", 52, 70, "343", "4141", 31),
+    GoldenCase("even_4411_v_442", 58, 58, "4411", "442", 42),
 )
 
 

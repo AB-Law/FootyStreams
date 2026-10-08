@@ -19,6 +19,7 @@ _TEMPERATURE_DECISION_PIVOT = 1.3
 _MAX_MARGIN = 2.0
 _KEEP_URGENCY = 0.2
 _RISK_SWING = 0.3
+_MIN_TEMPERATURE = 1e-6  # guards the division in the softmax; never reached with a valid config
 
 
 def urgency(state: MatchState) -> float:
@@ -45,7 +46,8 @@ def team_weights(state: MatchState, cfg: SimConfig) -> Weights:
     )
     keep = 1.0 - _KEEP_URGENCY * push + (view.patience - CENTRE) * decision.directness_bias
     risk = 1.0 - _RISK_SWING * (view.risk_taking - CENTRE) * 2.0
-    return Weights(max(0.2, progress), max(0.2, keep), max(0.2, risk))
+    floor = decision.min_utility_weight
+    return Weights(max(floor, progress), max(floor, keep), max(floor, risk))
 
 
 def choice_temperature(decisions: float, pressure: float, cfg: SimConfig) -> float:
@@ -58,7 +60,7 @@ def choice_temperature(decisions: float, pressure: float, cfg: SimConfig) -> flo
 def choose(options: list[Option], decisions: float, rng: SimRng, cfg: SimConfig) -> Option:
     """Pick one option by softmax over utility; consumes one draw."""
     pressure = options[0].pressure
-    temperature = max(1e-6, choice_temperature(decisions, pressure, cfg))
+    temperature = max(_MIN_TEMPERATURE, choice_temperature(decisions, pressure, cfg))
     best = max(option.utility for option in options)
     weights = [
         rational_weight(option.utility, best, 1.0 / temperature, cfg.decision.weight_floor)

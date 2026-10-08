@@ -12,5 +12,5 @@ that changes match output bumps it (goldens are re-pinned with ``uv run golden u
 
 from __future__ import annotations
 
-SCHEMA_VERSION = "0.1.3"
-SIM_VERSION = "0.1.0"
+SCHEMA_VERSION = "0.1.4"
+SIM_VERSION = "0.1.1"

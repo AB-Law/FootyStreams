@@ -51,7 +51,7 @@ def shot_shares(play: Play, pressure: float, shooter_skill: float) -> ShotShares
     blocked = cfg.block_base + cfg.block_pressure * pressure
     skill_edge = (shooter_skill - _SKILL_PIVOT) / _SKILL_PIVOT
     off_target = cfg.off_target_base - cfg.off_target_skill_swing * skill_edge
-    off_target = clamp(off_target, 0.05, 0.6)
+    off_target = clamp(off_target, cfg.off_target_min, cfg.off_target_max)
     on_frame = 1.0 - blocked - off_target
     woodwork = cfg.woodwork_share * on_frame
     return ShotShares(blocked, blocked + off_target, blocked + off_target + woodwork)
@@ -117,6 +117,7 @@ def _after_shot(play: Play, outcome: str, shot_id: str, assist: str | None) -> f
     state = play.state
     if outcome == "goal":
         return _score_goal(play, shot_id, assist)
+    state.assist_from = None  # a rebound is a new chance: the earlier pass does not assist it
     if outcome == "saved":
         _record_save(play, shot_id)
     elif outcome == "off_target":

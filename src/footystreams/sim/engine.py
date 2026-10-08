@@ -51,6 +51,10 @@ _RESOLVERS = {
 }
 
 
+def _goals(state: MatchState) -> int:
+    return state.home.score + state.away.score
+
+
 class MatchEngine:
     """Runs one match and yields its events in order."""
 
@@ -92,6 +96,7 @@ class MatchEngine:
         if period != PERIODS[0]:
             state.home.attack_dir, state.away.attack_dir = -1, 1
         place_for_kickoff(state, kicking)
+        state.assist_from = None
         state.chain += 1
         self._pending_move_s = 0.0
         self._emit_marker(KickoffEvent, period=period, team=kicking)
@@ -107,6 +112,7 @@ class MatchEngine:
             update_positions(state, self._pending_move_s, self._config.positioning)
             self._pending_move_s = 0.0
         state.tick += 1
+        goals_before = _goals(state)
         carrier = state.carrier
         nearest = nearest_opponents(state.defenders, carrier.x, carrier.y, NEAREST_PRESSERS)
         pressure = pressure_from(nearest, state.defenders, self._config.pressure)
@@ -116,7 +122,12 @@ class MatchEngine:
             option: Option = decide(state, play.rng, self._config, pressure)
             duration = _RESOLVERS[option.kind](play, option)
         state.t_period += duration
-        self._pending_move_s += duration
+        if _goals(state) == goals_before:
+            self._pending_move_s += duration
+        else:
+            # The clock ran through the celebration, but place_for_kickoff already walked everyone
+            # back to the kick-off formation; moving them again would undo it.
+            self._pending_move_s = 0.0
 
     def _summary_event(self) -> MatchEvent:
         events = list(self._emitter.events)

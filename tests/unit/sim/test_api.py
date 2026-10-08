@@ -11,10 +11,13 @@ from footystreams.sim import (
     InvalidSetupError,
     SimConfig,
     default_tables,
+    engine,
     run_match,
     simulate_match,
 )
-from footystreams.sim.config import config_hash
+from footystreams.sim.config import PositionConfig, config_hash
+from footystreams.sim.positioning import update_positions
+from footystreams.sim.state import MatchState
 from tests.factories.match import make_setup, make_team_sheet
 from tests.factories.sim_teams import make_demo_setup
 
@@ -122,3 +125,21 @@ def test_run_match__stream_without_a_summary__raises_engine_error(
 
     with pytest.raises(EngineError, match="without a summary"):
         run_match(SETUP, 1, CFG, TABLES)
+
+
+def test_run_match__no_position_update_spans_a_goal_celebration(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The clock runs through a celebration, but players stay in the kick-off formation."""
+    steps: list[float] = []
+
+    def spy(state: MatchState, dt: float, cfg: PositionConfig) -> None:
+        steps.append(dt)
+        update_positions(state, dt, cfg)
+
+    monkeypatch.setattr(engine, "update_positions", spy)
+
+    result = run_match(SETUP, 7, CFG, TABLES)
+
+    assert result.summary.score_home + result.summary.score_away > 0
+    assert max(steps) < CFG.tempo.celebration_s - CFG.tempo.celebration_spread_s
