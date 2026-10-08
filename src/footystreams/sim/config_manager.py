@@ -42,7 +42,9 @@ class ManagerConfig(DomainModel):
 
     enabled: bool = True  # the AI manager; forced injury changes happen regardless
     max_subs: int = Field(ge=0, le=11, default=5)
-    max_windows: int = Field(ge=0, le=11, default=3)  # stoppages in which changes may be made
+    # Stoppages in which changes may be made. The real rule is three, with several changes in each;
+    # the AI makes one change per stoppage, so five windows give the real 4.2 changes a side (M8).
+    max_windows: int = Field(ge=0, le=11, default=5)
     window_gap_s: float = 20.0  # changes closer together than this share one window
     sub_s: float = 30.0  # stoppage per substitution
     sub_spread_s: float = 8.0
@@ -60,7 +62,7 @@ class ManagerConfig(DomainModel):
     shift_cooldown_s: float = 480.0  # a manager lets a change of mentality settle
     tactical_gain: float = 2.0  # appeal of chasing or protecting per goal of margin (up to 2)
     card_gain: float = 2.0  # appeal of reshaping after a dismissal
-    yellow_from_min: float = 25.0
-    yellow_until_min: float = 70.0
+    yellow_from_min: float = 60.0  # managers pull a booked player late, not before the hour
+    yellow_until_min: float = 85.0
     yellow_aggression: float = 60.0  # booked players at least this aggressive are a risk
     yellow_gain: float = 1.5

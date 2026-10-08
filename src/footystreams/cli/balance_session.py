@@ -51,6 +51,7 @@ class Session:
                 self.league_tables,
                 arguments.matches if matches is None else matches,
                 arguments.seed if seed is None else seed,
+                arguments.min_gap,
             )
         return BalanceRunner(scenarios, self.sim_tables, arguments.workers)
 

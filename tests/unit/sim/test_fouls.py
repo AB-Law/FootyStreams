@@ -8,7 +8,7 @@ from footystreams.events.restarts import FreeKickEvent
 from footystreams.sim.actions.foul import contest_foul, plays_advantage
 from footystreams.sim.actions.free_kick import take_free_kick
 from footystreams.sim.actions.setpieces import choose_free_kick_taker, restart_delay
-from footystreams.sim.config import DisciplineConfig, SimConfig, merge_config
+from footystreams.sim.config import DisciplineConfig, ShotConfig, SimConfig, merge_config
 from footystreams.sim.discipline import (
     Contact,
     contact_probability,
@@ -26,6 +26,7 @@ from tests.factories.referee import make_referee
 from tests.factories.sim_play import make_play
 
 CFG = DisciplineConfig(contact_base=0.45)
+RULES = (CFG, ShotConfig())
 ALWAYS_CONTACT = merge_config(SimConfig(), {"discipline": {"contact_base": 1000.0}})
 
 
@@ -79,21 +80,41 @@ def test_severity_label__thresholds(severity: float, label: str) -> None:
 def test_denies_opportunity__through_on_goal_with_only_the_keeper_ahead() -> None:
     play = make_play()
     carrier = play.state.home.players[10]
-    carrier.x, carrier.y = 0.85, 0.5
+    carrier.x, carrier.y = 0.92, 0.5
     for defender in play.state.away.players:
         defender.x, defender.y = 0.2, 0.5  # all behind him in home's frame (away defends x -> 1)
     play.state.away.players[0].x = 0.99
-    assert denies_opportunity(carrier, play.state.away.players, CFG, 1)
+    assert denies_opportunity(carrier, play.state.away.players, RULES, 1)
     for defender in play.state.away.players[:4]:
-        defender.x = 0.95
-    assert not denies_opportunity(carrier, play.state.away.players, CFG, 1)
+        defender.x = 0.97
+    assert not denies_opportunity(carrier, play.state.away.players, RULES, 1)
+
+
+def test_denies_opportunity__a_run_too_far_out_or_too_wide_is_not_a_clear_chance() -> None:
+    play = make_play()
+    carrier = play.state.home.players[10]
+    for defender in play.state.away.players:
+        defender.x, defender.y = 0.2, 0.5
+    play.state.away.players[0].x = 0.99
+    carrier.x, carrier.y = 0.85, 0.5  # through, but 16 m out: about 0.07 xG
+    assert not denies_opportunity(carrier, play.state.away.players, RULES, 1)
+    carrier.x, carrier.y = 0.92, 0.5  # 8 m out and central: a clear chance
+    assert denies_opportunity(carrier, play.state.away.players, RULES, 1)
+    carrier.y = 0.1  # the same depth from the touchline
+    assert not denies_opportunity(carrier, play.state.away.players, RULES, 1)
+    assert denies_opportunity(
+        carrier,
+        play.state.away.players,
+        (CFG.model_copy(update={"dogso_min_xg": 0.0}), ShotConfig()),
+        1,
+    )
 
 
 def test_denies_opportunity__a_man_in_midfield_is_not_through() -> None:
     play = make_play()
     carrier = play.state.home.players[8]
     carrier.x = 0.4
-    assert not denies_opportunity(carrier, [], CFG, 1)
+    assert not denies_opportunity(carrier, [], RULES, 1)
 
 
 def _tackle_pair(play: Play) -> tuple[PlayerState, PlayerState]:

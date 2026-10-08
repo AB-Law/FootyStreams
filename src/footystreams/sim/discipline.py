@@ -10,7 +10,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from footystreams.sim.config import DisciplineConfig, RefereeConfig
+from footystreams.sim.actions.shooting import geometry_xg
+from footystreams.sim.config import DisciplineConfig, RefereeConfig, ShotConfig
 from footystreams.sim.effective import Skills
 from footystreams.sim.geometry import CENTRE, frame_coordinate, in_penalty_area
 from footystreams.sim.mathx import PERCENT, clamp
@@ -72,14 +73,25 @@ def severity_label(severity: float, cfg: DisciplineConfig) -> SeverityLabel:
 
 
 def denies_opportunity(
-    carrier: PlayerState, opponents: list[PlayerState], cfg: DisciplineConfig, direction: int
+    carrier: PlayerState,
+    opponents: list[PlayerState],
+    rules: tuple[DisciplineConfig, ShotConfig],
+    direction: int,
 ) -> bool:
-    """True when the fouled man was through on goal: far up the pitch, at most the keeper ahead."""
+    """True when the fouled man had a clear chance: through on goal and close enough to score.
+
+    Through on goal is far up the pitch with at most the keeper ahead; a clear chance is also an
+    unpressured xG of `dogso_min_xg` from where he stood, so a wide or distant run past the last
+    defender is not a denied goal (M8: it made 1.4 reds a match against about 0.1 in a league).
+    """
+    cfg, shot = rules
     fx = frame_coordinate(carrier.x, direction)
     if fx < cfg.dogso_min_frame_x:
         return False
     ahead = sum(frame_coordinate(opponent.x, direction) > fx for opponent in opponents)
-    return ahead <= cfg.dogso_max_defenders_ahead
+    if ahead > cfg.dogso_max_defenders_ahead:
+        return False
+    return geometry_xg(fx, frame_coordinate(carrier.y, direction), shot) >= cfg.dogso_min_xg
 
 
 def box_shift(profile_penalty_propensity: float, cfg: RefereeConfig) -> float:
@@ -124,5 +136,5 @@ def roll_contact(play: Play, tackler: PlayerState, carrier: PlayerState) -> Cont
         severity,
         severity_label(severity, cfg.discipline),
         in_box,
-        denies_opportunity(carrier, fouling_team.players, cfg.discipline, attack_dir),
+        denies_opportunity(carrier, fouling_team.players, (cfg.discipline, cfg.shot), attack_dir),
     )

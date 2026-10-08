@@ -74,6 +74,7 @@ archetypes:
     reputation: [85, 92]
     quality: [72, 76]
     style_weights: {possession: 4, gegen_press: 3, high_press: 3}
+    mismatch_styles: [possession, gegen_press, high_press, wing_play]
     city_percentile: 0.0
     income_m: [120, 150]
     wage_budget_share: [0.55, 0.62]
@@ -95,6 +96,7 @@ archetypes:
     reputation: [75, 82]
     quality: [68, 72]
     style_weights: {high_press: 4, wing_play: 3, gegen_press: 2}
+    mismatch_styles: [possession, gegen_press, high_press, wing_play]
     city_percentile: 0.1
     income_m: [88, 110]
     wage_budget_share: [0.56, 0.63]

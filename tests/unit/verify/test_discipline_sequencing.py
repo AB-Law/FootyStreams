@@ -83,7 +83,7 @@ def test_m12__a_cause_that_comes_later_is_reported() -> None:
 
 
 def test_m12__a_scoring_shot_without_its_goal_is_reported() -> None:
-    log = list(log_with("goal"))
+    log = list(log_with("scoring_shot"))
     shot_index = next(
         i for i, e in enumerate(log) if isinstance(e, ShotEvent) and e.outcome == "goal"
     )

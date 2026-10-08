@@ -9,6 +9,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0222** Let balance fit count only the metrics named by --metrics *(M8; scope: cli)*
+- **0219** Add balance --min-gap to play only mismatched pairings for strength studies *(M8; scope: cli)*
+- **0218** Make the balance sensitivity sweep resumable, with one-sided nudges and a report file *(M8; scope: cli, tools)*
 - **0216** Add uv run engine: the channel as a process, with the world stepped in a worker process *(M12; scope: cli, runtime)*
 - **0215** Add the Engine: lock, supervised buffer and broadcast, resume from the cursor, filler, graceful stop *(M12; scope: runtime)*
 - **0214** Add the simulation buffer (world ahead of the broadcast, verified, quarantine) and the world stepper *(M12; scope: runtime)*
@@ -139,6 +142,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0228** Calibrate stage 3: discipline, home advantage and the on-target share *(M8; scope: sim; sim version minor)*
+- **0227** Allow five substitution windows and move the five-plus goals bands *(M8; scope: sim, data, design; sim version patch)*
+- **0226** Calibrate stage 2: tactics leverage and the shot level *(M8; scope: sim; sim version minor)*
+- **0224** Keep elite clubs' drama managers attacking *(M8; scope: seed, data)*
+- **0223** Calibrate shot volume and quality: stage 1 defaults *(M8; scope: sim; sim version minor)*
+- **0220** Move the yellow-card substitution window to minutes 60-85 *(M8; scope: sim; sim version minor; schema version patch)*
 - **0178** Fund transfer budgets from income and scale final-fill wages to the club's budget *(M11; scope: league, data)*
 - **0169** Scale intake from the league's own recorded level; split the rollover modules *(M10; scope: league)*
 - **0168** Tune development, intake and squad wages; add league health and a 20-season test *(M10; scope: league)*
@@ -160,6 +169,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0225** Count a denied goal-scoring chance only when it was a clear chance *(M8; scope: sim; sim version patch)*
+- **0221** Hold attackers on the offside line and mistime runs only on balls in behind *(M8; scope: sim; sim version patch)*
 - **0207** Strip git's repository variables from every test so a hook cannot steer them into the real repo *(M12; scope: tools)*
 - **0204** Count only changes before the break as early tactical substitutions in the balance metric *(M8; scope: tools)*
 - **0203** Count first-half stoppage time in player minutes so a late-first-half substitute never gets negative minutes *(M8; scope: events, sim; sim version patch)*
@@ -204,6 +215,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0062** Share the one-player-on-two-teams check between sim and verify *(M4; scope: domain, verify, sim)*
 
 ### Tests
+- **0229** Add the balance profile and metamorphic statistical tests *(M8; scope: tools)*
 - **0183** Skip the world-gen wall-clock tripwire under coverage *(M9; scope: seed)*
 - **0171** Stop the season tests timing out under coverage *(M10; scope: league)*
 - **0135** Share cached worlds across seed tests *(M2; scope: cli)*
@@ -215,6 +227,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0230** Write the M8 calibration report and record the sensitivity matrices *(M8; scope: docs, design)*
 - **0217** Write the M12 report and the as-built runtime section of design 13 *(M12; scope: docs, design)*
 - **0205** Write the M8 report, the as-built calibration sections of design 02 and the status page *(M8; scope: docs, design)*
 - **0195** Record the Join integration in the status page and milestones *(M8; scope: docs)*

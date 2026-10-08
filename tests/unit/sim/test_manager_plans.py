@@ -89,8 +89,9 @@ def test_candidate_plans__a_dismissal_while_trailing_keeps_the_mentality() -> No
 def test_candidate_plans__a_booked_aggressive_player_is_a_yellow_risk() -> None:
     player = _players()[0]
     player.skills = replace(player.skills, aggression=80.0)
-    assert _reasons(_view(booked=(player,))) == ["yellow_risk"]
-    assert _reasons(_view(booked=(player,), minute=80.0)) == []
+    assert _reasons(_view(booked=(player,), minute=65.0)) == ["yellow_risk"]
+    assert _reasons(_view(booked=(player,), minute=30.0)) == []  # not before the hour
+    assert _reasons(_view(booked=(player,), minute=88.0)) == []
 
 
 def test_choose_plan__nothing_to_choose_means_do_nothing() -> None:

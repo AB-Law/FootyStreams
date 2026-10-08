@@ -34,7 +34,12 @@ def test_apply_crowd__home_gains_mental_attributes_proportionally_to_the_crowd()
     skills = _skills()
     small = apply_crowd(skills, "home", Crowd(0.2, 0.3), CFG, 1.0)
     large = apply_crowd(skills, "home", Crowd(1.0, 0.3), CFG, 1.0)
-    assert skills.composure < small.composure < large.composure <= skills.composure * 1.12
+    assert (
+        skills.composure
+        < small.composure
+        < large.composure
+        <= skills.composure * (1.0 + CFG.crowd_lift)
+    )
     assert large.finishing == skills.finishing
 
 

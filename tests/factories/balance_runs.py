@@ -13,12 +13,14 @@ from tests.factories.world import make_world
 
 
 @cache
-def make_balance_scenarios(matches: int = 12, seed: int = 1) -> tuple[Scenario, ...]:
+def make_balance_scenarios(
+    matches: int = 12, seed: int = 1, min_gap: float = 0.0
+) -> tuple[Scenario, ...]:
     """Scenarios over a generated 4-club world (12 ordered pairings)."""
     database = InMemoryDatabase()
     save_world(make_world(2, 4), InMemoryUnitOfWork(database))
     with InMemoryUnitOfWork(database) as uow:
-        return tuple(build_scenarios(uow, make_league_tables(), matches, seed))
+        return tuple(build_scenarios(uow, make_league_tables(), matches, seed, min_gap))
 
 
 def make_balance_tables() -> StaticTables:

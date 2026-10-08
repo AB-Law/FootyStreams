@@ -136,6 +136,31 @@ def test_balance_fit__writes_a_candidate_and_never_overwrites_it(
     assert "already exists" in capsys.readouterr().err
 
 
+@pytest.mark.slow
+def test_balance_fit__metrics_limit_what_the_loss_counts(
+    world_directory: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    out = tmp_path / "limited.yaml"
+    arguments = [
+        "fit", *_run(world_directory), "--knobs", "shot.xg_cap", "--max-evals", "4",
+        "--validation-matches", "4", "--metrics", "goals_per_match,shots_per_team",
+        "--out", str(out),
+    ]  # fmt: skip
+
+    assert main(arguments) == 0
+    assert "metrics: goals_per_match, shots_per_team" in out.read_text(encoding="utf-8")
+    assert "/2 PASS" in capsys.readouterr().out  # only the two chosen metrics were judged
+
+
+def test_balance_fit__an_unknown_metric_is_a_usage_error(
+    world_directory: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    arguments = ["fit", *_run(world_directory), "--knobs", "shot.xg_cap", "--metrics", "nope"]
+
+    assert main(arguments) == EXIT_USAGE
+    assert "unknown metrics" in capsys.readouterr().err
+
+
 @pytest.mark.parametrize("extra", [["--bounds", "2,1"], ["--bounds", "x,y"], []])
 def test_balance_fit__bad_input_is_a_usage_error(
     world_directory: Path, extra: list[str], capsys: pytest.CaptureFixture[str]
@@ -146,3 +171,39 @@ def test_balance_fit__bad_input_is_a_usage_error(
 
     assert main(arguments) == EXIT_USAGE
     assert "balance: error" in capsys.readouterr().err
+
+
+def _sweep(world: Path, state: Path, *extra: str) -> list[str]:
+    return [
+        "sensitivity", *_run(world), "--knobs", "shot.xg_cap,shot.range_m", "--sides", "up",
+        "--metrics", "goals_per_match", "--state", str(state), *extra,
+    ]  # fmt: skip
+
+
+def test_balance_sensitivity__a_resumed_sweep_replays_nothing_and_prints_the_same(
+    world_directory: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    state = tmp_path / "sweep.jsonl"
+    report = tmp_path / "report.txt"
+    assert main(_sweep(world_directory, state, "--report", str(report))) == 0
+    first = capsys.readouterr()
+    assert "[2/2]" in first.err
+
+    assert main(_sweep(world_directory, state)) == 0
+    second = capsys.readouterr()
+
+    assert second.out == first.out
+    assert second.err == ""  # every knob was already in the file
+    assert report.read_text(encoding="utf-8") == first.out
+    assert len(state.read_text(encoding="utf-8").splitlines()) == 3  # header and two knobs
+
+
+def test_balance_sensitivity__a_state_file_from_other_settings_is_refused(
+    world_directory: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    state = tmp_path / "sweep.jsonl"
+    assert main(_sweep(world_directory, state)) == 0
+    capsys.readouterr()
+
+    assert main(_sweep(world_directory, state, "--seed", "7")) == EXIT_USAGE
+    assert "different settings" in capsys.readouterr().err

@@ -16,7 +16,7 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from footystreams.balance.runner import default_workers
-from footystreams.balance.sensitivity import DEFAULT_RELATIVE_STEP
+from footystreams.balance.sensitivity import DEFAULT_RELATIVE_STEP, Sides
 from footystreams.balance.targets import DEFAULT_PROFILE
 from footystreams.cli.balance_commands import EXIT_OFF_TARGET, EXIT_OK, HANDLERS
 from footystreams.cli.balance_session import open_session
@@ -47,6 +47,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--set", action="append", default=[], dest="pairs", metavar="GROUP.KNOB=VALUE",
         help="override one knob (repeatable)",
     )  # fmt: skip
+    parser.add_argument(
+        "--min-gap", type=float, default=0.0, dest="min_gap",
+        help="play only pairings whose rating gap is at least this (strength studies)",
+    )  # fmt: skip
     parser.add_argument("--workers", type=int, default=default_workers())
     parser.add_argument("--failures", action="store_true", help="run: only the metrics that miss")
     parser.add_argument("--knobs", help="sensitivity, fit: comma-separated knob paths")
@@ -54,7 +58,20 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--relative", type=float, default=DEFAULT_RELATIVE_STEP, help="sensitivity: nudge size"
     )
-    parser.add_argument("--metrics", help="sensitivity: comma-separated metric columns")
+    parser.add_argument(
+        "--metrics",
+        help="sensitivity, fit: comma-separated metrics (fit: only these enter the loss)",
+    )
+    parser.add_argument(
+        "--sides", choices=[side.value for side in Sides], default=Sides.BOTH.value,
+        help="sensitivity: nudge down and up (both) or only up (half the cost)",
+    )  # fmt: skip
+    parser.add_argument(
+        "--state", type=Path, help="sensitivity: save progress here; resume if it exists"
+    )
+    parser.add_argument(
+        "--report", type=Path, help="sensitivity: also write the table to this file"
+    )
     parser.add_argument("--max-evals", type=int, default=DEFAULT_MAX_EVALUATIONS, dest="max_evals")
     parser.add_argument("--restarts", type=int, default=1, help="fit: searches to run")
     parser.add_argument("--bounds", help="fit: allowed multiplier range of each knob, low,high")

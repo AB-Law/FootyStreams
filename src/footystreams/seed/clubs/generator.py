@@ -68,9 +68,14 @@ class ClubPlan:
 
 
 def _style_for(rng: WorldRng, archetype: ClubArchetype) -> ManagerStyle:
-    """The archetype's usual style; one club in five gets a deliberate mismatch for drama."""
+    """The archetype's usual style; one club in five gets a deliberate mismatch for drama.
+
+    An elite archetype lists the styles its mismatch may draw from: a title contender never gets a
+    low-block manager (M8: the strongest club played defensively and lost its edge to tactics).
+    """
     if rng.bernoulli(MANAGER_MISMATCH_CHANCE):
-        return ManagerStyle(rng.choice(sorted(style.value for style in ManagerStyle)))
+        allowed = archetype.mismatch_styles or tuple(style.value for style in ManagerStyle)
+        return ManagerStyle(rng.choice(sorted(allowed)))
     return ManagerStyle(rng.choice_weighted(archetype.style_weights))
 
 

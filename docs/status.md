@@ -6,9 +6,9 @@ Updated on the Join integration branch (2026-10-08). Read this first; then the d
 - Design is complete (`docs/design/`, index in `docs/design/README.md`; decisions in `09-schema-decisions.md`).
 - **M0 is merged** to `main` (scaffold, quality gate, changelog, CI, ADRs).
 - **Track A (M1, M4–M7)** and **Track B (M2, M3, M9–M11)** are both merged to `main`.
-- **Join track:** the integration (PR 28) is merged. **M8** is split in two PRs: part 1 (`feat/m8-balance-harness`) is the `uv run balance` harness (run, sensitivity, fit), the profiling pass and a minutes bug it found; part 2 is the calibrated defaults, golden re-pin and statistical tests (`docs/milestones/M8.md`). **M12** (the runtime engine, `uv run engine`) is built on `feat/m12-runtime-engine` (`docs/milestones/M12.md`); then M13 → M14.
+- **Join track:** the integration (PR 28), M8 part 1 (PR 29, the balance harness) and M12 (PR 30, the runtime engine, `uv run engine`) are merged. **M8 part 2** (`feat/m8-calibration`) is the calibration: 33 of 43 balance metrics pass (was 13), `SIM_VERSION` 0.5.0 and `SCHEMA_VERSION` 0.3.2, with the known gaps (goal timing, possession spread, corners) recorded in `docs/milestones/M8.md` and `tests/statistical`. Then M13 -> M14.
 - Integration done: the sim plays the world's own formations (`sim.tables.tables_from_catalog`), `league --simulator event` plays a season on the real engine (deterministic; about 14 s for 4 clubs), and `sim --home A --away B --world DIR|--db FILE` plays a friendly (`league/friendly.py`).
-- Baseline for M8 part 2 (13 of 43 metrics pass): the real engine scores about 4.1 goals a match in generated worlds (the realistic target is about 2.7), and the league's `EventSimulator` does not yet pass the match referee to `run_match` (a neutral one officiates; `sim --world` does pass it).
+- After M8 part 2: the real engine scores about 2.7 goals a match in the default world (target 2.7); the league's `EventSimulator` does not yet pass the match referee to `run_match` (a neutral one officiates; `sim --world` does pass it). Style choices have almost no effect on results until they have costs (a follow-up in the M8 report).
 
 ## How to work here
 ```bash

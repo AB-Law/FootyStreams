@@ -97,3 +97,6 @@ audio/
 # Scratch space
 scratch/
 tmp/
+
+# balance harness runs (resumable sweep state and reports)
+balance_runs/

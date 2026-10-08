@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 from tests.factories.balance_runs import make_balance_scenarios
 
 
@@ -37,3 +39,19 @@ def test_build_scenarios__swapping_the_venue_negates_the_gap() -> None:
 
     for (home, away), gap in by_pair.items():
         assert abs(gap + by_pair[(away, home)]) < 1e-3
+
+
+def test_build_scenarios__a_minimum_gap_keeps_only_the_mismatched_pairings() -> None:
+    everything = make_balance_scenarios()
+    widest = max(abs(s.gap) for s in everything)
+
+    chosen = make_balance_scenarios(12, 1, widest / 2)
+
+    assert chosen
+    assert all(abs(s.gap) >= widest / 2 for s in chosen)
+    assert len(chosen) == 12  # the cycle repeats, so the requested number is still played
+
+
+def test_build_scenarios__a_gap_no_pairing_reaches_is_refused() -> None:
+    with pytest.raises(ValueError, match="no pairing"):
+        make_balance_scenarios(12, 1, 1e6)

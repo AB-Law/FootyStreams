@@ -1158,28 +1158,28 @@
     "club_id": "clb_00006",
     "player_id": "plr_0004m",
     "squad_number": 1,
-    "squad_role": "key",
+    "squad_role": "rotation",
     "status": "first_team"
   },
   {
     "club_id": "clb_00006",
     "player_id": "plr_0004p",
     "squad_number": 2,
-    "squad_role": "key",
+    "squad_role": "rotation",
     "status": "first_team"
   },
   {
     "club_id": "clb_00006",
     "player_id": "plr_0004r",
     "squad_number": 3,
-    "squad_role": "rotation",
+    "squad_role": "key",
     "status": "first_team"
   },
   {
     "club_id": "clb_00006",
     "player_id": "plr_0004t",
     "squad_number": 4,
-    "squad_role": "rotation",
+    "squad_role": "key",
     "status": "first_team"
   },
   {
@@ -1193,42 +1193,42 @@
     "club_id": "clb_00006",
     "player_id": "plr_0004x",
     "squad_number": 6,
-    "squad_role": "rotation",
+    "squad_role": "key",
     "status": "first_team"
   },
   {
     "club_id": "clb_00006",
     "player_id": "plr_00054",
     "squad_number": 7,
-    "squad_role": "rotation",
+    "squad_role": "backup",
     "status": "first_team"
   },
   {
     "club_id": "clb_00006",
     "player_id": "plr_0004z",
     "squad_number": 8,
-    "squad_role": "key",
+    "squad_role": "rotation",
     "status": "first_team"
   },
   {
     "club_id": "clb_00006",
     "player_id": "plr_00059",
     "squad_number": 9,
-    "squad_role": "key",
+    "squad_role": "rotation",
     "status": "first_team"
   },
   {
     "club_id": "clb_00006",
     "player_id": "plr_00053",
     "squad_number": 10,
-    "squad_role": "rotation",
+    "squad_role": "key",
     "status": "first_team"
   },
   {
     "club_id": "clb_00006",
     "player_id": "plr_00055",
     "squad_number": 11,
-    "squad_role": "key",
+    "squad_role": "rotation",
     "status": "first_team"
   },
   {
@@ -1242,14 +1242,14 @@
     "club_id": "clb_00006",
     "player_id": "plr_0004n",
     "squad_number": 13,
-    "squad_role": "rotation",
+    "squad_role": "backup",
     "status": "first_team"
   },
   {
     "club_id": "clb_00006",
     "player_id": "plr_0004s",
     "squad_number": 14,
-    "squad_role": "backup",
+    "squad_role": "rotation",
     "status": "first_team"
   },
   {
@@ -1263,28 +1263,28 @@
     "club_id": "clb_00006",
     "player_id": "plr_0004y",
     "squad_number": 16,
-    "squad_role": "backup",
+    "squad_role": "rotation",
     "status": "first_team"
   },
   {
     "club_id": "clb_00006",
     "player_id": "plr_00056",
     "squad_number": 17,
-    "squad_role": "rotation",
+    "squad_role": "key",
     "status": "first_team"
   },
   {
     "club_id": "clb_00006",
     "player_id": "plr_00050",
     "squad_number": 18,
-    "squad_role": "key",
+    "squad_role": "backup",
     "status": "first_team"
   },
   {
     "club_id": "clb_00006",
     "player_id": "plr_00057",
     "squad_number": 19,
-    "squad_role": "backup",
+    "squad_role": "key",
     "status": "first_team"
   },
   {
@@ -1396,14 +1396,14 @@
     "club_id": "clb_00007",
     "player_id": "plr_0005m",
     "squad_number": 2,
-    "squad_role": "backup",
+    "squad_role": "key",
     "status": "first_team"
   },
   {
     "club_id": "clb_00007",
     "player_id": "plr_0005o",
     "squad_number": 3,
-    "squad_role": "backup",
+    "squad_role": "key",
     "status": "first_team"
   },
   {
@@ -1417,7 +1417,7 @@
     "club_id": "clb_00007",
     "player_id": "plr_0005r",
     "squad_number": 5,
-    "squad_role": "rotation",
+    "squad_role": "key",
     "status": "first_team"
   },
   {
@@ -1431,35 +1431,35 @@
     "club_id": "clb_00007",
     "player_id": "plr_00061",
     "squad_number": 7,
-    "squad_role": "backup",
+    "squad_role": "key",
     "status": "first_team"
   },
   {
     "club_id": "clb_00007",
     "player_id": "plr_0005w",
     "squad_number": 8,
-    "squad_role": "key",
+    "squad_role": "backup",
     "status": "first_team"
   },
   {
     "club_id": "clb_00007",
     "player_id": "plr_00066",
     "squad_number": 9,
-    "squad_role": "key",
+    "squad_role": "rotation",
     "status": "first_team"
   },
   {
     "club_id": "clb_00007",
     "player_id": "plr_00060",
     "squad_number": 10,
-    "squad_role": "rotation",
+    "squad_role": "backup",
     "status": "first_team"
   },
   {
     "club_id": "clb_00007",
     "player_id": "plr_00062",
     "squad_number": 11,
-    "squad_role": "rotation",
+    "squad_role": "key",
     "status": "first_team"
   },
   {
@@ -1473,21 +1473,21 @@
     "club_id": "clb_00007",
     "player_id": "plr_0005k",
     "squad_number": 13,
-    "squad_role": "rotation",
+    "squad_role": "backup",
     "status": "first_team"
   },
   {
     "club_id": "clb_00007",
     "player_id": "plr_0005p",
     "squad_number": 14,
-    "squad_role": "backup",
+    "squad_role": "rotation",
     "status": "first_team"
   },
   {
     "club_id": "clb_00007",
     "player_id": "plr_0005s",
     "squad_number": 15,
-    "squad_role": "key",
+    "squad_role": "rotation",
     "status": "first_team"
   },
   {
@@ -1501,7 +1501,7 @@
     "club_id": "clb_00007",
     "player_id": "plr_00063",
     "squad_number": 17,
-    "squad_role": "backup",
+    "squad_role": "rotation",
     "status": "first_team"
   },
   {
@@ -1515,28 +1515,28 @@
     "club_id": "clb_00007",
     "player_id": "plr_00064",
     "squad_number": 19,
-    "squad_role": "rotation",
+    "squad_role": "backup",
     "status": "first_team"
   },
   {
     "club_id": "clb_00007",
     "player_id": "plr_0005y",
     "squad_number": 20,
-    "squad_role": "key",
+    "squad_role": "backup",
     "status": "first_team"
   },
   {
     "club_id": "clb_00007",
     "player_id": "plr_00065",
     "squad_number": 21,
-    "squad_role": "backup",
+    "squad_role": "rotation",
     "status": "first_team"
   },
   {
     "club_id": "clb_00007",
     "player_id": "plr_00067",
     "squad_number": 24,
-    "squad_role": "key",
+    "squad_role": "rotation",
     "status": "first_team"
   },
   {
@@ -1550,7 +1550,7 @@
     "club_id": "clb_00007",
     "player_id": "plr_0005z",
     "squad_number": 28,
-    "squad_role": "rotation",
+    "squad_role": "backup",
     "status": "first_team"
   },
   {
