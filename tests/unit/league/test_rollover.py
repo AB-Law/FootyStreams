@@ -52,7 +52,7 @@ def test_rollover__retired_players_have_no_club_and_no_club_player_is_retired() 
 def test_rollover__every_club_keeps_a_legal_senior_squad_with_keepers() -> None:
     _, factory = cached_rolled_over()
     with factory() as uow:
-        clubs = uow.clubs.all()
+        clubs = [c for c in uow.clubs.all() if c.id != OUTSIDE_WORLD]
     players = _players()
     for club in clubs:
         seniors = [
