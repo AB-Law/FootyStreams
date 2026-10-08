@@ -48,9 +48,17 @@ def _pairings(repositories: Repositories) -> list[tuple[ClubId, ClubId]]:
 
 
 def build_scenarios(
-    repositories: Repositories, tables: LeagueTables, matches: int, base_seed: int
+    repositories: Repositories,
+    tables: LeagueTables,
+    matches: int,
+    base_seed: int,
+    min_gap: float = 0.0,
 ) -> list[Scenario]:
-    """The first ``matches`` scenarios of the endless pairing cycle."""
+    """The first ``matches`` scenarios of the endless pairing cycle.
+
+    ``min_gap`` keeps only the pairings whose teams differ in rating by at least that much, so a
+    strength study plays mismatches only instead of a world's many near-equal pairs.
+    """
     pairings = _pairings(repositories)
     squads = {
         club: {player.id: player for player in load_team(repositories, club).squad}
@@ -59,12 +67,21 @@ def build_scenarios(
     }
     today = read_date(repositories)
     simulator = ResultOnlySimulator(tables.roles, tables.config.result_only)
-    scenarios = []
-    for index in range(matches):
-        home, away = pairings[index % len(pairings)]
-        world_seed = derive_seed(base_seed, f"balance:{index // len(pairings)}")
+
+    def scenario(index: int, pair: tuple[ClubId, ClubId], replicate: int) -> Scenario:
+        home, away = pair
+        world_seed = derive_seed(base_seed, f"balance:{replicate}")
         engine = MatchdayEngine(tables=tables, simulator=simulator, world_seed=world_seed)
         setup = build_friendly_setup(repositories, home, away, engine, today)
         gap = _rating(setup.home, squads[home], tables) - _rating(setup.away, squads[away], tables)
-        scenarios.append(Scenario(setup, (base_seed + index) % SEED_LIMIT, round(gap, 4)))
-    return scenarios
+        return Scenario(setup, (base_seed + index) % SEED_LIMIT, round(gap, 4))
+
+    if min_gap > 0.0:
+        pairings = [pair for pair in pairings if abs(scenario(0, pair, 0).gap) >= min_gap]
+        if not pairings:
+            msg = f"no pairing in this world differs in rating by {min_gap} or more"
+            raise ValueError(msg)
+    return [
+        scenario(index, pairings[index % len(pairings)], index // len(pairings))
+        for index in range(matches)
+    ]

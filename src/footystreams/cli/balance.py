@@ -47,6 +47,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--set", action="append", default=[], dest="pairs", metavar="GROUP.KNOB=VALUE",
         help="override one knob (repeatable)",
     )  # fmt: skip
+    parser.add_argument(
+        "--min-gap", type=float, default=0.0, dest="min_gap",
+        help="play only pairings whose rating gap is at least this (strength studies)",
+    )  # fmt: skip
     parser.add_argument("--workers", type=int, default=default_workers())
     parser.add_argument("--failures", action="store_true", help="run: only the metrics that miss")
     parser.add_argument("--knobs", help="sensitivity, fit: comma-separated knob paths")

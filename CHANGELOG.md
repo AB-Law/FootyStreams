@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0208** Add balance --min-gap to play only mismatched pairings for strength studies *(M8; scope: cli)*
 - **0206** Make the balance sensitivity sweep resumable, with one-sided nudges and a report file *(M8; scope: cli, tools)*
 - **0200** Add balance fit: search chosen knobs for the lowest loss and write a candidate config *(M8; scope: cli, tools)*
 - **0199** Add balance sensitivity: nudge each knob and show which metric it moves *(M8; scope: cli, tools)*

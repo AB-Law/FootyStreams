@@ -109,6 +109,7 @@ def _sweep_settings(session: Session, targets: dict[str, Target]) -> dict[str, o
         "world": str(arguments.world),
         "matches": arguments.matches,
         "seed": arguments.seed,
+        "min_gap": arguments.min_gap,
         "relative": arguments.relative,
         "sides": arguments.sides,
         "metrics": list(targets),
