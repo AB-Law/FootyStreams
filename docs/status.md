@@ -57,3 +57,8 @@ Also: committed `schemas/` (drift-tested), factories/strategies under `tests/`, 
 - **M6 done locally** on `feat/m6-fatigue-injuries-weather-ai` (based on the M5 branch): fatigue, weather and pitch, home advantage (crowd), injuries with forced changes, substitution mechanics, the AI manager (checkpoints, triggers, mentality changes, changes at stoppages and half-time); `verify_match` gains M06, M08 (M07 and M11 extended; M09 is an engine-level test). `SIM_VERSION` 0.3.0, `SCHEMA_VERSION` 0.1.5. Report: `docs/milestones/M6.md`.
 - Fixed on the way: an away-side positioning edge from sequential team updates.
 - Known gaps: no formation changes or half-time talk in the manager; the factory bench (two outfielders and a goalkeeper) caps changes at about 3.5 a match; draw rate and red cards still high; 0.4 s CPU a match.
+
+### Track A update at the end of M7
+- **M7 done locally** on `feat/m7-summary-ratings-frames` (based on the M6 branch): the causal context (momentum, intensity, significance, tags), enriched pass/dribble/shot events, the full summary (stats, ratings 3-10, player of the match, hooks, pass matrix, zone flow, shot map, xG/xA/xT, timelines, key moments, injuries), opt-in tracking frames, a read-only `analytics/` module (maps, totals, heatmaps, `annotate`), and `verify` M13-M16 and M18. `SIM_VERSION` 0.4.0, `SCHEMA_VERSION` 0.2.0 (additive, defaults only; flagged in the PR). Report: `docs/milestones/M7.md`.
+- Track A is complete (M4-M7). Next on this track: M8 (balance harness, calibration, performance), then M9 needs the league layer (`build_match_setup`, lineup AI).
+- Known gaps: about 0.5 s CPU a match (budget 0.15 s), draw rate and red cards high, manager has no formation changes or half-time talk, hooks that need league context.
