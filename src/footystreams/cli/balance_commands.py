@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import sys
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from pathlib import Path
 
 from footystreams.balance import knobs, overrides
@@ -185,14 +185,14 @@ def _summary(label: str, results: list[MetricResult]) -> str:
     return f"{label}: {passed}/{len(results)} PASS, loss {total_loss(results):.3f}"
 
 
-def _validate(session: Session, found: FitResult) -> list[str]:
+def _validate(session: Session, found: FitResult, targets: Mapping[str, Target]) -> list[str]:
     """Re-measure the current config and the candidate on seeds the fit never saw."""
     arguments = session.arguments
     seed = arguments.seed + VALIDATION_SEED_OFFSET
     candidate = overrides.apply(session.config, found.overrides)
     with session.runner(arguments.validation_matches, seed) as runner:
-        before = evaluate(runner.run(session.config), session.profile.metrics)
-        after = evaluate(runner.run(candidate), session.profile.metrics)
+        before = evaluate(runner.run(session.config), targets)
+        after = evaluate(runner.run(candidate), targets)
     title = f"on {arguments.validation_matches} fresh matches (seed {seed})"
     return [_summary(f"{title}, current", before), _summary(f"{title}, candidate", after)]
 
@@ -214,6 +214,7 @@ def fit_command(session: Session) -> int:
         msg = f"{out} already exists; a fit never overwrites a file"
         raise ValueError(msg)
     chosen = chosen_knobs(session)
+    targets = _matrix_targets(session) if arguments.metrics else session.profile.metrics
     bounds = _parse_bounds(arguments.bounds) if arguments.bounds else DEFAULT_BOUNDS
     with session.runner() as runner:
         settings = FitSettings(
@@ -222,11 +223,12 @@ def fit_command(session: Session) -> int:
             restarts=arguments.restarts,
             seed=arguments.seed,
         )
-        found = fit(runner.run, session.config, chosen, session.profile.metrics, settings)
+        found = fit(runner.run, session.config, chosen, targets, settings)
     notes = [
         f"balance fit: profile {session.profile.name}, {arguments.matches} matches, "
         f"seed {arguments.seed}, {found.evaluations} evaluations",
         f"knobs: {', '.join(k.path for k in chosen)}",
+        f"metrics: {', '.join(targets)}",
     ]
     text = format_candidate(found, notes)
     if out is None:
@@ -234,7 +236,7 @@ def fit_command(session: Session) -> int:
     else:
         out.write_text(text, encoding="utf-8")
         print(f"wrote {out}")
-    for line in _validate(session, found):
+    for line in _validate(session, found, targets):
         print(line)
     return EXIT_OK
 

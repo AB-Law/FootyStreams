@@ -136,6 +136,31 @@ def test_balance_fit__writes_a_candidate_and_never_overwrites_it(
     assert "already exists" in capsys.readouterr().err
 
 
+@pytest.mark.slow
+def test_balance_fit__metrics_limit_what_the_loss_counts(
+    world_directory: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    out = tmp_path / "limited.yaml"
+    arguments = [
+        "fit", *_run(world_directory), "--knobs", "shot.xg_cap", "--max-evals", "4",
+        "--validation-matches", "4", "--metrics", "goals_per_match,shots_per_team",
+        "--out", str(out),
+    ]  # fmt: skip
+
+    assert main(arguments) == 0
+    assert "metrics: goals_per_match, shots_per_team" in out.read_text(encoding="utf-8")
+    assert "/2 PASS" in capsys.readouterr().out  # only the two chosen metrics were judged
+
+
+def test_balance_fit__an_unknown_metric_is_a_usage_error(
+    world_directory: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    arguments = ["fit", *_run(world_directory), "--knobs", "shot.xg_cap", "--metrics", "nope"]
+
+    assert main(arguments) == EXIT_USAGE
+    assert "unknown metrics" in capsys.readouterr().err
+
+
 @pytest.mark.parametrize("extra", [["--bounds", "2,1"], ["--bounds", "x,y"], []])
 def test_balance_fit__bad_input_is_a_usage_error(
     world_directory: Path, extra: list[str], capsys: pytest.CaptureFixture[str]

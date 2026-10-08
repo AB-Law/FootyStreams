@@ -58,7 +58,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--relative", type=float, default=DEFAULT_RELATIVE_STEP, help="sensitivity: nudge size"
     )
-    parser.add_argument("--metrics", help="sensitivity: comma-separated metric columns")
+    parser.add_argument(
+        "--metrics",
+        help="sensitivity, fit: comma-separated metrics (fit: only these enter the loss)",
+    )
     parser.add_argument(
         "--sides", choices=[side.value for side in Sides], default=Sides.BOTH.value,
         help="sensitivity: nudge down and up (both) or only up (half the cost)",
