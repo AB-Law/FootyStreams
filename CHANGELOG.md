@@ -175,6 +175,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0062** Share the one-player-on-two-teams check between sim and verify *(M4; scope: domain, verify, sim)*
 
 ### Tests
+- **0183** Skip the world-gen wall-clock tripwire under coverage *(M9; scope: seed)*
+- **0182** Stop the season tests timing out under coverage *(M9; scope: league)*
 - **0171** Stop the season tests timing out under coverage *(M10; scope: league)*
 - **0135** Share cached worlds across seed tests *(M2; scope: cli)*
 - **0119** Add the M7 slow-tier sweeps; write the M7 report, design notes and status *(M7; scope: sim)*
@@ -200,6 +202,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0001** Add the Phase 1 design document set (entities, simulation, events, architecture, seeding, milestones). *(design; scope: design)*
 
 ### Build and tooling
+- **0184** Cap coverage pytest-xdist workers to avoid CI OOM crashes *(M9; scope: tools)*
 - **0143** Run the test tiers in parallel with pytest-xdist *(M9; scope: tools)*
 - **0073** Bump SIM_VERSION to 0.1.1 and SCHEMA_VERSION to 0.1.4, add two golden cases *(M4; scope: schemas; sim version patch; schema version patch)*
 - **0018** Add the CI workflow and CODEOWNERS *(M0; scope: ci)*
