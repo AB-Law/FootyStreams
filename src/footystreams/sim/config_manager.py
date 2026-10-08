@@ -42,7 +42,9 @@ class ManagerConfig(DomainModel):
 
     enabled: bool = True  # the AI manager; forced injury changes happen regardless
     max_subs: int = Field(ge=0, le=11, default=5)
-    max_windows: int = Field(ge=0, le=11, default=3)  # stoppages in which changes may be made
+    # Stoppages in which changes may be made. The real rule is three, with several changes in each;
+    # the AI makes one change per stoppage, so five windows give the real 4.2 changes a side (M8).
+    max_windows: int = Field(ge=0, le=11, default=5)
     window_gap_s: float = 20.0  # changes closer together than this share one window
     sub_s: float = 30.0  # stoppage per substitution
     sub_spread_s: float = 8.0

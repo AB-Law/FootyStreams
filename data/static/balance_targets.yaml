@@ -19,8 +19,8 @@ profiles:
       draw_pct: {target: 25, min: 22, max: 29, weight: 2, tier: fast}
       away_win_pct: {target: 30, min: 26, max: 34, weight: 2, tier: fast}
       scoreless_pct: {target: 7.5, min: 6, max: 9, weight: 1, tier: slow}
-      five_plus_goals_pct: {target: 4, min: 0, max: 7, weight: 1, tier: slow}
-      team_five_plus_pct: {target: 1, min: 0, max: 2, weight: 1, tier: slow}
+      five_plus_goals_pct: {target: 14, min: 10, max: 18, weight: 1, tier: slow}
+      team_five_plus_pct: {target: 2.5, min: 1, max: 4, weight: 1, tier: slow}
       second_half_goal_share_pct: {target: 55.5, min: 53, max: 58, weight: 1, tier: slow}
       late_goal_share_pct: {target: 25, min: 22, max: 28, weight: 1, tier: slow}
       shots_per_team: {target: 12.5, min: 11, max: 14, weight: 2, tier: fast}
@@ -64,8 +64,8 @@ profiles:
       away_goals_per_match: {target: 1.50, min: 1.3, max: 1.7, weight: 1, tier: fast}
       shots_per_team: {target: 15, min: 13.5, max: 16.5, weight: 2, tier: fast}
       scoreless_pct: {target: 4, min: 2.5, max: 6, weight: 1, tier: slow}
-      five_plus_goals_pct: {target: 12, min: 6, max: 20, weight: 1, tier: slow}
-      team_five_plus_pct: {target: 4, min: 1, max: 8, weight: 1, tier: slow}
+      five_plus_goals_pct: {target: 22, min: 16, max: 30, weight: 1, tier: slow}
+      team_five_plus_pct: {target: 6, min: 3, max: 10, weight: 1, tier: slow}
 
   defensive_grind:
     description: Tight, low-scoring games with many draws.
@@ -79,7 +79,8 @@ profiles:
       home_win_pct: {target: 40, min: 36, max: 44, weight: 2, tier: fast}
       away_win_pct: {target: 30, min: 26, max: 34, weight: 2, tier: fast}
       scoreless_pct: {target: 11, min: 9, max: 14, weight: 1, tier: slow}
-      five_plus_goals_pct: {target: 2, min: 0, max: 4, weight: 1, tier: slow}
+      five_plus_goals_pct: {target: 8, min: 4, max: 12, weight: 1, tier: slow}
+      team_five_plus_pct: {target: 1, min: 0, max: 2.5, weight: 1, tier: slow}
 
   chaos:
     description: More cards, injuries and upsets for entertainment.
