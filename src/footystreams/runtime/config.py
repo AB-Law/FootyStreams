@@ -88,6 +88,9 @@ class EngineConfig(BaseModel):
     sink_queue: int = Field(ge=1, default=2000)
     sink_timeout_s: float = Field(gt=0.0, default=5.0)
     cursor_every: int = Field(ge=1, default=25)
+    starve_grace_s: float = Field(ge=0.0, default=2.0)  # real seconds to wait for the buffer
+    lock_grace_s: float = Field(ge=0.0, default=3.0)  # patience for a crashed holder's lock
+    max_lag_s: float = Field(gt=0.0, default=5.0)  # most the player catches up after a stall
     safe_mode: bool = False
     programme: Programme = Programme()
 

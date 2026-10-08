@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0214** Add the simulation buffer (world ahead of the broadcast, verified, quarantine) and the world stepper *(M12; scope: runtime)*
 - **0213** Add the supervisor (restart with backoff and a circuit breaker) and keep filler out of the cursor *(M12; scope: runtime)*
 - **0212** Add the match player: paced replay of stored logs with half-time, resume and clock-jump handling *(M12; scope: runtime)*
 - **0211** Add the programme: played matchdays laid out as pre-match, match, post-match and magazine blocks *(M12; scope: runtime)*
