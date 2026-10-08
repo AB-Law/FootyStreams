@@ -1,0 +1,17 @@
+{
+  "name": "footystreams-viewer",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Silent pixel-art replay viewer for recorded FootyStreams matches (prototype)",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p .",
+    "typecheck": "tsc -p . --noEmit",
+    "test": "node --test \"src/**/*.test.ts\"",
+    "start": "npm run build && node serve.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  }
+}
