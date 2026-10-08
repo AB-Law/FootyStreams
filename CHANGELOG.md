@@ -176,6 +176,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0008** Remove the Cursor rules generator; keep plain, hand-maintained .cursor/rules copies. *(design; scope: tools, design)*
 
 ### Performance
+- **0201** Find the offside line once per team in a position update, not once per player *(M8; scope: sim)*
 - **0067** Rank the carrier's nearest opponents once per moment instead of twice *(M4; scope: sim)*
 - **0052** Speed up option generation and refresh positions every 4 seconds *(M4; scope: sim)*
 

@@ -61,16 +61,20 @@ def move_toward(player: PlayerState, target_x: float, target_y: float, max_metre
     player.y += (target_y - player.y) * fraction
 
 
-def offside_ceiling(
-    team: TeamState, opponents: TeamState, player: PlayerState, cfg: OffsideConfig
-) -> float:
-    """Return the farthest frame x this player will stand: just short of the offside line.
+def ceiling_below_line(line: float, player: PlayerState, cfg: OffsideConfig) -> float:
+    """Return the farthest frame x this player will stand, given the offside line.
 
     Sharper off-the-ball movers (higher `off_ball_movement`) hug the line more tightly.
     """
-    line = offside_line(opponents, team.attack_dir)
     margin = cfg.margin_min + cfg.margin_range * (1.0 - player.skills.off_ball_movement / PERCENT)
     return line - margin
+
+
+def offside_ceiling(
+    team: TeamState, opponents: TeamState, player: PlayerState, cfg: OffsideConfig
+) -> float:
+    """Return the farthest frame x this player will stand: just short of the offside line."""
+    return ceiling_below_line(offside_line(opponents, team.attack_dir), player, cfg)
 
 
 Move = tuple[PlayerState, float, float, float]  # player, absolute target x, y, metres allowed
@@ -89,13 +93,16 @@ def _plan_team_moves(
         frame_coordinate(state.ball_x, team.attack_dir),
         frame_coordinate(state.ball_y, team.attack_dir),
     )
+    # Perf: M8-sim-profile - the line is the same for every player of the team in one planning
+    # pass (nobody has moved yet), so it is found once instead of once per player (was 11% of CPU).
+    line = offside_line(opponents, team.attack_dir) if offside is not None else 0.0
     moves: list[Move] = []
     for player in team.players:
         if player is state.carrier:
             continue
         target_x, target_y = target_in_frame(team, player, ball, in_possession, cfg)
         if offside is not None and player.line is not Line.KEEPER:
-            target_x = min(target_x, offside_ceiling(team, opponents, player, offside))
+            target_x = min(target_x, ceiling_below_line(line, player, offside))
         moves.append(
             (
                 player,
