@@ -19,6 +19,7 @@ from pydantic import Field
 
 from footystreams.domain.base import DomainModel, UsageTag
 from footystreams.domain.canonical import canonical_json
+from footystreams.sim.config_context import ContextConfig
 from footystreams.sim.config_manager import ManagerConfig
 from footystreams.sim.config_play import (
     ChallengeConfig,
@@ -48,6 +49,7 @@ CONFIG_HASH_LENGTH = 16
 
 __all__ = [
     "ChallengeConfig",
+    "ContextConfig",
     "DecisionConfig",
     "DisciplineConfig",
     "DribbleConfig",
@@ -101,6 +103,7 @@ class SimConfig(DomainModel):
         "home_advantage": "S",
         "injury": "S",
         "manager": "S",
+        "context": "S",
     }
 
     model_profile: str = "v1"
@@ -125,6 +128,7 @@ class SimConfig(DomainModel):
     home_advantage: HomeAdvantageConfig = Field(default_factory=HomeAdvantageConfig)
     injury: InjuryConfig = Field(default_factory=InjuryConfig)
     manager: ManagerConfig = Field(default_factory=ManagerConfig)
+    context: ContextConfig = Field(default_factory=ContextConfig)
 
 
 def config_hash(config: SimConfig) -> str:

@@ -12,6 +12,16 @@ from footystreams.domain.types import PlayerId, Unit
 from footystreams.domain.versions import SCHEMA_VERSION, SIM_VERSION
 from footystreams.events.base import EventBase, event_usage
 from footystreams.events.context import EventContext
+from footystreams.events.summary_rows import (
+    Hook,
+    InjuryReport,
+    KeyMoment,
+    MomentumPoint,
+    PassLink,
+    ShotPoint,
+    XgPoint,
+    ZoneFlow,
+)
 
 
 class TeamStats(DomainModel):
@@ -28,6 +38,18 @@ class TeamStats(DomainModel):
         "corners": "L",
         "yellows": "L",
         "reds": "L",
+        "key_passes": "L",
+        "dribbles": "L",
+        "dribbles_won": "L",
+        "tackles": "L",
+        "tackles_won": "L",
+        "interceptions": "L",
+        "clearances": "L",
+        "offsides": "L",
+        "saves": "L",
+        "big_chances": "L",
+        "xt": "L",
+        "field_tilt": "L",
     }
 
     possession: Unit = 0.5
@@ -40,6 +62,18 @@ class TeamStats(DomainModel):
     corners: int = Field(ge=0, default=0)
     yellows: int = Field(ge=0, default=0)
     reds: int = Field(ge=0, default=0)
+    key_passes: int = Field(ge=0, default=0)
+    dribbles: int = Field(ge=0, default=0)
+    dribbles_won: int = Field(ge=0, default=0)
+    tackles: int = Field(ge=0, default=0)
+    tackles_won: int = Field(ge=0, default=0)
+    interceptions: int = Field(ge=0, default=0)
+    clearances: int = Field(ge=0, default=0)
+    offsides: int = Field(ge=0, default=0)
+    saves: int = Field(ge=0, default=0)
+    big_chances: int = Field(ge=0, default=0)
+    xt: float = 0.0  # total threat gained by completed passes
+    field_tilt: Unit = 0.5  # share of final-third passes made by this side
 
 
 class PlayerMatchStats(DomainModel):
@@ -55,6 +89,28 @@ class PlayerMatchStats(DomainModel):
         "yellows": "L",
         "reds": "L",
         "rating": "L",
+        "starts": "L",
+        "position": "L",
+        "shots_on_target": "L",
+        "xa": "L",
+        "xt": "L",
+        "passes": "L",
+        "passes_completed": "L",
+        "key_passes": "L",
+        "progressive_passes": "L",
+        "dribbles": "L",
+        "dribbles_won": "L",
+        "tackles": "L",
+        "tackles_won": "L",
+        "interceptions": "L",
+        "clearances": "L",
+        "fouls": "L",
+        "fouled": "L",
+        "saves": "L",
+        "goals_conceded": "L",
+        "clean_sheet": "L",
+        "end_exhaustion": "L",
+        "injured": "L",
     }
 
     player_id: PlayerId
@@ -66,6 +122,28 @@ class PlayerMatchStats(DomainModel):
     yellows: int = Field(ge=0, default=0)
     reds: int = Field(ge=0, default=0)
     rating: float = Field(ge=3.0, le=10.0, default=6.0)
+    starts: bool = True
+    position: str = ""
+    shots_on_target: int = Field(ge=0, default=0)
+    xa: float = Field(ge=0.0, default=0.0)
+    xt: float = 0.0
+    passes: int = Field(ge=0, default=0)
+    passes_completed: int = Field(ge=0, default=0)
+    key_passes: int = Field(ge=0, default=0)
+    progressive_passes: int = Field(ge=0, default=0)
+    dribbles: int = Field(ge=0, default=0)
+    dribbles_won: int = Field(ge=0, default=0)
+    tackles: int = Field(ge=0, default=0)
+    tackles_won: int = Field(ge=0, default=0)
+    interceptions: int = Field(ge=0, default=0)
+    clearances: int = Field(ge=0, default=0)
+    fouls: int = Field(ge=0, default=0)
+    fouled: int = Field(ge=0, default=0)
+    saves: int = Field(ge=0, default=0)
+    goals_conceded: int = Field(ge=0, default=0)
+    clean_sheet: bool = False
+    end_exhaustion: Unit = 0.0
+    injured: bool = False
 
 
 class PlayerRating(DomainModel):
@@ -74,10 +152,12 @@ class PlayerRating(DomainModel):
     __usage__: ClassVar[Mapping[str, UsageTag]] = {
         "player_id": "L",
         "rating": "L",
+        "breakdown": "L",
     }
 
     player_id: PlayerId
     rating: float = Field(ge=3.0, le=10.0)
+    breakdown: Mapping[str, float] = Field(default_factory=dict)
 
 
 class MatchSummary(DomainModel):
@@ -100,6 +180,14 @@ class MatchSummary(DomainModel):
         "player_stats": "L",
         "ratings": "L",
         "player_of_the_match": "L",
+        "injuries": "L",
+        "momentum_timeline": "L",
+        "xg_timeline": "L",
+        "key_moments": "L",
+        "hooks": "L",
+        "pass_matrix": "L",
+        "zone_pass_flow": "L",
+        "shot_map": "L",
     }
 
     schema_version: str = SCHEMA_VERSION
@@ -118,6 +206,14 @@ class MatchSummary(DomainModel):
     player_stats: tuple[PlayerMatchStats, ...] = ()
     ratings: tuple[PlayerRating, ...] = ()
     player_of_the_match: PlayerId | None = None
+    injuries: tuple[InjuryReport, ...] = ()
+    momentum_timeline: tuple[MomentumPoint, ...] = ()
+    xg_timeline: tuple[XgPoint, ...] = ()
+    key_moments: tuple[KeyMoment, ...] = ()
+    hooks: tuple[Hook, ...] = ()
+    pass_matrix: tuple[PassLink, ...] = ()
+    zone_pass_flow: tuple[ZoneFlow, ...] = ()
+    shot_map: tuple[ShotPoint, ...] = ()
 
 
 class MatchSummaryEvent(EventBase):

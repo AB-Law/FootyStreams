@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from footystreams.domain.match import TeamSheet
 from footystreams.domain.snapshot import PlayerSnapshot
+from footystreams.domain.types import PlayerId
 from footystreams.sim.config_world import FatigueConfig
 from footystreams.sim.effective import Multipliers, scale_skills
 from footystreams.sim.mathx import clamp
@@ -18,6 +19,7 @@ from footystreams.sim.state import Line, MatchState, PlayerState, TeamState
 from footystreams.sim.weather import Conditions
 
 _PERCENT = 100.0
+FINAL_PRECISION = 4
 _CENTRE = 0.5
 
 
@@ -111,3 +113,12 @@ def halftime_recovery(state: MatchState, cfg: FatigueConfig) -> None:
         for player in team.players:
             player.exhaustion = max(0.0, player.exhaustion - cfg.halftime_recovery)
             _refresh(player, cfg)
+
+
+def final_exhaustion(state: MatchState) -> dict[PlayerId, float]:
+    """Return every player's exhaustion (capped at 1) as he left the pitch or at the whistle."""
+    found: dict[PlayerId, float] = {}
+    for team in (state.home, state.away):
+        for player in (*team.substituted_off, *team.sent_off, *team.players):
+            found[player.player_id] = round(min(1.0, player.exhaustion), FINAL_PRECISION)
+    return found

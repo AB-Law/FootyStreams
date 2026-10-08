@@ -26,6 +26,13 @@ def test_merge_config__invalid_value__is_rejected() -> None:
         merge_config(SimConfig(), {"frame_interval_s": 0})
 
 
+@pytest.mark.parametrize("knob", ["progressive_frame_x", "big_chance_xg"])
+@pytest.mark.parametrize("value", [0.0, -0.1, 1.5])
+def test_merge_config__context_knobs_stay_inside_the_unit_range(knob: str, value: float) -> None:
+    with pytest.raises(ValidationError):
+        merge_config(SimConfig(), {"context": {knob: value}})
+
+
 def test_merge_config__unknown_key__is_rejected() -> None:
     with pytest.raises(ValidationError):
         merge_config(SimConfig(), {"no_such_knob": 1})

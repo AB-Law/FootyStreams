@@ -9,8 +9,9 @@ and the production pre-air gate, so no check is ever re-implemented elsewhere. C
   M17 kickoff first; a fulltime; nothing after it but the summary, which ends the log
 
 The discipline checks (M07, M11) live in `verify/discipline.py`, the pitch and substitution
-checks (M06, M08) in `verify/substitutions.py` and the sequencing rules (M12) in
-`verify/sequencing.py`; `verify_match` runs them all.
+checks (M06, M08) in `verify/substitutions.py`, the sequencing rules (M12) in
+`verify/sequencing.py` and the data and summary checks (M13-M16, M18) in `verify/summary.py`;
+`verify_match` runs them all.
 """
 
 from __future__ import annotations
@@ -21,7 +22,7 @@ from itertools import pairwise
 from footystreams.domain.match import MatchSetup, players_on_both_sheets
 from footystreams.events.clock import period_elapsed_s
 from footystreams.events.open_play import GoalEvent
-from footystreams.events.structure import FulltimeEvent, KickoffEvent
+from footystreams.events.structure import FrameEvent, FulltimeEvent, KickoffEvent
 from footystreams.events.summary import MatchSummaryEvent
 from footystreams.events.types import MatchEvent
 from footystreams.verify.discipline import (
@@ -31,6 +32,13 @@ from footystreams.verify.discipline import (
 )
 from footystreams.verify.sequencing import check_sequencing
 from footystreams.verify.substitutions import check_pitch_state, check_substitution_limits
+from footystreams.verify.summary import (
+    check_digest,
+    check_events_validate,
+    check_ranges,
+    check_ratings,
+    check_summary_recomputes,
+)
 from footystreams.verify.violation import Violation
 
 Check = Callable[[Sequence[MatchEvent]], list[Violation]]
@@ -148,13 +156,20 @@ def check_rosters(setup: MatchSetup) -> list[Violation]:
     ]
 
 
-_EVENT_CHECKS: tuple[Check, ...] = (
+_LOG_CHECKS: tuple[Check, ...] = (
     check_sequence,
     check_ids,
     check_time,
     check_scores,
     check_positions,
     check_ending,
+    check_events_validate,
+    check_ratings,
+    check_digest,
+    check_ranges,
+)
+# Rules about play read the log without tracking frames, which sit between the real events.
+_PLAY_CHECKS: tuple[Check, ...] = (
     check_dismissed_players_stay_off,
     check_card_logic,
     check_men_counts,
@@ -166,10 +181,14 @@ _EVENT_CHECKS: tuple[Check, ...] = (
 def verify_match(events: Sequence[MatchEvent], setup: MatchSetup | None = None) -> list[Violation]:
     """Return every violated match invariant (empty when the log is sound).
 
-    `setup` enables the roster checks; the log checks need only the events.
+    `setup` enables the roster, pitch-state and summary checks; the log checks need only the
+    events. Tracking frames (when present) are checked as events but ignored by the rules of play.
     """
-    found = [violation for check in _EVENT_CHECKS for violation in check(events)]
+    play = [event for event in events if not isinstance(event, FrameEvent)]
+    found = [violation for check in _LOG_CHECKS for violation in check(events)]
+    found.extend(violation for check in _PLAY_CHECKS for violation in check(play))
     if setup is not None:
         found.extend(check_rosters(setup))
-        found.extend(check_pitch_state(events, setup))
+        found.extend(check_pitch_state(play, setup))
+        found.extend(check_summary_recomputes(events, setup))
     return found

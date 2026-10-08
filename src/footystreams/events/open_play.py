@@ -8,7 +8,7 @@ from typing import ClassVar, Literal
 from pydantic import Field
 
 from footystreams.domain.base import UsageTag
-from footystreams.domain.types import PlayerId, Unit
+from footystreams.domain.types import PlayerId, Pos, Unit
 from footystreams.events.base import EventBase, event_usage
 from footystreams.events.context import EventContext
 
@@ -23,6 +23,9 @@ class PassEvent(EventBase):
         outcome="S",
         length_m="S",
         key_pass="S",  # noqa: S106 — football "key pass", not a password
+        end_pos="S",
+        progressive="S",
+        xt_gain="S",
     )
 
     type: Literal["pass"] = "pass"
@@ -32,6 +35,9 @@ class PassEvent(EventBase):
     outcome: Literal["complete", "incomplete", "intercepted", "out"] = "complete"
     length_m: float = Field(ge=0.0, default=0.0)
     key_pass: bool = False
+    end_pos: Pos | None = None  # where the ball was played to (absolute); None when not recorded
+    progressive: bool = False  # moved the ball at least a quarter of the pitch toward goal
+    xt_gain: float = 0.0  # threat gained (negative when played backwards)
 
 
 class DribbleEvent(EventBase):
@@ -41,12 +47,14 @@ class DribbleEvent(EventBase):
         ctx="S",
         player_id="S",
         outcome="S",
+        end_pos="S",
     )
 
     type: Literal["dribble"] = "dribble"
     ctx: EventContext = Field(default_factory=EventContext)
     player_id: PlayerId
     outcome: Literal["success", "tackled", "lost"] = "success"
+    end_pos: Pos | None = None
 
 
 class TackleEvent(EventBase):
@@ -95,6 +103,7 @@ class ShotEvent(EventBase):
         xg="S",
         outcome="S",
         assist_id="S",
+        big_chance="S",
     )
 
     type: Literal["shot"] = "shot"
@@ -103,6 +112,7 @@ class ShotEvent(EventBase):
     xg: Unit = 0.0
     outcome: Literal["goal", "saved", "blocked", "off_target", "woodwork"] = "off_target"
     assist_id: PlayerId | None = None
+    big_chance: bool = False  # xG at or above 0.3
 
 
 class SaveEvent(EventBase):

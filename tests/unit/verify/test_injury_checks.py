@@ -1,11 +1,11 @@
 from collections.abc import Sequence
 
+from footystreams.events.derive.presence import injured_off_unreplaced
 from footystreams.events.discipline import InjuryEvent, SubstitutionEvent
 from footystreams.events.open_play import PassEvent
 from footystreams.events.types import MatchEvent
 from footystreams.sim import SimConfig, default_tables, merge_config, run_match
 from footystreams.verify import verify_match
-from footystreams.verify.discipline import injured_off_unreplaced
 from tests.factories.sim_config import CARD_HEAVY
 from tests.helpers.logs import INJURY_HEAVY, demo_setup, injury_heavy_log
 from tests.helpers.sim import assert_match_valid

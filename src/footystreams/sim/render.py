@@ -13,6 +13,7 @@ from enum import StrEnum
 from footystreams.domain.match import MatchSetup
 from footystreams.domain.types import PlayerId
 from footystreams.events.base import EventBase, MatchClock
+from footystreams.events.context import ContextTag
 from footystreams.events.discipline import CardEvent, FoulEvent, InjuryEvent, SubstitutionEvent
 from footystreams.events.open_play import (
     ClearanceEvent,
@@ -36,6 +37,26 @@ from footystreams.events.types import MatchEvent
 
 KEY_SIGNIFICANCE = 0.25
 SECOND_PERIOD = 2
+TOP_RATED = 3
+# Tags that tell a story; the time and derby tags sit on most events and would drown the line.
+_STORY_TAGS = frozenset(
+    {
+        ContextTag.OPENING_GOAL,
+        ContextTag.EQUALISER,
+        ContextTag.GO_AHEAD_GOAL,
+        ContextTag.EXTENDS_LEAD,
+        ContextTag.CONSOLATION_GOAL,
+        ContextTag.COMEBACK_GOAL,
+        ContextTag.BRACE,
+        ContextTag.HAT_TRICK,
+        ContextTag.PENALTY,
+        ContextTag.OWN_GOAL,
+        ContextTag.SECOND_YELLOW,
+        ContextTag.BIG_CHANCE,
+        ContextTag.BIG_SAVE,
+        ContextTag.WOODWORK,
+    }
+)
 
 
 class Verbosity(StrEnum):
@@ -166,9 +187,11 @@ _FORMATTERS: dict[type, Formatter] = {
 
 
 def render_event(event: MatchEvent, names: Names) -> str:
-    """Return one play-by-play line for an event."""
+    """Return one play-by-play line for an event, with its notable tags in brackets."""
     text = _FORMATTERS.get(type(event), _fallback)(event, names)
-    return f"{clock_text(event.clock):>7} {text}"
+    tags = [tag.value for tag in event.ctx.tags if tag in _STORY_TAGS]
+    suffix = f"  [{', '.join(tags)}]" if tags else ""
+    return f"{clock_text(event.clock):>7} {text}{suffix}"
 
 
 def _fallback(event: MatchEvent, names: Names) -> str:  # noqa: ARG001 - same signature as formatters
@@ -186,9 +209,9 @@ def is_key_event(event: MatchEvent) -> bool:
 def render_events(
     events: Iterable[MatchEvent], names: Names, verbosity: Verbosity
 ) -> Iterable[str]:
-    """Yield play-by-play lines, skipping the summary event and (for KEY) minor events."""
+    """Yield play-by-play lines, skipping summary, frames and (for KEY) minor events."""
     for event in events:
-        if event.type == "match_summary":
+        if event.type in {"match_summary", "frame"}:
             continue
         if verbosity is Verbosity.FULL or is_key_event(event):
             yield render_event(event, names)
@@ -205,11 +228,16 @@ _STAT_ROWS: tuple[tuple[str, Callable[[TeamStats], str]], ...] = (
     ("Corners", lambda s: str(s.corners)),
     ("Yellow cards", lambda s: str(s.yellows)),
     ("Red cards", lambda s: str(s.reds)),
+    ("Key passes", lambda s: str(s.key_passes)),
+    ("Tackles won", lambda s: f"{s.tackles_won}/{s.tackles}"),
+    ("Interceptions", lambda s: str(s.interceptions)),
+    ("Saves", lambda s: str(s.saves)),
+    ("Field tilt", lambda s: f"{s.field_tilt * 100:.0f}%"),
 )
 
 
 def render_summary(summary: MatchSummary, names: Names) -> list[str]:
-    """Return the final score line and a two-column team statistics table."""
+    """Return the final score line, a team statistics table, the best players and the stories."""
     lines = [
         f"Final: {names.home_code} {summary.score_home}-{summary.score_away} {names.away_code}"
         f"  (HT {summary.ht_home}-{summary.ht_away})  attendance {summary.attendance:,}"
@@ -219,4 +247,29 @@ def render_summary(summary: MatchSummary, names: Names) -> list[str]:
     for label, value in _STAT_ROWS:
         home, away = value(summary.team_stats_home), value(summary.team_stats_away)
         lines.append(f"{label:<16}{home:>8}{away:>8}")
+    lines.extend(_best_players(summary, names))
+    lines.extend(_stories(summary, names))
     return lines
+
+
+def _best_players(summary: MatchSummary, names: Names) -> list[str]:
+    """Return the player of the match and the top rated, one line each."""
+    if not summary.ratings:
+        return []
+    ranked = sorted(summary.ratings, key=lambda rating: (-rating.rating, rating.player_id))
+    lines = ["", f"Player of the match: {names.player(summary.player_of_the_match)}"]
+    lines.extend(
+        f"  {rating.rating:>4.1f}  {names.player(rating.player_id)}"
+        for rating in ranked[:TOP_RATED]
+    )
+    return lines
+
+
+def _stories(summary: MatchSummary, names: Names) -> list[str]:
+    """Return injuries and narrative hooks, if any."""
+    lines = [
+        f"Injury: {names.player(injury.player_id)} ({injury.type}, {injury.severity.value})"
+        for injury in summary.injuries
+    ]
+    lines.extend(f"Story: {hook.kind.replace('_', ' ')}" for hook in summary.hooks)
+    return ["", *lines] if lines else []

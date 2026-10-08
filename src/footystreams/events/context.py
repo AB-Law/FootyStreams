@@ -20,6 +20,27 @@ class ContextTag(StrEnum):
     PRESSURE = "pressure"
     TRANSITION = "transition"
     OPEN_PLAY = "open_play"
+    DERBY = "derby"
+    LATE_GAME = "late_game"  # from the 75th minute
+    STOPPAGE_TIME = "stoppage_time"
+    LAST_MINUTES = "last_minutes"  # from the 88th minute, or added time of the second half
+    OPENING_GOAL = "opening_goal"
+    EQUALISER = "equaliser"
+    GO_AHEAD_GOAL = "go_ahead_goal"
+    EXTENDS_LEAD = "extends_lead"
+    CONSOLATION_GOAL = "consolation_goal"
+    COMEBACK_GOAL = "comeback_goal"
+    BRACE = "brace"
+    HAT_TRICK = "hat_trick"
+    PENALTY = "penalty"
+    OWN_GOAL = "own_goal"
+    MAN_ADVANTAGE = "man_advantage"
+    TEN_MEN = "ten_men"
+    SECOND_YELLOW = "second_yellow"
+    BIG_CHANCE = "big_chance"
+    BIG_SAVE = "big_save"
+    WOODWORK = "woodwork"
+    INJURY_SCARE = "injury_scare"
 
 
 class EventContext(DomainModel):

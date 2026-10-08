@@ -14,9 +14,10 @@ from collections.abc import Sequence
 from footystreams.domain.competition import MatchRules
 from footystreams.domain.match import MatchSetup, TeamSheet
 from footystreams.events.clock import match_elapsed_s
+from footystreams.events.derive.presence import leaver
 from footystreams.events.discipline import SubstitutionEvent
 from footystreams.events.types import MatchEvent
-from footystreams.verify.discipline import TEAM_SIZE, leaver_at
+from footystreams.verify.discipline import TEAM_SIZE
 from footystreams.verify.violation import Violation
 
 SAME_WINDOW_S = 60  # lenient: changes this close are one stoppage, so the check never over-counts
@@ -43,9 +44,9 @@ def check_pitch_state(events: Sequence[MatchEvent], setup: MatchSetup) -> list[V
             on[event.team].discard(event.player_off_id)
             bench[event.team].discard(event.player_on_id)
             on[event.team].add(event.player_on_id)
-        leaver = leaver_at(events, position)
-        if leaver is not None:
-            on[event.team].discard(leaver)
+        departed = leaver(events, position)
+        if departed is not None:
+            on[event.team].discard(departed)
         if len(on[event.team]) > TEAM_SIZE:
             found.append(Violation("M06", f"{len(on[event.team])} players on the pitch", event.id))
     return found

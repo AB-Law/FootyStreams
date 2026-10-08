@@ -7,6 +7,7 @@ from functools import cache
 
 from footystreams.domain.match import MatchSetup
 from footystreams.events.discipline import CardEvent
+from footystreams.events.result import MatchResult
 from footystreams.events.types import MatchEvent
 from footystreams.sim import SimConfig, default_tables, merge_config, run_match
 from tests.factories.sim_config import CARD_HEAVY, m5_config
@@ -70,3 +71,32 @@ def injury_heavy_log() -> tuple[MatchEvent, ...]:
     """A match with plenty of injuries, forced changes and sides playing short."""
     config = merge_config(SimConfig(), INJURY_HEAVY)
     return run_match(demo_setup(), 5, config, default_tables()).events
+
+
+@cache
+def context_result() -> MatchResult:
+    """A demo match played with the M7 context and event enrichment switched on."""
+    config = merge_config(SimConfig(), {"context": {"enabled": True}})
+    return run_match(demo_setup(), 7, config, default_tables())
+
+
+_ID_FIELDS = ("shot_event_id", "subject_event_id")
+
+
+def without_frames_renumbered(events: tuple[MatchEvent, ...]) -> list[dict[str, object]]:
+    """The non-frame, non-summary events as data with ids and seq renumbered contiguously.
+
+    Frames take sequence numbers, so a log with frames differs from one without in `seq`, `id`
+    and the fields that point at ids. After this normalisation the two must be equal.
+    """
+    kept = [e for e in events if e.type not in ("frame", "match_summary")]
+    new_id = {event.id: f"{event.match_id}:{index:05d}" for index, event in enumerate(kept)}
+    rows: list[dict[str, object]] = []
+    for index, event in enumerate(kept):
+        data = event.model_dump()
+        data["id"], data["seq"] = new_id[event.id], index
+        for name in ("caused_by", *_ID_FIELDS):
+            if data.get(name) is not None:
+                data[name] = new_id[data[name]]
+        rows.append(data)
+    return rows

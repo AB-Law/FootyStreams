@@ -12,6 +12,8 @@ from collections.abc import Iterator
 from footystreams.domain.match import MatchSetup
 from footystreams.domain.referee import Referee
 from footystreams.events.base import EventBase
+from footystreams.events.derive.context import ContextTracker
+from footystreams.events.derive.summary import SummaryInputs, build_summary
 from footystreams.events.digest import log_digest
 from footystreams.events.structure import (
     AddedTimeEvent,
@@ -30,8 +32,9 @@ from footystreams.sim.config import SimConfig, config_hash
 from footystreams.sim.config_rules import OffsideConfig
 from footystreams.sim.decision import decide
 from footystreams.sim.emit import EventEmitter, Meta, TeamLabel
-from footystreams.sim.fatigue import advance_exhaustion, halftime_recovery
-from footystreams.sim.injury import injure_without_contact
+from footystreams.sim.fatigue import advance_exhaustion, final_exhaustion, halftime_recovery
+from footystreams.sim.frames import FrameRecorder
+from footystreams.sim.injury import injure_without_contact, injury_reports
 from footystreams.sim.manager_ai import ManagerAI
 from footystreams.sim.options import ActionKind, Option
 from footystreams.sim.play import Play
@@ -42,7 +45,6 @@ from footystreams.sim.rng import SimRng
 from footystreams.sim.side import Side
 from footystreams.sim.state import REGULATION_PERIOD_S, MatchState
 from footystreams.sim.stoppage import SECONDS_PER_MINUTE, added_minutes
-from footystreams.sim.summary import SummaryInputs, build_summary
 from footystreams.sim.tables import StaticTables
 
 PERIODS = (1, 2)
@@ -87,7 +89,8 @@ class MatchEngine:
         self._config = config
         context = make_context(setup, streams["dayform"], config)
         self._state: MatchState = build_state(setup, tables, context)
-        self._emitter = EventEmitter(setup.match_id)
+        tracker = ContextTracker(is_derby=setup.is_derby) if config.context.enabled else None
+        self._emitter = EventEmitter(setup.match_id, tracker)
         self._play = Play(
             self._state,
             streams["play"],
@@ -104,6 +107,7 @@ class MatchEngine:
             if config.manager.enabled
             else None
         )
+        self._frames = FrameRecorder(config.frame_interval_s) if config.emit_frames else None
         self._pending_move_s = 0.0
 
     @property
@@ -156,6 +160,8 @@ class MatchEngine:
             state.home.attack_dir, state.away.attack_dir = -1, 1
         place_for_kickoff(state, kicking)
         state.assist_from = None
+        if self._frames is not None:
+            self._frames.reset(state)
         state.chain += 1
         self._pending_move_s = 0.0
         self._emit_marker(KickoffEvent, period=period, team=kicking)
@@ -197,13 +203,21 @@ class MatchEngine:
             # The clock ran through the celebration, but place_for_kickoff already walked everyone
             # back to the kick-off formation; moving them again would undo it.
             self._pending_move_s = 0.0
+        if self._frames is not None:
+            self._frames.record(state, self._emitter)
 
     def _offside_rule(self) -> OffsideConfig | None:
         return self._config.offside if self._config.offside.enabled else None
 
     def _summary_event(self) -> MatchEvent:
         events = list(self._emitter.events)
-        inputs = SummaryInputs(self._seed, config_hash(self._config), log_digest(events))
+        inputs = SummaryInputs(
+            self._seed,
+            config_hash(self._config),
+            log_digest(events),
+            injuries=injury_reports(self._state),
+            end_exhaustion=final_exhaustion(self._state),
+        )
         summary = build_summary(events, self._setup, inputs)
         self._emitter.emit(self._state, MatchSummaryEvent, Meta(), summary=summary)
         return self._emitter.drain()[0]

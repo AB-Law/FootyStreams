@@ -9,6 +9,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0117** Add annotate(): the non-causal annotation pass (winning goal, late winner, comeback, turning points, goal of the match) *(M7; scope: analytics)*
+- **0116** Add read-only analytics: pass network, zone flow, shot map, xG/xA/xT totals and heatmaps recomputed from the log *(M7; scope: analytics)*
+- **0114** Emit tracking frames (22 players and the ball) when SimConfig.emit_frames is on; verify and the summary ignore them *(M7; scope: sim, verify)*
+- **0113** Add match checks M13 (events validate), M14 (summary recomputable), M15 (ratings), M16 (digest) and M18 (ranges) *(M7; scope: verify)*
+- **0112** Derive narrative hooks (late winner, comeback, hat-trick, red-card turning point, keeper heroics, ...) *(M7; scope: events)*
+- **0111** Rate every player 3-10 from the log and pick the player of the match *(M7; scope: events)*
+- **0110** Derive the pass network, zone pass flow, shot map, xG and momentum timelines and key moments from the log *(M7; scope: events)*
+- **0109** Count the full team and player stats from the log; substitutes get rows with their minutes *(M7; scope: events, sim)*
+- **0108** Add the presence fold (minutes, starts, who left); verify reuses it *(M7; scope: events, verify)*
+- **0107** Record end positions, progressive passes, threat gain and big chances when context is on *(M7; scope: sim, events)*
+- **0106** Wire the context tracker into the emitter behind SimConfig.context.enabled *(M7; scope: sim, events)*
+- **0105** Add the causal context tracker: momentum, intensity, significance and tags *(M7; scope: events)*
 - **0097** Add match checks M06 (pitch state) and M08 (substitution limits); test exhaustion never falls in a half *(M6; scope: verify)*
 - **0096** Run the AI manager: checkpoints, triggers, changes at stoppages and half-time *(M6; scope: sim)*
 - **0095** Add the AI manager's assessment, candidate plans and mentality ladder *(M6; scope: sim)*
@@ -65,6 +77,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0118** Enable the M7 context and event enrichment by default (SIM_VERSION stays 0.4.0, goldens re-pinned) *(M7; scope: sim; sim version minor)*
+- **0115** sim: show story tags, the player of the match, top ratings, injuries and stories; add --frames and --frame-interval *(M7; scope: cli)*
+- **0103** Finalise the M7 schema (causal context tags, pass and dribble end positions, frame players, summary stats and analytics rows) and bump SIM_VERSION to 0.4.0 *(M7; scope: events, schemas; sim version minor; schema version minor)*
 - **0099** Enable the M6 behaviours (fatigue, weather, home advantage, injuries, AI manager), plan both teams' moves from the same positions, bump SIM_VERSION to 0.3.0 *(M6; scope: sim, schemas; sim version minor; schema version patch)*
 - **0084** Enable and calibrate the M5 behaviours; SIM_VERSION 0.2.0 *(M5; scope: sim, schemas; sim version minor; schema version patch)*
 - **0072** Bound the SimConfig knobs and move the remaining magic numbers into it *(M4; scope: sim; sim version patch)*
@@ -79,6 +94,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0120** Fix own-goal tags and bound the M7 context knobs *(M7; scope: events, sim)*
 - **0102** Do not announce a mentality change that changes nothing *(M6; scope: sim)*
 - **0101** Put a bench goalkeeper in goal when he replaces a stand-in keeper *(M6; scope: sim)*
 - **0098** Roll a foul injury before the card so a dismissed fouler is not named afterwards *(M6; scope: sim)*
@@ -100,12 +116,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0052** Speed up option generation and refresh positions every 4 seconds *(M4; scope: sim)*
 
 ### Refactoring
+- **0104** Move the summary fold from sim to events/derive so verify and analytics can recompute it *(M7; scope: events, sim)*
 - **0091** Build the state from a BuildContext and add the bench, injury stream and ManagerConfig *(M6; scope: sim)*
 - **0068** Move the text renderer from cli to sim so cli stays a thin wrapper *(M4; scope: sim, cli)*
 - **0066** Remove duplicated constants from the simulation modules *(M4; scope: sim)*
 - **0062** Share the one-player-on-two-teams check between sim and verify *(M4; scope: domain, verify, sim)*
 
 ### Tests
+- **0119** Add the M7 slow-tier sweeps; write the M7 report, design notes and status *(M7; scope: sim)*
 - **0100** Add the M6 sweeps and metamorphic tests; write the M6 report *(M6; scope: sim)*
 - **0085** Add the M5 sweeps and write the M5 report *(M5; scope: sim, docs)*
 - **0069** Replace a near-vacuous equal-teams assertion with meaningful strength checks *(M4; scope: sim)*

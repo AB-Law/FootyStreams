@@ -7,6 +7,7 @@ from footystreams.sim.actions.foul import contest_foul
 from footystreams.sim.actions.nearest import closest_of, nearest_defender_to
 from footystreams.sim.actions.out_of_play import out_of_play
 from footystreams.sim.emit import Meta
+from footystreams.sim.enrich import dribble_fields
 from footystreams.sim.geometry import CENTRE, frame_coordinate
 from footystreams.sim.options import Option
 from footystreams.sim.play import Play, action_duration, actor, take_possession
@@ -30,7 +31,12 @@ def resolve_dribble(play: Play, option: Option) -> float:
         outcome = "tackled" if tackled else "lost"
     meta = Meta(team=carrier.side, participants=(actor(carrier, "carrier"),), pos=start)
     dribble_id = play.emit.emit(
-        state, DribbleEvent, meta, player_id=carrier.player_id, outcome=outcome
+        state,
+        DribbleEvent,
+        meta,
+        player_id=carrier.player_id,
+        outcome=outcome,
+        **dribble_fields(play, option, kept_ball=beaten),
     )
     duration = action_duration(play, play.cfg.tempo.dribble_s)
     if beaten:

@@ -10,13 +10,13 @@ from collections.abc import Iterator
 
 from footystreams.domain.match import MatchSetup, players_on_both_sheets
 from footystreams.domain.referee import Referee
+from footystreams.events.derive.summary import setup_ref
 from footystreams.events.result import MatchResult
 from footystreams.events.summary import MatchSummaryEvent
 from footystreams.events.types import MatchEvent
 from footystreams.sim.config import SimConfig, config_hash
 from footystreams.sim.engine import MatchEngine
 from footystreams.sim.errors import EngineError, InvalidSetupError
-from footystreams.sim.summary import setup_ref
 from footystreams.sim.tables import StaticTables
 
 

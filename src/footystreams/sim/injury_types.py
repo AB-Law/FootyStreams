@@ -52,3 +52,11 @@ NON_CONTACT_TYPES = (
 def types_for(cause: InjuryCause) -> tuple[InjuryType, ...]:
     """Return the injury types a cause can produce (a foul is contact)."""
     return NON_CONTACT_TYPES if cause == "non_contact" else CONTACT_TYPES
+
+
+def base_days_of(name: str) -> int:
+    """Return the typical layoff in days of a named injury type (0 for an unknown name)."""
+    for entry in (*CONTACT_TYPES, *NON_CONTACT_TYPES):
+        if entry.name == name:
+            return entry.base_days
+    return 0
