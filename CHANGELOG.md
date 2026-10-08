@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0232** Add a pixel-art replay viewer prototype (silent, file replay only) *(design; scope: tools)*
 - **0222** Let balance fit count only the metrics named by --metrics *(M8; scope: cli)*
 - **0219** Add balance --min-gap to play only mismatched pairings for strength studies *(M8; scope: cli)*
 - **0218** Make the balance sensitivity sweep resumable, with one-sided nudges and a report file *(M8; scope: cli, tools)*
