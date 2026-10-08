@@ -15,7 +15,7 @@ from footystreams.sim.referee import (
 from footystreams.sim.rng import SimRng
 from tests.factories.referee import make_referee
 from tests.factories.sim_play import make_play
-from tests.factories.sim_teams import make_demo_setup
+from tests.factories.sim_teams import DEMO_REFEREE_ID, make_demo_setup
 
 CFG = RefereeConfig()
 
@@ -94,7 +94,7 @@ def test_is_called__consumes_a_noise_draw_and_a_decision_draw() -> None:
 
 
 def test_run_match__accepts_a_referee_and_stays_deterministic() -> None:
-    setup, referee = make_demo_setup(), make_referee(strictness=0.8)
+    setup, referee = make_demo_setup(), make_referee(id=DEMO_REFEREE_ID, strictness=0.8)
     first = run_match(setup, 3, SimConfig(), default_tables(), referee)
     second = run_match(setup, 3, SimConfig(), default_tables(), referee)
     assert first.log_digest == second.log_digest

@@ -31,6 +31,13 @@ def validate_setup(setup: MatchSetup) -> None:
         raise InvalidSetupError(msg)
 
 
+def validate_referee(setup: MatchSetup, referee: Referee | None) -> None:
+    """Reject a referee other than the one the setup names (None means the neutral referee)."""
+    if referee is not None and referee.id != setup.referee_id:
+        msg = f"referee {referee.id} is not {setup.referee_id}, the official of {setup.match_id}"
+        raise InvalidSetupError(msg)
+
+
 def simulate_match(
     setup: MatchSetup,
     seed: int,
@@ -44,6 +51,7 @@ def simulate_match(
     caller resolves it. Without one a neutral referee officiates.
     """
     validate_setup(setup)
+    validate_referee(setup, referee)
     return MatchEngine(setup, seed, config, tables, referee).run()
 
 

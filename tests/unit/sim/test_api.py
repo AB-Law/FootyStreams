@@ -19,7 +19,8 @@ from footystreams.sim.config import OffsideConfig, PositionConfig, config_hash
 from footystreams.sim.positioning import update_positions
 from footystreams.sim.state import MatchState
 from tests.factories.match import make_setup, make_team_sheet
-from tests.factories.sim_teams import make_demo_setup
+from tests.factories.referee import make_referee
+from tests.factories.sim_teams import DEMO_REFEREE_ID, make_demo_setup
 
 TABLES = default_tables()
 CFG = SimConfig()
@@ -109,6 +110,17 @@ def test_simulate_match__players_on_both_sheets__is_rejected_before_any_event() 
     )
     with pytest.raises(InvalidSetupError, match="both sheets"):
         simulate_match(twin, 1, CFG, TABLES)
+
+
+def test_simulate_match__referee_other_than_the_one_named__is_rejected() -> None:
+    other = make_referee(id="ref_other001")
+    with pytest.raises(InvalidSetupError, match="ref_other001"):
+        simulate_match(SETUP, 1, CFG, TABLES, other)
+
+
+def test_simulate_match__the_named_referee__is_accepted() -> None:
+    named = make_referee(id=DEMO_REFEREE_ID)
+    assert run_match(SETUP, 1, CFG, TABLES, named).events
 
 
 def test_simulate_match__same_club_on_both_sides__is_rejected() -> None:

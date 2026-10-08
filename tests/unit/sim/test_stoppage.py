@@ -5,7 +5,7 @@ from footystreams.sim import SimConfig, default_tables, merge_config, run_match
 from footystreams.sim.config import StoppageConfig
 from footystreams.sim.stoppage import added_minutes
 from tests.factories.referee import make_referee
-from tests.factories.sim_teams import make_demo_setup
+from tests.factories.sim_teams import DEMO_REFEREE_ID, make_demo_setup
 
 CFG = StoppageConfig()
 
@@ -29,7 +29,8 @@ def test_added_minutes__rounds_up() -> None:
 
 @pytest.mark.parametrize("seed", [1, 2, 3])
 def test_run_match__with_added_time_each_half_announces_it_and_plays_it(seed: int) -> None:
-    result = run_match(make_demo_setup(), seed, SimConfig(), default_tables(), make_referee())
+    referee = make_referee(id=DEMO_REFEREE_ID)
+    result = run_match(make_demo_setup(), seed, SimConfig(), default_tables(), referee)
     announcements = [e for e in result.events if isinstance(e, AddedTimeEvent)]
     assert [e.clock.period for e in announcements] == [1, 2]
     halftime = next(e for e in result.events if isinstance(e, HalftimeEvent))
