@@ -116,3 +116,33 @@ def test_balance_sensitivity__bad_input_is_a_usage_error(
 ) -> None:
     assert main(["sensitivity", *_run(world_directory), *extra]) == EXIT_USAGE
     assert "balance: error" in capsys.readouterr().err
+
+
+@pytest.mark.slow
+def test_balance_fit__writes_a_candidate_and_never_overwrites_it(
+    world_directory: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    out = tmp_path / "candidate.yaml"
+    arguments = [
+        "fit", *_run(world_directory), "--knobs", "shot.xg_cap", "--max-evals", "4",
+        "--validation-matches", "4", "--out", str(out),
+    ]  # fmt: skip
+
+    assert main(arguments) == 0
+    printed = capsys.readouterr().out
+    assert out.read_text(encoding="utf-8").startswith("# balance fit")
+    assert "fresh matches" in printed
+    assert main(arguments) == EXIT_USAGE
+    assert "already exists" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("extra", [["--bounds", "2,1"], ["--bounds", "x,y"], []])
+def test_balance_fit__bad_input_is_a_usage_error(
+    world_directory: Path, extra: list[str], capsys: pytest.CaptureFixture[str]
+) -> None:
+    arguments = ["fit", *_run(world_directory), *extra]
+    if extra:
+        arguments += ["--knobs", "shot.xg_cap"]
+
+    assert main(arguments) == EXIT_USAGE
+    assert "balance: error" in capsys.readouterr().err

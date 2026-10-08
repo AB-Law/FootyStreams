@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0200** Add balance fit: search chosen knobs for the lowest loss and write a candidate config *(M8; scope: cli, tools)*
 - **0199** Add balance sensitivity: nudge each knob and show which metric it moves *(M8; scope: cli, tools)*
 - **0198** Add the balance command: scenarios over every pairing, a process-pool runner, --config and --set *(M8; scope: cli, tools)*
 - **0197** Add balance targets, profiles, evaluation with intervals, and the report *(M8; scope: tools, data)*
