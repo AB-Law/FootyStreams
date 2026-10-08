@@ -88,7 +88,7 @@ class PassConfig(DomainModel):
     base_long: Share = 0.80
     base_through: Share = 0.74
     base_cross: Share = 0.62
-    base_back: Share = 1.0
+    base_back: Share = 0.925
     length_penalty_per_m: float = 0.0035
     skill_swing: float = 0.12  # damped: skill gaps must not compound into lopsided matches
     skill_pivot: float = 55.0
@@ -144,7 +144,7 @@ class ShotConfig(DomainModel):
     pressure_penalty: Share = 0.7
     finishing_floor: Positive = 0.80
     finishing_span: NonNegative = 0.40
-    min_xg: Share = 0.02
+    min_xg: Share = 0.06  # below this a chance is not worth taking: no 20 m punts
     long_range_m: Positive = 20.0  # beyond this the shooter's long_shots replaces finishing
     block_base: Share = 0.12  # share of shots a defender gets in the way of
     block_pressure: Share = 0.15  # extra blocked share at full pressure
@@ -183,13 +183,13 @@ class DribbleConfig(DomainModel):
         "distance_m": "S",
     }
 
-    base: Share = 0.55
+    base: Share = 0.3235
     swing: float = 0.12
     scale: Positive = 20.0
     pressure_penalty: float = 0.15
     min_probability: Share = 0.05
     max_probability: Share = 0.95
-    distance_m: Positive = 8.0  # how far a dribble carries the ball
+    distance_m: Positive = 8.54  # how far a dribble carries the ball
 
     @model_validator(mode="after")
     def _probability_bounds_are_ordered(self) -> Self:
@@ -230,14 +230,14 @@ class DecisionConfig(DomainModel):
     }
 
     candidates: int = Field(ge=1, le=10, default=4)
-    progress_scale: float = 12.0  # utility per unit of threat gained
+    progress_scale: float = 12.94  # utility per unit of threat gained
     loss_cost_base: float = 0.15
     loss_cost_own_third: float = 0.55  # extra cost of losing the ball at the own goal line
     lead_frame_x: float = 0.012  # passes are aimed slightly ahead of the receiver
     min_pass_m: float = 4.0
-    shot_scale: float = 14.0
+    shot_scale: float = 10.68
     shoot_on_sight_swing: float = 0.8
-    clear_pressure: float = 0.45
+    clear_pressure: float = 0.61
     clear_max_frame_x: float = 0.30
     clear_base: float = 0.9
     clear_slope: float = 1.5
