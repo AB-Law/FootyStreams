@@ -82,7 +82,7 @@ A site around a live video stream in a styled "monitor" frame, with replays and 
 ### Proposed order (to confirm when the design is written)
 
 1. The design document and its decisions (below).
-2. A silent browser viewer fed by an engine sink: a live pixel match.
+2. A silent browser viewer fed by an engine sink: a live pixel match. A file-replay **prototype** of the picture (not this step) lives in `viewer/`: it reads a recorded `--frames` log through one `onEvent` function, so the live sink can replace the file reader.
 3. Studio scenes with templated scripts (no LLM).
 4. LLM commentary and TTS behind the M13 seams, with fallbacks.
 5. Text products: social feed, newspapers, pundit shows.
