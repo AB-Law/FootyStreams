@@ -17,6 +17,6 @@ class ContextConfig(DomainModel):
         "big_chance_xg": "S",
     }
 
-    enabled: bool = False  # switched on in the commit that enables M7 behaviour
+    enabled: bool = True
     progressive_frame_x: float = 0.25  # a pass is progressive when it gains this much pitch
     big_chance_xg: float = 0.30

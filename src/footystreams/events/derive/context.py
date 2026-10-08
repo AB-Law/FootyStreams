@@ -65,6 +65,7 @@ _SIGNIFICANCE_BOOST = {
     ContextTag.LATE_GAME: 0.05,
     ContextTag.LAST_MINUTES: 0.05,
 }
+_TAG_ORDER = tuple(ContextTag)
 _MATTERS = 0.1  # events below this significance are not boosted by the match situation
 _SIGNIFICANCE_BY_TYPE = {
     "goal": 1.0,
@@ -159,8 +160,10 @@ class ContextTracker:
         existing: tuple[ContextTag, ...], computed: set[ContextTag]
     ) -> tuple[ContextTag, ...]:
         """Keep tags the sim attached, then add computed ones in declaration order."""
-        extra = [tag for tag in ContextTag if tag in computed and tag not in existing]
-        return (*existing, *extra)
+        if not computed:
+            return existing
+        # Perf: M7-context - walking the enum on every event cost ~15 ms a match; most have no tag.
+        return (*existing, *(tag for tag in _TAG_ORDER if tag in computed and tag not in existing))
 
     @staticmethod
     def _significance(event: MatchEvent, tags: set[ContextTag]) -> float:

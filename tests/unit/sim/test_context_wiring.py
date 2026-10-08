@@ -22,7 +22,7 @@ def test_run_match__replaying_the_tracker_over_the_log_reproduces_every_context(
     assert [event.ctx for event in replayed] == [event.ctx for event in events]
 
 
-def test_run_match__context_is_off_by_default() -> None:
+def test_run_match__with_context_off_events_carry_the_default_context() -> None:
     off = merge_config(SimConfig(), {"context": {"enabled": False}})
     events = run_match(make_demo_setup(), 7, off, default_tables()).events
     assert all(event.ctx.momentum == 0.0 and not event.ctx.tags for event in events[:30])
@@ -44,3 +44,7 @@ def test_run_match__turning_context_on_changes_only_context_and_enrichment() -> 
     assert [_without_context(event) for event in plain] == [
         _without_context(event) for event in context_result().events[:-1]
     ]
+
+
+def test_sim_config__context_is_on_by_default() -> None:
+    assert SimConfig().context.enabled

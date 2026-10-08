@@ -77,6 +77,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0101** Enable the M7 context and event enrichment by default (SIM_VERSION stays 0.4.0, goldens re-pinned) *(M7; scope: sim; sim version minor)*
 - **0098** sim: show story tags, the player of the match, top ratings, injuries and stories; add --frames and --frame-interval *(M7; scope: cli)*
 - **0086** Finalise the M7 schema (causal context tags, pass and dribble end positions, frame players, summary stats and analytics rows) and bump SIM_VERSION to 0.4.0 *(M7; scope: events, schemas; sim version minor; schema version minor)*
 - **0084** Enable the M6 behaviours (fatigue, weather, home advantage, injuries, AI manager), plan both teams' moves from the same positions, bump SIM_VERSION to 0.3.0 *(M6; scope: sim, schemas; sim version minor; schema version patch)*

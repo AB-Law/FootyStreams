@@ -6,7 +6,6 @@ numbers and, with `SimConfig.context.enabled` off, return nothing (docs/design/0
 
 from __future__ import annotations
 
-from footystreams.domain.types import Pos
 from footystreams.events.derive.threat import frame_value, threat
 from footystreams.sim.geometry import Point
 from footystreams.sim.mathx import clamp
@@ -16,10 +15,12 @@ from footystreams.sim.play import Play
 PRECISION = 4
 
 
-def _position(point: Point) -> Pos:
-    return Pos(
-        x=round(clamp(point[0], 0.0, 1.0), PRECISION), y=round(clamp(point[1], 0.0, 1.0), PRECISION)
-    )
+def _position(point: Point) -> dict[str, float]:
+    # Perf: M7-context - a plain dict is validated once by the event model; a Pos was built twice.
+    return {
+        "x": round(clamp(point[0], 0.0, 1.0), PRECISION),
+        "y": round(clamp(point[1], 0.0, 1.0), PRECISION),
+    }
 
 
 def pass_fields(play: Play, start: Point, option: Option) -> dict[str, object]:

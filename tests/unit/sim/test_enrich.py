@@ -28,7 +28,7 @@ def test_pass_fields__a_long_forward_pass_is_progressive_and_gains_threat() -> N
     fields = pass_fields(_play(ON), (0.4, 0.5), _option((0.8, 0.5)))
     assert fields["progressive"] is True
     assert fields["xt_gain"] > 0.0  # type: ignore[operator]
-    assert fields["end_pos"].x == 0.8  # type: ignore[attr-defined]
+    assert fields["end_pos"] == {"x": 0.8, "y": 0.5}
 
 
 def test_pass_fields__a_short_or_backward_pass_is_not_progressive() -> None:
@@ -43,7 +43,7 @@ def test_dribble_fields__only_a_kept_ball_has_an_end() -> None:
     play = _play(ON)
     assert dribble_fields(play, _option((0.6, 0.4)), kept_ball=False) == {}
     kept = dribble_fields(play, _option((0.6, 0.4)), kept_ball=True)
-    assert (kept["end_pos"].x, kept["end_pos"].y) == (0.6, 0.4)  # type: ignore[attr-defined]
+    assert kept["end_pos"] == {"x": 0.6, "y": 0.4}
 
 
 def test_shot_fields__big_chance_starts_at_the_configured_xg() -> None:
