@@ -6,9 +6,9 @@ Updated on the Join integration branch (2026-10-08). Read this first; then the d
 - Design is complete (`docs/design/`, index in `docs/design/README.md`; decisions in `09-schema-decisions.md`).
 - **M0 is merged** to `main` (scaffold, quality gate, changelog, CI, ADRs).
 - **Track A (M1, M4–M7)** and **Track B (M2, M3, M9–M11)** are both merged to `main`.
-- **Join track** is next: the integration branch (`feat/join-world-sim-integration`) joins the tracks, then **M8** balance → M12 engine → M13 → M14.
+- **Join track:** the integration (PR 28) is merged. **M8** is split in two PRs: part 1 (`feat/m8-balance-harness`) is the `uv run balance` harness (run, sensitivity, fit), the profiling pass and a minutes bug it found; part 2 is the calibrated defaults, golden re-pin and statistical tests (`docs/milestones/M8.md`). Then M12 engine → M13 → M14.
 - Integration done: the sim plays the world's own formations (`sim.tables.tables_from_catalog`), `league --simulator event` plays a season on the real engine (deterministic; about 14 s for 4 clubs), and `sim --home A --away B --world DIR|--db FILE` plays a friendly (`league/friendly.py`).
-- For M8: the real engine scores about 4.1 goals a match in generated worlds (the realistic target is about 2.7), and the league's `EventSimulator` does not yet pass the match referee to `run_match` (a neutral one officiates; `sim --world` does pass it).
+- Baseline for M8 part 2 (13 of 43 metrics pass): the real engine scores about 4.1 goals a match in generated worlds (the realistic target is about 2.7), and the league's `EventSimulator` does not yet pass the match referee to `run_match` (a neutral one officiates; `sim --world` does pass it).
 
 ## How to work here
 ```bash
