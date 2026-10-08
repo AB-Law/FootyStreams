@@ -19,14 +19,19 @@ from footystreams.sim.side import opposite
 from footystreams.sim.state import PlayerState
 
 
-def offside_called(play: Play, passer: PlayerState, receiver: PlayerState) -> bool:
-    """Decide if a pass to `receiver` is flagged (no draw unless he is on or near the line)."""
+def offside_called(
+    play: Play, passer: PlayerState, receiver: PlayerState, *, runs_in_behind: bool = True
+) -> bool:
+    """Decide if a pass to `receiver` is flagged (no draw unless he is on or near the line).
+
+    Only a ball played in behind (`runs_in_behind`) can catch a runner who set off early.
+    """
     state = play.state
     direction = state.team(passer.side).attack_dir
     line = offside_line(state.team(opposite(passer.side)), direction)
     ahead = frame_coordinate(receiver.x, direction)
     if not in_offside_position(ahead, frame_coordinate(passer.x, direction), line):
-        return _mistimed_run(play, receiver, ahead, line) and _flagged(play)
+        return runs_in_behind and _mistimed_run(play, receiver, ahead, line) and _flagged(play)
     return _flagged(play)
 
 

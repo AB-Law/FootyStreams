@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 import pytest
 
 from footystreams.events.open_play import OffsideEvent, PassEvent
@@ -133,3 +135,60 @@ def test_positioning__with_the_rule_on_attackers_stay_behind_the_line() -> None:
     line = offside_line(state.away, 1)
     assert striker.x <= line
     assert offside_ceiling(state.home, state.away, striker, play.cfg.offside) < line
+
+
+def test_positioning__an_attacker_left_beyond_a_dropping_line_is_pulled_back() -> None:
+    play = make_play(config=ON)
+    state = play.state
+    for index, player in enumerate(state.away.players):
+        player.x, player.y = 0.9 - 0.04 * index, 0.5
+    striker = state.home.players[10]
+    striker.x = 0.97  # the defence dropped and left him beyond the line
+    update_positions(state, 0.1, play.cfg.positioning, play.cfg.offside)  # too short to walk back
+    assert striker.x <= offside_ceiling(state.home, state.away, striker, play.cfg.offside)
+
+
+def test_positioning__the_carrier_is_never_pulled_back_by_the_line() -> None:
+    play = make_play(config=ON)
+    state = play.state
+    for index, player in enumerate(state.away.players):
+        player.x, player.y = 0.9 - 0.04 * index, 0.5
+    state.carrier.x = 0.97
+    update_positions(state, 0.1, play.cfg.positioning, play.cfg.offside)
+    assert state.carrier.x == 0.97
+
+
+def _near_the_line_always_mistimes() -> SimConfig:
+    return merge_config(
+        SimConfig(), {"offside": {"enabled": True, "call_base": 2.0, "mistime_base": 1.0}}
+    )
+
+
+def test_offside_called__only_a_ball_in_behind_can_catch_a_mistimed_run() -> None:
+    play = make_play(config=_near_the_line_always_mistimes())
+    carrier, receiver = _setup_offside(play, 0.84)  # onside, a stride from the line (0.85)
+    receiver.skills = replace(receiver.skills, off_ball_movement=0.0)
+    before = play.discipline.draws
+    assert not offside_called(play, carrier, receiver, runs_in_behind=False)
+    assert play.discipline.draws == before
+    assert offside_called(play, carrier, receiver, runs_in_behind=True)
+
+
+@pytest.mark.parametrize(
+    ("kind", "flagged"),
+    [
+        (PassKind.THROUGH, True),
+        (PassKind.LONG, True),
+        (PassKind.SHORT, False),
+        (PassKind.BACK, False),
+    ],
+)
+def test_resolve_pass__which_kinds_of_pass_can_catch_a_mistimed_run(
+    kind: PassKind, flagged: bool
+) -> None:
+    play = make_play(config=_near_the_line_always_mistimes())
+    _, receiver = _setup_offside(play, 0.84)
+    receiver.skills = replace(receiver.skills, off_ball_movement=0.0)
+    option = _pass_to(receiver)
+    resolve_pass(play, replace(option, pass_kind=kind))
+    assert any(isinstance(e, OffsideEvent) for e in play.emit.events) is flagged

@@ -22,6 +22,7 @@ from footystreams.sim.side import opposite
 from footystreams.sim.state import PlayerState
 
 _LONG_KINDS = (PassKind.LONG, PassKind.CROSS)
+_BEHIND_KINDS = (PassKind.THROUGH, PassKind.LONG, PassKind.CROSS)  # balls a runner can mistime
 FailedOutcome = Literal["intercepted", "incomplete", "out"]
 
 
@@ -97,7 +98,8 @@ def _receive(
     play: Play, passer: PlayerState, receiver: PlayerState, option: Option, pass_id: str
 ) -> float:
     """The receiver gets the ball, unless the referee flags him offside; return extra seconds."""
-    if play.cfg.offside.enabled and offside_called(play, passer, receiver):
+    behind = option.pass_kind in _BEHIND_KINDS
+    if play.cfg.offside.enabled and offside_called(play, passer, receiver, runs_in_behind=behind):
         return punish_offside(play, receiver, pass_id)
     take_possession(play.state, receiver, option.end[0], option.end[1])
     play.state.assist_from = passer

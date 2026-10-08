@@ -153,6 +153,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0210** Hold attackers on the offside line and mistime runs only on balls in behind *(M8; scope: sim; sim version patch)*
 - **0207** Strip git's repository variables from every test so a hook cannot steer them into the real repo *(M12; scope: tools)*
 - **0204** Count only changes before the break as early tactical substitutions in the balance metric *(M8; scope: tools)*
 - **0203** Count first-half stoppage time in player minutes so a late-first-half substitute never gets negative minutes *(M8; scope: events, sim; sim version patch)*

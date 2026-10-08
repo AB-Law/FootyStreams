@@ -129,6 +129,30 @@ def update_positions(
     ]
     for player, target_x, target_y, metres in moves:
         move_toward(player, target_x, target_y, metres)
+    if offside is not None:
+        _hold_the_line(state, offside)
+
+
+def _hold_the_line(state: MatchState, cfg: OffsideConfig) -> None:
+    """Pull back any attacker the opponents' line has left behind it.
+
+    The ceiling in `_plan_team_moves` only limits where a player is heading; a defence that drops
+    leaves attackers standing offside until they walk back, which was half of all offsides
+    (M8 sweep). Players watch the line, so being beyond it is not a state they stay in; offsides
+    come from the mistimed runs of `actions/offside.py` alone. Both lines are read before either
+    team is pulled back so the result does not depend on the team order.
+    """
+    lines = {
+        team.side: offside_line(state.team(opposite(team.side)), team.attack_dir)
+        for team in (state.home, state.away)
+    }
+    for team in (state.home, state.away):
+        for player in team.players:
+            if player is state.carrier or player.line is Line.KEEPER:
+                continue
+            ceiling = ceiling_below_line(lines[team.side], player, cfg)
+            if frame_coordinate(player.x, team.attack_dir) > ceiling:
+                player.x = frame_coordinate(ceiling, team.attack_dir)
 
 
 def place_for_kickoff(state: MatchState, kicking_side: Side) -> None:
