@@ -14,7 +14,7 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 from itertools import pairwise
 
-from footystreams.domain.match import MatchSetup
+from footystreams.domain.match import MatchSetup, players_on_both_sheets
 from footystreams.events.clock import period_elapsed_s
 from footystreams.events.open_play import GoalEvent
 from footystreams.events.structure import FulltimeEvent, KickoffEvent
@@ -121,8 +121,10 @@ def check_ending(events: Sequence[MatchEvent]) -> list[Violation]:
 
 def check_rosters(setup: MatchSetup) -> list[Violation]:
     """M05: no player appears on both sheets."""
-    shared = sorted(set(setup.home.squad) & set(setup.away.squad))
-    return [Violation("M05", "player is on both teams", player_id) for player_id in shared]
+    return [
+        Violation("M05", "player is on both teams", player_id)
+        for player_id in players_on_both_sheets(setup)
+    ]
 
 
 _EVENT_CHECKS: tuple[Check, ...] = (

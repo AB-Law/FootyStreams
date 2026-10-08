@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 
-from footystreams.domain.match import MatchSetup
+from footystreams.domain.match import MatchSetup, players_on_both_sheets
 from footystreams.events.result import MatchResult
 from footystreams.events.summary import MatchSummaryEvent
 from footystreams.events.types import MatchEvent
@@ -21,8 +21,7 @@ from footystreams.sim.tables import StaticTables
 
 def validate_setup(setup: MatchSetup) -> None:
     """Reject a setup that cannot be simulated, before any event is produced."""
-    home_ids = set(setup.home.squad)
-    shared = sorted(home_ids & set(setup.away.squad))
+    shared = players_on_both_sheets(setup)
     if shared:
         msg = f"players on both sheets of {setup.match_id}: {', '.join(shared)}"
         raise InvalidSetupError(msg)
