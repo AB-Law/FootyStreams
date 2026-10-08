@@ -153,6 +153,13 @@ def check_transfers(
     for entry in entries:
         if entry.ref.get("transfer_id"):
             legs[entry.ref["transfer_id"]].append(entry)
+    known = {transfer.id for transfer in transfers}
+    for transfer_id in legs:
+        findings.expect(
+            transfer_id,
+            "orphan ledger legs with no matching transfer",
+            holds=transfer_id in known,
+        )
     for transfer in transfers:
         found = legs.get(transfer.id, [])
         if transfer.fee == 0:

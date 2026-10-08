@@ -183,3 +183,6 @@ def test_check_transfers__missing_wrong_or_stray_legs_are_l06() -> None:
     assert any("seller's leg" in v.message for v in check_transfers(transfers, one_leg))
     free = paid.model_copy(update={"fee": 0})
     assert any("free transfer" in v.message for v in check_transfers([free], entries))
+    orphaned = [e for e in entries if e.ref.get("transfer_id") == paid.id]
+    without_deal = [t for t in transfers if t != paid]
+    assert any("orphan ledger legs" in v.message for v in check_transfers(without_deal, orphaned))

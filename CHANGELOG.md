@@ -141,6 +141,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0188** Export check_schedule from the verify package *(M11; scope: verify)*
+- **0187** Flag orphan transfer ledger legs as L06 *(M11; scope: verify)*
 - **0186** Exclude OUTSIDE_WORLD from league health and squad checks *(M11; scope: league)*
 - **0185** Export check_transfers from the verify package *(M11; scope: verify)*
 - **0181** Write clubs before the players that name them when applying a delta *(M11; scope: league)*
