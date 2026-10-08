@@ -9,8 +9,9 @@ and the production pre-air gate, so no check is ever re-implemented elsewhere. C
   M17 nothing after fulltime but the summary; log starts with a kickoff
 
 The discipline checks (M07, M11) live in `verify/discipline.py`, the pitch and substitution
-checks (M06, M08) in `verify/substitutions.py` and the sequencing rules (M12) in
-`verify/sequencing.py`; `verify_match` runs them all.
+checks (M06, M08) in `verify/substitutions.py`, the sequencing rules (M12) in
+`verify/sequencing.py` and the data and summary checks (M13-M16, M18) in `verify/summary.py`;
+`verify_match` runs them all.
 """
 
 from __future__ import annotations
@@ -31,6 +32,13 @@ from footystreams.verify.discipline import (
 )
 from footystreams.verify.sequencing import check_sequencing
 from footystreams.verify.substitutions import check_pitch_state, check_substitution_limits
+from footystreams.verify.summary import (
+    check_digest,
+    check_events_validate,
+    check_ranges,
+    check_ratings,
+    check_summary_recomputes,
+)
 from footystreams.verify.violation import Violation
 
 Check = Callable[[Sequence[MatchEvent]], list[Violation]]
@@ -148,6 +156,10 @@ _EVENT_CHECKS: tuple[Check, ...] = (
     check_men_counts,
     check_sequencing,
     check_substitution_limits,
+    check_events_validate,
+    check_ratings,
+    check_digest,
+    check_ranges,
 )
 
 
@@ -160,4 +172,5 @@ def verify_match(events: Sequence[MatchEvent], setup: MatchSetup | None = None) 
     if setup is not None:
         found.extend(check_rosters(setup))
         found.extend(check_pitch_state(events, setup))
+        found.extend(check_summary_recomputes(events, setup))
     return found
