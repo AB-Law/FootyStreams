@@ -9,6 +9,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0140** (migration needed) Add SQLite repositories, Alembic 0001_initial and seed --db *(M3; scope: cli)*
+- **0139** Add repository ports, table specs, codec and in-memory repositories *(M3; scope: persistence)*
 - **0136** Commit the default world (seed 1) with a regeneration test *(M2; scope: seed)*
 - **0134** Add canonical world IO, content hashing and the seed CLI *(M2; scope: cli)*
 - **0133** Add verify_world, the world coherence checks, and senior-squad nationality quotas *(M2; scope: seed)*
@@ -148,6 +150,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0141** Write the M3 milestone report and refresh status and architecture docs *(M3; scope: design)*
 - **0137** Write the M2 milestone report and refresh design docs and status *(M2; scope: design)*
 - **0074** Record the digest decision (ADR 0006), the M4 perf exception and the review round *(M4; scope: design, docs)*
 - **0061** Write the M4 report and the Track A status section *(M4; scope: docs, sim)*

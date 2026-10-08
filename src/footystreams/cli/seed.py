@@ -8,6 +8,10 @@ from pathlib import Path
 
 from footystreams.cli.world_checks import build_world_checks, build_world_targets
 from footystreams.domain.world import World
+from footystreams.persistence.sql.engine import create_sqlite_engine
+from footystreams.persistence.sql.migrate import upgrade
+from footystreams.persistence.sql.uow import SqlUnitOfWork
+from footystreams.persistence.world_store import save_world
 from footystreams.seed.config import MAX_CLUBS, GeneratorConfig
 from footystreams.seed.static.files import StaticDataError
 from footystreams.seed.static.tables import StaticTables, load_static_tables
@@ -31,6 +35,7 @@ def _parser() -> argparse.ArgumentParser:
         "--validate", action="store_true", help="run only the coherence checks; write nothing"
     )
     parser.add_argument("--world", type=Path, help="with --validate: check this existing world")
+    parser.add_argument("--db", type=Path, help="also load the world into this SQLite database")
     return parser
 
 
@@ -42,6 +47,13 @@ def _report(world: World, tables: StaticTables) -> int:
         return EXIT_VIOLATIONS
     print("coherence checks: PASS (0 violations)")
     return EXIT_OK
+
+
+def _load_into_database(world: World, path: Path) -> None:
+    engine = create_sqlite_engine(path)
+    upgrade(engine)
+    save_world(world, SqlUnitOfWork(engine))
+    engine.dispose()
 
 
 def _run(arguments: argparse.Namespace) -> int:
@@ -57,6 +69,9 @@ def _run(arguments: argparse.Namespace) -> int:
     manifest = write_world(world, destination)
     print(f"wrote {destination} ({len(world.players)} players, {len(world.clubs)} clubs)")
     print(f"content_sha256={manifest.content_sha256}")
+    if arguments.db is not None:
+        _load_into_database(world, arguments.db)
+        print(f"loaded into {arguments.db}")
     return EXIT_OK
 
 
