@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0099** Add read-only analytics: pass network, zone flow, shot map, xG/xA/xT totals and heatmaps recomputed from the log *(M7; scope: analytics)*
 - **0097** Emit tracking frames (22 players and the ball) when SimConfig.emit_frames is on; verify and the summary ignore them *(M7; scope: sim, verify)*
 - **0096** Add match checks M13 (events validate), M14 (summary recomputable), M15 (ratings), M16 (digest) and M18 (ranges) *(M7; scope: verify)*
 - **0095** Derive narrative hooks (late winner, comeback, hat-trick, red-card turning point, keeper heroics, ...) *(M7; scope: events)*
