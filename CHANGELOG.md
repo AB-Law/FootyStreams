@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0191** Build the sim's static tables from the world's formation catalogue *(M8; scope: sim)*
 - **0177** Add the transfer-leg invariant L06 and the transfers report *(M11; scope: verify)*
 - **0176** Add the transfer market *(M11; scope: league)*
 - **0175** Add the rules of a deal *(M11; scope: league)*

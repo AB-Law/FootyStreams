@@ -10,6 +10,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 
 from footystreams.domain.roles import RoleCatalog
+from footystreams.domain.static_tables import FormationCatalog
 from footystreams.domain.types import FormationId, Position
 from footystreams.sim.formations import BUILTIN_FORMATIONS
 
@@ -50,5 +51,21 @@ def default_tables() -> StaticTables:
             FormationId(name), tuple(FormationSlot(Position(code), x, y) for code, x, y in rows)
         )
         for name, rows in BUILTIN_FORMATIONS.items()
+    }
+    return StaticTables(formations=formations)
+
+
+def tables_from_catalog(catalog: FormationCatalog) -> StaticTables:
+    """Return tables holding the world's formations, so the sim plays what the league lineups use.
+
+    The world's `formations.yaml` is the single source of truth once a world exists; the built-ins
+    of `default_tables` only serve the demo and the goldens.
+    """
+    formations = {
+        formation.id: Formation(
+            formation.id,
+            tuple(FormationSlot(slot.position, slot.x, slot.y) for slot in formation.slots),
+        )
+        for formation in catalog.formations.values()
     }
     return StaticTables(formations=formations)
