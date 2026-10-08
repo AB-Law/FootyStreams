@@ -68,9 +68,17 @@ def magazine_id(fixture: Fixture) -> str:
     return f"{fixture.date.isoformat()}:{fixture.matchday:03d}:{MAGAZINE_FIXTURE}:{MAGAZINE}"
 
 
+FILLER_PREFIX = "filler:"
+
+
+def is_untracked(block: Block) -> bool:
+    """True for filler the engine makes up on the spot: it never moves the cursor."""
+    return block.id.startswith(FILLER_PREFIX)
+
+
 def filler_id(number: int) -> str:
     """The id of the ``number``-th filler block of a run (fillers never move the cursor)."""
-    return f"filler:{number:06d}"
+    return f"{FILLER_PREFIX}{number:06d}"
 
 
 def _names(repositories: Repositories, fixture: Fixture) -> dict[str, Fact]:

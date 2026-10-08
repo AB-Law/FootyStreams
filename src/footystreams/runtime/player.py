@@ -31,7 +31,7 @@ from footystreams.runtime.clock import Clock
 from footystreams.runtime.config import Programme
 from footystreams.runtime.cursor import NO_EVENT, Cursor, Phase
 from footystreams.runtime.health import HealthReporter
-from footystreams.runtime.programme import Block, BlockKind
+from footystreams.runtime.programme import Block, BlockKind, is_untracked
 
 SECOND_HALF = 2
 MAX_LAG_S = 5.0
@@ -80,12 +80,15 @@ class MatchPlayer:
 
     async def play(self, block: Block, resume_after: int = NO_EVENT) -> None:
         """Air ``block``; ``resume_after`` is the last match event already delivered, if any."""
-        await self._persist(Cursor(block.id, Phase.STARTED, resume_after))
+        tracked = not is_untracked(block)
+        if tracked:
+            await self._persist(Cursor(block.id, Phase.STARTED, resume_after))
         if block.kind is BlockKind.MATCH:
             await self._play_match(block, resume_after)
         else:
             await self._play_segment(block)
-        await self._persist(Cursor(block.id, Phase.DONE))
+        if tracked:
+            await self._persist(Cursor(block.id, Phase.DONE))
 
     async def _play_segment(self, block: Block) -> None:
         start = self._clock.now()

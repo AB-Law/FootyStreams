@@ -217,3 +217,13 @@ def test_play__a_segment_block_airs_started_waits_its_duration_then_ended() -> N
     assert ended.id.endswith(":end")
     assert harness.clock.now() == 90.0
     assert harness.saved == [Cursor(segment.id, Phase.STARTED), Cursor(segment.id, Phase.DONE)]
+
+
+def test_play__filler_airs_but_never_moves_the_cursor() -> None:
+    harness = Harness()
+    filler = Block("filler:000001", BlockKind.FILLER, "", 30.0, {"reason": "buffer_low"})
+
+    emitted = _run(harness, filler)
+
+    assert [e.type for e in emitted] == ["segment_started", "segment_ended"]
+    assert harness.saved == []
