@@ -1,0 +1,26 @@
+[
+  {
+    "club_ids": [
+      "clb_00001",
+      "clb_00002",
+      "clb_00003",
+      "clb_00004",
+      "clb_00005",
+      "clb_00006",
+      "clb_00007",
+      "clb_00008"
+    ],
+    "id": "cmp_00001",
+    "name": "Valmere Premier League",
+    "rules": {
+      "bench_size": 9,
+      "extra_time": false,
+      "match_minutes": 90,
+      "penalties": false,
+      "sub_windows": 3,
+      "subs_max": 5,
+      "video_review": false
+    },
+    "short_name": "VPL"
+  }
+]

@@ -1,0 +1,5082 @@
+[
+  {
+    "appearance": {
+      "build": "stocky",
+      "facial_hair": "goatee",
+      "hair_colour": "brown",
+      "hair_style": "short",
+      "skin_tone": 4
+    },
+    "attrs": {
+      "coaching_mental": 88,
+      "coaching_physical": 58,
+      "coaching_technical": 92,
+      "injury_prevention": 55,
+      "injury_treatment": 71,
+      "scouting_judgement": 51,
+      "scouting_network": 49,
+      "tactical_input": 85
+    },
+    "birthplace": {
+      "city": "Diby",
+      "nation": "nat_gorlund"
+    },
+    "club_id": "clb_00001",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00001",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 5096
+    },
+    "date_of_birth": "1978-09-26",
+    "first_name": "Suric",
+    "gender": "male",
+    "id": "stf_00001",
+    "known_as": "Hedentwood",
+    "last_name": "Hedentwood",
+    "nationality": "nat_gorlund",
+    "personality": {
+      "ambition": 75,
+      "archetype_tags": [
+        "hothead"
+      ],
+      "ego": 61,
+      "humor": 45,
+      "interview_style": "combative",
+      "loyalty": 34,
+      "media_openness": 56,
+      "professionalism": 57,
+      "resilience": 41,
+      "sociability": 23,
+      "sportsmanship": 41,
+      "volatility": 70
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "HE-dent-wood",
+      "stress_syllable": 0
+    },
+    "quality": 73,
+    "reputation": 73,
+    "role": "assistant_manager",
+    "second_nationality": "nat_estmark"
+  },
+  {
+    "appearance": {
+      "build": "stocky",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "fade",
+      "skin_tone": 2
+    },
+    "attrs": {
+      "coaching_mental": 69,
+      "coaching_physical": 43,
+      "coaching_technical": 64,
+      "injury_prevention": 42,
+      "injury_treatment": 36,
+      "scouting_judgement": 31,
+      "scouting_network": 37,
+      "tactical_input": 67
+    },
+    "birthplace": {
+      "city": "Bjothos",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00001",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00001",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2828
+    },
+    "date_of_birth": "1987-12-22",
+    "first_name": "Tharidis",
+    "gender": "female",
+    "id": "stf_00002",
+    "known_as": "Gøgau",
+    "last_name": "Gogau",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 50,
+      "archetype_tags": [],
+      "ego": 51,
+      "humor": 56,
+      "interview_style": "bland",
+      "loyalty": 63,
+      "media_openness": 41,
+      "professionalism": 69,
+      "resilience": 36,
+      "sociability": 58,
+      "sportsmanship": 38,
+      "volatility": 69
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "GO-gau",
+      "stress_syllable": 0
+    },
+    "quality": 53,
+    "reputation": 53,
+    "role": "first_team_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "none",
+      "hair_colour": "grey",
+      "hair_style": "braids",
+      "skin_tone": 5
+    },
+    "attrs": {
+      "coaching_mental": 77,
+      "coaching_physical": 51,
+      "coaching_technical": 74,
+      "injury_prevention": 42,
+      "injury_treatment": 42,
+      "scouting_judgement": 47,
+      "scouting_network": 50,
+      "tactical_input": 42
+    },
+    "birthplace": {
+      "city": "Bjothos",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00001",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00001",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3760
+    },
+    "date_of_birth": "1998-08-29",
+    "first_name": "Sisirgar",
+    "gender": "male",
+    "id": "stf_00003",
+    "known_as": "Thovosen",
+    "last_name": "Thovosen",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 46,
+      "archetype_tags": [],
+      "ego": 48,
+      "humor": 31,
+      "interview_style": "bland",
+      "loyalty": 45,
+      "media_openness": 57,
+      "professionalism": 56,
+      "resilience": 44,
+      "sociability": 62,
+      "sportsmanship": 69,
+      "volatility": 57
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "THO-vo-sen",
+      "stress_syllable": 0
+    },
+    "quality": 62,
+    "reputation": 62,
+    "role": "goalkeeping_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "stocky",
+      "facial_hair": "beard",
+      "hair_colour": "brown",
+      "hair_style": "fade",
+      "skin_tone": 7
+    },
+    "attrs": {
+      "coaching_mental": 28,
+      "coaching_physical": 70,
+      "coaching_technical": 28,
+      "injury_prevention": 55,
+      "injury_treatment": 32,
+      "scouting_judgement": 31,
+      "scouting_network": 33,
+      "tactical_input": 31
+    },
+    "birthplace": {
+      "city": "Seisund",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00001",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00001",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2461
+    },
+    "date_of_birth": "1993-08-11",
+    "first_name": "Gathulf",
+    "gender": "male",
+    "id": "stf_00004",
+    "known_as": "Sirsund",
+    "last_name": "Sirsund",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 43,
+      "archetype_tags": [],
+      "ego": 46,
+      "humor": 69,
+      "interview_style": "bland",
+      "loyalty": 49,
+      "media_openness": 61,
+      "professionalism": 61,
+      "resilience": 41,
+      "sociability": 53,
+      "sportsmanship": 28,
+      "volatility": 52
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "SIR-sund",
+      "stress_syllable": 0
+    },
+    "quality": 49,
+    "reputation": 49,
+    "role": "fitness_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "beard",
+      "hair_colour": "grey",
+      "hair_style": "curly",
+      "skin_tone": 5
+    },
+    "attrs": {
+      "coaching_mental": 34,
+      "coaching_physical": 30,
+      "coaching_technical": 41,
+      "injury_prevention": 61,
+      "injury_treatment": 79,
+      "scouting_judgement": 47,
+      "scouting_network": 41,
+      "tactical_input": 32
+    },
+    "birthplace": {
+      "city": "Seisund",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00001",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00001",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3433
+    },
+    "date_of_birth": "1997-06-30",
+    "first_name": "Jararngulf",
+    "gender": "male",
+    "id": "stf_00005",
+    "known_as": "Thajir",
+    "last_name": "Thajir",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 29,
+      "archetype_tags": [],
+      "ego": 42,
+      "humor": 64,
+      "interview_style": "bland",
+      "loyalty": 52,
+      "media_openness": 55,
+      "professionalism": 25,
+      "resilience": 50,
+      "sociability": 56,
+      "sportsmanship": 56,
+      "volatility": 59
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "THA-jir",
+      "stress_syllable": 0
+    },
+    "quality": 59,
+    "reputation": 59,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "beard",
+      "hair_colour": "brown",
+      "hair_style": "short",
+      "skin_tone": 5
+    },
+    "attrs": {
+      "coaching_mental": 46,
+      "coaching_physical": 55,
+      "coaching_technical": 40,
+      "injury_prevention": 75,
+      "injury_treatment": 79,
+      "scouting_judgement": 45,
+      "scouting_network": 43,
+      "tactical_input": 46
+    },
+    "birthplace": {
+      "city": "Harhavik",
+      "nation": "nat_dravik"
+    },
+    "club_id": "clb_00001",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00001",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3760
+    },
+    "date_of_birth": "1989-09-04",
+    "first_name": "Rubrohelm",
+    "gender": "male",
+    "id": "stf_00006",
+    "known_as": "Drahegard",
+    "last_name": "Drahegard",
+    "nationality": "nat_dravik",
+    "personality": {
+      "ambition": 34,
+      "archetype_tags": [],
+      "ego": 45,
+      "humor": 53,
+      "interview_style": "bland",
+      "loyalty": 43,
+      "media_openness": 63,
+      "professionalism": 58,
+      "resilience": 51,
+      "sociability": 31,
+      "sportsmanship": 50,
+      "volatility": 40
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "DRA-he-gard",
+      "stress_syllable": 0
+    },
+    "quality": 62,
+    "reputation": 62,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "goatee",
+      "hair_colour": "black",
+      "hair_style": "fade",
+      "skin_tone": 7
+    },
+    "attrs": {
+      "coaching_mental": 38,
+      "coaching_physical": 36,
+      "coaching_technical": 47,
+      "injury_prevention": 49,
+      "injury_treatment": 42,
+      "scouting_judgement": 87,
+      "scouting_network": 77,
+      "tactical_input": 49
+    },
+    "birthplace": {
+      "city": "Cesdisiz",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00001",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00001",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3986
+    },
+    "date_of_birth": "1972-07-11",
+    "first_name": "Pepina",
+    "gender": "female",
+    "id": "stf_00007",
+    "known_as": "Dodan",
+    "last_name": "tho Dodan",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 26,
+      "archetype_tags": [],
+      "ego": 34,
+      "humor": 42,
+      "interview_style": "bland",
+      "loyalty": 61,
+      "media_openness": 50,
+      "professionalism": 59,
+      "resilience": 40,
+      "sociability": 9,
+      "sportsmanship": 58,
+      "volatility": 41
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "tho-do-DAN",
+      "stress_syllable": 2
+    },
+    "quality": 64,
+    "reputation": 64,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "bald",
+      "skin_tone": 2
+    },
+    "attrs": {
+      "coaching_mental": 33,
+      "coaching_physical": 33,
+      "coaching_technical": 36,
+      "injury_prevention": 34,
+      "injury_treatment": 39,
+      "scouting_judgement": 57,
+      "scouting_network": 72,
+      "tactical_input": 34
+    },
+    "birthplace": {
+      "city": "Seisund",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00001",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00001",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3122
+    },
+    "date_of_birth": "1969-04-30",
+    "first_name": "Gusa",
+    "gender": "female",
+    "id": "stf_00008",
+    "known_as": "Thosuld",
+    "last_name": "Thosuld",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 56,
+      "archetype_tags": [],
+      "ego": 26,
+      "humor": 39,
+      "interview_style": "bland",
+      "loyalty": 62,
+      "media_openness": 32,
+      "professionalism": 56,
+      "resilience": 63,
+      "sociability": 28,
+      "sportsmanship": 70,
+      "volatility": 15
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "THOS-uld",
+      "stress_syllable": 0
+    },
+    "quality": 56,
+    "reputation": 56,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "stubble",
+      "hair_colour": "blond",
+      "hair_style": "buzz",
+      "skin_tone": 4
+    },
+    "attrs": {
+      "coaching_mental": 33,
+      "coaching_physical": 42,
+      "coaching_technical": 33,
+      "injury_prevention": 29,
+      "injury_treatment": 31,
+      "scouting_judgement": 71,
+      "scouting_network": 31,
+      "tactical_input": 78
+    },
+    "birthplace": {
+      "city": "Drohigard",
+      "nation": "nat_dravik"
+    },
+    "club_id": "clb_00001",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00001",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2734
+    },
+    "date_of_birth": "1987-08-18",
+    "first_name": "Gritrohelm",
+    "gender": "male",
+    "id": "stf_00009",
+    "known_as": "Haborg",
+    "last_name": "Haborg",
+    "nationality": "nat_dravik",
+    "personality": {
+      "ambition": 56,
+      "archetype_tags": [],
+      "ego": 57,
+      "humor": 41,
+      "interview_style": "candid",
+      "loyalty": 45,
+      "media_openness": 80,
+      "professionalism": 55,
+      "resilience": 43,
+      "sociability": 85,
+      "sportsmanship": 36,
+      "volatility": 43
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "HA-borg",
+      "stress_syllable": 0
+    },
+    "quality": 52,
+    "reputation": 52,
+    "role": "analyst",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "bald",
+      "skin_tone": 2
+    },
+    "attrs": {
+      "coaching_mental": 48,
+      "coaching_physical": 22,
+      "coaching_technical": 69,
+      "injury_prevention": 30,
+      "injury_treatment": 37,
+      "scouting_judgement": 21,
+      "scouting_network": 31,
+      "tactical_input": 60
+    },
+    "birthplace": {
+      "city": "Tartelt",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00002",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00002",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2461
+    },
+    "date_of_birth": "1998-07-25",
+    "first_name": "Dratith",
+    "gender": "female",
+    "id": "stf_0000a",
+    "known_as": "Dradrudun",
+    "last_name": "Dradrudun",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 81,
+      "archetype_tags": [
+        "hothead"
+      ],
+      "ego": 59,
+      "humor": 46,
+      "interview_style": "combative",
+      "loyalty": 47,
+      "media_openness": 34,
+      "professionalism": 48,
+      "resilience": 47,
+      "sociability": 36,
+      "sportsmanship": 32,
+      "volatility": 76
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "DRA-dru-dun",
+      "stress_syllable": 0
+    },
+    "quality": 49,
+    "reputation": 49,
+    "role": "assistant_manager",
+    "second_nationality": "nat_estmark"
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "long",
+      "skin_tone": 6
+    },
+    "attrs": {
+      "coaching_mental": 69,
+      "coaching_physical": 42,
+      "coaching_technical": 69,
+      "injury_prevention": 43,
+      "injury_treatment": 46,
+      "scouting_judgement": 45,
+      "scouting_network": 37,
+      "tactical_input": 67
+    },
+    "birthplace": {
+      "city": "Harhavik",
+      "nation": "nat_dravik"
+    },
+    "club_id": "clb_00002",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00002",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3328
+    },
+    "date_of_birth": "1976-12-21",
+    "first_name": "Hänamund",
+    "gender": "male",
+    "id": "stf_0000b",
+    "known_as": "Notrind",
+    "last_name": "Notrind",
+    "nationality": "nat_dravik",
+    "personality": {
+      "ambition": 60,
+      "archetype_tags": [],
+      "ego": 66,
+      "humor": 24,
+      "interview_style": "bland",
+      "loyalty": 44,
+      "media_openness": 37,
+      "professionalism": 67,
+      "resilience": 53,
+      "sociability": 58,
+      "sportsmanship": 55,
+      "volatility": 37
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "NO-trind",
+      "stress_syllable": 0
+    },
+    "quality": 58,
+    "reputation": 58,
+    "role": "first_team_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "none",
+      "hair_colour": "blond",
+      "hair_style": "braids",
+      "skin_tone": 3
+    },
+    "attrs": {
+      "coaching_mental": 85,
+      "coaching_physical": 47,
+      "coaching_technical": 73,
+      "injury_prevention": 57,
+      "injury_treatment": 52,
+      "scouting_judgement": 52,
+      "scouting_network": 38,
+      "tactical_input": 36
+    },
+    "birthplace": {
+      "city": "Tartelt",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00002",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00002",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4220
+    },
+    "date_of_birth": "1980-02-11",
+    "first_name": "Braidror",
+    "gender": "male",
+    "id": "stf_0000c",
+    "known_as": "Kaven",
+    "last_name": "Kaven",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 35,
+      "archetype_tags": [],
+      "ego": 52,
+      "humor": 35,
+      "interview_style": "bland",
+      "loyalty": 51,
+      "media_openness": 59,
+      "professionalism": 49,
+      "resilience": 50,
+      "sociability": 52,
+      "sportsmanship": 27,
+      "volatility": 60
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "KA-ven",
+      "stress_syllable": 0
+    },
+    "quality": 66,
+    "reputation": 66,
+    "role": "goalkeeping_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "none",
+      "hair_colour": "black",
+      "hair_style": "fade",
+      "skin_tone": 8
+    },
+    "attrs": {
+      "coaching_mental": 51,
+      "coaching_physical": 90,
+      "coaching_technical": 59,
+      "injury_prevention": 87,
+      "injury_treatment": 51,
+      "scouting_judgement": 49,
+      "scouting_network": 42,
+      "tactical_input": 56
+    },
+    "birthplace": {
+      "city": "Harhavik",
+      "nation": "nat_dravik"
+    },
+    "club_id": "clb_00002",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00002",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4710
+    },
+    "date_of_birth": "1981-01-14",
+    "first_name": "Habert",
+    "gender": "male",
+    "id": "stf_0000d",
+    "known_as": "Rodrong",
+    "last_name": "Rodrong",
+    "nationality": "nat_dravik",
+    "personality": {
+      "ambition": 30,
+      "archetype_tags": [
+        "hothead"
+      ],
+      "ego": 52,
+      "humor": 43,
+      "interview_style": "combative",
+      "loyalty": 53,
+      "media_openness": 27,
+      "professionalism": 51,
+      "resilience": 32,
+      "sociability": 39,
+      "sportsmanship": 32,
+      "volatility": 82
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "RO-drong",
+      "stress_syllable": 0
+    },
+    "quality": 70,
+    "reputation": 70,
+    "role": "fitness_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "short",
+      "skin_tone": 5
+    },
+    "attrs": {
+      "coaching_mental": 34,
+      "coaching_physical": 51,
+      "coaching_technical": 56,
+      "injury_prevention": 80,
+      "injury_treatment": 83,
+      "scouting_judgement": 46,
+      "scouting_network": 48,
+      "tactical_input": 39
+    },
+    "birthplace": {
+      "city": "Drudraigar",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00002",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00002",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3649
+    },
+    "date_of_birth": "1977-12-09",
+    "first_name": "Ketor",
+    "gender": "male",
+    "id": "stf_0000e",
+    "known_as": "Groka",
+    "last_name": "Groka",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 73,
+      "archetype_tags": [],
+      "ego": 47,
+      "humor": 37,
+      "interview_style": "bland",
+      "loyalty": 33,
+      "media_openness": 43,
+      "professionalism": 79,
+      "resilience": 66,
+      "sociability": 46,
+      "sportsmanship": 70,
+      "volatility": 15
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "GRO-ka",
+      "stress_syllable": 0
+    },
+    "quality": 61,
+    "reputation": 61,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "none",
+      "hair_colour": "black",
+      "hair_style": "curly",
+      "skin_tone": 2
+    },
+    "attrs": {
+      "coaching_mental": 55,
+      "coaching_physical": 48,
+      "coaching_technical": 50,
+      "injury_prevention": 79,
+      "injury_treatment": 89,
+      "scouting_judgement": 39,
+      "scouting_network": 39,
+      "tactical_input": 43
+    },
+    "birthplace": {
+      "city": "Harhavik",
+      "nation": "nat_dravik"
+    },
+    "club_id": "clb_00002",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00002",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4220
+    },
+    "date_of_birth": "1996-09-30",
+    "first_name": "Fjihelm",
+    "gender": "male",
+    "id": "stf_0000f",
+    "known_as": "Rogard",
+    "last_name": "Rogard",
+    "nationality": "nat_dravik",
+    "personality": {
+      "ambition": 64,
+      "archetype_tags": [],
+      "ego": 53,
+      "humor": 58,
+      "interview_style": "bland",
+      "loyalty": 65,
+      "media_openness": 52,
+      "professionalism": 56,
+      "resilience": 67,
+      "sociability": 53,
+      "sportsmanship": 72,
+      "volatility": 21
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "RO-gard",
+      "stress_syllable": 0
+    },
+    "quality": 66,
+    "reputation": 66,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "stocky",
+      "facial_hair": "stubble",
+      "hair_colour": "black",
+      "hair_style": "braids",
+      "skin_tone": 4
+    },
+    "attrs": {
+      "coaching_mental": 48,
+      "coaching_physical": 46,
+      "coaching_technical": 54,
+      "injury_prevention": 44,
+      "injury_treatment": 51,
+      "scouting_judgement": 73,
+      "scouting_network": 78,
+      "tactical_input": 48
+    },
+    "birthplace": {
+      "city": "Tartelt",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00002",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00002",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3872
+    },
+    "date_of_birth": "1996-07-22",
+    "first_name": "Hogor",
+    "gender": "male",
+    "id": "stf_0000g",
+    "known_as": "Braven",
+    "last_name": "ve Braven",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 62,
+      "archetype_tags": [],
+      "ego": 55,
+      "humor": 42,
+      "interview_style": "bland",
+      "loyalty": 43,
+      "media_openness": 46,
+      "professionalism": 68,
+      "resilience": 63,
+      "sociability": 30,
+      "sportsmanship": 51,
+      "volatility": 47
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "ve-BRA-ven",
+      "stress_syllable": 1
+    },
+    "quality": 63,
+    "reputation": 63,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "stubble",
+      "hair_colour": "blond",
+      "hair_style": "buzz",
+      "skin_tone": 7
+    },
+    "attrs": {
+      "coaching_mental": 40,
+      "coaching_physical": 36,
+      "coaching_technical": 29,
+      "injury_prevention": 34,
+      "injury_treatment": 33,
+      "scouting_judgement": 66,
+      "scouting_network": 76,
+      "tactical_input": 25
+    },
+    "birthplace": {
+      "city": "Drudraigar",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00002",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00002",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3022
+    },
+    "date_of_birth": "2003-03-10",
+    "first_name": "Kanban",
+    "gender": "male",
+    "id": "stf_0000h",
+    "known_as": "Kukroven",
+    "last_name": "Kukroven",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 70,
+      "archetype_tags": [],
+      "ego": 58,
+      "humor": 29,
+      "interview_style": "bland",
+      "loyalty": 37,
+      "media_openness": 37,
+      "professionalism": 50,
+      "resilience": 53,
+      "sociability": 30,
+      "sportsmanship": 55,
+      "volatility": 42
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "KU-kro-ven",
+      "stress_syllable": 0
+    },
+    "quality": 55,
+    "reputation": 55,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "black",
+      "hair_style": "buzz",
+      "skin_tone": 8
+    },
+    "attrs": {
+      "coaching_mental": 47,
+      "coaching_physical": 35,
+      "coaching_technical": 34,
+      "injury_prevention": 42,
+      "injury_treatment": 47,
+      "scouting_judgement": 77,
+      "scouting_network": 41,
+      "tactical_input": 66
+    },
+    "birthplace": {
+      "city": "Beseck",
+      "nation": "nat_gorlund"
+    },
+    "club_id": "clb_00002",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00002",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3433
+    },
+    "date_of_birth": "1973-08-04",
+    "first_name": "Heley",
+    "gender": "male",
+    "id": "stf_0000i",
+    "known_as": "Coberd",
+    "last_name": "Coberd",
+    "nationality": "nat_gorlund",
+    "personality": {
+      "ambition": 54,
+      "archetype_tags": [],
+      "ego": 47,
+      "humor": 37,
+      "interview_style": "bland",
+      "loyalty": 36,
+      "media_openness": 46,
+      "professionalism": 60,
+      "resilience": 59,
+      "sociability": 56,
+      "sportsmanship": 44,
+      "volatility": 49
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "CO-berd",
+      "stress_syllable": 0
+    },
+    "quality": 59,
+    "reputation": 59,
+    "role": "analyst",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "goatee",
+      "hair_colour": "brown",
+      "hair_style": "bald",
+      "skin_tone": 2
+    },
+    "attrs": {
+      "coaching_mental": 69,
+      "coaching_physical": 30,
+      "coaching_technical": 63,
+      "injury_prevention": 31,
+      "injury_treatment": 27,
+      "scouting_judgement": 36,
+      "scouting_network": 31,
+      "tactical_input": 71
+    },
+    "birthplace": {
+      "city": "Fucci",
+      "nation": "nat_corsanth"
+    },
+    "club_id": "clb_00003",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00003",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2924
+    },
+    "date_of_birth": "1974-06-30",
+    "first_name": "Ganpo",
+    "gender": "male",
+    "id": "stf_0000j",
+    "known_as": "Cirlisini",
+    "last_name": "Cirlisini",
+    "nationality": "nat_corsanth",
+    "personality": {
+      "ambition": 61,
+      "archetype_tags": [
+        "hothead"
+      ],
+      "ego": 75,
+      "humor": 54,
+      "interview_style": "cocky",
+      "loyalty": 44,
+      "media_openness": 50,
+      "professionalism": 43,
+      "resilience": 57,
+      "sociability": 47,
+      "sportsmanship": 44,
+      "volatility": 73
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "cir-LIS-ini",
+      "stress_syllable": 1
+    },
+    "quality": 54,
+    "reputation": 54,
+    "role": "assistant_manager",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "grey",
+      "hair_style": "long",
+      "skin_tone": 1
+    },
+    "attrs": {
+      "coaching_mental": 87,
+      "coaching_physical": 61,
+      "coaching_technical": 86,
+      "injury_prevention": 53,
+      "injury_treatment": 48,
+      "scouting_judgement": 53,
+      "scouting_network": 54,
+      "tactical_input": 84
+    },
+    "birthplace": {
+      "city": "Bjothos",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00003",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00003",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4966
+    },
+    "date_of_birth": "1999-03-15",
+    "first_name": "Huhadis",
+    "gender": "female",
+    "id": "stf_0000k",
+    "known_as": "Sasen",
+    "last_name": "ma Sasen",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 25,
+      "archetype_tags": [],
+      "ego": 32,
+      "humor": 47,
+      "interview_style": "bland",
+      "loyalty": 49,
+      "media_openness": 50,
+      "professionalism": 52,
+      "resilience": 47,
+      "sociability": 38,
+      "sportsmanship": 61,
+      "volatility": 4
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "ma-SA-sen",
+      "stress_syllable": 1
+    },
+    "quality": 72,
+    "reputation": 72,
+    "role": "first_team_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "beard",
+      "hair_colour": "grey",
+      "hair_style": "buzz",
+      "skin_tone": 5
+    },
+    "attrs": {
+      "coaching_mental": 78,
+      "coaching_physical": 37,
+      "coaching_technical": 70,
+      "injury_prevention": 53,
+      "injury_treatment": 49,
+      "scouting_judgement": 45,
+      "scouting_network": 42,
+      "tactical_input": 44
+    },
+    "birthplace": {
+      "city": "Bjothos",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00003",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00003",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3540
+    },
+    "date_of_birth": "1994-01-04",
+    "first_name": "Søsvar",
+    "gender": "male",
+    "id": "stf_0000l",
+    "known_as": "Vosuld",
+    "last_name": "Vosuld",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 66,
+      "archetype_tags": [],
+      "ego": 42,
+      "humor": 32,
+      "interview_style": "bland",
+      "loyalty": 47,
+      "media_openness": 34,
+      "professionalism": 68,
+      "resilience": 66,
+      "sociability": 45,
+      "sportsmanship": 60,
+      "volatility": 25
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "VO-si-uld",
+      "stress_syllable": 0
+    },
+    "quality": 60,
+    "reputation": 60,
+    "role": "goalkeeping_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "stubble",
+      "hair_colour": "brown",
+      "hair_style": "curly",
+      "skin_tone": 4
+    },
+    "attrs": {
+      "coaching_mental": 56,
+      "coaching_physical": 85,
+      "coaching_technical": 43,
+      "injury_prevention": 78,
+      "injury_treatment": 56,
+      "scouting_judgement": 57,
+      "scouting_network": 47,
+      "tactical_input": 41
+    },
+    "birthplace": {
+      "city": "Drudraigar",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00003",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00003",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4462
+    },
+    "date_of_birth": "1988-06-30",
+    "first_name": "Tubar",
+    "gender": "male",
+    "id": "stf_0000m",
+    "known_as": "Kokven",
+    "last_name": "Kokven",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 50,
+      "archetype_tags": [
+        "quiet_leader"
+      ],
+      "ego": 50,
+      "humor": 21,
+      "interview_style": "bland",
+      "loyalty": 37,
+      "media_openness": 45,
+      "professionalism": 72,
+      "resilience": 43,
+      "sociability": 19,
+      "sportsmanship": 70,
+      "volatility": 42
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "KOK-ven",
+      "stress_syllable": 0
+    },
+    "quality": 68,
+    "reputation": 68,
+    "role": "fitness_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "stubble",
+      "hair_colour": "red",
+      "hair_style": "buzz",
+      "skin_tone": 6
+    },
+    "attrs": {
+      "coaching_mental": 52,
+      "coaching_physical": 38,
+      "coaching_technical": 39,
+      "injury_prevention": 78,
+      "injury_treatment": 82,
+      "scouting_judgement": 52,
+      "scouting_network": 48,
+      "tactical_input": 44
+    },
+    "birthplace": {
+      "city": "Drudraigar",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00003",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00003",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3760
+    },
+    "date_of_birth": "1994-10-14",
+    "first_name": "Donbran",
+    "gender": "male",
+    "id": "stf_0000n",
+    "known_as": "Graiven",
+    "last_name": "Graiven",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 29,
+      "archetype_tags": [],
+      "ego": 49,
+      "humor": 67,
+      "interview_style": "bland",
+      "loyalty": 51,
+      "media_openness": 57,
+      "professionalism": 62,
+      "resilience": 61,
+      "sociability": 69,
+      "sportsmanship": 74,
+      "volatility": 41
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "GRAI-ven",
+      "stress_syllable": 0
+    },
+    "quality": 62,
+    "reputation": 62,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "stubble",
+      "hair_colour": "grey",
+      "hair_style": "buzz",
+      "skin_tone": 1
+    },
+    "attrs": {
+      "coaching_mental": 40,
+      "coaching_physical": 34,
+      "coaching_technical": 40,
+      "injury_prevention": 71,
+      "injury_treatment": 61,
+      "scouting_judgement": 40,
+      "scouting_network": 34,
+      "tactical_input": 44
+    },
+    "birthplace": {
+      "city": "Juzvuetiz",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00003",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00003",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3122
+    },
+    "date_of_birth": "1980-02-16",
+    "first_name": "Vozett",
+    "gender": "nonbinary",
+    "id": "stf_0000o",
+    "known_as": "Zochánquin",
+    "last_name": "Zóchanquin",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 35,
+      "archetype_tags": [],
+      "ego": 57,
+      "humor": 54,
+      "interview_style": "bland",
+      "loyalty": 48,
+      "media_openness": 34,
+      "professionalism": 54,
+      "resilience": 41,
+      "sociability": 41,
+      "sportsmanship": 47,
+      "volatility": 67
+    },
+    "pronouns": "they/them",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "zo-chan-QUIN",
+      "stress_syllable": 2
+    },
+    "quality": 56,
+    "reputation": 56,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "fade",
+      "skin_tone": 7
+    },
+    "attrs": {
+      "coaching_mental": 37,
+      "coaching_physical": 40,
+      "coaching_technical": 38,
+      "injury_prevention": 40,
+      "injury_treatment": 37,
+      "scouting_judgement": 75,
+      "scouting_network": 80,
+      "tactical_input": 42
+    },
+    "birthplace": {
+      "city": "Drohigard",
+      "nation": "nat_dravik"
+    },
+    "club_id": "clb_00003",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00003",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3122
+    },
+    "date_of_birth": "1977-11-28",
+    "first_name": "Troric",
+    "gender": "male",
+    "id": "stf_0000p",
+    "known_as": "Kriborg",
+    "last_name": "Kriborg",
+    "nationality": "nat_dravik",
+    "personality": {
+      "ambition": 44,
+      "archetype_tags": [],
+      "ego": 44,
+      "humor": 53,
+      "interview_style": "candid",
+      "loyalty": 47,
+      "media_openness": 80,
+      "professionalism": 56,
+      "resilience": 60,
+      "sociability": 88,
+      "sportsmanship": 33,
+      "volatility": 55
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "KRI-borg",
+      "stress_syllable": 0
+    },
+    "quality": 56,
+    "reputation": 56,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "stocky",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "curly",
+      "skin_tone": 6
+    },
+    "attrs": {
+      "coaching_mental": 53,
+      "coaching_physical": 39,
+      "coaching_technical": 46,
+      "injury_prevention": 54,
+      "injury_treatment": 42,
+      "scouting_judgement": 73,
+      "scouting_network": 78,
+      "tactical_input": 45
+    },
+    "birthplace": {
+      "city": "Drudraigar",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00003",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00003",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4340
+    },
+    "date_of_birth": "1982-02-08",
+    "first_name": "Tokor",
+    "gender": "nonbinary",
+    "id": "stf_0000q",
+    "known_as": "Darkaltgar",
+    "last_name": "Darkaltgar",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 42,
+      "archetype_tags": [
+        "hothead"
+      ],
+      "ego": 57,
+      "humor": 48,
+      "interview_style": "combative",
+      "loyalty": 30,
+      "media_openness": 34,
+      "professionalism": 45,
+      "resilience": 52,
+      "sociability": 24,
+      "sportsmanship": 47,
+      "volatility": 72
+    },
+    "pronouns": "they/them",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "DAR-kalt-gar",
+      "stress_syllable": 0
+    },
+    "quality": 67,
+    "reputation": 67,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "beard",
+      "hair_colour": "black",
+      "hair_style": "curly",
+      "skin_tone": 8
+    },
+    "attrs": {
+      "coaching_mental": 66,
+      "coaching_physical": 65,
+      "coaching_technical": 46,
+      "injury_prevention": 70,
+      "injury_treatment": 55,
+      "scouting_judgement": 86,
+      "scouting_network": 57,
+      "tactical_input": 85
+    },
+    "birthplace": {
+      "city": "Juzvuetiz",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00003",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00003",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 5636
+    },
+    "date_of_birth": "1988-08-14",
+    "first_name": "Traxduras",
+    "gender": "male",
+    "id": "stf_0000r",
+    "known_as": "Cóchettan",
+    "last_name": "ár Cochettán",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 37,
+      "archetype_tags": [],
+      "ego": 34,
+      "humor": 63,
+      "interview_style": "philosophical",
+      "loyalty": 51,
+      "media_openness": 53,
+      "professionalism": 59,
+      "resilience": 70,
+      "sociability": 46,
+      "sportsmanship": 65,
+      "volatility": 48
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "ar-co-che-ETTAN",
+      "stress_syllable": 3
+    },
+    "quality": 77,
+    "reputation": 77,
+    "role": "analyst",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "none",
+      "hair_colour": "black",
+      "hair_style": "curly",
+      "skin_tone": 1
+    },
+    "attrs": {
+      "coaching_mental": 73,
+      "coaching_physical": 41,
+      "coaching_technical": 73,
+      "injury_prevention": 40,
+      "injury_treatment": 40,
+      "scouting_judgement": 29,
+      "scouting_network": 36,
+      "tactical_input": 70
+    },
+    "birthplace": {
+      "city": "Sirora",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00004",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00004",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3328
+    },
+    "date_of_birth": "1970-07-22",
+    "first_name": "Vesofia",
+    "gender": "female",
+    "id": "stf_0000s",
+    "known_as": "Mani",
+    "last_name": "Mani",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 65,
+      "archetype_tags": [
+        "hothead"
+      ],
+      "ego": 64,
+      "humor": 57,
+      "interview_style": "combative",
+      "loyalty": 44,
+      "media_openness": 38,
+      "professionalism": 53,
+      "resilience": 51,
+      "sociability": 52,
+      "sportsmanship": 50,
+      "volatility": 86
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "MO-ani",
+      "stress_syllable": 0
+    },
+    "quality": 58,
+    "reputation": 58,
+    "role": "assistant_manager",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "short",
+      "skin_tone": 6
+    },
+    "attrs": {
+      "coaching_mental": 83,
+      "coaching_physical": 47,
+      "coaching_technical": 96,
+      "injury_prevention": 41,
+      "injury_treatment": 61,
+      "scouting_judgement": 53,
+      "scouting_network": 50,
+      "tactical_input": 82
+    },
+    "birthplace": {
+      "city": "Jasnen",
+      "nation": "nat_estmark"
+    },
+    "club_id": "clb_00004",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00004",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4966
+    },
+    "date_of_birth": "1988-11-04",
+    "first_name": "Tesar",
+    "gender": "male",
+    "id": "stf_0000t",
+    "known_as": "Väahal",
+    "last_name": "Väahal",
+    "nationality": "nat_estmark",
+    "personality": {
+      "ambition": 46,
+      "archetype_tags": [],
+      "ego": 35,
+      "humor": 58,
+      "interview_style": "humble",
+      "loyalty": 48,
+      "media_openness": 58,
+      "professionalism": 86,
+      "resilience": 60,
+      "sociability": 75,
+      "sportsmanship": 50,
+      "volatility": 1
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "VAA-hal",
+      "stress_syllable": 0
+    },
+    "quality": 72,
+    "reputation": 72,
+    "role": "first_team_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "moustache",
+      "hair_colour": "blond",
+      "hair_style": "short",
+      "skin_tone": 4
+    },
+    "attrs": {
+      "coaching_mental": 83,
+      "coaching_physical": 57,
+      "coaching_technical": 89,
+      "injury_prevention": 68,
+      "injury_treatment": 65,
+      "scouting_judgement": 60,
+      "scouting_network": 54,
+      "tactical_input": 62
+    },
+    "birthplace": {
+      "city": "Traegwae",
+      "nation": "nat_fenhal"
+    },
+    "club_id": "clb_00004",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00004",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 5636
+    },
+    "date_of_birth": "1973-05-28",
+    "first_name": "Beithtryneth",
+    "gender": "male",
+    "id": "stf_0000u",
+    "known_as": "Dathryn",
+    "last_name": "Dathryn",
+    "nationality": "nat_fenhal",
+    "personality": {
+      "ambition": 31,
+      "archetype_tags": [],
+      "ego": 40,
+      "humor": 27,
+      "interview_style": "philosophical",
+      "loyalty": 40,
+      "media_openness": 38,
+      "professionalism": 58,
+      "resilience": 70,
+      "sociability": 40,
+      "sportsmanship": 74,
+      "volatility": 30
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "DATH-ryn",
+      "stress_syllable": 0
+    },
+    "quality": 77,
+    "reputation": 77,
+    "role": "goalkeeping_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "stocky",
+      "facial_hair": "moustache",
+      "hair_colour": "grey",
+      "hair_style": "fade",
+      "skin_tone": 3
+    },
+    "attrs": {
+      "coaching_mental": 32,
+      "coaching_physical": 76,
+      "coaching_technical": 34,
+      "injury_prevention": 59,
+      "injury_treatment": 44,
+      "scouting_judgement": 24,
+      "scouting_network": 31,
+      "tactical_input": 30
+    },
+    "birthplace": {
+      "city": "Sirora",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00004",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00004",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2641
+    },
+    "date_of_birth": "1985-03-08",
+    "first_name": "Fasnel",
+    "gender": "male",
+    "id": "stf_0000v",
+    "known_as": "Selle",
+    "last_name": "Selle",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 72,
+      "archetype_tags": [
+        "quiet_leader"
+      ],
+      "ego": 37,
+      "humor": 34,
+      "interview_style": "humble",
+      "loyalty": 39,
+      "media_openness": 54,
+      "professionalism": 76,
+      "resilience": 67,
+      "sociability": 33,
+      "sportsmanship": 44,
+      "volatility": 30
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "SE-elle",
+      "stress_syllable": 0
+    },
+    "quality": 51,
+    "reputation": 51,
+    "role": "fitness_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "stocky",
+      "facial_hair": "stubble",
+      "hair_colour": "brown",
+      "hair_style": "buzz",
+      "skin_tone": 6
+    },
+    "attrs": {
+      "coaching_mental": 38,
+      "coaching_physical": 32,
+      "coaching_technical": 35,
+      "injury_prevention": 73,
+      "injury_treatment": 67,
+      "scouting_judgement": 38,
+      "scouting_network": 27,
+      "tactical_input": 34
+    },
+    "birthplace": {
+      "city": "Jasnen",
+      "nation": "nat_estmark"
+    },
+    "club_id": "clb_00004",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00004",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3022
+    },
+    "date_of_birth": "1987-03-17",
+    "first_name": "Seris",
+    "gender": "male",
+    "id": "stf_0000w",
+    "known_as": "Sasis",
+    "last_name": "Sasis",
+    "nationality": "nat_estmark",
+    "personality": {
+      "ambition": 58,
+      "archetype_tags": [],
+      "ego": 62,
+      "humor": 41,
+      "interview_style": "bland",
+      "loyalty": 42,
+      "media_openness": 60,
+      "professionalism": 65,
+      "resilience": 60,
+      "sociability": 35,
+      "sportsmanship": 44,
+      "volatility": 46
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "SAS-is",
+      "stress_syllable": 0
+    },
+    "quality": 55,
+    "reputation": 55,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "black",
+      "hair_style": "fade",
+      "skin_tone": 6
+    },
+    "attrs": {
+      "coaching_mental": 44,
+      "coaching_physical": 43,
+      "coaching_technical": 55,
+      "injury_prevention": 81,
+      "injury_treatment": 79,
+      "scouting_judgement": 53,
+      "scouting_network": 49,
+      "tactical_input": 51
+    },
+    "birthplace": {
+      "city": "Vevani",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00004",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00004",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4585
+    },
+    "date_of_birth": "1991-07-24",
+    "first_name": "Limel",
+    "gender": "male",
+    "id": "stf_0000x",
+    "known_as": "Ravani",
+    "last_name": "Ravani",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 74,
+      "archetype_tags": [],
+      "ego": 45,
+      "humor": 50,
+      "interview_style": "humble",
+      "loyalty": 31,
+      "media_openness": 54,
+      "professionalism": 79,
+      "resilience": 70,
+      "sociability": 51,
+      "sportsmanship": 43,
+      "volatility": 30
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "ra-VA-ani",
+      "stress_syllable": 1
+    },
+    "quality": 69,
+    "reputation": 69,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "stocky",
+      "facial_hair": "stubble",
+      "hair_colour": "grey",
+      "hair_style": "short",
+      "skin_tone": 5
+    },
+    "attrs": {
+      "coaching_mental": 30,
+      "coaching_physical": 45,
+      "coaching_technical": 32,
+      "injury_prevention": 31,
+      "injury_treatment": 27,
+      "scouting_judgement": 66,
+      "scouting_network": 68,
+      "tactical_input": 29
+    },
+    "birthplace": {
+      "city": "Prablic",
+      "nation": "nat_aldovia"
+    },
+    "club_id": "clb_00004",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00004",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2828
+    },
+    "date_of_birth": "1988-11-30",
+    "first_name": "Zikeko",
+    "gender": "male",
+    "id": "stf_0000y",
+    "known_as": "Zeslanič",
+    "last_name": "Zeslanic",
+    "nationality": "nat_aldovia",
+    "personality": {
+      "ambition": 77,
+      "archetype_tags": [],
+      "ego": 48,
+      "humor": 50,
+      "interview_style": "bland",
+      "loyalty": 42,
+      "media_openness": 61,
+      "professionalism": 74,
+      "resilience": 53,
+      "sociability": 57,
+      "sportsmanship": 65,
+      "volatility": 14
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "ze-SLAN-ic",
+      "stress_syllable": 1
+    },
+    "quality": 53,
+    "reputation": 53,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "stocky",
+      "facial_hair": "moustache",
+      "hair_colour": "black",
+      "hair_style": "curly",
+      "skin_tone": 3
+    },
+    "attrs": {
+      "coaching_mental": 46,
+      "coaching_physical": 43,
+      "coaching_technical": 52,
+      "injury_prevention": 39,
+      "injury_treatment": 47,
+      "scouting_judgement": 75,
+      "scouting_network": 80,
+      "tactical_input": 43
+    },
+    "birthplace": {
+      "city": "Maikumaqi",
+      "nation": "nat_hasari"
+    },
+    "club_id": "clb_00004",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00004",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3649
+    },
+    "date_of_birth": "1994-05-17",
+    "first_name": "Shinia",
+    "gender": "female",
+    "id": "stf_0000z",
+    "known_as": "Shimerir",
+    "last_name": "al Shimerir",
+    "nationality": "nat_hasari",
+    "personality": {
+      "ambition": 56,
+      "archetype_tags": [
+        "hothead",
+        "joker"
+      ],
+      "ego": 65,
+      "humor": 77,
+      "interview_style": "combative",
+      "loyalty": 67,
+      "media_openness": 47,
+      "professionalism": 34,
+      "resilience": 41,
+      "sociability": 69,
+      "sportsmanship": 44,
+      "volatility": 90
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "al-shi-MER-ir",
+      "stress_syllable": 2
+    },
+    "quality": 61,
+    "reputation": 61,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "goatee",
+      "hair_colour": "brown",
+      "hair_style": "fade",
+      "skin_tone": 8
+    },
+    "attrs": {
+      "coaching_mental": 45,
+      "coaching_physical": 48,
+      "coaching_technical": 47,
+      "injury_prevention": 44,
+      "injury_treatment": 46,
+      "scouting_judgement": 71,
+      "scouting_network": 46,
+      "tactical_input": 76
+    },
+    "birthplace": {
+      "city": "Sirora",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00004",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00004",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4102
+    },
+    "date_of_birth": "1985-10-12",
+    "first_name": "Lofanel",
+    "gender": "male",
+    "id": "stf_00010",
+    "known_as": "Vesieri",
+    "last_name": "Vesieri",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 54,
+      "archetype_tags": [
+        "hothead"
+      ],
+      "ego": 53,
+      "humor": 50,
+      "interview_style": "combative",
+      "loyalty": 30,
+      "media_openness": 32,
+      "professionalism": 61,
+      "resilience": 44,
+      "sociability": 56,
+      "sportsmanship": 36,
+      "volatility": 85
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "VES-ieri",
+      "stress_syllable": 0
+    },
+    "quality": 65,
+    "reputation": 65,
+    "role": "analyst",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "stubble",
+      "hair_colour": "black",
+      "hair_style": "curly",
+      "skin_tone": 3
+    },
+    "attrs": {
+      "coaching_mental": 67,
+      "coaching_physical": 35,
+      "coaching_technical": 59,
+      "injury_prevention": 32,
+      "injury_treatment": 28,
+      "scouting_judgement": 34,
+      "scouting_network": 42,
+      "tactical_input": 71
+    },
+    "birthplace": {
+      "city": "Bemonne",
+      "nation": "nat_brevane"
+    },
+    "club_id": "clb_00005",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00005",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2461
+    },
+    "date_of_birth": "1993-03-27",
+    "first_name": "Bougel",
+    "gender": "male",
+    "id": "stf_00011",
+    "known_as": "Donne",
+    "last_name": "Donne",
+    "nationality": "nat_brevane",
+    "personality": {
+      "ambition": 23,
+      "archetype_tags": [
+        "hothead"
+      ],
+      "ego": 36,
+      "humor": 46,
+      "interview_style": "combative",
+      "loyalty": 46,
+      "media_openness": 50,
+      "professionalism": 37,
+      "resilience": 20,
+      "sociability": 56,
+      "sportsmanship": 45,
+      "volatility": 83
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "de-ONNE",
+      "stress_syllable": 1
+    },
+    "quality": 49,
+    "reputation": 49,
+    "role": "assistant_manager",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "moustache",
+      "hair_colour": "black",
+      "hair_style": "short",
+      "skin_tone": 4
+    },
+    "attrs": {
+      "coaching_mental": 54,
+      "coaching_physical": 39,
+      "coaching_technical": 65,
+      "injury_prevention": 32,
+      "injury_treatment": 22,
+      "scouting_judgement": 30,
+      "scouting_network": 25,
+      "tactical_input": 67
+    },
+    "birthplace": {
+      "city": "Nianora",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00005",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00005",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2042
+    },
+    "date_of_birth": "1973-10-27",
+    "first_name": "Fovero",
+    "gender": "male",
+    "id": "stf_00012",
+    "known_as": "Lamas",
+    "last_name": "Lamas",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 66,
+      "archetype_tags": [
+        "quiet_leader"
+      ],
+      "ego": 41,
+      "humor": 35,
+      "interview_style": "humble",
+      "loyalty": 41,
+      "media_openness": 46,
+      "professionalism": 71,
+      "resilience": 70,
+      "sociability": 23,
+      "sportsmanship": 64,
+      "volatility": 12
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "LA-mas",
+      "stress_syllable": 0
+    },
+    "quality": 44,
+    "reputation": 44,
+    "role": "first_team_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "goatee",
+      "hair_colour": "brown",
+      "hair_style": "fade",
+      "skin_tone": 5
+    },
+    "attrs": {
+      "coaching_mental": 53,
+      "coaching_physical": 30,
+      "coaching_technical": 54,
+      "injury_prevention": 18,
+      "injury_treatment": 28,
+      "scouting_judgement": 16,
+      "scouting_network": 35,
+      "tactical_input": 15
+    },
+    "birthplace": {
+      "city": "Sebuss",
+      "nation": "nat_gorlund"
+    },
+    "club_id": "clb_00005",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00005",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2288
+    },
+    "date_of_birth": "1990-02-13",
+    "first_name": "Reley",
+    "gender": "male",
+    "id": "stf_00013",
+    "known_as": "Becack",
+    "last_name": "Becack",
+    "nationality": "nat_gorlund",
+    "personality": {
+      "ambition": 47,
+      "archetype_tags": [],
+      "ego": 57,
+      "humor": 60,
+      "interview_style": "bland",
+      "loyalty": 62,
+      "media_openness": 64,
+      "professionalism": 36,
+      "resilience": 47,
+      "sociability": 44,
+      "sportsmanship": 38,
+      "volatility": 69
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "BE-cack",
+      "stress_syllable": 0
+    },
+    "quality": 47,
+    "reputation": 47,
+    "role": "goalkeeping_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "none",
+      "hair_colour": "black",
+      "hair_style": "curly",
+      "skin_tone": 7
+    },
+    "attrs": {
+      "coaching_mental": 23,
+      "coaching_physical": 48,
+      "coaching_technical": 21,
+      "injury_prevention": 58,
+      "injury_treatment": 23,
+      "scouting_judgement": 24,
+      "scouting_network": 21,
+      "tactical_input": 37
+    },
+    "birthplace": {
+      "city": "Vevani",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00005",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00005",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 1600
+    },
+    "date_of_birth": "1971-06-06",
+    "first_name": "Lliomenian",
+    "gender": "male",
+    "id": "stf_00014",
+    "known_as": "Meliol",
+    "last_name": "Meliol",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 51,
+      "archetype_tags": [
+        "quiet_leader"
+      ],
+      "ego": 60,
+      "humor": 43,
+      "interview_style": "bland",
+      "loyalty": 50,
+      "media_openness": 67,
+      "professionalism": 79,
+      "resilience": 43,
+      "sociability": 28,
+      "sportsmanship": 60,
+      "volatility": 46
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "ME-liol",
+      "stress_syllable": 0
+    },
+    "quality": 38,
+    "reputation": 38,
+    "role": "fitness_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "stocky",
+      "facial_hair": "stubble",
+      "hair_colour": "brown",
+      "hair_style": "braids",
+      "skin_tone": 5
+    },
+    "attrs": {
+      "coaching_mental": 50,
+      "coaching_physical": 42,
+      "coaching_technical": 43,
+      "injury_prevention": 69,
+      "injury_treatment": 80,
+      "scouting_judgement": 42,
+      "scouting_network": 32,
+      "tactical_input": 47
+    },
+    "birthplace": {
+      "city": "Clédàin",
+      "nation": "nat_brevane"
+    },
+    "club_id": "clb_00005",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00005",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3649
+    },
+    "date_of_birth": "1971-03-08",
+    "first_name": "Méufél",
+    "gender": "male",
+    "id": "stf_00015",
+    "known_as": "Déutlier",
+    "last_name": "Deutlier",
+    "nationality": "nat_brevane",
+    "personality": {
+      "ambition": 35,
+      "archetype_tags": [],
+      "ego": 33,
+      "humor": 32,
+      "interview_style": "philosophical",
+      "loyalty": 61,
+      "media_openness": 33,
+      "professionalism": 64,
+      "resilience": 71,
+      "sociability": 53,
+      "sportsmanship": 67,
+      "volatility": 19
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "deut-lou-IER",
+      "stress_syllable": 2
+    },
+    "quality": 61,
+    "reputation": 61,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "none",
+      "hair_colour": "blond",
+      "hair_style": "short",
+      "skin_tone": 6
+    },
+    "attrs": {
+      "coaching_mental": 37,
+      "coaching_physical": 28,
+      "coaching_technical": 35,
+      "injury_prevention": 68,
+      "injury_treatment": 66,
+      "scouting_judgement": 35,
+      "scouting_network": 34,
+      "tactical_input": 36
+    },
+    "birthplace": {
+      "city": "Vevani",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00005",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00005",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2734
+    },
+    "date_of_birth": "1974-12-24",
+    "first_name": "Nallio",
+    "gender": "male",
+    "id": "stf_00016",
+    "known_as": "Mollenora",
+    "last_name": "Mollenora",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 53,
+      "archetype_tags": [],
+      "ego": 45,
+      "humor": 57,
+      "interview_style": "bland",
+      "loyalty": 56,
+      "media_openness": 51,
+      "professionalism": 58,
+      "resilience": 58,
+      "sociability": 44,
+      "sportsmanship": 55,
+      "volatility": 58
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "mo-LLEN-ora",
+      "stress_syllable": 1
+    },
+    "quality": 52,
+    "reputation": 52,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "none",
+      "hair_colour": "blond",
+      "hair_style": "short",
+      "skin_tone": 3
+    },
+    "attrs": {
+      "coaching_mental": 49,
+      "coaching_physical": 51,
+      "coaching_technical": 49,
+      "injury_prevention": 46,
+      "injury_treatment": 48,
+      "scouting_judgement": 91,
+      "scouting_network": 87,
+      "tactical_input": 50
+    },
+    "birthplace": {
+      "city": "Bemonne",
+      "nation": "nat_brevane"
+    },
+    "club_id": "clb_00005",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00005",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4462
+    },
+    "date_of_birth": "1977-08-14",
+    "first_name": "Deminé",
+    "gender": "female",
+    "id": "stf_00017",
+    "known_as": "Boulairard",
+    "last_name": "Boulairard",
+    "nationality": "nat_brevane",
+    "personality": {
+      "ambition": 34,
+      "archetype_tags": [
+        "one_club_man"
+      ],
+      "ego": 50,
+      "humor": 60,
+      "interview_style": "bland",
+      "loyalty": 71,
+      "media_openness": 52,
+      "professionalism": 46,
+      "resilience": 47,
+      "sociability": 67,
+      "sportsmanship": 60,
+      "volatility": 50
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "bou-lair-ARD",
+      "stress_syllable": 2
+    },
+    "quality": 68,
+    "reputation": 68,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "stubble",
+      "hair_colour": "brown",
+      "hair_style": "buzz",
+      "skin_tone": 1
+    },
+    "attrs": {
+      "coaching_mental": 14,
+      "coaching_physical": 27,
+      "coaching_technical": 14,
+      "injury_prevention": 11,
+      "injury_treatment": 19,
+      "scouting_judgement": 52,
+      "scouting_network": 43,
+      "tactical_input": 14
+    },
+    "birthplace": {
+      "city": "Gallodyn",
+      "nation": "nat_fenhal"
+    },
+    "club_id": "clb_00005",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00005",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 1532
+    },
+    "date_of_birth": "1993-01-19",
+    "first_name": "Nogwylan",
+    "gender": "male",
+    "id": "stf_00018",
+    "known_as": "Llaenven",
+    "last_name": "Llaenven",
+    "nationality": "nat_fenhal",
+    "personality": {
+      "ambition": 60,
+      "archetype_tags": [
+        "joker"
+      ],
+      "ego": 42,
+      "humor": 73,
+      "interview_style": "jokey",
+      "loyalty": 48,
+      "media_openness": 55,
+      "professionalism": 52,
+      "resilience": 38,
+      "sociability": 77,
+      "sportsmanship": 23,
+      "volatility": 51
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "LLAEN-ven",
+      "stress_syllable": 0
+    },
+    "quality": 37,
+    "reputation": 37,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "braids",
+      "skin_tone": 2
+    },
+    "attrs": {
+      "coaching_mental": 31,
+      "coaching_physical": 45,
+      "coaching_technical": 28,
+      "injury_prevention": 33,
+      "injury_treatment": 34,
+      "scouting_judgement": 65,
+      "scouting_network": 38,
+      "tactical_input": 76
+    },
+    "birthplace": {
+      "city": "Vevani",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00005",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00005",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3022
+    },
+    "date_of_birth": "1992-03-04",
+    "first_name": "Shafel",
+    "gender": "male",
+    "id": "stf_00019",
+    "known_as": "Sora",
+    "last_name": "Sora",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 71,
+      "archetype_tags": [],
+      "ego": 81,
+      "humor": 50,
+      "interview_style": "cocky",
+      "loyalty": 35,
+      "media_openness": 53,
+      "professionalism": 67,
+      "resilience": 51,
+      "sociability": 42,
+      "sportsmanship": 29,
+      "volatility": 63
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "SE-ora",
+      "stress_syllable": 0
+    },
+    "quality": 55,
+    "reputation": 55,
+    "role": "analyst",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "beard",
+      "hair_colour": "black",
+      "hair_style": "buzz",
+      "skin_tone": 2
+    },
+    "attrs": {
+      "coaching_mental": 77,
+      "coaching_physical": 47,
+      "coaching_technical": 75,
+      "injury_prevention": 34,
+      "injury_treatment": 50,
+      "scouting_judgement": 52,
+      "scouting_network": 57,
+      "tactical_input": 84
+    },
+    "birthplace": {
+      "city": "Bukach",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00006",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00006",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3986
+    },
+    "date_of_birth": "1970-05-26",
+    "first_name": "Kohorda",
+    "gender": "female",
+    "id": "stf_0001a",
+    "known_as": "Konmor",
+    "last_name": "Konmor",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 63,
+      "archetype_tags": [],
+      "ego": 48,
+      "humor": 58,
+      "interview_style": "bland",
+      "loyalty": 46,
+      "media_openness": 55,
+      "professionalism": 54,
+      "resilience": 69,
+      "sociability": 52,
+      "sportsmanship": 76,
+      "volatility": 18
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "KON-mor",
+      "stress_syllable": 0
+    },
+    "quality": 64,
+    "reputation": 64,
+    "role": "assistant_manager",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "none",
+      "hair_colour": "red",
+      "hair_style": "buzz",
+      "skin_tone": 6
+    },
+    "attrs": {
+      "coaching_mental": 85,
+      "coaching_physical": 58,
+      "coaching_technical": 83,
+      "injury_prevention": 61,
+      "injury_treatment": 64,
+      "scouting_judgement": 58,
+      "scouting_network": 58,
+      "tactical_input": 80
+    },
+    "birthplace": {
+      "city": "Tartelt",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00006",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00006",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4837
+    },
+    "date_of_birth": "1971-04-26",
+    "first_name": "Tobrara",
+    "gender": "female",
+    "id": "stf_0001b",
+    "known_as": "Kubroven",
+    "last_name": "Kubroven",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 22,
+      "archetype_tags": [
+        "one_club_man"
+      ],
+      "ego": 31,
+      "humor": 44,
+      "interview_style": "bland",
+      "loyalty": 72,
+      "media_openness": 41,
+      "professionalism": 48,
+      "resilience": 35,
+      "sociability": 47,
+      "sportsmanship": 35,
+      "volatility": 55
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "KU-bro-ven",
+      "stress_syllable": 0
+    },
+    "quality": 71,
+    "reputation": 71,
+    "role": "first_team_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "none",
+      "hair_colour": "blond",
+      "hair_style": "buzz",
+      "skin_tone": 1
+    },
+    "attrs": {
+      "coaching_mental": 78,
+      "coaching_physical": 54,
+      "coaching_technical": 85,
+      "injury_prevention": 54,
+      "injury_treatment": 44,
+      "scouting_judgement": 50,
+      "scouting_network": 52,
+      "tactical_input": 47
+    },
+    "birthplace": {
+      "city": "Sebuss",
+      "nation": "nat_gorlund"
+    },
+    "club_id": "clb_00006",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00006",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4220
+    },
+    "date_of_birth": "1986-01-07",
+    "first_name": "Mididen",
+    "gender": "male",
+    "id": "stf_0001c",
+    "known_as": "Wahaby",
+    "last_name": "Wahaby",
+    "nationality": "nat_gorlund",
+    "personality": {
+      "ambition": 35,
+      "archetype_tags": [],
+      "ego": 49,
+      "humor": 43,
+      "interview_style": "bland",
+      "loyalty": 41,
+      "media_openness": 33,
+      "professionalism": 48,
+      "resilience": 48,
+      "sociability": 18,
+      "sportsmanship": 39,
+      "volatility": 63
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "WA-ha-by",
+      "stress_syllable": 0
+    },
+    "quality": 66,
+    "reputation": 66,
+    "role": "goalkeeping_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "stubble",
+      "hair_colour": "black",
+      "hair_style": "bald",
+      "skin_tone": 2
+    },
+    "attrs": {
+      "coaching_mental": 57,
+      "coaching_physical": 88,
+      "coaching_technical": 60,
+      "injury_prevention": 84,
+      "injury_treatment": 54,
+      "scouting_judgement": 53,
+      "scouting_network": 67,
+      "tactical_input": 68
+    },
+    "birthplace": {
+      "city": "Drudraigar",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00006",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00006",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 6060
+    },
+    "date_of_birth": "1983-08-18",
+    "first_name": "Dredan",
+    "gender": "male",
+    "id": "stf_0001d",
+    "known_as": "Daven",
+    "last_name": "Daven",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 80,
+      "archetype_tags": [],
+      "ego": 58,
+      "humor": 60,
+      "interview_style": "bland",
+      "loyalty": 47,
+      "media_openness": 62,
+      "professionalism": 79,
+      "resilience": 59,
+      "sociability": 71,
+      "sportsmanship": 47,
+      "volatility": 46
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "DA-ven",
+      "stress_syllable": 0
+    },
+    "quality": 80,
+    "reputation": 80,
+    "role": "fitness_coach",
+    "second_nationality": "nat_hasari"
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "black",
+      "hair_style": "curly",
+      "skin_tone": 2
+    },
+    "attrs": {
+      "coaching_mental": 55,
+      "coaching_physical": 64,
+      "coaching_technical": 54,
+      "injury_prevention": 93,
+      "injury_treatment": 99,
+      "scouting_judgement": 61,
+      "scouting_network": 61,
+      "tactical_input": 54
+    },
+    "birthplace": {
+      "city": "Bukach",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00006",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00006",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 5636
+    },
+    "date_of_birth": "1994-06-01",
+    "first_name": "Kubaka",
+    "gender": "female",
+    "id": "stf_0001e",
+    "known_as": "Kraithbok",
+    "last_name": "Kraithbok",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 63,
+      "archetype_tags": [],
+      "ego": 58,
+      "humor": 57,
+      "interview_style": "guarded",
+      "loyalty": 49,
+      "media_openness": 30,
+      "professionalism": 70,
+      "resilience": 69,
+      "sociability": 54,
+      "sportsmanship": 70,
+      "volatility": 14
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "KRAITH-bok",
+      "stress_syllable": 0
+    },
+    "quality": 77,
+    "reputation": 77,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "stocky",
+      "facial_hair": "none",
+      "hair_colour": "red",
+      "hair_style": "short",
+      "skin_tone": 6
+    },
+    "attrs": {
+      "coaching_mental": 50,
+      "coaching_physical": 49,
+      "coaching_technical": 50,
+      "injury_prevention": 87,
+      "injury_treatment": 80,
+      "scouting_judgement": 40,
+      "scouting_network": 52,
+      "tactical_input": 48
+    },
+    "birthplace": {
+      "city": "Tartelt",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00006",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00006",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4220
+    },
+    "date_of_birth": "1974-06-01",
+    "first_name": "Gangra",
+    "gender": "female",
+    "id": "stf_0001f",
+    "known_as": "Hathmor",
+    "last_name": "Hathmor",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 51,
+      "archetype_tags": [],
+      "ego": 60,
+      "humor": 47,
+      "interview_style": "bland",
+      "loyalty": 32,
+      "media_openness": 57,
+      "professionalism": 65,
+      "resilience": 36,
+      "sociability": 46,
+      "sportsmanship": 33,
+      "volatility": 42
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "HATH-mor",
+      "stress_syllable": 0
+    },
+    "quality": 66,
+    "reputation": 66,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "none",
+      "hair_colour": "black",
+      "hair_style": "long",
+      "skin_tone": 5
+    },
+    "attrs": {
+      "coaching_mental": 61,
+      "coaching_physical": 59,
+      "coaching_technical": 60,
+      "injury_prevention": 66,
+      "injury_treatment": 60,
+      "scouting_judgement": 93,
+      "scouting_network": 87,
+      "tactical_input": 58
+    },
+    "birthplace": {
+      "city": "Drudraigar",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00006",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00006",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 5636
+    },
+    "date_of_birth": "1981-12-30",
+    "first_name": "Tebach",
+    "gender": "male",
+    "id": "stf_0001g",
+    "known_as": "Grogreven",
+    "last_name": "Grogreven",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 74,
+      "archetype_tags": [],
+      "ego": 44,
+      "humor": 39,
+      "interview_style": "humble",
+      "loyalty": 47,
+      "media_openness": 55,
+      "professionalism": 75,
+      "resilience": 60,
+      "sociability": 54,
+      "sportsmanship": 67,
+      "volatility": 36
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "GRO-gre-ven",
+      "stress_syllable": 0
+    },
+    "quality": 77,
+    "reputation": 77,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "beard",
+      "hair_colour": "grey",
+      "hair_style": "long",
+      "skin_tone": 7
+    },
+    "attrs": {
+      "coaching_mental": 59,
+      "coaching_physical": 58,
+      "coaching_technical": 54,
+      "injury_prevention": 65,
+      "injury_treatment": 56,
+      "scouting_judgement": 77,
+      "scouting_network": 94,
+      "tactical_input": 54
+    },
+    "birthplace": {
+      "city": "Tartelt",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00006",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00006",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4837
+    },
+    "date_of_birth": "1978-03-14",
+    "first_name": "Kertor",
+    "gender": "male",
+    "id": "stf_0001h",
+    "known_as": "Drartoven",
+    "last_name": "Drartoven",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 56,
+      "archetype_tags": [],
+      "ego": 61,
+      "humor": 61,
+      "interview_style": "bland",
+      "loyalty": 48,
+      "media_openness": 57,
+      "professionalism": 58,
+      "resilience": 40,
+      "sociability": 70,
+      "sportsmanship": 24,
+      "volatility": 55
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "DRAR-to-ven",
+      "stress_syllable": 0
+    },
+    "quality": 71,
+    "reputation": 71,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "short",
+      "skin_tone": 8
+    },
+    "attrs": {
+      "coaching_mental": 43,
+      "coaching_physical": 37,
+      "coaching_technical": 56,
+      "injury_prevention": 43,
+      "injury_treatment": 52,
+      "scouting_judgement": 78,
+      "scouting_network": 38,
+      "tactical_input": 74
+    },
+    "birthplace": {
+      "city": "Tartelt",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00006",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00006",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3872
+    },
+    "date_of_birth": "2001-06-20",
+    "first_name": "Bobra",
+    "gender": "female",
+    "id": "stf_0001i",
+    "known_as": "Kakromor",
+    "last_name": "Kakromor",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 91,
+      "archetype_tags": [
+        "hothead"
+      ],
+      "ego": 78,
+      "humor": 46,
+      "interview_style": "cocky",
+      "loyalty": 40,
+      "media_openness": 48,
+      "professionalism": 56,
+      "resilience": 43,
+      "sociability": 52,
+      "sportsmanship": 39,
+      "volatility": 72
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "KA-kro-mor",
+      "stress_syllable": 0
+    },
+    "quality": 63,
+    "reputation": 63,
+    "role": "analyst",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "moustache",
+      "hair_colour": "black",
+      "hair_style": "curly",
+      "skin_tone": 3
+    },
+    "attrs": {
+      "coaching_mental": 88,
+      "coaching_physical": 58,
+      "coaching_technical": 80,
+      "injury_prevention": 39,
+      "injury_treatment": 49,
+      "scouting_judgement": 50,
+      "scouting_network": 43,
+      "tactical_input": 81
+    },
+    "birthplace": {
+      "city": "Juzvuetiz",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00007",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00007",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4340
+    },
+    "date_of_birth": "1973-08-19",
+    "first_name": "Cechas",
+    "gender": "male",
+    "id": "stf_0001j",
+    "known_as": "Jezdos-Chuetiz",
+    "last_name": "Jezdos-Chuetiz",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 44,
+      "archetype_tags": [],
+      "ego": 63,
+      "humor": 44,
+      "interview_style": "bland",
+      "loyalty": 58,
+      "media_openness": 52,
+      "professionalism": 62,
+      "resilience": 47,
+      "sociability": 50,
+      "sportsmanship": 60,
+      "volatility": 43
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "jez-DOS-chuet-iz",
+      "stress_syllable": 1
+    },
+    "quality": 67,
+    "reputation": 67,
+    "role": "assistant_manager",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "blond",
+      "hair_style": "buzz",
+      "skin_tone": 2
+    },
+    "attrs": {
+      "coaching_mental": 100,
+      "coaching_physical": 71,
+      "coaching_technical": 85,
+      "injury_prevention": 62,
+      "injury_treatment": 65,
+      "scouting_judgement": 49,
+      "scouting_network": 45,
+      "tactical_input": 100
+    },
+    "birthplace": {
+      "city": "Quesquin",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00007",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00007",
+      "end": "2034-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 5776
+    },
+    "date_of_birth": "1996-12-22",
+    "first_name": "Pováchó",
+    "gender": "male",
+    "id": "stf_0001k",
+    "known_as": "Ciz",
+    "last_name": "Ciz",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 68,
+      "archetype_tags": [],
+      "ego": 47,
+      "humor": 55,
+      "interview_style": "philosophical",
+      "loyalty": 47,
+      "media_openness": 58,
+      "professionalism": 70,
+      "resilience": 71,
+      "sociability": 78,
+      "sportsmanship": 52,
+      "volatility": 38
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "ci-IZ",
+      "stress_syllable": 1
+    },
+    "quality": 78,
+    "reputation": 78,
+    "role": "first_team_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "goatee",
+      "hair_colour": "grey",
+      "hair_style": "short",
+      "skin_tone": 7
+    },
+    "attrs": {
+      "coaching_mental": 84,
+      "coaching_physical": 53,
+      "coaching_technical": 72,
+      "injury_prevention": 45,
+      "injury_treatment": 37,
+      "scouting_judgement": 44,
+      "scouting_network": 43,
+      "tactical_input": 34
+    },
+    "birthplace": {
+      "city": "Juzvuetiz",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00007",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00007",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3760
+    },
+    "date_of_birth": "2000-08-31",
+    "first_name": "Disjodez",
+    "gender": "male",
+    "id": "stf_0001l",
+    "known_as": "Ruzas",
+    "last_name": "Ruzas",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 48,
+      "archetype_tags": [],
+      "ego": 58,
+      "humor": 36,
+      "interview_style": "bland",
+      "loyalty": 67,
+      "media_openness": 41,
+      "professionalism": 46,
+      "resilience": 39,
+      "sociability": 8,
+      "sportsmanship": 37,
+      "volatility": 50
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "ru-ZAS",
+      "stress_syllable": 1
+    },
+    "quality": 62,
+    "reputation": 62,
+    "role": "goalkeeping_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "stubble",
+      "hair_colour": "blond",
+      "hair_style": "bald",
+      "skin_tone": 4
+    },
+    "attrs": {
+      "coaching_mental": 72,
+      "coaching_physical": 83,
+      "coaching_technical": 60,
+      "injury_prevention": 94,
+      "injury_treatment": 51,
+      "scouting_judgement": 60,
+      "scouting_network": 53,
+      "tactical_input": 59
+    },
+    "birthplace": {
+      "city": "Drudraigar",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00007",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00007",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 5776
+    },
+    "date_of_birth": "1969-04-14",
+    "first_name": "Krudrena",
+    "gender": "female",
+    "id": "stf_0001m",
+    "known_as": "Tuven",
+    "last_name": "Tuven",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 67,
+      "archetype_tags": [],
+      "ego": 64,
+      "humor": 48,
+      "interview_style": "bland",
+      "loyalty": 34,
+      "media_openness": 53,
+      "professionalism": 67,
+      "resilience": 57,
+      "sociability": 51,
+      "sportsmanship": 34,
+      "volatility": 54
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "TU-ven",
+      "stress_syllable": 0
+    },
+    "quality": 78,
+    "reputation": 78,
+    "role": "fitness_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "braids",
+      "skin_tone": 6
+    },
+    "attrs": {
+      "coaching_mental": 61,
+      "coaching_physical": 39,
+      "coaching_technical": 34,
+      "injury_prevention": 63,
+      "injury_treatment": 72,
+      "scouting_judgement": 43,
+      "scouting_network": 43,
+      "tactical_input": 59
+    },
+    "birthplace": {
+      "city": "Kenaqi",
+      "nation": "nat_hasari"
+    },
+    "club_id": "clb_00007",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00007",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3986
+    },
+    "date_of_birth": "1972-07-14",
+    "first_name": "Marman",
+    "gender": "male",
+    "id": "stf_0001n",
+    "known_as": "Mazhāin",
+    "last_name": "al Mazhain",
+    "nationality": "nat_hasari",
+    "personality": {
+      "ambition": 35,
+      "archetype_tags": [],
+      "ego": 50,
+      "humor": 59,
+      "interview_style": "bland",
+      "loyalty": 64,
+      "media_openness": 47,
+      "professionalism": 49,
+      "resilience": 35,
+      "sociability": 47,
+      "sportsmanship": 44,
+      "volatility": 61
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "al-MAZ-hain",
+      "stress_syllable": 1
+    },
+    "quality": 64,
+    "reputation": 64,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "none",
+      "hair_colour": "red",
+      "hair_style": "short",
+      "skin_tone": 7
+    },
+    "attrs": {
+      "coaching_mental": 35,
+      "coaching_physical": 36,
+      "coaching_technical": 31,
+      "injury_prevention": 60,
+      "injury_treatment": 62,
+      "scouting_judgement": 35,
+      "scouting_network": 38,
+      "tactical_input": 37
+    },
+    "birthplace": {
+      "city": "Juzvuetiz",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00007",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00007",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2461
+    },
+    "date_of_birth": "1991-09-20",
+    "first_name": "Zitrita",
+    "gender": "female",
+    "id": "stf_0001o",
+    "known_as": "Chónaldó",
+    "last_name": "Chonaldó",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 30,
+      "archetype_tags": [],
+      "ego": 51,
+      "humor": 47,
+      "interview_style": "bland",
+      "loyalty": 65,
+      "media_openness": 62,
+      "professionalism": 59,
+      "resilience": 39,
+      "sociability": 50,
+      "sportsmanship": 62,
+      "volatility": 33
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "chon-ALDO",
+      "stress_syllable": 1
+    },
+    "quality": 49,
+    "reputation": 49,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "none",
+      "hair_colour": "black",
+      "hair_style": "buzz",
+      "skin_tone": 3
+    },
+    "attrs": {
+      "coaching_mental": 61,
+      "coaching_physical": 63,
+      "coaching_technical": 56,
+      "injury_prevention": 70,
+      "injury_treatment": 51,
+      "scouting_judgement": 100,
+      "scouting_network": 91,
+      "tactical_input": 69
+    },
+    "birthplace": {
+      "city": "Chiyisz",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00007",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00007",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 6500
+    },
+    "date_of_birth": "1981-05-24",
+    "first_name": "Thaugamgis",
+    "gender": "male",
+    "id": "stf_0001p",
+    "known_as": "Zekski",
+    "last_name": "Zekski",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 39,
+      "archetype_tags": [],
+      "ego": 28,
+      "humor": 45,
+      "interview_style": "humble",
+      "loyalty": 44,
+      "media_openness": 55,
+      "professionalism": 74,
+      "resilience": 53,
+      "sociability": 66,
+      "sportsmanship": 59,
+      "volatility": 44
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "ZEK-ski",
+      "stress_syllable": 0
+    },
+    "quality": 83,
+    "reputation": 83,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "buzz",
+      "skin_tone": 3
+    },
+    "attrs": {
+      "coaching_mental": 56,
+      "coaching_physical": 45,
+      "coaching_technical": 51,
+      "injury_prevention": 54,
+      "injury_treatment": 50,
+      "scouting_judgement": 68,
+      "scouting_network": 73,
+      "tactical_input": 53
+    },
+    "birthplace": {
+      "city": "Gallodyn",
+      "nation": "nat_fenhal"
+    },
+    "club_id": "clb_00007",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00007",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4585
+    },
+    "date_of_birth": "1997-04-09",
+    "first_name": "Trogudeiwyn",
+    "gender": "male",
+    "id": "stf_0001q",
+    "known_as": "Beinven",
+    "last_name": "Beinven",
+    "nationality": "nat_fenhal",
+    "personality": {
+      "ambition": 15,
+      "archetype_tags": [],
+      "ego": 39,
+      "humor": 44,
+      "interview_style": "bland",
+      "loyalty": 49,
+      "media_openness": 45,
+      "professionalism": 52,
+      "resilience": 46,
+      "sociability": 51,
+      "sportsmanship": 51,
+      "volatility": 67
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "BEIN-ven",
+      "stress_syllable": 0
+    },
+    "quality": 69,
+    "reputation": 69,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "braids",
+      "skin_tone": 8
+    },
+    "attrs": {
+      "coaching_mental": 56,
+      "coaching_physical": 65,
+      "coaching_technical": 70,
+      "injury_prevention": 67,
+      "injury_treatment": 72,
+      "scouting_judgement": 89,
+      "scouting_network": 70,
+      "tactical_input": 91
+    },
+    "birthplace": {
+      "city": "Cesdisiz",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00007",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00007",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 6500
+    },
+    "date_of_birth": "1991-07-10",
+    "first_name": "Zacodett",
+    "gender": "male",
+    "id": "stf_0001r",
+    "known_as": "Puettris",
+    "last_name": "Puettris",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 36,
+      "archetype_tags": [],
+      "ego": 47,
+      "humor": 37,
+      "interview_style": "bland",
+      "loyalty": 50,
+      "media_openness": 61,
+      "professionalism": 60,
+      "resilience": 49,
+      "sociability": 47,
+      "sportsmanship": 59,
+      "volatility": 33
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "puet-TRIS",
+      "stress_syllable": 1
+    },
+    "quality": 83,
+    "reputation": 83,
+    "role": "analyst",
+    "second_nationality": "nat_fenhal"
+  },
+  {
+    "appearance": {
+      "build": "stocky",
+      "facial_hair": "stubble",
+      "hair_colour": "black",
+      "hair_style": "fade",
+      "skin_tone": 3
+    },
+    "attrs": {
+      "coaching_mental": 73,
+      "coaching_physical": 39,
+      "coaching_technical": 71,
+      "injury_prevention": 49,
+      "injury_treatment": 43,
+      "scouting_judgement": 36,
+      "scouting_network": 46,
+      "tactical_input": 79
+    },
+    "birthplace": {
+      "city": "Zijowi",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00008",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00008",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3540
+    },
+    "date_of_birth": "1995-05-20",
+    "first_name": "Veyis",
+    "gender": "male",
+    "id": "stf_0001s",
+    "known_as": "Tseszymach-Zauthant",
+    "last_name": "Tšeszymach-Zauthant",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 48,
+      "archetype_tags": [
+        "quiet_leader"
+      ],
+      "ego": 22,
+      "humor": 38,
+      "interview_style": "humble",
+      "loyalty": 31,
+      "media_openness": 58,
+      "professionalism": 70,
+      "resilience": 61,
+      "sociability": 45,
+      "sportsmanship": 66,
+      "volatility": 24
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "TSE-szym-ach-zau-thant",
+      "stress_syllable": 0
+    },
+    "quality": 60,
+    "reputation": 60,
+    "role": "assistant_manager",
+    "second_nationality": "nat_gorlund"
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "buzz",
+      "skin_tone": 2
+    },
+    "attrs": {
+      "coaching_mental": 53,
+      "coaching_physical": 21,
+      "coaching_technical": 70,
+      "injury_prevention": 36,
+      "injury_treatment": 28,
+      "scouting_judgement": 37,
+      "scouting_network": 31,
+      "tactical_input": 56
+    },
+    "birthplace": {
+      "city": "Chiyisz",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00008",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00008",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2374
+    },
+    "date_of_birth": "2003-03-01",
+    "first_name": "Chauchtsiš",
+    "gender": "male",
+    "id": "stf_0001t",
+    "known_as": "Zykjeisz",
+    "last_name": "Zykjeisz",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 55,
+      "archetype_tags": [],
+      "ego": 63,
+      "humor": 37,
+      "interview_style": "bland",
+      "loyalty": 42,
+      "media_openness": 44,
+      "professionalism": 44,
+      "resilience": 57,
+      "sociability": 10,
+      "sportsmanship": 48,
+      "volatility": 41
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "ZYK-jeisz",
+      "stress_syllable": 0
+    },
+    "quality": 48,
+    "reputation": 48,
+    "role": "first_team_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "black",
+      "hair_style": "fade",
+      "skin_tone": 3
+    },
+    "attrs": {
+      "coaching_mental": 68,
+      "coaching_physical": 38,
+      "coaching_technical": 60,
+      "injury_prevention": 44,
+      "injury_treatment": 33,
+      "scouting_judgement": 37,
+      "scouting_network": 43,
+      "tactical_input": 37
+    },
+    "birthplace": {
+      "city": "Chiyisz",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00008",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00008",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2924
+    },
+    "date_of_birth": "1997-02-06",
+    "first_name": "Thymvaka",
+    "gender": "female",
+    "id": "stf_0001u",
+    "known_as": "Gauchski",
+    "last_name": "Gauchski",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 59,
+      "archetype_tags": [],
+      "ego": 40,
+      "humor": 67,
+      "interview_style": "bland",
+      "loyalty": 57,
+      "media_openness": 48,
+      "professionalism": 67,
+      "resilience": 54,
+      "sociability": 37,
+      "sportsmanship": 54,
+      "volatility": 51
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "GAUCH-ski",
+      "stress_syllable": 0
+    },
+    "quality": 54,
+    "reputation": 54,
+    "role": "goalkeeping_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "red",
+      "hair_style": "short",
+      "skin_tone": 6
+    },
+    "attrs": {
+      "coaching_mental": 33,
+      "coaching_physical": 75,
+      "coaching_technical": 42,
+      "injury_prevention": 82,
+      "injury_treatment": 45,
+      "scouting_judgement": 50,
+      "scouting_network": 46,
+      "tactical_input": 51
+    },
+    "birthplace": {
+      "city": "Gathiški",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00008",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00008",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4102
+    },
+    "date_of_birth": "2001-01-27",
+    "first_name": "Zyyagas",
+    "gender": "male",
+    "id": "stf_0001v",
+    "known_as": "Ziszěch",
+    "last_name": "Ziszech",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 72,
+      "archetype_tags": [
+        "hothead",
+        "mercenary"
+      ],
+      "ego": 64,
+      "humor": 40,
+      "interview_style": "combative",
+      "loyalty": 27,
+      "media_openness": 47,
+      "professionalism": 61,
+      "resilience": 31,
+      "sociability": 56,
+      "sportsmanship": 42,
+      "volatility": 81
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "ZI-szech",
+      "stress_syllable": 0
+    },
+    "quality": 65,
+    "reputation": 65,
+    "role": "fitness_coach",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "goatee",
+      "hair_colour": "black",
+      "hair_style": "curly",
+      "skin_tone": 6
+    },
+    "attrs": {
+      "coaching_mental": 50,
+      "coaching_physical": 46,
+      "coaching_technical": 46,
+      "injury_prevention": 78,
+      "injury_treatment": 71,
+      "scouting_judgement": 33,
+      "scouting_network": 33,
+      "tactical_input": 47
+    },
+    "birthplace": {
+      "city": "Gathiški",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00008",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00008",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3872
+    },
+    "date_of_birth": "1976-08-27",
+    "first_name": "Chigaszik",
+    "gender": "male",
+    "id": "stf_0001w",
+    "known_as": "Zeszski-Zikski",
+    "last_name": "Zeszski-Zikski",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 38,
+      "archetype_tags": [],
+      "ego": 36,
+      "humor": 48,
+      "interview_style": "bland",
+      "loyalty": 61,
+      "media_openness": 46,
+      "professionalism": 50,
+      "resilience": 49,
+      "sociability": 37,
+      "sportsmanship": 46,
+      "volatility": 42
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "ZESZ-ski-zik-ski",
+      "stress_syllable": 0
+    },
+    "quality": 63,
+    "reputation": 63,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "stubble",
+      "hair_colour": "black",
+      "hair_style": "short",
+      "skin_tone": 3
+    },
+    "attrs": {
+      "coaching_mental": 50,
+      "coaching_physical": 42,
+      "coaching_technical": 52,
+      "injury_prevention": 83,
+      "injury_treatment": 83,
+      "scouting_judgement": 59,
+      "scouting_network": 47,
+      "tactical_input": 50
+    },
+    "birthplace": {
+      "city": "Zijowi",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00008",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00008",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4585
+    },
+    "date_of_birth": "1982-09-14",
+    "first_name": "Chichizik",
+    "gender": "male",
+    "id": "stf_0001x",
+    "known_as": "Gyšzytz",
+    "last_name": "Gyszytz",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 30,
+      "archetype_tags": [],
+      "ego": 37,
+      "humor": 52,
+      "interview_style": "bland",
+      "loyalty": 61,
+      "media_openness": 45,
+      "professionalism": 43,
+      "resilience": 48,
+      "sociability": 55,
+      "sportsmanship": 58,
+      "volatility": 53
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "GYSZ-ytz",
+      "stress_syllable": 0
+    },
+    "quality": 69,
+    "reputation": 69,
+    "role": "physio",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "stubble",
+      "hair_colour": "red",
+      "hair_style": "fade",
+      "skin_tone": 2
+    },
+    "attrs": {
+      "coaching_mental": 40,
+      "coaching_physical": 39,
+      "coaching_technical": 37,
+      "injury_prevention": 32,
+      "injury_treatment": 33,
+      "scouting_judgement": 71,
+      "scouting_network": 59,
+      "tactical_input": 28
+    },
+    "birthplace": {
+      "city": "Harhavik",
+      "nation": "nat_dravik"
+    },
+    "club_id": "clb_00008",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00008",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 2641
+    },
+    "date_of_birth": "1973-02-10",
+    "first_name": "Hihelm",
+    "gender": "male",
+    "id": "stf_0001y",
+    "known_as": "Skovik",
+    "last_name": "Skovik",
+    "nationality": "nat_dravik",
+    "personality": {
+      "ambition": 46,
+      "archetype_tags": [],
+      "ego": 44,
+      "humor": 44,
+      "interview_style": "bland",
+      "loyalty": 42,
+      "media_openness": 61,
+      "professionalism": 50,
+      "resilience": 53,
+      "sociability": 54,
+      "sportsmanship": 47,
+      "volatility": 54
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "SKO-vik",
+      "stress_syllable": 0
+    },
+    "quality": 51,
+    "reputation": 51,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "stubble",
+      "hair_colour": "blond",
+      "hair_style": "short",
+      "skin_tone": 5
+    },
+    "attrs": {
+      "coaching_mental": 52,
+      "coaching_physical": 56,
+      "coaching_technical": 43,
+      "injury_prevention": 40,
+      "injury_treatment": 43,
+      "scouting_judgement": 80,
+      "scouting_network": 92,
+      "tactical_input": 46
+    },
+    "birthplace": {
+      "city": "Sirora",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00008",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00008",
+      "end": "2032-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 4340
+    },
+    "date_of_birth": "1989-03-15",
+    "first_name": "Limio",
+    "gender": "male",
+    "id": "stf_0001z",
+    "known_as": "Viollani",
+    "last_name": "Viollani",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 19,
+      "archetype_tags": [],
+      "ego": 22,
+      "humor": 61,
+      "interview_style": "bland",
+      "loyalty": 59,
+      "media_openness": 54,
+      "professionalism": 46,
+      "resilience": 38,
+      "sociability": 55,
+      "sportsmanship": 43,
+      "volatility": 44
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "vio-LLA-ani",
+      "stress_syllable": 1
+    },
+    "quality": 67,
+    "reputation": 67,
+    "role": "scout",
+    "second_nationality": null
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "stubble",
+      "hair_colour": "brown",
+      "hair_style": "buzz",
+      "skin_tone": 8
+    },
+    "attrs": {
+      "coaching_mental": 32,
+      "coaching_physical": 31,
+      "coaching_technical": 43,
+      "injury_prevention": 39,
+      "injury_treatment": 50,
+      "scouting_judgement": 69,
+      "scouting_network": 48,
+      "tactical_input": 63
+    },
+    "birthplace": {
+      "city": "Gathiški",
+      "nation": "nat_valmere"
+    },
+    "club_id": "clb_00008",
+    "contract": {
+      "appearance_bonus": 0,
+      "clean_sheet_bonus": 0,
+      "club_id": "clb_00008",
+      "end": "2033-06-30",
+      "extension_option": false,
+      "goal_bonus": 0,
+      "release_clause": null,
+      "relegation_wage_cut_pct": 0.0,
+      "sell_on_pct": 0.0,
+      "signing_bonus": 0,
+      "squad_role": "backup",
+      "start": "2031-07-01",
+      "wage_weekly": 3540
+    },
+    "date_of_birth": "1988-11-17",
+    "first_name": "Szešzyichik",
+    "gender": "male",
+    "id": "stf_00020",
+    "known_as": "Tsivenko",
+    "last_name": "Tsivenko",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 26,
+      "archetype_tags": [],
+      "ego": 43,
+      "humor": 38,
+      "interview_style": "bland",
+      "loyalty": 58,
+      "media_openness": 39,
+      "professionalism": 52,
+      "resilience": 49,
+      "sociability": 36,
+      "sportsmanship": 62,
+      "volatility": 50
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "TSI-vau-enko",
+      "stress_syllable": 0
+    },
+    "quality": 60,
+    "reputation": 60,
+    "role": "analyst",
+    "second_nationality": null
+  }
+]

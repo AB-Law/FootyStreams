@@ -6,5 +6,14 @@ Design: docs/design/10-testing-strategy.md section 9.
 
 from footystreams.verify.match import verify_match
 from footystreams.verify.violation import Violation, format_violations
+from footystreams.verify.world import verify_world
+from footystreams.verify.world_targets import WorldChecks, WorldTargets
 
-__all__ = ["Violation", "format_violations", "verify_match"]
+__all__ = [
+    "Violation",
+    "WorldChecks",
+    "WorldTargets",
+    "format_violations",
+    "verify_match",
+    "verify_world",
+]

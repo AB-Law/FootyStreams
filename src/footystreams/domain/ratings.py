@@ -61,16 +61,28 @@ def role_rating(
     )
 
 
-def compute_current_ability(player: Player, catalog: RoleCatalog) -> AbilityScore:
-    """Best role+duty fit across the catalog, clamped to AbilityScore."""
+def ability_from_attributes(
+    attrs: Mapping[str, int],
+    position_competence: Mapping[Position, int],
+    catalog: RoleCatalog,
+) -> AbilityScore:
+    """Best role+duty fit for a flat attribute map, clamped to AbilityScore.
+
+    Exposed separately from ``compute_current_ability`` so generators and development code can
+    evaluate hypothetical attribute sets without constructing a Player each time.
+    """
     best = 0.0
-    attrs = _flat_attributes(player)
     for role in catalog.roles.values():
-        scale = _competence_scale(player, role.position)
+        scale = position_competence.get(role.position, 0) / 100.0
         for spec in role.duties.values():
             best = max(best, _weighted_role_score(attrs, spec, scale))
     score = round(best)
     return max(ABILITY_SCORE_MIN, min(ABILITY_SCORE_MAX, score))
+
+
+def compute_current_ability(player: Player, catalog: RoleCatalog) -> AbilityScore:
+    """Best role+duty fit across the catalog, clamped to AbilityScore."""
+    return ability_from_attributes(_flat_attributes(player), player.position_competence, catalog)
 
 
 def assigned_or_best_role_rating(

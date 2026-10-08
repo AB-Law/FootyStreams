@@ -9,6 +9,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0136** Commit the default world (seed 1) with a regeneration test *(M2; scope: seed)*
+- **0134** Add canonical world IO, content hashing and the seed CLI *(M2; scope: cli)*
+- **0133** Add verify_world, the world coherence checks, and senior-squad nationality quotas *(M2; scope: seed)*
+- **0132** Add generate_world: the pure seed-to-World function *(M2; scope: seed)*
+- **0131** Add the seed relationship graph *(M2; scope: seed)*
+- **0130** Add referee and media crew generators *(M2; scope: data)*
+- **0129** Add the club generator: identity, stadium, finances, organisation, calibrated squads and default tactics *(M2; scope: data)*
+- **0127** Add manager and staff generators with tactic presets and style prototypes *(M2; scope: data)*
+- **0126** Add the player generator: archetypes, spiky attributes, positions, personality and contracts *(M2; scope: data)*
+- **0125** Add invented name cultures, quality gates and the unique name book *(M2; scope: data)*
+- **0124** Add static YAML tables and loaders: formations, roles, traits, injuries, climate *(M2; scope: data)*
+- **0123** Add ability_from_attributes and best-lineup squad strength helpers *(M2; scope: domain)*
+- **0122** Add world record and static-table models *(M2; scope: schemas; schema version minor)*
+- **0121** Add WorldRng, a deterministic forkable random stream for seed and league code *(M2; scope: domain)*
 - **0117** Add annotate(): the non-causal annotation pass (winning goal, late winner, comeback, turning points, goal of the match) *(M7; scope: analytics)*
 - **0116** Add read-only analytics: pass network, zone flow, shot map, xG/xA/xT totals and heatmaps recomputed from the log *(M7; scope: analytics)*
 - **0114** Emit tracking frames (22 players and the ball) when SimConfig.emit_frames is on; verify and the summary ignore them *(M7; scope: sim, verify)*
@@ -94,6 +108,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0138** Merge verify exports, renumber M2 fragments, and retie goldens after Track A rebase *(M2; scope: verify, schemas, sim; sim version patch; schema version patch)*
 - **0120** Fix own-goal tags and bound the M7 context knobs *(M7; scope: events, sim)*
 - **0102** Do not announce a mentality change that changes nothing *(M6; scope: sim)*
 - **0101** Put a bench goalkeeper in goal when he replaces a stand-in keeper *(M6; scope: sim)*
@@ -116,6 +131,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0052** Speed up option generation and refresh positions every 4 seconds *(M4; scope: sim)*
 
 ### Refactoring
+- **0128** Move IdMint to domain and add checkpoints for discarded generation attempts *(M2; scope: seed)*
 - **0104** Move the summary fold from sim to events/derive so verify and analytics can recompute it *(M7; scope: events, sim)*
 - **0091** Build the state from a BuildContext and add the bench, injury stream and ManagerConfig *(M6; scope: sim)*
 - **0068** Move the text renderer from cli to sim so cli stays a thin wrapper *(M4; scope: sim, cli)*
@@ -123,6 +139,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0062** Share the one-player-on-two-teams check between sim and verify *(M4; scope: domain, verify, sim)*
 
 ### Tests
+- **0135** Share cached worlds across seed tests *(M2; scope: cli)*
 - **0119** Add the M7 slow-tier sweeps; write the M7 report, design notes and status *(M7; scope: sim)*
 - **0100** Add the M6 sweeps and metamorphic tests; write the M6 report *(M6; scope: sim)*
 - **0085** Add the M5 sweeps and write the M5 report *(M5; scope: sim, docs)*
@@ -131,6 +148,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0137** Write the M2 milestone report and refresh design docs and status *(M2; scope: design)*
 - **0074** Record the digest decision (ADR 0006), the M4 perf exception and the review round *(M4; scope: design, docs)*
 - **0061** Write the M4 report and the Track A status section *(M4; scope: docs, sim)*
 - **0039** Record M1 decisions and refresh design paths *(M1; scope: design, docs)*

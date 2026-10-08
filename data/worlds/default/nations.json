@@ -1,0 +1,65 @@
+[
+  {
+    "demonym": "Aldovian",
+    "id": "nat_aldovia",
+    "is_home": false,
+    "name": "Aldovia",
+    "name_culture": "aldovia"
+  },
+  {
+    "demonym": "Brevanese",
+    "id": "nat_brevane",
+    "is_home": false,
+    "name": "Brevane",
+    "name_culture": "brevane"
+  },
+  {
+    "demonym": "Corsanthine",
+    "id": "nat_corsanth",
+    "is_home": false,
+    "name": "Corsanth",
+    "name_culture": "corsanth"
+  },
+  {
+    "demonym": "Dravikan",
+    "id": "nat_dravik",
+    "is_home": false,
+    "name": "Dravik",
+    "name_culture": "dravik"
+  },
+  {
+    "demonym": "Estmarker",
+    "id": "nat_estmark",
+    "is_home": false,
+    "name": "Estmark",
+    "name_culture": "estmark"
+  },
+  {
+    "demonym": "Fenhalan",
+    "id": "nat_fenhal",
+    "is_home": false,
+    "name": "Fenhal",
+    "name_culture": "fenhal"
+  },
+  {
+    "demonym": "Gorlander",
+    "id": "nat_gorlund",
+    "is_home": false,
+    "name": "Gorlund",
+    "name_culture": "gorlund"
+  },
+  {
+    "demonym": "Hasari",
+    "id": "nat_hasari",
+    "is_home": false,
+    "name": "Hasari",
+    "name_culture": "hasari"
+  },
+  {
+    "demonym": "Valmerian",
+    "id": "nat_valmere",
+    "is_home": true,
+    "name": "Valmere",
+    "name_culture": "highland"
+  }
+]

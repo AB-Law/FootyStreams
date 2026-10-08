@@ -1,0 +1,115 @@
+# The broadcast crew: eleven authored personas, one per slot, instantiated with generated names.
+# personality: disposition centres (0-100) the person is drawn around. voice: casting sheet.
+# Catchphrases are plain text here; the engine layer will attach trigger tags later.
+distinctness_minimum: 28.0   # minimum Euclidean distance between two crew members' dispositions
+crew:
+  old_hand:
+    role: lead_commentator
+    summary: "Calm, measured, history-rich, dry wit"
+    gender: {male: 8, female: 2}
+    age: [54, 66]
+    personality: {ambition: 40, loyalty: 75, professionalism: 85, volatility: 20, sportsmanship: 80, ego: 45, sociability: 55, humor: 65, media_openness: 70, resilience: 80}
+    voice: {age_range: mature, accent: "measured valmerian", timbre: [warm, gravelly], voice_register: low, base_pace_wpm: 135, pace_variance: 0.08, energy_range: [0.2, 0.8], delivery_notes: "unhurried; lets a goal breathe"}
+    catchphrases: ["Well, I have seen that before.", "And there it is, as it always was."]
+    expertise: [club_history, league_history]
+    interjections: ["Ah.", "Ha."]
+  firecracker:
+    role: lead_commentator
+    summary: "High enthusiasm, loses his voice early, prone to gaffes"
+    gender: {male: 6, female: 3}
+    age: [28, 40]
+    personality: {ambition: 80, loyalty: 40, professionalism: 55, volatility: 80, sportsmanship: 55, ego: 70, sociability: 85, humor: 70, media_openness: 90, resilience: 50}
+    voice: {age_range: young, accent: "bright valmerian", timbre: [bright, raspy], voice_register: high, base_pace_wpm: 175, pace_variance: 0.2, energy_range: [0.4, 1.0], delivery_notes: "builds fast; shouts big moments"}
+    catchphrases: ["Absolutely unbelievable!", "You cannot write this!"]
+    expertise: [highlights, atmosphere]
+    interjections: ["Oh!", "Wow!", "What a moment!"]
+  tactician:
+    role: co_commentator
+    summary: "Analytic, technical vocabulary, dislikes long-ball football"
+    gender: {male: 5, female: 4}
+    age: [40, 55]
+    personality: {ambition: 60, loyalty: 50, professionalism: 90, volatility: 25, sportsmanship: 70, ego: 55, sociability: 40, humor: 30, media_openness: 60, resilience: 70}
+    voice: {age_range: mid, accent: "clipped valmerian", timbre: [crisp], voice_register: mid, base_pace_wpm: 160, pace_variance: 0.1, energy_range: [0.2, 0.7], delivery_notes: "precise; slows for diagrams"}
+    catchphrases: ["Look at the shape.", "That is a pressing trap."]
+    expertise: [tactics, coaching]
+    interjections: ["Right."]
+  stats_nerd:
+    role: co_commentator
+    summary: "Numbers first, enthusiasm second, endlessly curious"
+    gender: {male: 5, female: 4}
+    age: [30, 45]
+    personality: {ambition: 55, loyalty: 45, professionalism: 80, volatility: 30, sportsmanship: 75, ego: 35, sociability: 50, humor: 55, media_openness: 75, resilience: 60}
+    voice: {age_range: mid, accent: "even valmerian", timbre: [light], voice_register: mid, base_pace_wpm: 165, pace_variance: 0.12, energy_range: [0.2, 0.7], delivery_notes: "quotes a statistic and pauses"}
+    catchphrases: ["The numbers say otherwise.", "That is a first in the league."]
+    expertise: [statistics, league_history]
+    interjections: ["Interesting."]
+  local_hero:
+    role: reporter
+    summary: "Obvious club bias, beloved by one fanbase, tolerated by the rest"
+    gender: {male: 5, female: 4}
+    age: [35, 50]
+    personality: {ambition: 45, loyalty: 95, professionalism: 60, volatility: 55, sportsmanship: 50, ego: 55, sociability: 80, humor: 60, media_openness: 85, resilience: 55}
+    voice: {age_range: mid, accent: "regional valmerian", timbre: [warm], voice_register: mid, base_pace_wpm: 155, pace_variance: 0.15, energy_range: [0.3, 0.9], delivery_notes: "softens for his club, sharpens against rivals"}
+    catchphrases: ["Our lads did us proud.", "You will not find a prouder ground."]
+    expertise: [club_history, supporters]
+    interjections: ["Come on!"]
+  digger:
+    role: reporter
+    summary: "Persistent, probing, a little cold"
+    gender: {male: 4, female: 5}
+    age: [30, 48]
+    personality: {ambition: 85, loyalty: 30, professionalism: 75, volatility: 45, sportsmanship: 40, ego: 65, sociability: 30, humor: 25, media_openness: 40, resilience: 75}
+    voice: {age_range: mid, accent: "level valmerian", timbre: [dry], voice_register: mid, base_pace_wpm: 150, pace_variance: 0.07, energy_range: [0.2, 0.6], delivery_notes: "flat delivery, sharp questions"}
+    catchphrases: ["I am told otherwise.", "Sources close to the club say."]
+    expertise: [transfers, finance]
+    interjections: ["Hm."]
+  warm_presenter:
+    role: presenter
+    summary: "Welcoming, generous with praise, keeps the studio moving"
+    gender: {male: 3, female: 6}
+    age: [34, 50]
+    personality: {ambition: 50, loyalty: 65, professionalism: 90, volatility: 15, sportsmanship: 85, ego: 30, sociability: 90, humor: 75, media_openness: 95, resilience: 80}
+    voice: {age_range: mid, accent: "warm valmerian", timbre: [warm, smooth], voice_register: mid, base_pace_wpm: 150, pace_variance: 0.1, energy_range: [0.3, 0.8], delivery_notes: "smiling delivery"}
+    catchphrases: ["Welcome back, everyone.", "What a day it has been."]
+    expertise: [league_history, supporters]
+    interjections: ["Lovely."]
+  polished_anchor:
+    role: presenter
+    summary: "Immaculate, neutral, the voice of the results service"
+    gender: {male: 5, female: 4}
+    age: [38, 56]
+    personality: {ambition: 65, loyalty: 55, professionalism: 95, volatility: 10, sportsmanship: 80, ego: 40, sociability: 55, humor: 35, media_openness: 70, resilience: 85}
+    voice: {age_range: mature, accent: "neutral valmerian", timbre: [polished], voice_register: low, base_pace_wpm: 145, pace_variance: 0.05, energy_range: [0.2, 0.6], delivery_notes: "even and exact"}
+    catchphrases: ["Full time in Valmere.", "Those are the results."]
+    expertise: [statistics, league_history]
+    interjections: ["Indeed."]
+  cynic_pundit:
+    role: pundit
+    summary: "Sarcastic, rarely impressed, feuds with the optimist"
+    gender: {male: 6, female: 3}
+    age: [42, 60]
+    personality: {ambition: 35, loyalty: 40, professionalism: 55, volatility: 60, sportsmanship: 30, ego: 80, sociability: 45, humor: 80, media_openness: 80, resilience: 55}
+    voice: {age_range: mature, accent: "dry valmerian", timbre: [gravelly, dry], voice_register: low, base_pace_wpm: 150, pace_variance: 0.12, energy_range: [0.2, 0.8], delivery_notes: "deadpan; long pauses before the jab"}
+    catchphrases: ["Of course it is.", "I have seen better in the car park."]
+    expertise: [tactics, officiating]
+    interjections: ["Pfft.", "Naturally."]
+  optimist_pundit:
+    role: pundit
+    summary: "Finds the good in everything, even a 5-0 defeat"
+    gender: {male: 5, female: 4}
+    age: [32, 52]
+    personality: {ambition: 55, loyalty: 70, professionalism: 65, volatility: 35, sportsmanship: 90, ego: 40, sociability: 85, humor: 70, media_openness: 85, resilience: 90}
+    voice: {age_range: mid, accent: "sunny valmerian", timbre: [bright, warm], voice_register: high, base_pace_wpm: 160, pace_variance: 0.15, energy_range: [0.4, 0.9], delivery_notes: "lifts at the end of sentences"}
+    catchphrases: ["There are positives to take.", "Football is the winner today."]
+    expertise: [youth, supporters]
+    interjections: ["Lovely stuff."]
+  provocateur:
+    role: pundit
+    summary: "Says the unsayable to start an argument"
+    gender: {male: 5, female: 4}
+    age: [36, 58]
+    personality: {ambition: 75, loyalty: 25, professionalism: 45, volatility: 85, sportsmanship: 25, ego: 90, sociability: 60, humor: 65, media_openness: 95, resilience: 60}
+    voice: {age_range: mid, accent: "sharp valmerian", timbre: [raspy], voice_register: mid, base_pace_wpm: 170, pace_variance: 0.2, energy_range: [0.4, 1.0], delivery_notes: "interrupts; raises the volume"}
+    catchphrases: ["I will say what everyone is thinking.", "Sack the lot of them."]
+    expertise: [transfers, officiating]
+    interjections: ["Come on!", "Seriously?"]

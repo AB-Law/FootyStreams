@@ -1,0 +1,244 @@
+# The eight club archetypes of the Valmere Premier League (docs/design/05-seeding.md section 2).
+# Each archetype is assigned to exactly one club, shuffled by the world seed.
+# quality: target team rating (mean of the best XI's role ratings) of the club's squad.
+# income_m: annual income in millions of crowns; wage_ratio: wage bill as a share of the wage budget
+# (above 1.0 = overspending on purpose); wage_budget_share: share of income budgeted for wages.
+league:
+  name: Valmere Premier League
+  short_name: VPL
+  first_season_label: "2031/32"
+  season_start: "2031-08-15"
+  season_end: "2032-05-31"
+  min_gap: 18          # best-vs-worst team rating gap must fall in [min_gap, max_gap]
+  max_gap: 26
+  min_adjacent_gap: 0.5
+  calibration_tolerance: 0.6
+
+squad:
+  senior_template: {GK: 3, RB: 2, LB: 2, CB: 4, DM: 2, CM: 4, AM: 1, RM: 1, LM: 1, ST: 2, SS: 1, RW: 1, LW: 1}
+  youth_positions: [GK, CB, CB, LB, CM, CM, RW, ST]
+  age_mean: 26.8
+  age_deviation: 4.2
+  age_range: [17, 37]
+  goalkeeper_age_bonus: 2
+  home_players: [10, 13]        # senior squad: Valmerians (capped under the 55% nation share)
+  foreign_nations: [3, 5]       # how many foreign nations the rest come from
+  max_per_foreign_nation: 6
+  youth_age_range: [16, 19]
+  youth_ability: [34, 50]
+  starter_noise: 2.5
+  second_choice_drop: [3, 7]
+  deep_drop: [6, 11]
+  free_agents: 30
+  free_agent_ability: [35, 60]
+  free_agent_age: [20, 36]
+
+shirt_numbers:
+  GK: [1, 13, 31]
+  RB: [2, 12, 22]
+  LB: [3, 14, 23]
+  CB: [4, 5, 15, 25]
+  DM: [6, 16]
+  CM: [8, 18, 20, 28]
+  AM: [10]
+  RM: [7]
+  LM: [11]
+  RW: [17]
+  LW: [19]
+  SS: [21]
+  ST: [9, 24]
+
+palettes:
+  - {primary: "#c8102e", secondary: "#ffffff", accent: "#111111"}
+  - {primary: "#0b3d91", secondary: "#f2c200", accent: "#ffffff"}
+  - {primary: "#006b3c", secondary: "#ffffff", accent: "#f2c200"}
+  - {primary: "#111111", secondary: "#f2c200", accent: "#ffffff"}
+  - {primary: "#6a1b9a", secondary: "#ffffff", accent: "#f2c200"}
+  - {primary: "#f26b21", secondary: "#111111", accent: "#ffffff"}
+  - {primary: "#00a3e0", secondary: "#ffffff", accent: "#0b3d91"}
+  - {primary: "#7b1e3a", secondary: "#8fd3f4", accent: "#ffffff"}
+  - {primary: "#2e7d32", secondary: "#111111", accent: "#ffffff"}
+  - {primary: "#ffd100", secondary: "#0b3d91", accent: "#111111"}
+  - {primary: "#e8e8e8", secondary: "#c8102e", accent: "#111111"}
+  - {primary: "#5d4037", secondary: "#f5deb3", accent: "#ffffff"}
+kit_patterns: {solid: 3, stripes: 4, hoops: 2, halves: 2, sash: 1}
+club_suffixes: [United, Athletic, Rovers, Albion, Town, Wanderers, Sporting, Harriers, City, Rangers, County, Argyle]
+stadium_suffixes: [Park, Ground, Stadium, Arena, Road, Field, Gardens]
+crest_symbols: [stag, lion, anchor, tower, hawk, oak, bridge, wolf, star, ship, key, bull]
+crest_decorations: ["three wavy lines", "a crown", "crossed hammers", "a rising sun", "two keys", "a laurel wreath", "a chequered band"]
+sponsors: [Orrin Telecom, Valmere Savings, Kestrel Freight, Halden Brewing, Brightwater Energy, Corvane Motors, Lowmoor Dairy, Tessaly Air, Marrow & Dunne, Sablecross Insurance, Pellam Foods, Northgate Steel, Ilvane Bank, Quillon Software, Dovecote Homes, Reedwater Utilities]
+
+archetypes:
+  giants:
+    drama: "Expectations: nothing less than the title; an impatient board"
+    reputation: [85, 92]
+    quality: [72, 76]
+    style_weights: {possession: 4, gegen_press: 3, high_press: 3}
+    city_percentile: 0.0
+    income_m: [120, 150]
+    wage_budget_share: [0.55, 0.62]
+    wage_ratio: [0.90, 1.00]
+    transfer_budget_m: [60, 90]
+    balance_m: [40, 80]
+    debt_m: [0, 0]
+    stadium: {capacity: [52000, 62000], pitch_quality: [0.80, 0.95], atmosphere: [0.60, 0.80], proximity: [0.40, 0.60], surface: grass, length: [105, 110], width: [68, 75]}
+    fanbase: {size_k: [800, 1200], passion: [0.55, 0.75], toxicity: [0.20, 0.40], fickleness: [0.55, 0.80], away_following: [0.55, 0.80]}
+    board: {ambition: [85, 98], patience: [10, 30], meddling: [50, 80], budget_strictness: [30, 55], objective: {kind: league_position, target: "title"}}
+    facilities: {training: [82, 95], youth: [60, 78], medical: [80, 92], intake: [5, 6]}
+    founded: [1870, 1895]
+    academy_bonus: 0
+    young_squad: false
+    nicknames: [the Lions, the Crowns, the Eagles]
+    culture_tags: [glamour, expectations, big_stage]
+  challengers:
+    drama: "Rich-ish rivals of the Giants; the city derby pairs them"
+    reputation: [75, 82]
+    quality: [68, 72]
+    style_weights: {high_press: 4, wing_play: 3, gegen_press: 2}
+    city_percentile: 0.1
+    income_m: [88, 110]
+    wage_budget_share: [0.56, 0.63]
+    wage_ratio: [0.90, 1.00]
+    transfer_budget_m: [40, 60]
+    balance_m: [20, 50]
+    debt_m: [0, 10]
+    stadium: {capacity: [42000, 52000], pitch_quality: [0.75, 0.92], atmosphere: [0.60, 0.80], proximity: [0.45, 0.65], surface: grass, length: [104, 108], width: [68, 74]}
+    fanbase: {size_k: [500, 800], passion: [0.60, 0.80], toxicity: [0.25, 0.45], fickleness: [0.40, 0.65], away_following: [0.45, 0.70]}
+    board: {ambition: [75, 92], patience: [20, 45], meddling: [40, 70], budget_strictness: [35, 60], objective: {kind: league_position, target: "top 3"}}
+    facilities: {training: [72, 88], youth: [55, 75], medical: [70, 88], intake: [5, 6]}
+    founded: [1875, 1905]
+    academy_bonus: 0
+    young_squad: false
+    nicknames: [the Challengers, the Reds, the Blues, the Falcons]
+    culture_tags: [ambition, rivalry]
+  old_money:
+    drama: "Traditions, fading glory and a big, loyal fanbase"
+    reputation: [70, 78]
+    quality: [64, 68]
+    style_weights: {balanced: 3, direct: 3, wing_play: 2}
+    city_percentile: 0.25
+    income_m: [60, 75]
+    wage_budget_share: [0.58, 0.65]
+    wage_ratio: [0.90, 1.00]
+    transfer_budget_m: [20, 35]
+    balance_m: [10, 30]
+    debt_m: [5, 20]
+    stadium: {capacity: [38000, 48000], pitch_quality: [0.55, 0.75], atmosphere: [0.70, 0.90], proximity: [0.65, 0.85], surface: grass, length: [102, 106], width: [66, 72]}
+    fanbase: {size_k: [450, 700], passion: [0.70, 0.90], toxicity: [0.30, 0.55], fickleness: [0.20, 0.40], away_following: [0.50, 0.75]}
+    board: {ambition: [55, 75], patience: [40, 65], meddling: [50, 80], budget_strictness: [45, 70], objective: {kind: league_position, target: "top half"}}
+    facilities: {training: [55, 72], youth: [55, 72], medical: [55, 72], intake: [4, 5]}
+    founded: [1860, 1880]
+    academy_bonus: 0
+    young_squad: false
+    nicknames: [the Old Guard, the Reds, the Gentlemen]
+    culture_tags: [tradition, nostalgia, loyalty]
+  counter_punchers:
+    drama: "Tactical, well coached, and rarely out of the referee's notebook"
+    reputation: [60, 68]
+    quality: [62, 66]
+    style_weights: {counter_attacking: 5, low_block: 2, balanced: 1}
+    city_percentile: 0.4
+    income_m: [45, 60]
+    wage_budget_share: [0.56, 0.64]
+    wage_ratio: [0.88, 1.00]
+    transfer_budget_m: [15, 28]
+    balance_m: [5, 20]
+    debt_m: [0, 8]
+    stadium: {capacity: [26000, 34000], pitch_quality: [0.65, 0.85], atmosphere: [0.55, 0.75], proximity: [0.50, 0.70], surface: hybrid, length: [103, 107], width: [67, 72]}
+    fanbase: {size_k: [220, 380], passion: [0.55, 0.75], toxicity: [0.30, 0.50], fickleness: [0.35, 0.55], away_following: [0.30, 0.55]}
+    board: {ambition: [45, 65], patience: [45, 70], meddling: [25, 50], budget_strictness: [55, 75], objective: {kind: league_position, target: "top half"}}
+    facilities: {training: [60, 78], youth: [50, 68], medical: [60, 78], intake: [4, 5]}
+    founded: [1885, 1915]
+    academy_bonus: 0
+    young_squad: false
+    nicknames: [the Counters, the Foxes, the Vipers]
+    culture_tags: [tactical, discipline]
+  academy:
+    drama: "Great prospects, unreliable results"
+    reputation: [55, 65]
+    quality: [58, 62]
+    style_weights: {possession: 4, balanced: 2, high_press: 1}
+    city_percentile: 0.55
+    income_m: [35, 45]
+    wage_budget_share: [0.52, 0.60]
+    wage_ratio: [0.85, 0.98]
+    transfer_budget_m: [10, 20]
+    balance_m: [3, 15]
+    debt_m: [0, 5]
+    stadium: {capacity: [18000, 26000], pitch_quality: [0.70, 0.90], atmosphere: [0.45, 0.65], proximity: [0.45, 0.65], surface: hybrid, length: [103, 107], width: [67, 72]}
+    fanbase: {size_k: [120, 220], passion: [0.45, 0.65], toxicity: [0.10, 0.30], fickleness: [0.45, 0.70], away_following: [0.25, 0.45]}
+    board: {ambition: [50, 70], patience: [60, 85], meddling: [15, 40], budget_strictness: [50, 70], objective: {kind: youth, target: "promote three academy players"}}
+    facilities: {training: [70, 85], youth: [85, 95], medical: [60, 75], intake: [7, 8]}
+    founded: [1900, 1930]
+    academy_bonus: 6
+    young_squad: true
+    nicknames: [the Young Guns, the Cubs, the Saplings]
+    culture_tags: [youth_focus, development]
+  boom_and_bust:
+    drama: "In debt, high wages, and a hot-headed manager"
+    reputation: [50, 60]
+    quality: [58, 64]
+    style_weights: {gegen_press: 3, high_press: 3, wing_play: 2}
+    city_percentile: 0.6
+    income_m: [50, 65]
+    wage_budget_share: [0.90, 0.97]
+    wage_ratio: [1.05, 1.20]
+    transfer_budget_m: [5, 15]
+    balance_m: [-15, -3]
+    debt_m: [60, 90]
+    stadium: {capacity: [22000, 30000], pitch_quality: [0.60, 0.80], atmosphere: [0.55, 0.75], proximity: [0.50, 0.70], surface: grass, length: [102, 106], width: [66, 72]}
+    fanbase: {size_k: [150, 260], passion: [0.55, 0.75], toxicity: [0.35, 0.60], fickleness: [0.60, 0.85], away_following: [0.30, 0.50]}
+    board: {ambition: [70, 90], patience: [10, 30], meddling: [60, 90], budget_strictness: [10, 30], objective: {kind: financial, target: "reduce the debt"}}
+    facilities: {training: [50, 68], youth: [40, 58], medical: [45, 62], intake: [4, 5]}
+    founded: [1895, 1925]
+    academy_bonus: 0
+    young_squad: false
+    nicknames: [the Gamblers, the Sparks, the Rockets]
+    culture_tags: [volatile, ambition, debt]
+  grafters:
+    drama: "A hostile small ground and plenty of fouls"
+    reputation: [45, 55]
+    quality: [54, 58]
+    style_weights: {direct: 4, low_block: 3, counter_attacking: 1}
+    city_percentile: 0.8
+    income_m: [25, 35]
+    wage_budget_share: [0.55, 0.63]
+    wage_ratio: [0.88, 1.00]
+    transfer_budget_m: [3, 9]
+    balance_m: [1, 8]
+    debt_m: [0, 5]
+    stadium: {capacity: [9000, 15000], pitch_quality: [0.35, 0.55], atmosphere: [0.80, 0.95], proximity: [0.80, 0.95], surface: grass, length: [100, 103], width: [64, 67]}
+    fanbase: {size_k: [60, 110], passion: [0.80, 0.95], toxicity: [0.60, 0.85], fickleness: [0.15, 0.35], away_following: [0.15, 0.30]}
+    board: {ambition: [30, 50], patience: [50, 75], meddling: [30, 55], budget_strictness: [60, 80], objective: {kind: league_position, target: "avoid the bottom two"}}
+    facilities: {training: [40, 58], youth: [35, 52], medical: [40, 58], intake: [3, 4]}
+    founded: [1890, 1920]
+    academy_bonus: 0
+    young_squad: false
+    nicknames: [the Grafters, the Bulldogs, the Hammers]
+    culture_tags: [grit, hostile_ground, discipline_problems]
+  minnows:
+    drama: "Plucky underdogs; the upset generator"
+    reputation: [35, 45]
+    quality: [50, 55]
+    style_weights: {low_block: 4, direct: 3, counter_attacking: 2}
+    city_percentile: 1.0
+    income_m: [12, 18]
+    wage_budget_share: [0.55, 0.65]
+    wage_ratio: [0.88, 1.00]
+    transfer_budget_m: [1, 4]
+    balance_m: [0, 4]
+    debt_m: [0, 3]
+    stadium: {capacity: [8000, 12000], pitch_quality: [0.40, 0.60], atmosphere: [0.65, 0.85], proximity: [0.70, 0.90], surface: grass, length: [100, 104], width: [64, 68]}
+    fanbase: {size_k: [30, 70], passion: [0.65, 0.85], toxicity: [0.20, 0.40], fickleness: [0.10, 0.30], away_following: [0.10, 0.25]}
+    board: {ambition: [20, 40], patience: [65, 90], meddling: [10, 35], budget_strictness: [65, 85], objective: {kind: league_position, target: "avoid finishing last"}}
+    facilities: {training: [30, 48], youth: [30, 48], medical: [30, 48], intake: [3, 4]}
+    founded: [1900, 1935]
+    academy_bonus: 2
+    young_squad: false
+    nicknames: [the Minnows, the Pluckers, the Terriers]
+    culture_tags: [underdog, community]
+
+rivalries:
+  - {a: giants, b: challengers, intensity: 0.9, label: "The City Derby", origin: "Two big clubs and a century of one-upmanship"}
+  - {a: old_money, b: grafters, intensity: 0.8, label: "The Old Road Derby", origin: "A feud over a stolen cup in 1921"}
+  - {a: academy, b: boom_and_bust, intensity: 0.5, label: "The Debt Dispute", origin: "A prospect poached on a loan that was never repaid"}

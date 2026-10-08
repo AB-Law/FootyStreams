@@ -1,0 +1,271 @@
+# Invented name cultures. Six are regions of the home nation (Valmere); eight are foreign nations.
+# A syllable is onset + nucleus + coda, drawn by weight. Given names end in a weighted ending;
+# surnames are root+suffix, a compound of two roots, or a particle plus root+suffix.
+# stress: which syllable carries the stress in the respelling (first | last | penult).
+cultures:
+  highland:
+    kind: region
+    label: Highland
+    onsets: {k: 4, t: 3, d: 3, br: 2, gr: 2, dr: 2, sk: 1, kr: 2, h: 1, b: 2, g: 2}
+    nuclei: {a: 5, o: 4, u: 3, e: 3, ai: 1}
+    codas: {"": 5, r: 3, n: 3, k: 2, rn: 1, lt: 1, th: 1}
+    stress: first
+    given:
+      syllables: {1: 2, 2: 6, 3: 2}
+      male_endings: {an: 3, ek: 2, or: 3, ar: 2, ach: 1, "": 1}
+      female_endings: {a: 4, ra: 2, ith: 1, ena: 2}
+    surname:
+      shapes: {root_suffix: 6, compound: 2, particle: 1}
+      root_syllables: {1: 4, 2: 4}
+      suffixes: {ach: 3, ven: 3, dun: 2, mor: 2, gar: 2, skel: 1}
+      particles: [ve, ar]
+    hyphen_share: 0.03
+    diacritics: {}
+    diacritic_rate: 0.0
+  coastal:
+    kind: region
+    label: Coastal
+    onsets: {l: 4, m: 4, n: 3, v: 3, s: 3, r: 3, f: 2, sh: 1, ll: 1}
+    nuclei: {a: 5, e: 4, i: 3, o: 3, ia: 2, ea: 1, io: 1}
+    codas: {"": 7, n: 3, l: 2, s: 2, r: 1}
+    stress: penult
+    given:
+      syllables: {2: 5, 3: 5}
+      male_endings: {io: 3, an: 2, el: 3, ero: 2, ian: 2}
+      female_endings: {ia: 4, ella: 2, ina: 3, ene: 2}
+    surname:
+      shapes: {root_suffix: 8, compound: 1, particle: 1}
+      root_syllables: {1: 3, 2: 5}
+      suffixes: {ani: 3, elle: 2, ora: 3, ieri: 2, ane: 2, aro: 2}
+      particles: [ve, tho]
+    hyphen_share: 0.02
+    diacritics: {e: é}
+    diacritic_rate: 0.12
+  rivervale:
+    kind: region
+    label: Rivervale
+    onsets: {b: 3, w: 3, f: 3, h: 3, m: 3, st: 2, fl: 1, br: 2, p: 2, sh: 1}
+    nuclei: {e: 5, i: 3, a: 3, oo: 2, ou: 1, y: 1}
+    codas: {"": 3, ld: 3, nd: 2, rd: 2, rn: 2, lm: 1, st: 2, ft: 1}
+    stress: first
+    given:
+      syllables: {1: 3, 2: 6, 3: 1}
+      male_endings: {ld: 3, rin: 2, wen: 2, mund: 2, et: 2}
+      female_endings: {wyn: 3, eth: 2, ild: 2, a: 3}
+    surname:
+      shapes: {root_suffix: 3, compound: 6, particle: 1}
+      root_syllables: {1: 6, 2: 2}
+      suffixes: {hald: 3, mere: 3, wend: 2, holt: 2, stead: 1}
+      particles: [ar]
+    hyphen_share: 0.04
+    diacritics: {}
+    diacritic_rate: 0.0
+  portside:
+    kind: region
+    label: Portside
+    onsets: {p: 3, c: 3, z: 2, j: 2, ch: 2, tr: 2, d: 3, r: 2, qu: 1, v: 2}
+    nuclei: {a: 4, e: 3, o: 4, u: 2, i: 2, ue: 1}
+    codas: {"": 4, x: 1, z: 2, n: 2, s: 3, t: 2, m: 1}
+    stress: last
+    given:
+      syllables: {2: 6, 3: 4}
+      male_endings: {ez: 3, o: 3, in: 2, as: 2, ett: 2}
+      female_endings: {ita: 3, ina: 2, ette: 2, osa: 2}
+    surname:
+      shapes: {root_suffix: 7, compound: 2, particle: 2}
+      root_syllables: {1: 3, 2: 5}
+      suffixes: {quin: 2, oza: 3, ettan: 2, aldo: 2, iz: 3, uela: 1}
+      particles: [ve, ar, tho]
+    hyphen_share: 0.05
+    diacritics: {a: á, o: ó}
+    diacritic_rate: 0.15
+  borderlands:
+    kind: region
+    label: Borderlands
+    onsets: {g: 3, j: 3, ts: 2, z: 3, ch: 3, v: 2, y: 2, th: 2, sz: 1, kh: 1}
+    nuclei: {a: 4, e: 3, i: 3, y: 2, au: 2, ei: 1}
+    codas: {"": 3, s: 3, sz: 1, k: 2, ch: 2, m: 2, nt: 1}
+    stress: first
+    given:
+      syllables: {2: 7, 3: 3}
+      male_endings: {is: 3, ek: 3, as: 2, ik: 2, ul: 1}
+      female_endings: {ka: 3, ija: 2, eta: 3, ya: 2}
+    surname:
+      shapes: {root_suffix: 7, compound: 3, particle: 1}
+      root_syllables: {1: 3, 2: 5}
+      suffixes: {ski: 3, owi: 2, ach: 2, enko: 3, ytz: 2}
+      particles: [ve]
+    hyphen_share: 0.30
+    diacritics: {e: ě, s: š}
+    diacritic_rate: 0.10
+  isles:
+    kind: region
+    label: Isles
+    onsets: {h: 3, s: 3, th: 2, r: 2, j: 2, v: 3, g: 2, bj: 1, sv: 2, fr: 2}
+    nuclei: {a: 4, o: 4, i: 3, u: 3, ei: 1, au: 1}
+    codas: {"": 3, r: 3, n: 3, s: 2, ld: 1, rn: 1, nd: 1}
+    stress: first
+    given:
+      syllables: {1: 2, 2: 7, 3: 1}
+      male_endings: {ar: 3, ir: 2, ulf: 2, nir: 2, "on": 2}
+      female_endings: {dis: 3, a: 3, ild: 2, unn: 2}
+    surname:
+      shapes: {root_suffix: 7, compound: 2, particle: 1}
+      root_syllables: {1: 4, 2: 4}
+      suffixes: {sund: 3, nir: 2, uld: 2, sen: 3, vik: 2, fell: 1}
+      particles: [af, ma]
+    hyphen_share: 0.02
+    diacritics: {o: ø}
+    diacritic_rate: 0.10
+  aldovia:
+    kind: nation
+    label: Aldovian
+    onsets: {v: 3, z: 3, zh: 1, dr: 2, mr: 1, bl: 2, st: 3, pr: 2, vl: 2, sl: 1, k: 2, m: 2}
+    nuclei: {a: 5, o: 4, i: 3, e: 3, u: 2}
+    codas: {"": 4, k: 3, v: 3, n: 3, sk: 1, st: 2, m: 2}
+    stress: penult
+    given:
+      syllables: {2: 6, 3: 4}
+      male_endings: {imir: 3, slav: 2, ek: 3, an: 2, ko: 3}
+      female_endings: {ka: 4, ina: 2, mila: 3, ya: 2}
+    surname:
+      shapes: {root_suffix: 9, compound: 1, particle: 0}
+      root_syllables: {1: 2, 2: 6}
+      suffixes: {ov: 4, ek: 3, ic: 3, ski: 2, nik: 2, ev: 2}
+      particles: []
+    hyphen_share: 0.02
+    diacritics: {c: č, s: š}
+    diacritic_rate: 0.15
+  brevane:
+    kind: nation
+    label: Brevanese
+    onsets: {b: 3, r: 3, l: 3, ch: 2, j: 2, m: 3, f: 2, g: 2, cl: 1, d: 3}
+    nuclei: {ou: 3, eu: 2, ai: 3, e: 4, o: 3, a: 3, oi: 1}
+    codas: {"": 6, t: 3, n: 3, r: 2, d: 1, l: 1}
+    stress: last
+    given:
+      syllables: {2: 7, 3: 3}
+      male_endings: {ien: 3, ard: 2, ot: 2, el: 3, ique: 2}
+      female_endings: {ette: 3, ine: 3, elle: 2, aine: 2}
+    surname:
+      shapes: {root_suffix: 7, compound: 1, particle: 2}
+      root_syllables: {1: 3, 2: 5}
+      suffixes: {eau: 3, ier: 3, ault: 2, onne: 2, ille: 2, ard: 2}
+      particles: [de, ve]
+    hyphen_share: 0.08
+    diacritics: {e: é, a: à}
+    diacritic_rate: 0.20
+  corsanth:
+    kind: nation
+    label: Corsanthine
+    onsets: {t: 3, p: 3, r: 3, s: 3, m: 3, l: 2, g: 2, c: 3, f: 2, n: 2, v: 2}
+    nuclei: {a: 6, e: 4, i: 4, o: 5, u: 1}
+    codas: {"": 7, n: 3, s: 2, r: 2, l: 2, nt: 2}
+    stress: penult
+    given:
+      syllables: {2: 5, 3: 5}
+      male_endings: {o: 5, e: 2, ino: 2, aldo: 1, ante: 1}
+      female_endings: {a: 5, ina: 3, etta: 2, ia: 2}
+    surname:
+      shapes: {root_suffix: 8, compound: 1, particle: 1}
+      root_syllables: {1: 2, 2: 6}
+      suffixes: {ini: 3, oli: 3, ara: 2, ante: 2, elli: 3, ucci: 1}
+      particles: [di]
+    hyphen_share: 0.03
+    diacritics: {}
+    diacritic_rate: 0.0
+  dravik:
+    kind: nation
+    label: Dravikan
+    onsets: {dr: 3, kr: 3, gr: 3, sk: 3, sv: 2, h: 3, br: 2, tr: 2, fj: 1, r: 2, n: 2}
+    nuclei: {a: 5, i: 3, o: 3, u: 3, ä: 2, e: 2}
+    codas: {"": 2, r: 3, n: 3, nd: 2, rk: 2, ng: 2, st: 2, lm: 1}
+    stress: first
+    given:
+      syllables: {1: 3, 2: 6, 3: 1}
+      male_endings: {mund: 3, bert: 2, vald: 3, ric: 2, helm: 2}
+      female_endings: {gard: 3, trud: 2, hild: 3, a: 2}
+    surname:
+      shapes: {root_suffix: 4, compound: 5, particle: 1}
+      root_syllables: {1: 6, 2: 2}
+      suffixes: {vik: 3, gard: 3, mund: 2, heim: 2, ström: 2, borg: 2}
+      particles: [von, af]
+    hyphen_share: 0.02
+    diacritics: {}
+    diacritic_rate: 0.0
+  estmark:
+    kind: nation
+    label: Estmarker
+    onsets: {k: 3, s: 3, t: 3, v: 3, l: 3, r: 3, p: 2, m: 2, h: 2, j: 2}
+    nuclei: {aa: 2, ee: 2, o: 3, a: 4, e: 3, i: 3, u: 2, ü: 1}
+    codas: {"": 4, s: 4, l: 3, n: 3, m: 2, t: 2, k: 1}
+    stress: first
+    given:
+      syllables: {2: 7, 3: 3}
+      male_endings: {as: 3, is: 3, us: 2, ar: 2, o: 2}
+      female_endings: {ie: 3, a: 3, ja: 2, i: 3}
+    surname:
+      shapes: {root_suffix: 8, compound: 2, particle: 0}
+      root_syllables: {1: 4, 2: 4}
+      suffixes: {s: 3, is: 3, mäe: 2, nen: 3, las: 2, ste: 1}
+      particles: []
+    hyphen_share: 0.01
+    diacritics: {a: ä}
+    diacritic_rate: 0.15
+  fenhal:
+    kind: nation
+    label: Fenhalan
+    onsets: {c: 3, d: 3, b: 3, m: 3, gw: 2, tr: 2, fl: 1, ll: 1, ph: 1, n: 3, g: 2}
+    nuclei: {ae: 2, ia: 2, o: 4, a: 4, u: 2, ei: 2, y: 2}
+    codas: {"": 4, n: 3, rn: 2, th: 2, dd: 1, r: 3, g: 1}
+    stress: first
+    given:
+      syllables: {2: 7, 3: 3}
+      male_endings: {an: 3, ryn: 2, eth: 2, wyn: 2, lan: 2}
+      female_endings: {wen: 3, ys: 2, ia: 2, eira: 2}
+    surname:
+      shapes: {root_suffix: 7, compound: 2, particle: 2}
+      root_syllables: {1: 3, 2: 5}
+      suffixes: {ven: 3, ryn: 2, lleth: 1, dyn: 2, ach: 2, orn: 2}
+      particles: [ap, ar]
+    hyphen_share: 0.04
+    diacritics: {w: ŵ}
+    diacritic_rate: 0.05
+  gorlund:
+    kind: nation
+    label: Gorlander
+    onsets: {b: 3, c: 2, d: 3, h: 3, m: 3, p: 3, r: 3, s: 3, t: 3, w: 3, th: 1}
+    nuclei: {a: 4, e: 4, i: 3, o: 3, u: 3}
+    codas: {"": 2, ck: 2, ll: 2, rd: 2, nt: 3, sh: 1, ng: 2, tt: 2, ss: 1}
+    stress: first
+    given:
+      syllables: {1: 4, 2: 6}
+      male_endings: {ley: 3, ton: 3, ric: 2, win: 2, den: 2}
+      female_endings: {ley: 2, lyn: 3, beth: 2, a: 3}
+    surname:
+      shapes: {root_suffix: 4, compound: 5, particle: 0}
+      root_syllables: {1: 6, 2: 2}
+      suffixes: {ton: 3, ham: 2, worth: 2, field: 2, by: 2, wood: 1}
+      particles: []
+    hyphen_share: 0.06
+    diacritics: {}
+    diacritic_rate: 0.0
+  hasari:
+    kind: nation
+    label: Hasari
+    onsets: {h: 3, s: 3, z: 3, k: 3, m: 3, n: 3, sh: 2, kh: 2, r: 2, f: 1, y: 1}
+    nuclei: {a: 6, i: 4, u: 3, ai: 2, e: 2}
+    codas: {"": 4, r: 3, m: 3, n: 3, z: 2, l: 2, d: 1}
+    stress: penult
+    given:
+      syllables: {2: 6, 3: 4}
+      male_endings: {im: 3, ar: 3, uz: 2, id: 2, an: 3}
+      female_endings: {ira: 3, ana: 3, ia: 2, ine: 2}
+    surname:
+      shapes: {root_suffix: 7, compound: 1, particle: 3}
+      root_syllables: {1: 2, 2: 6}
+      suffixes: {ari: 4, azi: 2, oun: 2, ir: 3, aqi: 1, ezar: 1}
+      particles: [al, ke]
+    hyphen_share: 0.04
+    diacritics: {a: ā}
+    diacritic_rate: 0.10

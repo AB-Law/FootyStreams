@@ -1,0 +1,4338 @@
+[
+  {
+    "a": {
+      "id": "plr_0000d",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000e",
+      "kind": "player"
+    },
+    "id": "rel_00001",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6671,
+    "valence": 0.5555
+  },
+  {
+    "a": {
+      "id": "plr_0000e",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000o",
+      "kind": "player"
+    },
+    "id": "rel_00002",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4218,
+    "valence": 0.5756
+  },
+  {
+    "a": {
+      "id": "plr_0000e",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000g",
+      "kind": "player"
+    },
+    "id": "rel_00003",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7459,
+    "valence": 0.3247
+  },
+  {
+    "a": {
+      "id": "plr_0000e",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000i",
+      "kind": "player"
+    },
+    "id": "rel_00004",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5405,
+    "valence": 0.234
+  },
+  {
+    "a": {
+      "id": "plr_0000d",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000o",
+      "kind": "player"
+    },
+    "id": "rel_00005",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4935,
+    "valence": 0.7003
+  },
+  {
+    "a": {
+      "id": "plr_0000d",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000g",
+      "kind": "player"
+    },
+    "id": "rel_00006",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5261,
+    "valence": 0.6592
+  },
+  {
+    "a": {
+      "id": "plr_0000d",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000i",
+      "kind": "player"
+    },
+    "id": "rel_00007",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7711,
+    "valence": 0.83
+  },
+  {
+    "a": {
+      "id": "plr_0000g",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000o",
+      "kind": "player"
+    },
+    "id": "rel_00008",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5509,
+    "valence": 0.3063
+  },
+  {
+    "a": {
+      "id": "plr_0000i",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000o",
+      "kind": "player"
+    },
+    "id": "rel_00009",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6899,
+    "valence": 0.8677
+  },
+  {
+    "a": {
+      "id": "plr_0000g",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000i",
+      "kind": "player"
+    },
+    "id": "rel_0000a",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5577,
+    "valence": 0.3302
+  },
+  {
+    "a": {
+      "id": "plr_00009",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000p",
+      "kind": "player"
+    },
+    "id": "rel_0000b",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4998,
+    "valence": 0.8952
+  },
+  {
+    "a": {
+      "id": "plr_00004",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000p",
+      "kind": "player"
+    },
+    "id": "rel_0000c",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6849,
+    "valence": 0.2213
+  },
+  {
+    "a": {
+      "id": "plr_0000m",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000p",
+      "kind": "player"
+    },
+    "id": "rel_0000d",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8092,
+    "valence": 0.8485
+  },
+  {
+    "a": {
+      "id": "plr_00004",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00009",
+      "kind": "player"
+    },
+    "id": "rel_0000e",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6296,
+    "valence": 0.5066
+  },
+  {
+    "a": {
+      "id": "plr_00009",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000m",
+      "kind": "player"
+    },
+    "id": "rel_0000f",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6398,
+    "valence": 0.2957
+  },
+  {
+    "a": {
+      "id": "plr_00004",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000m",
+      "kind": "player"
+    },
+    "id": "rel_0000g",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.668,
+    "valence": 0.7925
+  },
+  {
+    "a": {
+      "id": "plr_00002",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000f",
+      "kind": "player"
+    },
+    "id": "rel_0000h",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4618,
+    "valence": 0.2833
+  },
+  {
+    "a": {
+      "id": "plr_00002",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000a",
+      "kind": "player"
+    },
+    "id": "rel_0000i",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7623,
+    "valence": 0.5442
+  },
+  {
+    "a": {
+      "id": "plr_00001",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00002",
+      "kind": "player"
+    },
+    "id": "rel_0000j",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4256,
+    "valence": 0.7104
+  },
+  {
+    "a": {
+      "id": "plr_0000a",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000f",
+      "kind": "player"
+    },
+    "id": "rel_0000k",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6089,
+    "valence": 0.5708
+  },
+  {
+    "a": {
+      "id": "plr_00001",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000f",
+      "kind": "player"
+    },
+    "id": "rel_0000l",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4308,
+    "valence": 0.2819
+  },
+  {
+    "a": {
+      "id": "plr_00001",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000a",
+      "kind": "player"
+    },
+    "id": "rel_0000m",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7938,
+    "valence": 0.8561
+  },
+  {
+    "a": {
+      "id": "plr_0000h",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000n",
+      "kind": "player"
+    },
+    "id": "rel_0000n",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8993,
+    "valence": 0.2542
+  },
+  {
+    "a": {
+      "id": "plr_0000l",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000n",
+      "kind": "player"
+    },
+    "id": "rel_0000o",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.729,
+    "valence": 0.8485
+  },
+  {
+    "a": {
+      "id": "plr_0000k",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000n",
+      "kind": "player"
+    },
+    "id": "rel_0000p",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4308,
+    "valence": 0.8068
+  },
+  {
+    "a": {
+      "id": "plr_0000n",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000p",
+      "kind": "player"
+    },
+    "id": "rel_0000q",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8808,
+    "valence": 0.4051
+  },
+  {
+    "a": {
+      "id": "plr_0000h",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000l",
+      "kind": "player"
+    },
+    "id": "rel_0000r",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4433,
+    "valence": 0.6073
+  },
+  {
+    "a": {
+      "id": "plr_0000h",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000k",
+      "kind": "player"
+    },
+    "id": "rel_0000s",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.675,
+    "valence": 0.4261
+  },
+  {
+    "a": {
+      "id": "plr_0000h",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000p",
+      "kind": "player"
+    },
+    "id": "rel_0000t",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8771,
+    "valence": 0.423
+  },
+  {
+    "a": {
+      "id": "plr_0000k",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000l",
+      "kind": "player"
+    },
+    "id": "rel_0000u",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7494,
+    "valence": 0.5159
+  },
+  {
+    "a": {
+      "id": "plr_0000l",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000p",
+      "kind": "player"
+    },
+    "id": "rel_0000v",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.665,
+    "valence": 0.8652
+  },
+  {
+    "a": {
+      "id": "plr_0000k",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000p",
+      "kind": "player"
+    },
+    "id": "rel_0000w",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6226,
+    "valence": 0.2214
+  },
+  {
+    "a": {
+      "id": "plr_0000l",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000r",
+      "kind": "player"
+    },
+    "id": "rel_0000x",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5225,
+    "valence": 0.6362
+  },
+  {
+    "a": {
+      "id": "plr_0000i",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0000v",
+      "kind": "player"
+    },
+    "id": "rel_0000y",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7709,
+    "valence": 0.263
+  },
+  {
+    "a": {
+      "id": "mgr_00001",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0000e",
+      "kind": "player"
+    },
+    "id": "rel_0000z",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4158,
+    "valence": 0.3919
+  },
+  {
+    "a": {
+      "id": "mgr_00001",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0000o",
+      "kind": "player"
+    },
+    "id": "rel_00010",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7145,
+    "valence": 0.8415
+  },
+  {
+    "a": {
+      "id": "mgr_00001",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00008",
+      "kind": "player"
+    },
+    "id": "rel_00011",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6316,
+    "valence": 0.693
+  },
+  {
+    "a": {
+      "id": "mgr_00001",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0000j",
+      "kind": "player"
+    },
+    "id": "rel_00012",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8178,
+    "valence": 0.7613
+  },
+  {
+    "a": {
+      "id": "mgr_00001",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0000p",
+      "kind": "player"
+    },
+    "id": "rel_00013",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6325,
+    "valence": 0.6597
+  },
+  {
+    "a": {
+      "id": "mgr_00001",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0000k",
+      "kind": "player"
+    },
+    "id": "rel_00014",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.671,
+    "valence": 0.8877
+  },
+  {
+    "a": {
+      "id": "mgr_00001",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "clb_00001",
+      "kind": "club"
+    },
+    "id": "rel_00015",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8498,
+    "valence": -0.1759
+  },
+  {
+    "a": {
+      "id": "plr_00011",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00016",
+      "kind": "player"
+    },
+    "id": "rel_00016",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6294,
+    "valence": 0.7584
+  },
+  {
+    "a": {
+      "id": "plr_00011",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00017",
+      "kind": "player"
+    },
+    "id": "rel_00017",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6012,
+    "valence": 0.2222
+  },
+  {
+    "a": {
+      "id": "plr_00011",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00015",
+      "kind": "player"
+    },
+    "id": "rel_00018",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8338,
+    "valence": 0.7434
+  },
+  {
+    "a": {
+      "id": "plr_00016",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00017",
+      "kind": "player"
+    },
+    "id": "rel_00019",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7239,
+    "valence": 0.8217
+  },
+  {
+    "a": {
+      "id": "plr_00015",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00016",
+      "kind": "player"
+    },
+    "id": "rel_0001a",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5977,
+    "valence": 0.2905
+  },
+  {
+    "a": {
+      "id": "plr_00015",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00017",
+      "kind": "player"
+    },
+    "id": "rel_0001b",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5995,
+    "valence": 0.4417
+  },
+  {
+    "a": {
+      "id": "plr_00013",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00016",
+      "kind": "player"
+    },
+    "id": "rel_0001c",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.401,
+    "valence": 0.391
+  },
+  {
+    "a": {
+      "id": "plr_00014",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00016",
+      "kind": "player"
+    },
+    "id": "rel_0001d",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.498,
+    "valence": 0.4371
+  },
+  {
+    "a": {
+      "id": "plr_00011",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00013",
+      "kind": "player"
+    },
+    "id": "rel_0001e",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4593,
+    "valence": 0.7072
+  },
+  {
+    "a": {
+      "id": "plr_00011",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00014",
+      "kind": "player"
+    },
+    "id": "rel_0001f",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4164,
+    "valence": 0.3646
+  },
+  {
+    "a": {
+      "id": "plr_00013",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00017",
+      "kind": "player"
+    },
+    "id": "rel_0001g",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4348,
+    "valence": 0.568
+  },
+  {
+    "a": {
+      "id": "plr_00014",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00017",
+      "kind": "player"
+    },
+    "id": "rel_0001h",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.675,
+    "valence": 0.6174
+  },
+  {
+    "a": {
+      "id": "plr_00013",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00014",
+      "kind": "player"
+    },
+    "id": "rel_0001i",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6721,
+    "valence": 0.6644
+  },
+  {
+    "a": {
+      "id": "plr_0000z",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00014",
+      "kind": "player"
+    },
+    "id": "rel_0001j",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8734,
+    "valence": 0.5451
+  },
+  {
+    "a": {
+      "id": "plr_0000z",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0001b",
+      "kind": "player"
+    },
+    "id": "rel_0001k",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8947,
+    "valence": 0.4056
+  },
+  {
+    "a": {
+      "id": "plr_0000z",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00010",
+      "kind": "player"
+    },
+    "id": "rel_0001l",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.537,
+    "valence": 0.2264
+  },
+  {
+    "a": {
+      "id": "plr_00014",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0001b",
+      "kind": "player"
+    },
+    "id": "rel_0001m",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4992,
+    "valence": 0.4877
+  },
+  {
+    "a": {
+      "id": "plr_00010",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00014",
+      "kind": "player"
+    },
+    "id": "rel_0001n",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.873,
+    "valence": 0.2642
+  },
+  {
+    "a": {
+      "id": "plr_00010",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0001b",
+      "kind": "player"
+    },
+    "id": "rel_0001o",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5204,
+    "valence": 0.8975
+  },
+  {
+    "a": {
+      "id": "plr_0001c",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0001n",
+      "kind": "player"
+    },
+    "id": "rel_0001p",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.842,
+    "valence": 0.6582
+  },
+  {
+    "a": {
+      "id": "plr_0001h",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0001u",
+      "kind": "player"
+    },
+    "id": "rel_0001q",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7016,
+    "valence": 0.7852
+  },
+  {
+    "a": {
+      "id": "mgr_00002",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0001l",
+      "kind": "player"
+    },
+    "id": "rel_0001r",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8171,
+    "valence": 0.1841
+  },
+  {
+    "a": {
+      "id": "mgr_00002",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0001m",
+      "kind": "player"
+    },
+    "id": "rel_0001s",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.619,
+    "valence": 0.6894
+  },
+  {
+    "a": {
+      "id": "mgr_00002",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00013",
+      "kind": "player"
+    },
+    "id": "rel_0001t",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4136,
+    "valence": 0.4935
+  },
+  {
+    "a": {
+      "id": "mgr_00002",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0001b",
+      "kind": "player"
+    },
+    "id": "rel_0001u",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7842,
+    "valence": 0.4479
+  },
+  {
+    "a": {
+      "id": "mgr_00002",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0000y",
+      "kind": "player"
+    },
+    "id": "rel_0001v",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5719,
+    "valence": 0.1193
+  },
+  {
+    "a": {
+      "id": "mgr_00002",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00011",
+      "kind": "player"
+    },
+    "id": "rel_0001w",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6102,
+    "valence": 0.2784
+  },
+  {
+    "a": {
+      "id": "mgr_00002",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "clb_00002",
+      "kind": "club"
+    },
+    "id": "rel_0001x",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.889,
+    "valence": 0.1389
+  },
+  {
+    "a": {
+      "id": "plr_00028",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002b",
+      "kind": "player"
+    },
+    "id": "rel_0001y",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7974,
+    "valence": 0.6178
+  },
+  {
+    "a": {
+      "id": "plr_0002a",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002b",
+      "kind": "player"
+    },
+    "id": "rel_0001z",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8826,
+    "valence": 0.7256
+  },
+  {
+    "a": {
+      "id": "plr_00028",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002a",
+      "kind": "player"
+    },
+    "id": "rel_00020",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4296,
+    "valence": 0.7653
+  },
+  {
+    "a": {
+      "id": "plr_0002g",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002h",
+      "kind": "player"
+    },
+    "id": "rel_00021",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4708,
+    "valence": 0.8787
+  },
+  {
+    "a": {
+      "id": "plr_00022",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002g",
+      "kind": "player"
+    },
+    "id": "rel_00022",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8928,
+    "valence": 0.6338
+  },
+  {
+    "a": {
+      "id": "plr_00021",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002g",
+      "kind": "player"
+    },
+    "id": "rel_00023",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.623,
+    "valence": 0.2846
+  },
+  {
+    "a": {
+      "id": "plr_00027",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002g",
+      "kind": "player"
+    },
+    "id": "rel_00024",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5369,
+    "valence": 0.6228
+  },
+  {
+    "a": {
+      "id": "plr_00022",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002h",
+      "kind": "player"
+    },
+    "id": "rel_00025",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5125,
+    "valence": 0.8569
+  },
+  {
+    "a": {
+      "id": "plr_00021",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002h",
+      "kind": "player"
+    },
+    "id": "rel_00026",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8223,
+    "valence": 0.3415
+  },
+  {
+    "a": {
+      "id": "plr_00027",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002h",
+      "kind": "player"
+    },
+    "id": "rel_00027",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6026,
+    "valence": 0.2493
+  },
+  {
+    "a": {
+      "id": "plr_00021",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00022",
+      "kind": "player"
+    },
+    "id": "rel_00028",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5495,
+    "valence": 0.6669
+  },
+  {
+    "a": {
+      "id": "plr_00022",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00027",
+      "kind": "player"
+    },
+    "id": "rel_00029",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4253,
+    "valence": 0.8271
+  },
+  {
+    "a": {
+      "id": "plr_00021",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00027",
+      "kind": "player"
+    },
+    "id": "rel_0002a",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6335,
+    "valence": 0.3698
+  },
+  {
+    "a": {
+      "id": "plr_00028",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002e",
+      "kind": "player"
+    },
+    "id": "rel_0002b",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6873,
+    "valence": 0.8961
+  },
+  {
+    "a": {
+      "id": "plr_0002b",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002e",
+      "kind": "player"
+    },
+    "id": "rel_0002c",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6839,
+    "valence": 0.7616
+  },
+  {
+    "a": {
+      "id": "plr_00024",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002e",
+      "kind": "player"
+    },
+    "id": "rel_0002d",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8285,
+    "valence": 0.209
+  },
+  {
+    "a": {
+      "id": "plr_0002d",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002e",
+      "kind": "player"
+    },
+    "id": "rel_0002e",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.887,
+    "valence": 0.8132
+  },
+  {
+    "a": {
+      "id": "plr_0002a",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002e",
+      "kind": "player"
+    },
+    "id": "rel_0002f",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.864,
+    "valence": 0.782
+  },
+  {
+    "a": {
+      "id": "plr_00029",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002e",
+      "kind": "player"
+    },
+    "id": "rel_0002g",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.844,
+    "valence": 0.5334
+  },
+  {
+    "a": {
+      "id": "plr_00024",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002d",
+      "kind": "player"
+    },
+    "id": "rel_0002h",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6777,
+    "valence": 0.8286
+  },
+  {
+    "a": {
+      "id": "plr_00024",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002a",
+      "kind": "player"
+    },
+    "id": "rel_0002i",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6789,
+    "valence": 0.8803
+  },
+  {
+    "a": {
+      "id": "plr_00024",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00029",
+      "kind": "player"
+    },
+    "id": "rel_0002j",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8836,
+    "valence": 0.2048
+  },
+  {
+    "a": {
+      "id": "plr_0002a",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002d",
+      "kind": "player"
+    },
+    "id": "rel_0002k",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7293,
+    "valence": 0.2444
+  },
+  {
+    "a": {
+      "id": "plr_00029",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002d",
+      "kind": "player"
+    },
+    "id": "rel_0002l",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.61,
+    "valence": 0.7987
+  },
+  {
+    "a": {
+      "id": "plr_00029",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002a",
+      "kind": "player"
+    },
+    "id": "rel_0002m",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5946,
+    "valence": 0.5421
+  },
+  {
+    "a": {
+      "id": "plr_0001z",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002p",
+      "kind": "player"
+    },
+    "id": "rel_0002n",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7283,
+    "valence": 0.5365
+  },
+  {
+    "a": {
+      "id": "plr_0002b",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0002p",
+      "kind": "player"
+    },
+    "id": "rel_0002o",
+    "kind": "rival",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.3503,
+    "valence": -0.2593
+  },
+  {
+    "a": {
+      "id": "mgr_00003",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00020",
+      "kind": "player"
+    },
+    "id": "rel_0002p",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8687,
+    "valence": 0.6468
+  },
+  {
+    "a": {
+      "id": "mgr_00003",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00023",
+      "kind": "player"
+    },
+    "id": "rel_0002q",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5861,
+    "valence": 0.6194
+  },
+  {
+    "a": {
+      "id": "mgr_00003",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00028",
+      "kind": "player"
+    },
+    "id": "rel_0002r",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5144,
+    "valence": 0.7861
+  },
+  {
+    "a": {
+      "id": "mgr_00003",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00029",
+      "kind": "player"
+    },
+    "id": "rel_0002s",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5628,
+    "valence": 0.7033
+  },
+  {
+    "a": {
+      "id": "mgr_00003",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0001y",
+      "kind": "player"
+    },
+    "id": "rel_0002t",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6632,
+    "valence": 0.4206
+  },
+  {
+    "a": {
+      "id": "mgr_00003",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00026",
+      "kind": "player"
+    },
+    "id": "rel_0002u",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5907,
+    "valence": 0.4986
+  },
+  {
+    "a": {
+      "id": "mgr_00003",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "clb_00003",
+      "kind": "club"
+    },
+    "id": "rel_0002v",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7196,
+    "valence": 0.7653
+  },
+  {
+    "a": {
+      "id": "plr_0002y",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00031",
+      "kind": "player"
+    },
+    "id": "rel_0002w",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5137,
+    "valence": 0.8723
+  },
+  {
+    "a": {
+      "id": "plr_0002y",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003g",
+      "kind": "player"
+    },
+    "id": "rel_0002x",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.819,
+    "valence": 0.5261
+  },
+  {
+    "a": {
+      "id": "plr_0002y",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003e",
+      "kind": "player"
+    },
+    "id": "rel_0002y",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8894,
+    "valence": 0.3057
+  },
+  {
+    "a": {
+      "id": "plr_0002y",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003c",
+      "kind": "player"
+    },
+    "id": "rel_0002z",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7232,
+    "valence": 0.8874
+  },
+  {
+    "a": {
+      "id": "plr_00031",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003g",
+      "kind": "player"
+    },
+    "id": "rel_00030",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8077,
+    "valence": 0.3233
+  },
+  {
+    "a": {
+      "id": "plr_00031",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003e",
+      "kind": "player"
+    },
+    "id": "rel_00031",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.785,
+    "valence": 0.2831
+  },
+  {
+    "a": {
+      "id": "plr_00031",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003c",
+      "kind": "player"
+    },
+    "id": "rel_00032",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7268,
+    "valence": 0.8588
+  },
+  {
+    "a": {
+      "id": "plr_0003e",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003g",
+      "kind": "player"
+    },
+    "id": "rel_00033",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7481,
+    "valence": 0.5147
+  },
+  {
+    "a": {
+      "id": "plr_0003c",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003g",
+      "kind": "player"
+    },
+    "id": "rel_00034",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6539,
+    "valence": 0.2582
+  },
+  {
+    "a": {
+      "id": "plr_0003c",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003e",
+      "kind": "player"
+    },
+    "id": "rel_00035",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6434,
+    "valence": 0.8185
+  },
+  {
+    "a": {
+      "id": "plr_0003e",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003f",
+      "kind": "player"
+    },
+    "id": "rel_00036",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6973,
+    "valence": 0.2736
+  },
+  {
+    "a": {
+      "id": "plr_0003f",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003g",
+      "kind": "player"
+    },
+    "id": "rel_00037",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4472,
+    "valence": 0.2171
+  },
+  {
+    "a": {
+      "id": "plr_0003d",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003f",
+      "kind": "player"
+    },
+    "id": "rel_00038",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4836,
+    "valence": 0.672
+  },
+  {
+    "a": {
+      "id": "plr_0003c",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003f",
+      "kind": "player"
+    },
+    "id": "rel_00039",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4055,
+    "valence": 0.5985
+  },
+  {
+    "a": {
+      "id": "plr_0003d",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003e",
+      "kind": "player"
+    },
+    "id": "rel_0003a",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7413,
+    "valence": 0.5574
+  },
+  {
+    "a": {
+      "id": "plr_0003d",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003g",
+      "kind": "player"
+    },
+    "id": "rel_0003b",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5603,
+    "valence": 0.4683
+  },
+  {
+    "a": {
+      "id": "plr_0003c",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003d",
+      "kind": "player"
+    },
+    "id": "rel_0003c",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.596,
+    "valence": 0.3079
+  },
+  {
+    "a": {
+      "id": "plr_00031",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00038",
+      "kind": "player"
+    },
+    "id": "rel_0003d",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7249,
+    "valence": 0.4623
+  },
+  {
+    "a": {
+      "id": "plr_0002y",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00038",
+      "kind": "player"
+    },
+    "id": "rel_0003e",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7394,
+    "valence": 0.3957
+  },
+  {
+    "a": {
+      "id": "plr_0002s",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003m",
+      "kind": "player"
+    },
+    "id": "rel_0003f",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6944,
+    "valence": 0.6375
+  },
+  {
+    "a": {
+      "id": "plr_00033",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003j",
+      "kind": "player"
+    },
+    "id": "rel_0003g",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5655,
+    "valence": 0.5938
+  },
+  {
+    "a": {
+      "id": "mgr_00004",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00036",
+      "kind": "player"
+    },
+    "id": "rel_0003h",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8053,
+    "valence": 0.6656
+  },
+  {
+    "a": {
+      "id": "mgr_00004",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00030",
+      "kind": "player"
+    },
+    "id": "rel_0003i",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4746,
+    "valence": 0.7621
+  },
+  {
+    "a": {
+      "id": "mgr_00004",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0003b",
+      "kind": "player"
+    },
+    "id": "rel_0003j",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8017,
+    "valence": 0.5749
+  },
+  {
+    "a": {
+      "id": "mgr_00004",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0002x",
+      "kind": "player"
+    },
+    "id": "rel_0003k",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8785,
+    "valence": 0.7688
+  },
+  {
+    "a": {
+      "id": "mgr_00004",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00035",
+      "kind": "player"
+    },
+    "id": "rel_0003l",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6932,
+    "valence": 0.7081
+  },
+  {
+    "a": {
+      "id": "mgr_00004",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0002z",
+      "kind": "player"
+    },
+    "id": "rel_0003m",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5518,
+    "valence": 0.2878
+  },
+  {
+    "a": {
+      "id": "mgr_00004",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "clb_00004",
+      "kind": "club"
+    },
+    "id": "rel_0003n",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7541,
+    "valence": 0.5568
+  },
+  {
+    "a": {
+      "id": "plr_0003s",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003z",
+      "kind": "player"
+    },
+    "id": "rel_0003o",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5334,
+    "valence": 0.2779
+  },
+  {
+    "a": {
+      "id": "plr_0003y",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003z",
+      "kind": "player"
+    },
+    "id": "rel_0003p",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5752,
+    "valence": 0.7461
+  },
+  {
+    "a": {
+      "id": "plr_0003z",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00045",
+      "kind": "player"
+    },
+    "id": "rel_0003q",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4301,
+    "valence": 0.414
+  },
+  {
+    "a": {
+      "id": "plr_0003r",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003z",
+      "kind": "player"
+    },
+    "id": "rel_0003r",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4227,
+    "valence": 0.4456
+  },
+  {
+    "a": {
+      "id": "plr_0003s",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003y",
+      "kind": "player"
+    },
+    "id": "rel_0003s",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4622,
+    "valence": 0.7448
+  },
+  {
+    "a": {
+      "id": "plr_0003s",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00045",
+      "kind": "player"
+    },
+    "id": "rel_0003t",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.41,
+    "valence": 0.44
+  },
+  {
+    "a": {
+      "id": "plr_0003r",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003s",
+      "kind": "player"
+    },
+    "id": "rel_0003u",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6923,
+    "valence": 0.8149
+  },
+  {
+    "a": {
+      "id": "plr_0003y",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00045",
+      "kind": "player"
+    },
+    "id": "rel_0003v",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7241,
+    "valence": 0.2357
+  },
+  {
+    "a": {
+      "id": "plr_0003r",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003y",
+      "kind": "player"
+    },
+    "id": "rel_0003w",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.748,
+    "valence": 0.7247
+  },
+  {
+    "a": {
+      "id": "plr_0003r",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00045",
+      "kind": "player"
+    },
+    "id": "rel_0003x",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4781,
+    "valence": 0.8724
+  },
+  {
+    "a": {
+      "id": "plr_0003s",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004a",
+      "kind": "player"
+    },
+    "id": "rel_0003y",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6922,
+    "valence": 0.8763
+  },
+  {
+    "a": {
+      "id": "plr_00045",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004a",
+      "kind": "player"
+    },
+    "id": "rel_0003z",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6271,
+    "valence": 0.4569
+  },
+  {
+    "a": {
+      "id": "plr_0003s",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003t",
+      "kind": "player"
+    },
+    "id": "rel_00040",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8624,
+    "valence": 0.4545
+  },
+  {
+    "a": {
+      "id": "plr_0003z",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004a",
+      "kind": "player"
+    },
+    "id": "rel_00041",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5638,
+    "valence": 0.425
+  },
+  {
+    "a": {
+      "id": "plr_0003t",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003z",
+      "kind": "player"
+    },
+    "id": "rel_00042",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6576,
+    "valence": 0.4363
+  },
+  {
+    "a": {
+      "id": "plr_0003t",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004a",
+      "kind": "player"
+    },
+    "id": "rel_00043",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5537,
+    "valence": 0.2135
+  },
+  {
+    "a": {
+      "id": "plr_0003y",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004a",
+      "kind": "player"
+    },
+    "id": "rel_00044",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7678,
+    "valence": 0.7875
+  },
+  {
+    "a": {
+      "id": "plr_0003t",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003y",
+      "kind": "player"
+    },
+    "id": "rel_00045",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4329,
+    "valence": 0.4412
+  },
+  {
+    "a": {
+      "id": "plr_0003v",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004k",
+      "kind": "player"
+    },
+    "id": "rel_00046",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7368,
+    "valence": 0.4897
+  },
+  {
+    "a": {
+      "id": "plr_00048",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004e",
+      "kind": "player"
+    },
+    "id": "rel_00047",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.66,
+    "valence": 0.6364
+  },
+  {
+    "a": {
+      "id": "mgr_00005",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0004c",
+      "kind": "player"
+    },
+    "id": "rel_00048",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6287,
+    "valence": 0.2014
+  },
+  {
+    "a": {
+      "id": "mgr_00005",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0003u",
+      "kind": "player"
+    },
+    "id": "rel_00049",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7104,
+    "valence": 0.8887
+  },
+  {
+    "a": {
+      "id": "mgr_00005",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0003s",
+      "kind": "player"
+    },
+    "id": "rel_0004a",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7448,
+    "valence": 0.6168
+  },
+  {
+    "a": {
+      "id": "mgr_00005",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00043",
+      "kind": "player"
+    },
+    "id": "rel_0004b",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4381,
+    "valence": 0.8276
+  },
+  {
+    "a": {
+      "id": "mgr_00005",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00047",
+      "kind": "player"
+    },
+    "id": "rel_0004c",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6522,
+    "valence": 0.6919
+  },
+  {
+    "a": {
+      "id": "mgr_00005",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0003x",
+      "kind": "player"
+    },
+    "id": "rel_0004d",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5903,
+    "valence": 0.586
+  },
+  {
+    "a": {
+      "id": "mgr_00005",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "clb_00005",
+      "kind": "club"
+    },
+    "id": "rel_0004e",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4211,
+    "valence": 0.5068
+  },
+  {
+    "a": {
+      "id": "plr_0004s",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00059",
+      "kind": "player"
+    },
+    "id": "rel_0004f",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6237,
+    "valence": 0.8764
+  },
+  {
+    "a": {
+      "id": "plr_0004s",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004z",
+      "kind": "player"
+    },
+    "id": "rel_0004g",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6456,
+    "valence": 0.5643
+  },
+  {
+    "a": {
+      "id": "plr_0004p",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004s",
+      "kind": "player"
+    },
+    "id": "rel_0004h",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.853,
+    "valence": 0.6337
+  },
+  {
+    "a": {
+      "id": "plr_0004s",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004u",
+      "kind": "player"
+    },
+    "id": "rel_0004i",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6926,
+    "valence": 0.6369
+  },
+  {
+    "a": {
+      "id": "plr_0004z",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00059",
+      "kind": "player"
+    },
+    "id": "rel_0004j",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4166,
+    "valence": 0.4447
+  },
+  {
+    "a": {
+      "id": "plr_0004p",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00059",
+      "kind": "player"
+    },
+    "id": "rel_0004k",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8927,
+    "valence": 0.4573
+  },
+  {
+    "a": {
+      "id": "plr_0004u",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00059",
+      "kind": "player"
+    },
+    "id": "rel_0004l",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4774,
+    "valence": 0.5639
+  },
+  {
+    "a": {
+      "id": "plr_0004p",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004z",
+      "kind": "player"
+    },
+    "id": "rel_0004m",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8668,
+    "valence": 0.3229
+  },
+  {
+    "a": {
+      "id": "plr_0004u",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004z",
+      "kind": "player"
+    },
+    "id": "rel_0004n",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4827,
+    "valence": 0.6273
+  },
+  {
+    "a": {
+      "id": "plr_0004p",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004u",
+      "kind": "player"
+    },
+    "id": "rel_0004o",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.813,
+    "valence": 0.6949
+  },
+  {
+    "a": {
+      "id": "plr_0004m",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004n",
+      "kind": "player"
+    },
+    "id": "rel_0004p",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6252,
+    "valence": 0.7298
+  },
+  {
+    "a": {
+      "id": "plr_0004m",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004o",
+      "kind": "player"
+    },
+    "id": "rel_0004q",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4934,
+    "valence": 0.4042
+  },
+  {
+    "a": {
+      "id": "plr_0004n",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004o",
+      "kind": "player"
+    },
+    "id": "rel_0004r",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.495,
+    "valence": 0.4984
+  },
+  {
+    "a": {
+      "id": "plr_0004t",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00058",
+      "kind": "player"
+    },
+    "id": "rel_0004s",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8948,
+    "valence": 0.5121
+  },
+  {
+    "a": {
+      "id": "plr_00057",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00058",
+      "kind": "player"
+    },
+    "id": "rel_0004t",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5892,
+    "valence": 0.328
+  },
+  {
+    "a": {
+      "id": "plr_0004y",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00058",
+      "kind": "player"
+    },
+    "id": "rel_0004u",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7504,
+    "valence": 0.8453
+  },
+  {
+    "a": {
+      "id": "plr_00058",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00059",
+      "kind": "player"
+    },
+    "id": "rel_0004v",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8105,
+    "valence": 0.6105
+  },
+  {
+    "a": {
+      "id": "plr_0004t",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00057",
+      "kind": "player"
+    },
+    "id": "rel_0004w",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.468,
+    "valence": 0.248
+  },
+  {
+    "a": {
+      "id": "plr_0004t",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0004y",
+      "kind": "player"
+    },
+    "id": "rel_0004x",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7469,
+    "valence": 0.683
+  },
+  {
+    "a": {
+      "id": "plr_0004t",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00059",
+      "kind": "player"
+    },
+    "id": "rel_0004y",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.47,
+    "valence": 0.3714
+  },
+  {
+    "a": {
+      "id": "plr_0004y",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00057",
+      "kind": "player"
+    },
+    "id": "rel_0004z",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7122,
+    "valence": 0.4575
+  },
+  {
+    "a": {
+      "id": "plr_00057",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00059",
+      "kind": "player"
+    },
+    "id": "rel_00050",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7918,
+    "valence": 0.3905
+  },
+  {
+    "a": {
+      "id": "plr_0004y",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00059",
+      "kind": "player"
+    },
+    "id": "rel_00051",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.563,
+    "valence": 0.2731
+  },
+  {
+    "a": {
+      "id": "plr_00050",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0005c",
+      "kind": "player"
+    },
+    "id": "rel_00052",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5316,
+    "valence": 0.8078
+  },
+  {
+    "a": {
+      "id": "plr_00054",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0005g",
+      "kind": "player"
+    },
+    "id": "rel_00053",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5493,
+    "valence": 0.6059
+  },
+  {
+    "a": {
+      "id": "plr_0004o",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0005b",
+      "kind": "player"
+    },
+    "id": "rel_00054",
+    "kind": "rival",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4365,
+    "valence": -0.6494
+  },
+  {
+    "a": {
+      "id": "plr_00056",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00057",
+      "kind": "player"
+    },
+    "id": "rel_00055",
+    "kind": "rival",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5365,
+    "valence": -0.5617
+  },
+  {
+    "a": {
+      "id": "mgr_00006",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00050",
+      "kind": "player"
+    },
+    "id": "rel_00056",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4935,
+    "valence": 0.4259
+  },
+  {
+    "a": {
+      "id": "mgr_00006",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0004u",
+      "kind": "player"
+    },
+    "id": "rel_00057",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7431,
+    "valence": 0.7674
+  },
+  {
+    "a": {
+      "id": "mgr_00006",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0004m",
+      "kind": "player"
+    },
+    "id": "rel_00058",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6451,
+    "valence": 0.7
+  },
+  {
+    "a": {
+      "id": "mgr_00006",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0004z",
+      "kind": "player"
+    },
+    "id": "rel_00059",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4825,
+    "valence": 0.5863
+  },
+  {
+    "a": {
+      "id": "mgr_00006",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00059",
+      "kind": "player"
+    },
+    "id": "rel_0005a",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4911,
+    "valence": 0.1791
+  },
+  {
+    "a": {
+      "id": "mgr_00006",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00055",
+      "kind": "player"
+    },
+    "id": "rel_0005b",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8775,
+    "valence": 0.543
+  },
+  {
+    "a": {
+      "id": "mgr_00006",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "clb_00006",
+      "kind": "club"
+    },
+    "id": "rel_0005c",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7439,
+    "valence": 0.5861
+  },
+  {
+    "a": {
+      "id": "plr_0005o",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0005s",
+      "kind": "player"
+    },
+    "id": "rel_0005d",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7924,
+    "valence": 0.7351
+  },
+  {
+    "a": {
+      "id": "plr_0005o",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0005r",
+      "kind": "player"
+    },
+    "id": "rel_0005e",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7124,
+    "valence": 0.8537
+  },
+  {
+    "a": {
+      "id": "plr_0005r",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0005s",
+      "kind": "player"
+    },
+    "id": "rel_0005f",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8972,
+    "valence": 0.8817
+  },
+  {
+    "a": {
+      "id": "plr_0005j",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0005k",
+      "kind": "player"
+    },
+    "id": "rel_0005g",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8203,
+    "valence": 0.889
+  },
+  {
+    "a": {
+      "id": "plr_0005j",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00066",
+      "kind": "player"
+    },
+    "id": "rel_0005h",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5975,
+    "valence": 0.3664
+  },
+  {
+    "a": {
+      "id": "plr_0005j",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0005q",
+      "kind": "player"
+    },
+    "id": "rel_0005i",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6258,
+    "valence": 0.7417
+  },
+  {
+    "a": {
+      "id": "plr_0005j",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00063",
+      "kind": "player"
+    },
+    "id": "rel_0005j",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6573,
+    "valence": 0.858
+  },
+  {
+    "a": {
+      "id": "plr_0005k",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00066",
+      "kind": "player"
+    },
+    "id": "rel_0005k",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8018,
+    "valence": 0.2856
+  },
+  {
+    "a": {
+      "id": "plr_0005k",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0005q",
+      "kind": "player"
+    },
+    "id": "rel_0005l",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7925,
+    "valence": 0.7334
+  },
+  {
+    "a": {
+      "id": "plr_0005k",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00063",
+      "kind": "player"
+    },
+    "id": "rel_0005m",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7651,
+    "valence": 0.2292
+  },
+  {
+    "a": {
+      "id": "plr_0005q",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00066",
+      "kind": "player"
+    },
+    "id": "rel_0005n",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5262,
+    "valence": 0.7425
+  },
+  {
+    "a": {
+      "id": "plr_00063",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00066",
+      "kind": "player"
+    },
+    "id": "rel_0005o",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4369,
+    "valence": 0.4594
+  },
+  {
+    "a": {
+      "id": "plr_0005q",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00063",
+      "kind": "player"
+    },
+    "id": "rel_0005p",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7797,
+    "valence": 0.532
+  },
+  {
+    "a": {
+      "id": "plr_0005w",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006f",
+      "kind": "player"
+    },
+    "id": "rel_0005q",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8092,
+    "valence": 0.6603
+  },
+  {
+    "a": {
+      "id": "plr_0005j",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006d",
+      "kind": "player"
+    },
+    "id": "rel_0005r",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7135,
+    "valence": 0.8138
+  },
+  {
+    "a": {
+      "id": "mgr_00007",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0005j",
+      "kind": "player"
+    },
+    "id": "rel_0005s",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5496,
+    "valence": 0.394
+  },
+  {
+    "a": {
+      "id": "mgr_00007",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0005q",
+      "kind": "player"
+    },
+    "id": "rel_0005t",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5266,
+    "valence": 0.7044
+  },
+  {
+    "a": {
+      "id": "mgr_00007",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0005w",
+      "kind": "player"
+    },
+    "id": "rel_0005u",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7308,
+    "valence": 0.4302
+  },
+  {
+    "a": {
+      "id": "mgr_00007",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0005y",
+      "kind": "player"
+    },
+    "id": "rel_0005v",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8448,
+    "valence": 0.5229
+  },
+  {
+    "a": {
+      "id": "mgr_00007",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0005s",
+      "kind": "player"
+    },
+    "id": "rel_0005w",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7499,
+    "valence": 0.4242
+  },
+  {
+    "a": {
+      "id": "mgr_00007",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00066",
+      "kind": "player"
+    },
+    "id": "rel_0005x",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8945,
+    "valence": 0.2283
+  },
+  {
+    "a": {
+      "id": "mgr_00007",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "clb_00007",
+      "kind": "club"
+    },
+    "id": "rel_0005y",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7144,
+    "valence": -0.047
+  },
+  {
+    "a": {
+      "id": "plr_0006s",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006u",
+      "kind": "player"
+    },
+    "id": "rel_0005z",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.526,
+    "valence": 0.3822
+  },
+  {
+    "a": {
+      "id": "plr_0006s",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006y",
+      "kind": "player"
+    },
+    "id": "rel_00060",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4701,
+    "valence": 0.6516
+  },
+  {
+    "a": {
+      "id": "plr_0006r",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006s",
+      "kind": "player"
+    },
+    "id": "rel_00061",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5071,
+    "valence": 0.4047
+  },
+  {
+    "a": {
+      "id": "plr_0006s",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006x",
+      "kind": "player"
+    },
+    "id": "rel_00062",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5029,
+    "valence": 0.8353
+  },
+  {
+    "a": {
+      "id": "plr_0006u",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006y",
+      "kind": "player"
+    },
+    "id": "rel_00063",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.687,
+    "valence": 0.8837
+  },
+  {
+    "a": {
+      "id": "plr_0006r",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006u",
+      "kind": "player"
+    },
+    "id": "rel_00064",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5535,
+    "valence": 0.4153
+  },
+  {
+    "a": {
+      "id": "plr_0006u",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006x",
+      "kind": "player"
+    },
+    "id": "rel_00065",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5683,
+    "valence": 0.6692
+  },
+  {
+    "a": {
+      "id": "plr_0006r",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006y",
+      "kind": "player"
+    },
+    "id": "rel_00066",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6718,
+    "valence": 0.5614
+  },
+  {
+    "a": {
+      "id": "plr_0006x",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006y",
+      "kind": "player"
+    },
+    "id": "rel_00067",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6272,
+    "valence": 0.8739
+  },
+  {
+    "a": {
+      "id": "plr_0006r",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006x",
+      "kind": "player"
+    },
+    "id": "rel_00068",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6358,
+    "valence": 0.6016
+  },
+  {
+    "a": {
+      "id": "plr_0006j",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006q",
+      "kind": "player"
+    },
+    "id": "rel_00069",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8933,
+    "valence": 0.2919
+  },
+  {
+    "a": {
+      "id": "plr_0006p",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006q",
+      "kind": "player"
+    },
+    "id": "rel_0006a",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.551,
+    "valence": 0.6582
+  },
+  {
+    "a": {
+      "id": "plr_0006j",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0006p",
+      "kind": "player"
+    },
+    "id": "rel_0006b",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7002,
+    "valence": 0.7707
+  },
+  {
+    "a": {
+      "id": "plr_00071",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00073",
+      "kind": "player"
+    },
+    "id": "rel_0006c",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5175,
+    "valence": 0.5829
+  },
+  {
+    "a": {
+      "id": "plr_00073",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00074",
+      "kind": "player"
+    },
+    "id": "rel_0006d",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7736,
+    "valence": 0.2347
+  },
+  {
+    "a": {
+      "id": "plr_00071",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00074",
+      "kind": "player"
+    },
+    "id": "rel_0006e",
+    "kind": "friend",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8719,
+    "valence": 0.316
+  },
+  {
+    "a": {
+      "id": "plr_0006h",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0007b",
+      "kind": "player"
+    },
+    "id": "rel_0006f",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8309,
+    "valence": 0.6231
+  },
+  {
+    "a": {
+      "id": "plr_0006u",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_00075",
+      "kind": "player"
+    },
+    "id": "rel_0006g",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7698,
+    "valence": 0.2714
+  },
+  {
+    "a": {
+      "id": "mgr_00008",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0006n",
+      "kind": "player"
+    },
+    "id": "rel_0006h",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8306,
+    "valence": 0.4911
+  },
+  {
+    "a": {
+      "id": "mgr_00008",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00070",
+      "kind": "player"
+    },
+    "id": "rel_0006i",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5248,
+    "valence": 0.345
+  },
+  {
+    "a": {
+      "id": "mgr_00008",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_00073",
+      "kind": "player"
+    },
+    "id": "rel_0006j",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5946,
+    "valence": 0.2009
+  },
+  {
+    "a": {
+      "id": "mgr_00008",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0006u",
+      "kind": "player"
+    },
+    "id": "rel_0006k",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6751,
+    "valence": 0.642
+  },
+  {
+    "a": {
+      "id": "mgr_00008",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0006t",
+      "kind": "player"
+    },
+    "id": "rel_0006l",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4181,
+    "valence": 0.8186
+  },
+  {
+    "a": {
+      "id": "mgr_00008",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "plr_0006r",
+      "kind": "player"
+    },
+    "id": "rel_0006m",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7869,
+    "valence": 0.1675
+  },
+  {
+    "a": {
+      "id": "mgr_00008",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "clb_00008",
+      "kind": "club"
+    },
+    "id": "rel_0006n",
+    "kind": "trust",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6767,
+    "valence": 0.3007
+  },
+  {
+    "a": {
+      "id": "mgr_00006",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "mgr_00007",
+      "kind": "manager"
+    },
+    "id": "rel_0006o",
+    "kind": "rival",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.9,
+    "valence": -0.45
+  },
+  {
+    "a": {
+      "id": "mgr_00001",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "mgr_00008",
+      "kind": "manager"
+    },
+    "id": "rel_0006p",
+    "kind": "rival",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8,
+    "valence": -0.4
+  },
+  {
+    "a": {
+      "id": "mgr_00002",
+      "kind": "manager"
+    },
+    "b": {
+      "id": "mgr_00003",
+      "kind": "manager"
+    },
+    "id": "rel_0006q",
+    "kind": "rival",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5,
+    "valence": -0.25
+  },
+  {
+    "a": {
+      "id": "plr_00036",
+      "kind": "player"
+    },
+    "b": {
+      "id": "plr_0003d",
+      "kind": "player"
+    },
+    "id": "rel_0006r",
+    "kind": "family",
+    "public": true,
+    "since": "2031-07-01",
+    "strength": 0.9183,
+    "valence": 0.6419
+  },
+  {
+    "a": {
+      "id": "med_00005",
+      "kind": "media"
+    },
+    "b": {
+      "id": "med_0000a",
+      "kind": "media"
+    },
+    "id": "rel_0006s",
+    "kind": "colleague",
+    "public": true,
+    "since": "2031-07-01",
+    "strength": 0.9,
+    "valence": 0.8
+  },
+  {
+    "a": {
+      "id": "med_00003",
+      "kind": "media"
+    },
+    "b": {
+      "id": "med_00009",
+      "kind": "media"
+    },
+    "id": "rel_0006t",
+    "kind": "colleague",
+    "public": true,
+    "since": "2031-07-01",
+    "strength": 0.85,
+    "valence": 0.7
+  },
+  {
+    "a": {
+      "id": "med_00001",
+      "kind": "media"
+    },
+    "b": {
+      "id": "med_00006",
+      "kind": "media"
+    },
+    "id": "rel_0006u",
+    "kind": "feud",
+    "public": true,
+    "since": "2031-07-01",
+    "strength": 0.8,
+    "valence": -0.5
+  },
+  {
+    "a": {
+      "id": "med_00007",
+      "kind": "media"
+    },
+    "b": {
+      "id": "med_0000b",
+      "kind": "media"
+    },
+    "id": "rel_0006v",
+    "kind": "mentor_of",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7,
+    "valence": 0.6
+  },
+  {
+    "a": {
+      "id": "med_00004",
+      "kind": "media"
+    },
+    "b": {
+      "id": "clb_00001",
+      "kind": "club"
+    },
+    "id": "rel_0006w",
+    "kind": "admires",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.95,
+    "valence": 0.9
+  },
+  {
+    "a": {
+      "id": "med_00004",
+      "kind": "media"
+    },
+    "b": {
+      "id": "clb_00002",
+      "kind": "club"
+    },
+    "id": "rel_0006x",
+    "kind": "dislikes",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6,
+    "valence": -0.6
+  },
+  {
+    "a": {
+      "id": "med_00001",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0001l",
+      "kind": "player"
+    },
+    "id": "rel_0006y",
+    "kind": "admires",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5758,
+    "valence": 0.6
+  },
+  {
+    "a": {
+      "id": "med_00001",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_00023",
+      "kind": "player"
+    },
+    "id": "rel_0006z",
+    "kind": "dislikes",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7149,
+    "valence": -0.5
+  },
+  {
+    "a": {
+      "id": "med_00002",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0002c",
+      "kind": "player"
+    },
+    "id": "rel_00070",
+    "kind": "admires",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6635,
+    "valence": 0.6
+  },
+  {
+    "a": {
+      "id": "med_00002",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_00038",
+      "kind": "player"
+    },
+    "id": "rel_00071",
+    "kind": "dislikes",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4449,
+    "valence": -0.5
+  },
+  {
+    "a": {
+      "id": "med_00003",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0006v",
+      "kind": "player"
+    },
+    "id": "rel_00072",
+    "kind": "admires",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6226,
+    "valence": 0.6
+  },
+  {
+    "a": {
+      "id": "med_00003",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0005i",
+      "kind": "player"
+    },
+    "id": "rel_00073",
+    "kind": "dislikes",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6871,
+    "valence": -0.5
+  },
+  {
+    "a": {
+      "id": "med_00004",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_00044",
+      "kind": "player"
+    },
+    "id": "rel_00074",
+    "kind": "admires",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5996,
+    "valence": 0.6
+  },
+  {
+    "a": {
+      "id": "med_00004",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0005m",
+      "kind": "player"
+    },
+    "id": "rel_00075",
+    "kind": "dislikes",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.576,
+    "valence": -0.5
+  },
+  {
+    "a": {
+      "id": "med_00005",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0004y",
+      "kind": "player"
+    },
+    "id": "rel_00076",
+    "kind": "admires",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6439,
+    "valence": 0.6
+  },
+  {
+    "a": {
+      "id": "med_00005",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_00032",
+      "kind": "player"
+    },
+    "id": "rel_00077",
+    "kind": "dislikes",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5889,
+    "valence": -0.5
+  },
+  {
+    "a": {
+      "id": "med_00006",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0006m",
+      "kind": "player"
+    },
+    "id": "rel_00078",
+    "kind": "admires",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7336,
+    "valence": 0.6
+  },
+  {
+    "a": {
+      "id": "med_00006",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0001d",
+      "kind": "player"
+    },
+    "id": "rel_00079",
+    "kind": "dislikes",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4536,
+    "valence": -0.5
+  },
+  {
+    "a": {
+      "id": "med_00007",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0003d",
+      "kind": "player"
+    },
+    "id": "rel_0007a",
+    "kind": "admires",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7978,
+    "valence": 0.6
+  },
+  {
+    "a": {
+      "id": "med_00007",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0003k",
+      "kind": "player"
+    },
+    "id": "rel_0007b",
+    "kind": "dislikes",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.559,
+    "valence": -0.5
+  },
+  {
+    "a": {
+      "id": "med_00008",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_00069",
+      "kind": "player"
+    },
+    "id": "rel_0007c",
+    "kind": "admires",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7058,
+    "valence": 0.6
+  },
+  {
+    "a": {
+      "id": "med_00008",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_00014",
+      "kind": "player"
+    },
+    "id": "rel_0007d",
+    "kind": "dislikes",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.7603,
+    "valence": -0.5
+  },
+  {
+    "a": {
+      "id": "med_00009",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0000k",
+      "kind": "player"
+    },
+    "id": "rel_0007e",
+    "kind": "admires",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.8073,
+    "valence": 0.6
+  },
+  {
+    "a": {
+      "id": "med_00009",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0000w",
+      "kind": "player"
+    },
+    "id": "rel_0007f",
+    "kind": "dislikes",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6154,
+    "valence": -0.5
+  },
+  {
+    "a": {
+      "id": "med_0000a",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0003r",
+      "kind": "player"
+    },
+    "id": "rel_0007g",
+    "kind": "admires",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6662,
+    "valence": 0.6
+  },
+  {
+    "a": {
+      "id": "med_0000a",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_00070",
+      "kind": "player"
+    },
+    "id": "rel_0007h",
+    "kind": "dislikes",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.4938,
+    "valence": -0.5
+  },
+  {
+    "a": {
+      "id": "med_0000b",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0002c",
+      "kind": "player"
+    },
+    "id": "rel_0007i",
+    "kind": "admires",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.6605,
+    "valence": 0.6
+  },
+  {
+    "a": {
+      "id": "med_0000b",
+      "kind": "media"
+    },
+    "b": {
+      "id": "plr_0002a",
+      "kind": "player"
+    },
+    "id": "rel_0007j",
+    "kind": "dislikes",
+    "public": false,
+    "since": "2031-07-01",
+    "strength": 0.5578,
+    "valence": -0.5
+  }
+]

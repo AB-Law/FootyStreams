@@ -1,0 +1,1058 @@
+[
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "stubble",
+      "hair_colour": "brown",
+      "hair_style": "short",
+      "skin_tone": 2
+    },
+    "birthplace": {
+      "city": "Bemonne",
+      "nation": "nat_brevane"
+    },
+    "catchphrases": [
+      "Of course it is.",
+      "I have seen better in the car park."
+    ],
+    "date_of_birth": "1984-10-09",
+    "expertise_tags": [
+      "tactics",
+      "officiating"
+    ],
+    "first_name": "Fotjel",
+    "gender": "male",
+    "id": "med_00001",
+    "known_as": "Chille-Jaichàult",
+    "last_name": "Chillé-Jaichault",
+    "nationality": "nat_brevane",
+    "personality": {
+      "ambition": 29,
+      "archetype_tags": [
+        "hothead"
+      ],
+      "ego": 77,
+      "humor": 88,
+      "interview_style": "combative",
+      "loyalty": 40,
+      "media_openness": 67,
+      "professionalism": 53,
+      "resilience": 65,
+      "sociability": 38,
+      "sportsmanship": 30,
+      "volatility": 55
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "cheu-ILLE-jai-cho-ault",
+      "stress_syllable": 1
+    },
+    "reputation": 85,
+    "role": "pundit",
+    "second_nationality": null,
+    "voice": {
+      "bindings": {
+        "placeholder": {
+          "created_on": null,
+          "model": "placeholder-v0",
+          "sample_uri": null,
+          "settings": {},
+          "voice_id": "voice_placeholder_01"
+        }
+      },
+      "casting": {
+        "accent": "dry valmerian",
+        "age_range": "mature",
+        "base_pace_wpm": 150,
+        "delivery_notes": "deadpan; long pauses before the jab",
+        "energy_range": [
+          0.2,
+          0.8
+        ],
+        "gender": "male",
+        "pace_variance": 0.12,
+        "timbre": [
+          "gravelly",
+          "dry"
+        ],
+        "voice_register": "low"
+      },
+      "delivery": {
+        "emotion_map": {},
+        "interjections": [
+          "Pfft.",
+          "Naturally."
+        ],
+        "shout_threshold": 0.8,
+        "whisper_threshold": 0.2
+      },
+      "lexicon": [
+        {
+          "ipa": null,
+          "respelling": "cheu-ILLE-jai-cho-ault",
+          "token": "Chille-Jaichàult"
+        }
+      ],
+      "schema_version": 2
+    }
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "stubble",
+      "hair_colour": "black",
+      "hair_style": "fade",
+      "skin_tone": 2
+    },
+    "birthplace": {
+      "city": "Taals",
+      "nation": "nat_estmark"
+    },
+    "catchphrases": [
+      "I am told otherwise.",
+      "Sources close to the club say."
+    ],
+    "date_of_birth": "1988-02-23",
+    "expertise_tags": [
+      "transfers",
+      "finance"
+    ],
+    "first_name": "Rita",
+    "gender": "female",
+    "id": "med_00002",
+    "known_as": "Kitpet",
+    "last_name": "Kitpet",
+    "nationality": "nat_estmark",
+    "personality": {
+      "ambition": 79,
+      "archetype_tags": [],
+      "ego": 60,
+      "humor": 33,
+      "interview_style": "bland",
+      "loyalty": 21,
+      "media_openness": 37,
+      "professionalism": 64,
+      "resilience": 71,
+      "sociability": 31,
+      "sportsmanship": 35,
+      "volatility": 44
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "KIT-pet",
+      "stress_syllable": 0
+    },
+    "reputation": 45,
+    "role": "reporter",
+    "second_nationality": null,
+    "voice": {
+      "bindings": {
+        "placeholder": {
+          "created_on": null,
+          "model": "placeholder-v0",
+          "sample_uri": null,
+          "settings": {},
+          "voice_id": "voice_placeholder_02"
+        }
+      },
+      "casting": {
+        "accent": "level valmerian",
+        "age_range": "mid",
+        "base_pace_wpm": 150,
+        "delivery_notes": "flat delivery, sharp questions",
+        "energy_range": [
+          0.2,
+          0.6
+        ],
+        "gender": "female",
+        "pace_variance": 0.07,
+        "timbre": [
+          "dry"
+        ],
+        "voice_register": "mid"
+      },
+      "delivery": {
+        "emotion_map": {},
+        "interjections": [
+          "Hm."
+        ],
+        "shout_threshold": 0.8,
+        "whisper_threshold": 0.2
+      },
+      "lexicon": [
+        {
+          "ipa": null,
+          "respelling": "KIT-pet",
+          "token": "Kitpet"
+        }
+      ],
+      "schema_version": 2
+    }
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "stubble",
+      "hair_colour": "brown",
+      "hair_style": "buzz",
+      "skin_tone": 5
+    },
+    "birthplace": {
+      "city": "Sirora",
+      "nation": "nat_valmere"
+    },
+    "catchphrases": [
+      "Absolutely unbelievable!",
+      "You cannot write this!"
+    ],
+    "date_of_birth": "1998-05-13",
+    "expertise_tags": [
+      "highlights",
+      "atmosphere"
+    ],
+    "first_name": "Lanmél",
+    "gender": "male",
+    "id": "med_00003",
+    "known_as": "Lani",
+    "last_name": "Lani",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 73,
+      "archetype_tags": [
+        "quiet_leader"
+      ],
+      "ego": 80,
+      "humor": 62,
+      "interview_style": "humble",
+      "loyalty": 38,
+      "media_openness": 97,
+      "professionalism": 47,
+      "resilience": 56,
+      "sociability": 84,
+      "sportsmanship": 61,
+      "volatility": 77
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "LA-ani",
+      "stress_syllable": 0
+    },
+    "reputation": 55,
+    "role": "lead_commentator",
+    "second_nationality": null,
+    "voice": {
+      "bindings": {
+        "placeholder": {
+          "created_on": null,
+          "model": "placeholder-v0",
+          "sample_uri": null,
+          "settings": {},
+          "voice_id": "voice_placeholder_03"
+        }
+      },
+      "casting": {
+        "accent": "bright valmerian",
+        "age_range": "young",
+        "base_pace_wpm": 175,
+        "delivery_notes": "builds fast; shouts big moments",
+        "energy_range": [
+          0.4,
+          1.0
+        ],
+        "gender": "male",
+        "pace_variance": 0.2,
+        "timbre": [
+          "bright",
+          "raspy"
+        ],
+        "voice_register": "high"
+      },
+      "delivery": {
+        "emotion_map": {},
+        "interjections": [
+          "Oh!",
+          "Wow!",
+          "What a moment!"
+        ],
+        "shout_threshold": 0.8,
+        "whisper_threshold": 0.2
+      },
+      "lexicon": [
+        {
+          "ipa": null,
+          "respelling": "LA-ani",
+          "token": "Lani"
+        }
+      ],
+      "schema_version": 2
+    }
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "stubble",
+      "hair_colour": "black",
+      "hair_style": "short",
+      "skin_tone": 5
+    },
+    "birthplace": {
+      "city": "Chiyisz",
+      "nation": "nat_valmere"
+    },
+    "catchphrases": [
+      "Our lads did us proud.",
+      "You will not find a prouder ground."
+    ],
+    "date_of_birth": "1990-08-29",
+    "expertise_tags": [
+      "club_history",
+      "supporters"
+    ],
+    "first_name": "Chijik",
+    "gender": "male",
+    "id": "med_00004",
+    "known_as": "Yitsi",
+    "last_name": "Yitsi",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 39,
+      "archetype_tags": [
+        "hothead"
+      ],
+      "ego": 60,
+      "humor": 53,
+      "interview_style": "combative",
+      "loyalty": 100,
+      "media_openness": 83,
+      "professionalism": 61,
+      "resilience": 62,
+      "sociability": 78,
+      "sportsmanship": 42,
+      "volatility": 48
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "YI-tsi",
+      "stress_syllable": 0
+    },
+    "reputation": 61,
+    "role": "reporter",
+    "second_nationality": null,
+    "voice": {
+      "bindings": {
+        "placeholder": {
+          "created_on": null,
+          "model": "placeholder-v0",
+          "sample_uri": null,
+          "settings": {},
+          "voice_id": "voice_placeholder_04"
+        }
+      },
+      "casting": {
+        "accent": "regional valmerian",
+        "age_range": "mid",
+        "base_pace_wpm": 155,
+        "delivery_notes": "softens for his club, sharpens against rivals",
+        "energy_range": [
+          0.3,
+          0.9
+        ],
+        "gender": "male",
+        "pace_variance": 0.15,
+        "timbre": [
+          "warm"
+        ],
+        "voice_register": "mid"
+      },
+      "delivery": {
+        "emotion_map": {},
+        "interjections": [
+          "Come on!"
+        ],
+        "shout_threshold": 0.8,
+        "whisper_threshold": 0.2
+      },
+      "lexicon": [
+        {
+          "ipa": null,
+          "respelling": "YI-tsi",
+          "token": "Yitsi"
+        }
+      ],
+      "schema_version": 2
+    }
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "moustache",
+      "hair_colour": "brown",
+      "hair_style": "braids",
+      "skin_tone": 4
+    },
+    "birthplace": {
+      "city": "Chiyisz",
+      "nation": "nat_valmere"
+    },
+    "catchphrases": [
+      "Well, I have seen that before.",
+      "And there it is, as it always was."
+    ],
+    "date_of_birth": "1974-12-05",
+    "expertise_tags": [
+      "club_history",
+      "league_history"
+    ],
+    "first_name": "Tseichek",
+    "gender": "male",
+    "id": "med_00005",
+    "known_as": "Theichis-Theszenko",
+    "last_name": "Theichis-Theszěnko",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 33,
+      "archetype_tags": [
+        "hothead"
+      ],
+      "ego": 41,
+      "humor": 68,
+      "interview_style": "combative",
+      "loyalty": 75,
+      "media_openness": 65,
+      "professionalism": 88,
+      "resilience": 79,
+      "sociability": 55,
+      "sportsmanship": 79,
+      "volatility": 21
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "THEI-chis-the-sza-enko",
+      "stress_syllable": 0
+    },
+    "reputation": 56,
+    "role": "lead_commentator",
+    "second_nationality": null,
+    "voice": {
+      "bindings": {
+        "placeholder": {
+          "created_on": null,
+          "model": "placeholder-v0",
+          "sample_uri": null,
+          "settings": {},
+          "voice_id": "voice_placeholder_05"
+        }
+      },
+      "casting": {
+        "accent": "measured valmerian",
+        "age_range": "mature",
+        "base_pace_wpm": 135,
+        "delivery_notes": "unhurried; lets a goal breathe",
+        "energy_range": [
+          0.2,
+          0.8
+        ],
+        "gender": "male",
+        "pace_variance": 0.08,
+        "timbre": [
+          "warm",
+          "gravelly"
+        ],
+        "voice_register": "low"
+      },
+      "delivery": {
+        "emotion_map": {},
+        "interjections": [
+          "Ah.",
+          "Ha."
+        ],
+        "shout_threshold": 0.8,
+        "whisper_threshold": 0.2
+      },
+      "lexicon": [
+        {
+          "ipa": null,
+          "respelling": "THEI-chis-the-sza-enko",
+          "token": "Theichis-Theszenko"
+        }
+      ],
+      "schema_version": 2
+    }
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "beard",
+      "hair_colour": "brown",
+      "hair_style": "long",
+      "skin_tone": 2
+    },
+    "birthplace": {
+      "city": "Gathiški",
+      "nation": "nat_valmere"
+    },
+    "catchphrases": [
+      "There are positives to take.",
+      "Football is the winner today."
+    ],
+    "date_of_birth": "1995-05-13",
+    "expertise_tags": [
+      "youth",
+      "supporters"
+    ],
+    "first_name": "Tsamyis",
+    "gender": "male",
+    "id": "med_00006",
+    "known_as": "Jiyimytz-Zenko",
+    "last_name": "Jiyimytz-Zenko",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 51,
+      "archetype_tags": [],
+      "ego": 43,
+      "humor": 70,
+      "interview_style": "bland",
+      "loyalty": 64,
+      "media_openness": 90,
+      "professionalism": 57,
+      "resilience": 100,
+      "sociability": 83,
+      "sportsmanship": 90,
+      "volatility": 35
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "JI-yim-ytz-ze-enko",
+      "stress_syllable": 0
+    },
+    "reputation": 65,
+    "role": "pundit",
+    "second_nationality": null,
+    "voice": {
+      "bindings": {
+        "placeholder": {
+          "created_on": null,
+          "model": "placeholder-v0",
+          "sample_uri": null,
+          "settings": {},
+          "voice_id": "voice_placeholder_06"
+        }
+      },
+      "casting": {
+        "accent": "sunny valmerian",
+        "age_range": "mid",
+        "base_pace_wpm": 160,
+        "delivery_notes": "lifts at the end of sentences",
+        "energy_range": [
+          0.4,
+          0.9
+        ],
+        "gender": "male",
+        "pace_variance": 0.15,
+        "timbre": [
+          "bright",
+          "warm"
+        ],
+        "voice_register": "high"
+      },
+      "delivery": {
+        "emotion_map": {},
+        "interjections": [
+          "Lovely stuff."
+        ],
+        "shout_threshold": 0.8,
+        "whisper_threshold": 0.2
+      },
+      "lexicon": [
+        {
+          "ipa": null,
+          "respelling": "JI-yim-ytz-ze-enko",
+          "token": "Jiyimytz-Zenko"
+        }
+      ],
+      "schema_version": 2
+    }
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "stubble",
+      "hair_colour": "red",
+      "hair_style": "short",
+      "skin_tone": 8
+    },
+    "birthplace": {
+      "city": "Zijowi",
+      "nation": "nat_valmere"
+    },
+    "catchphrases": [
+      "Full time in Valmere.",
+      "Those are the results."
+    ],
+    "date_of_birth": "1975-02-17",
+    "expertise_tags": [
+      "statistics",
+      "league_history"
+    ],
+    "first_name": "Theyaš",
+    "gender": "male",
+    "id": "med_00007",
+    "known_as": "Jithowi",
+    "last_name": "Jithowi",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 63,
+      "archetype_tags": [
+        "hothead"
+      ],
+      "ego": 51,
+      "humor": 31,
+      "interview_style": "combative",
+      "loyalty": 52,
+      "media_openness": 56,
+      "professionalism": 97,
+      "resilience": 83,
+      "sociability": 64,
+      "sportsmanship": 85,
+      "volatility": 3
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "JI-the-owi",
+      "stress_syllable": 0
+    },
+    "reputation": 82,
+    "role": "presenter",
+    "second_nationality": null,
+    "voice": {
+      "bindings": {
+        "placeholder": {
+          "created_on": null,
+          "model": "placeholder-v0",
+          "sample_uri": null,
+          "settings": {},
+          "voice_id": "voice_placeholder_07"
+        }
+      },
+      "casting": {
+        "accent": "neutral valmerian",
+        "age_range": "mature",
+        "base_pace_wpm": 145,
+        "delivery_notes": "even and exact",
+        "energy_range": [
+          0.2,
+          0.6
+        ],
+        "gender": "male",
+        "pace_variance": 0.05,
+        "timbre": [
+          "polished"
+        ],
+        "voice_register": "low"
+      },
+      "delivery": {
+        "emotion_map": {},
+        "interjections": [
+          "Indeed."
+        ],
+        "shout_threshold": 0.8,
+        "whisper_threshold": 0.2
+      },
+      "lexicon": [
+        {
+          "ipa": null,
+          "respelling": "JI-the-owi",
+          "token": "Jithowi"
+        }
+      ],
+      "schema_version": 2
+    }
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "goatee",
+      "hair_colour": "brown",
+      "hair_style": "buzz",
+      "skin_tone": 5
+    },
+    "birthplace": {
+      "city": "Gathiški",
+      "nation": "nat_valmere"
+    },
+    "catchphrases": [
+      "I will say what everyone is thinking.",
+      "Sack the lot of them."
+    ],
+    "date_of_birth": "1992-06-20",
+    "expertise_tags": [
+      "transfers",
+      "officiating"
+    ],
+    "first_name": "Gizis",
+    "gender": "male",
+    "id": "med_00008",
+    "known_as": "Theszenko",
+    "last_name": "Theszenko",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 67,
+      "archetype_tags": [
+        "one_club_man"
+      ],
+      "ego": 97,
+      "humor": 64,
+      "interview_style": "bland",
+      "loyalty": 27,
+      "media_openness": 98,
+      "professionalism": 48,
+      "resilience": 66,
+      "sociability": 52,
+      "sportsmanship": 24,
+      "volatility": 84
+    },
+    "pronouns": "he/him",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "THESZ-enko",
+      "stress_syllable": 0
+    },
+    "reputation": 41,
+    "role": "pundit",
+    "second_nationality": null,
+    "voice": {
+      "bindings": {
+        "placeholder": {
+          "created_on": null,
+          "model": "placeholder-v0",
+          "sample_uri": null,
+          "settings": {},
+          "voice_id": "voice_placeholder_08"
+        }
+      },
+      "casting": {
+        "accent": "sharp valmerian",
+        "age_range": "mid",
+        "base_pace_wpm": 170,
+        "delivery_notes": "interrupts; raises the volume",
+        "energy_range": [
+          0.4,
+          1.0
+        ],
+        "gender": "male",
+        "pace_variance": 0.2,
+        "timbre": [
+          "raspy"
+        ],
+        "voice_register": "mid"
+      },
+      "delivery": {
+        "emotion_map": {},
+        "interjections": [
+          "Come on!",
+          "Seriously?"
+        ],
+        "shout_threshold": 0.8,
+        "whisper_threshold": 0.2
+      },
+      "lexicon": [
+        {
+          "ipa": null,
+          "respelling": "THESZ-enko",
+          "token": "Theszenko"
+        }
+      ],
+      "schema_version": 2
+    }
+  },
+  {
+    "appearance": {
+      "build": "athletic",
+      "facial_hair": "none",
+      "hair_colour": "grey",
+      "hair_style": "buzz",
+      "skin_tone": 7
+    },
+    "birthplace": {
+      "city": "Gathiški",
+      "nation": "nat_valmere"
+    },
+    "catchphrases": [
+      "The numbers say otherwise.",
+      "That is a first in the league."
+    ],
+    "date_of_birth": "1992-06-05",
+    "expertise_tags": [
+      "statistics",
+      "league_history"
+    ],
+    "first_name": "Thěyaka",
+    "gender": "female",
+    "id": "med_00009",
+    "known_as": "Vevamenko",
+    "last_name": "Vevamenko",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 59,
+      "archetype_tags": [],
+      "ego": 37,
+      "humor": 47,
+      "interview_style": "bland",
+      "loyalty": 45,
+      "media_openness": 71,
+      "professionalism": 80,
+      "resilience": 59,
+      "sociability": 45,
+      "sportsmanship": 76,
+      "volatility": 23
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "VE-vam-enko",
+      "stress_syllable": 0
+    },
+    "reputation": 61,
+    "role": "co_commentator",
+    "second_nationality": null,
+    "voice": {
+      "bindings": {
+        "placeholder": {
+          "created_on": null,
+          "model": "placeholder-v0",
+          "sample_uri": null,
+          "settings": {},
+          "voice_id": "voice_placeholder_09"
+        }
+      },
+      "casting": {
+        "accent": "even valmerian",
+        "age_range": "mid",
+        "base_pace_wpm": 165,
+        "delivery_notes": "quotes a statistic and pauses",
+        "energy_range": [
+          0.2,
+          0.7
+        ],
+        "gender": "female",
+        "pace_variance": 0.12,
+        "timbre": [
+          "light"
+        ],
+        "voice_register": "mid"
+      },
+      "delivery": {
+        "emotion_map": {},
+        "interjections": [
+          "Interesting."
+        ],
+        "shout_threshold": 0.8,
+        "whisper_threshold": 0.2
+      },
+      "lexicon": [
+        {
+          "ipa": null,
+          "respelling": "VE-vam-enko",
+          "token": "Vevamenko"
+        }
+      ],
+      "schema_version": 2
+    }
+  },
+  {
+    "appearance": {
+      "build": "lean",
+      "facial_hair": "none",
+      "hair_colour": "brown",
+      "hair_style": "short",
+      "skin_tone": 7
+    },
+    "birthplace": {
+      "city": "Gathiški",
+      "nation": "nat_valmere"
+    },
+    "catchphrases": [
+      "Look at the shape.",
+      "That is a pressing trap."
+    ],
+    "date_of_birth": "1987-06-23",
+    "expertise_tags": [
+      "tactics",
+      "coaching"
+    ],
+    "first_name": "Thatsechaka",
+    "gender": "female",
+    "id": "med_0000a",
+    "known_as": "Yizytz",
+    "last_name": "Yizytz",
+    "nationality": "nat_valmere",
+    "personality": {
+      "ambition": 58,
+      "archetype_tags": [],
+      "ego": 56,
+      "humor": 28,
+      "interview_style": "philosophical",
+      "loyalty": 51,
+      "media_openness": 66,
+      "professionalism": 89,
+      "resilience": 66,
+      "sociability": 50,
+      "sportsmanship": 77,
+      "volatility": 37
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "YI-za-ytz",
+      "stress_syllable": 0
+    },
+    "reputation": 51,
+    "role": "co_commentator",
+    "second_nationality": null,
+    "voice": {
+      "bindings": {
+        "placeholder": {
+          "created_on": null,
+          "model": "placeholder-v0",
+          "sample_uri": null,
+          "settings": {},
+          "voice_id": "voice_placeholder_10"
+        }
+      },
+      "casting": {
+        "accent": "clipped valmerian",
+        "age_range": "mid",
+        "base_pace_wpm": 160,
+        "delivery_notes": "precise; slows for diagrams",
+        "energy_range": [
+          0.2,
+          0.7
+        ],
+        "gender": "female",
+        "pace_variance": 0.1,
+        "timbre": [
+          "crisp"
+        ],
+        "voice_register": "mid"
+      },
+      "delivery": {
+        "emotion_map": {},
+        "interjections": [
+          "Right."
+        ],
+        "shout_threshold": 0.8,
+        "whisper_threshold": 0.2
+      },
+      "lexicon": [
+        {
+          "ipa": null,
+          "respelling": "YI-za-ytz",
+          "token": "Yizytz"
+        }
+      ],
+      "schema_version": 2
+    }
+  },
+  {
+    "appearance": {
+      "build": "tall",
+      "facial_hair": "goatee",
+      "hair_colour": "red",
+      "hair_style": "short",
+      "skin_tone": 8
+    },
+    "birthplace": {
+      "city": "Zedrov",
+      "nation": "nat_aldovia"
+    },
+    "catchphrases": [
+      "Welcome back, everyone.",
+      "What a day it has been."
+    ],
+    "date_of_birth": "1996-09-08",
+    "expertise_tags": [
+      "league_history",
+      "supporters"
+    ],
+    "first_name": "Vlodriština",
+    "gender": "female",
+    "id": "med_0000b",
+    "known_as": "Bledraski",
+    "last_name": "Bledraški",
+    "nationality": "nat_aldovia",
+    "personality": {
+      "ambition": 48,
+      "archetype_tags": [],
+      "ego": 30,
+      "humor": 82,
+      "interview_style": "bland",
+      "loyalty": 75,
+      "media_openness": 91,
+      "professionalism": 84,
+      "resilience": 71,
+      "sociability": 94,
+      "sportsmanship": 85,
+      "volatility": 18
+    },
+    "pronouns": "she/her",
+    "pronunciation": {
+      "ipa": null,
+      "respelling": "ble-DRA-ski",
+      "stress_syllable": 1
+    },
+    "reputation": 82,
+    "role": "presenter",
+    "second_nationality": null,
+    "voice": {
+      "bindings": {
+        "placeholder": {
+          "created_on": null,
+          "model": "placeholder-v0",
+          "sample_uri": null,
+          "settings": {},
+          "voice_id": "voice_placeholder_11"
+        }
+      },
+      "casting": {
+        "accent": "warm valmerian",
+        "age_range": "mid",
+        "base_pace_wpm": 150,
+        "delivery_notes": "smiling delivery",
+        "energy_range": [
+          0.3,
+          0.8
+        ],
+        "gender": "female",
+        "pace_variance": 0.1,
+        "timbre": [
+          "warm",
+          "smooth"
+        ],
+        "voice_register": "mid"
+      },
+      "delivery": {
+        "emotion_map": {},
+        "interjections": [
+          "Lovely."
+        ],
+        "shout_threshold": 0.8,
+        "whisper_threshold": 0.2
+      },
+      "lexicon": [
+        {
+          "ipa": null,
+          "respelling": "ble-DRA-ski",
+          "token": "Bledraski"
+        }
+      ],
+      "schema_version": 2
+    }
+  }
+]

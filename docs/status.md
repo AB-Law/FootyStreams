@@ -60,5 +60,29 @@ Also: committed `schemas/` (drift-tested), factories/strategies under `tests/`, 
 
 ### Track A update at the end of M7
 - **M7 done locally** on `feat/m7-summary-ratings-frames` (based on the M6 branch): the causal context (momentum, intensity, significance, tags), enriched pass/dribble/shot events, the full summary (stats, ratings 3-10, player of the match, hooks, pass matrix, zone flow, shot map, xG/xA/xT, timelines, key moments, injuries), opt-in tracking frames, a read-only `analytics/` module (maps, totals, heatmaps, `annotate`), and `verify` M13-M16 and M18. `SIM_VERSION` 0.4.0, `SCHEMA_VERSION` 0.2.0 (additive, defaults only; flagged in the PR). Report: `docs/milestones/M7.md`.
-- Track A is complete (M4-M7). Next on this track: M8 (balance harness, calibration, performance), then M9 needs the league layer (`build_match_setup`, lineup AI).
+- Track A is complete (M4-M7) and **merged to `main`**. Next on this track: M8 (balance harness, calibration, performance), then M9 needs the league layer (`build_match_setup`, lineup AI).
 - Known gaps: about 0.5 s CPU a match (budget 0.15 s), draw rate and red cards high, manager has no formation changes or half-time talk, hooks that need league context.
+
+---
+
+## Track B (world) — overnight run, 2026-10-07 (rebase onto main 2026-10-08)
+Track A (M4-M7) is on `main`. Track B builds M2, M3, M9, M10, M11 as **stacked draft PRs** (each branch is cut from the previous one). After Track A landed, M2 was rebased onto `main`: fragment ids renumbered to 0121+, `SCHEMA_VERSION` 0.3.1, `SIM_VERSION` 0.4.1.
+
+| Milestone | Branch | State |
+|-----------|--------|-------|
+| M2 seed and static data | `feat/m2-seed-world` | rebased onto `main` (draft PR #18); see `docs/milestones/M2.md` |
+| M3 persistence | `feat/m3-persistence` | next (rebase after M2 push) |
+| M9 league layer | `feat/m9-league-layer` | pending |
+| M10 development and rollover | `feat/m10-development-rollover` | pending |
+| M11 contracts and transfers | `feat/m11-contracts-transfers` | pending |
+
+### What M2 added
+- `uv run seed --seed N [--out DIR] [--name NAME] [--clubs K] [--validate] [--world DIR]`; the committed `data/worlds/default` is seed 1 (`content_sha256` in its manifest).
+- `seed/` (static loaders, names, players, managers, clubs, referees, media, relationships, `generate_world`, `world_io`), `verify/world*.py` (W01-W03, W07-W10, C01-C08), and in `domain/`: `WorldRng`, `IdMint`, `squad_strength`, world records and static-table models (**SCHEMA_VERSION 0.3.1** on top of Track A's 0.2.0).
+- Static tables in `data/static/`: formations, roles, traits, injuries, climate, name cultures, denylist/blocklist, player/club/media archetypes, manager styles, tactic presets.
+- Tests share one world per seed through `tests/factories/world.make_world`; generation takes about 2.3 s.
+
+### Track B caveats
+- `WorldRng` stands in for track A's `SimRng` (same interface); unify when both tracks merge at M8/M12.
+- Fragment ids 0042-0058 were renumbered to 0121-0137 after rebasing onto Track A.
+- The fast gate takes about 40 s (budget 60 s); `--tier pr` about 2 min.
