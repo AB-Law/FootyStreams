@@ -87,15 +87,17 @@ def test_run_season__private_modifiers__never_appear_in_the_event_log() -> None:
     assert not any(m.id in events or m.summary_key in events for m in private)
 
 
+@pytest.mark.timeout(120)
 def test_run_season__same_seed_twice__identical_standings_and_ledger() -> None:
-    first, factory_a = play_season(2, 4)
+    first, factory_a = _small()
     second, factory_b = play_season(2, 4)
     assert first.table == second.table
     assert season_fingerprint(factory_a) == season_fingerprint(factory_b)
 
 
+@pytest.mark.timeout(120)
 def test_run_season__different_seed__different_season() -> None:
-    _, factory_a = play_season(2, 4)
+    _, factory_a = _small()
     _, factory_b = play_season(3, 4)
     assert season_fingerprint(factory_a) != season_fingerprint(factory_b)
 

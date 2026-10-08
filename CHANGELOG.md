@@ -155,6 +155,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0062** Share the one-player-on-two-teams check between sim and verify *(M4; scope: domain, verify, sim)*
 
 ### Tests
+- **0182** Stop the season tests timing out under coverage *(M9; scope: league)*
 - **0135** Share cached worlds across seed tests *(M2; scope: cli)*
 - **0119** Add the M7 slow-tier sweeps; write the M7 report, design notes and status *(M7; scope: sim)*
 - **0100** Add the M6 sweeps and metamorphic tests; write the M6 report *(M6; scope: sim)*
