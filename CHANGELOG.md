@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0211** Add the programme: played matchdays laid out as pre-match, match, post-match and magazine blocks *(M12; scope: runtime)*
 - **0210** Add the single-instance lock, the persisted playback cursor and the health heartbeat *(M12; scope: runtime)*
 - **0209** Add the EventBus with per-sink bounded queues and the NDJSON, file and in-memory sinks *(M12; scope: runtime)*
 - **0208** Add the broadcast event contract: segments, world notices and engine markers *(M12; scope: events, runtime)*
