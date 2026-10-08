@@ -79,6 +79,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0101** Put a bench goalkeeper in goal when he replaces a stand-in keeper *(M6; scope: sim)*
 - **0098** Roll a foul injury before the card so a dismissed fouler is not named afterwards *(M6; scope: sim)*
 - **0087** Reject a referee other than the one the setup names *(M5; scope: sim)*
 - **0086** Bound the M5 SimConfig knobs like the M4 ones *(M5; scope: sim)*
