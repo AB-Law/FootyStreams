@@ -7,8 +7,8 @@ const MIN_FLIGHT_S = 0.3;
 /** Peak height of a ball in the air, in screen pixels, for a full loft. */
 const MAX_LIFT_PX = 12;
 const DEFAULT_SHOT_LOFT = 0.15;
-/** A curve of 1 bows the path sideways by a quarter of its length at the control point (an eighth on the ball). */
-const MAX_BEND = 0.25;
+/** A curve of 1 puts the control point 0.7 of the shot length beside the middle: the ball itself bows by about a third of that. */
+const MAX_BEND = 0.7;
 
 /** A ball in the air between two points: straight, or bent by `bend` (fraction of its length). */
 export interface Flight {
