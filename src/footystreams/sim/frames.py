@@ -19,10 +19,13 @@ from footystreams.sim.mathx import clamp, lerp
 from footystreams.sim.state import MatchState
 
 PRECISION = 4
-# A moment can last far longer than the ball takes to move (a throw-in delay, a goal celebration).
-# The ball, and the player it ends up with, cover their distance at this speed and then wait, so a
-# long moment shows a quick move and a hold instead of a ball crawling for the whole span.
+# A long moment can last far longer than the ball takes to move (a throw-in delay, a goal
+# celebration). In one, the ball and the player it ends up with cover their distance at this speed
+# and then wait, so a long moment shows a quick move and a hold, not a ball crawling for the span.
 BALL_SPEED_MPS = 25.0
+LONG_MOMENT_S = (
+    5.0  # shorter moments move everything together, so the carrier stays among the others
+)
 MIN_TRAVEL_S = 0.4
 
 
@@ -79,7 +82,9 @@ class FrameRecorder:
             return
         current = snapshot(state)
         span = current.t - base.t
-        travel = max(MIN_TRAVEL_S, distance_m(*base.ball, *current.ball) / BALL_SPEED_MPS)
+        travel = span
+        if span > LONG_MOMENT_S:
+            travel = max(MIN_TRAVEL_S, distance_m(*base.ball, *current.ball) / BALL_SPEED_MPS)
         while self._next_t <= current.t:
             elapsed = self._next_t - base.t
             fraction = elapsed / span if span > 0 else 1.0
