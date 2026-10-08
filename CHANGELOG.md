@@ -77,6 +77,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0098** Fund transfer budgets from income and scale final-fill wages to the club's budget *(M11; scope: league, data)*
 - **0089** Scale intake from the league's own recorded level; split the rollover modules *(M10; scope: league)*
 - **0088** Tune development, intake and squad wages; add league health and a 20-season test *(M10; scope: league)*
 - **0072** Derive fixture ids and flag derbies when scheduling *(M9; scope: league)*

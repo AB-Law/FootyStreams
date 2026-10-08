@@ -119,6 +119,7 @@ class RolloverConfig(_Config):
     wage_tolerance: float = Field(ge=0.0)
     wage_scale_max: float = Field(ge=1.0)
     transfer_budget_share: float = Field(ge=0.0, le=1.0)
+    transfer_budget_income_share: float = Field(ge=0.0, le=1.0)
     contract_extend_years: tuple[int, int]
     awards_min_appearances: int = Field(ge=1)
 

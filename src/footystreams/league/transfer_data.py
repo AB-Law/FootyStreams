@@ -9,9 +9,10 @@ from footystreams.domain.player import Player
 from footystreams.domain.prospects import ProspectFactory
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.transfer import TransferWindow
+from footystreams.domain.types import ClubId
 from footystreams.league.delta import WorldDelta
 from footystreams.league.mood import active_modifiers
-from footystreams.league.squad import SquadContext, rebalance
+from footystreams.league.squad import SquadContext, on_budget, rebalance
 from footystreams.league.tables import LeagueTables
 from footystreams.league.transfer_day import run_market_day
 from footystreams.league.transfer_delta import market_delta
@@ -74,6 +75,13 @@ def load_market(
     return market
 
 
+def _scale(market: Market, club_id: ClubId) -> float:
+    """How much of the market wage the club can pay: its budget over its bill, at most 1.0."""
+    bill = market.wage_bill(club_id)
+    budget = market.clubs[club_id].finances.wage_budget_weekly
+    return min(1.0, budget / bill) if bill else 1.0
+
+
 def _final_fill(market: Market, tables: LeagueTables) -> None:
     """On the last day every club is brought to a legal squad from its prospects and free agents."""
     context = SquadContext(market.today, tables.development.squad, tables.development.youth)
@@ -82,7 +90,9 @@ def _final_fill(market: Market, tables: LeagueTables) -> None:
             (p for p in market.players.values() if p.contract is None), key=lambda p: p.id
         )
         moves = rebalance(club_id, market.seniors(club_id), pool, context)
-        for player in (*moves.promoted, *moves.signed, *moves.released):
+        for player in (*moves.promoted, *moves.signed):
+            market.players[player.id] = on_budget(player, _scale(market, club_id))
+        for player in moves.released:
             market.players[player.id] = player
         if moves.promoted or moves.signed or moves.released:
             market.touched.add(club_id)

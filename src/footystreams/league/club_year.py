@@ -71,7 +71,9 @@ def reset_budgets(club: Club, finance: FinanceConfig, config: RolloverConfig) ->
     """Wage budget from the income estimate; transfer budget from the money in the bank."""
     income = income_estimate(club, finance)
     wage_budget = round(income * config.wage_budget_ratio / finance.weeks_per_year)
-    transfer_budget = max(0, round(club.finances.balance * config.transfer_budget_share))
+    transfer_budget = max(0, round(club.finances.balance * config.transfer_budget_share)) + round(
+        income * config.transfer_budget_income_share
+    )
     finances = club.finances.model_copy(
         update={"wage_budget_weekly": wage_budget, "transfer_budget": transfer_budget}
     )
