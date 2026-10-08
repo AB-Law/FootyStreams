@@ -110,3 +110,12 @@ def test_m05__a_player_on_both_sheets_is_reported() -> None:
 
 def test_verify_match__is_repeatable() -> None:
     assert verify_match(_events(), SETUP) == verify_match(_events(), SETUP)
+
+
+def test_m17__a_log_cut_off_before_fulltime_is_reported() -> None:
+    truncated = list(_events())[:100]
+    assert "M17" in _codes(truncated)
+
+
+def test_m17__a_log_without_the_closing_summary_is_reported() -> None:
+    assert "M17" in _codes(list(_events())[:-1])
