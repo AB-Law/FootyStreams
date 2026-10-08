@@ -13,6 +13,14 @@ from dataclasses import dataclass, field
 from footystreams.domain.match import MatchSetup, SetupRef, TeamSheet
 from footystreams.domain.types import PlayerId
 from footystreams.events.clock import period_elapsed_s
+from footystreams.events.derive.maps import (
+    key_moments,
+    momentum_timeline,
+    pass_matrix,
+    shot_map,
+    xg_timeline,
+    zone_pass_flow,
+)
 from footystreams.events.derive.presence import Spell, injured_players, player_spells
 from footystreams.events.derive.tally import PlayerTally, SideTally, Tally, tally_events
 from footystreams.events.open_play import GoalEvent
@@ -181,6 +189,12 @@ def build_summary(
         team_stats_away=_team_stats(tally.away, tally.home),
         player_stats=_player_rows(setup, tally, spells, inputs, injured_players(events)),
         injuries=inputs.injuries,
+        momentum_timeline=momentum_timeline(events, duration),
+        xg_timeline=xg_timeline(events),
+        key_moments=key_moments(events),
+        pass_matrix=pass_matrix(events),
+        zone_pass_flow=zone_pass_flow(events),
+        shot_map=shot_map(events),
     )
 
 

@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0093** Derive the pass network, zone pass flow, shot map, xG and momentum timelines and key moments from the log *(M7; scope: events)*
 - **0092** Count the full team and player stats from the log; substitutes get rows with their minutes *(M7; scope: events, sim)*
 - **0091** Add the presence fold (minutes, starts, who left); verify reuses it *(M7; scope: events, verify)*
 - **0090** Record end positions, progressive passes, threat gain and big chances when context is on *(M7; scope: sim, events)*

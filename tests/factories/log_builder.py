@@ -28,9 +28,10 @@ class LogBuilder:
         second: int = 0,
         stoppage: int = 0,
         men: tuple[int, int] = (11, 11),
+        significance: float = 0.0,
         **fields: Any,
     ) -> MatchEvent:
-        """Append an event of `cls` and return it (ctx carries only the men on the pitch)."""
+        """Append an event of `cls` and return it (ctx carries men and significance only)."""
         seq = len(self.events)
         event = cls.model_validate(
             {
@@ -40,7 +41,7 @@ class LogBuilder:
                 "tick": seq,
                 "clock": MatchClock(period=period, minute=minute, second=second, stoppage=stoppage),
                 "team": team,
-                "ctx": EventContext(men_home=men[0], men_away=men[1], significance=0.5),
+                "ctx": EventContext(men_home=men[0], men_away=men[1], significance=significance),
                 **fields,
             }
         )
