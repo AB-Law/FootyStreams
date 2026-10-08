@@ -163,6 +163,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0041** Close M1 test gaps for union usage and aggregates *(M1; scope: domain, events, docs; schema version patch)*
 
 ### Removed
+- **0190** Drop the duplicate season-timeout fragment 0182 *(M11; scope: docs)*
 - **0008** Remove the Cursor rules generator; keep plain, hand-maintained .cursor/rules copies. *(design; scope: tools, design)*
 
 ### Performance
@@ -180,7 +181,6 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 
 ### Tests
 - **0183** Skip the world-gen wall-clock tripwire under coverage *(M9; scope: seed)*
-- **0182** Stop the season tests timing out under coverage *(M9; scope: league)*
 - **0171** Stop the season tests timing out under coverage *(M10; scope: league)*
 - **0135** Share cached worlds across seed tests *(M2; scope: cli)*
 - **0119** Add the M7 slow-tier sweeps; write the M7 report, design notes and status *(M7; scope: sim)*
