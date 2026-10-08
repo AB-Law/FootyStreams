@@ -1,0 +1,4 @@
+node_modules/
+dist/
+# Recorded replays are about 15 MB each; record them with scripts/record_match.py
+replays/
