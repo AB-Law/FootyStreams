@@ -7,10 +7,12 @@ numbers and, with `SimConfig.context.enabled` off, return nothing (docs/design/0
 from __future__ import annotations
 
 from footystreams.events.derive.threat import frame_value, threat
+from footystreams.sim.flight import shot_flight
 from footystreams.sim.geometry import Point
 from footystreams.sim.mathx import clamp
 from footystreams.sim.options import Option
 from footystreams.sim.play import Play
+from footystreams.sim.state import PlayerState
 
 PRECISION = 4
 
@@ -44,8 +46,15 @@ def dribble_fields(play: Play, option: Option, *, kept_ball: bool) -> dict[str, 
     return {"end_pos": _position(option.end)}
 
 
-def shot_fields(play: Play, xg: float) -> dict[str, object]:
-    """Return whether a shot was a big chance."""
+def shot_fields(play: Play, xg: float, shooter: PlayerState, outcome: str) -> dict[str, object]:
+    """Return whether a shot was a big chance and how it travelled (target, bend, pace, loft)."""
     if not play.cfg.context.enabled:
         return {}
-    return {"big_chance": xg >= play.cfg.context.big_chance_xg}
+    path = shot_flight(play, shooter, outcome)
+    return {
+        "big_chance": xg >= play.cfg.context.big_chance_xg,
+        "target": _position(path.target),
+        "curve": round(path.curve, PRECISION),
+        "speed_mps": path.speed_mps,
+        "loft": path.loft,
+    }

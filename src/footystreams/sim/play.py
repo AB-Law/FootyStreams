@@ -37,6 +37,7 @@ class Play:
     referee: RefereeProfile
     injury: SimRng
     build: BuildContext
+    flight: SimRng  # the look of a shot (sim/flight.py); never feeds an outcome
 
 
 def take_possession(state: MatchState, player: PlayerState, x: float, y: float) -> None:

@@ -57,6 +57,7 @@ STREAM_NAMES = (
     "mgr_away",
     "dayform",
     "review",
+    "flight",
 )
 _RESOLVERS = {
     ActionKind.PASS: resolve_pass,
@@ -101,6 +102,7 @@ class MatchEngine:
             referee_profile(referee),
             streams["injury"],
             context,
+            streams["flight"],
         )
         self._manager = (
             ManagerAI(self._play, streams["mgr_home"], streams["mgr_away"])
