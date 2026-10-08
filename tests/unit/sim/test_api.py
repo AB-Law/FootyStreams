@@ -6,7 +6,14 @@ from footystreams.events.digest import log_digest
 from footystreams.events.open_play import GoalEvent
 from footystreams.events.structure import FulltimeEvent, HalftimeEvent, KickoffEvent
 from footystreams.events.summary import MatchSummaryEvent
-from footystreams.sim import InvalidSetupError, SimConfig, default_tables, run_match, simulate_match
+from footystreams.sim import (
+    EngineError,
+    InvalidSetupError,
+    SimConfig,
+    default_tables,
+    run_match,
+    simulate_match,
+)
 from footystreams.sim.config import config_hash
 from tests.factories.match import make_setup, make_team_sheet
 from tests.factories.sim_teams import make_demo_setup
@@ -105,3 +112,13 @@ def test_simulate_match__same_club_on_both_sides__is_rejected() -> None:
     away = make_team_sheet(club_id="clb_home01", side="away")
     with pytest.raises(InvalidSetupError, match="same club"):
         simulate_match(make_setup(away=away), 1, CFG, TABLES)
+
+
+def test_run_match__stream_without_a_summary__raises_engine_error(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    truncated = run_match(SETUP, 1, CFG, TABLES).events[:-1]
+    monkeypatch.setattr("footystreams.sim.api.simulate_match", lambda *_: iter(truncated))
+
+    with pytest.raises(EngineError, match="without a summary"):
+        run_match(SETUP, 1, CFG, TABLES)

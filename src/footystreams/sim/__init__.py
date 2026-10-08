@@ -7,10 +7,11 @@ Design: docs/design/02-simulation.md.
 
 from footystreams.sim.api import run_match, simulate_match
 from footystreams.sim.config import SimConfig, config_hash, merge_config
-from footystreams.sim.errors import InvalidSetupError
+from footystreams.sim.errors import EngineError, InvalidSetupError
 from footystreams.sim.tables import StaticTables, default_tables
 
 __all__ = [
+    "EngineError",
     "InvalidSetupError",
     "SimConfig",
     "StaticTables",

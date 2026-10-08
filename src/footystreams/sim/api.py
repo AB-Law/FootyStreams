@@ -14,7 +14,7 @@ from footystreams.events.summary import MatchSummaryEvent
 from footystreams.events.types import MatchEvent
 from footystreams.sim.config import SimConfig, config_hash
 from footystreams.sim.engine import MatchEngine
-from footystreams.sim.errors import InvalidSetupError
+from footystreams.sim.errors import EngineError, InvalidSetupError
 from footystreams.sim.summary import setup_ref
 from footystreams.sim.tables import StaticTables
 
@@ -44,7 +44,7 @@ def run_match(setup: MatchSetup, seed: int, config: SimConfig, tables: StaticTab
     last = events[-1]
     if not isinstance(last, MatchSummaryEvent):
         msg = f"match {setup.match_id} ended without a summary"
-        raise InvalidSetupError(msg)
+        raise EngineError(msg)
     summary = last.summary
     return MatchResult(
         events=events,
