@@ -10,7 +10,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from footystreams.events.open_play import GoalEvent, SaveEvent, ShotEvent
-from footystreams.sim.actions.challenge import closest_of
+from footystreams.sim.actions.nearest import closest_of
+from footystreams.sim.actions.out_of_play import out_of_play
 from footystreams.sim.actions.shooting import finishing_skill
 from footystreams.sim.emit import Meta
 from footystreams.sim.geometry import frame_coordinate, goal_distance_m
@@ -19,7 +20,7 @@ from footystreams.sim.options import Option
 from footystreams.sim.play import Play, action_duration, actor, label, take_possession
 from footystreams.sim.positioning import place_for_kickoff
 from footystreams.sim.pressure import nearest_opponents
-from footystreams.sim.side import opposite
+from footystreams.sim.side import Side, opposite
 from footystreams.sim.state import PlayerState
 
 _SKILL_PIVOT = 50.0
@@ -113,28 +114,46 @@ def resolve_shot(play: Play, option: Option) -> float:
 
 
 def _after_shot(play: Play, outcome: str, shot_id: str, assist: str | None) -> float:
-    """Apply the consequences of a shot outcome; return extra seconds (goal celebration)."""
+    """Apply the consequences of a shot outcome; return extra seconds (goal, restarts)."""
     state = play.state
     if outcome == "goal":
-        return _score_goal(play, shot_id, assist)
+        return score_goal(play, shot_id, assist)
     state.assist_from = None  # a rebound is a new chance: the earlier pass does not assist it
     if outcome == "saved":
-        _record_save(play, shot_id)
-    elif outcome == "off_target":
-        _keeper_collects(play)
-    else:  # blocked or woodwork: the ball breaks loose near the shooter
-        _loose_ball(play, (state.ball_x, state.ball_y))
+        return _record_save(play, shot_id)
+    if outcome == "off_target":
+        return restart_behind(play, last_touch=state.carrier.side, collect=True)
+    if outcome == "blocked" and _deflected_behind(play, play.cfg.restarts.blocked_corner_share):
+        return restart_behind(play, last_touch=state.defenders.side, collect=False)
+    loose_ball(play, (state.ball_x, state.ball_y))
     return 0.0
 
 
-def _keeper_collects(play: Play) -> None:
+def _deflected_behind(play: Play, share: float) -> bool:
+    """True when restarts are on and the ball runs out behind the goal (one `setpiece` draw)."""
+    return play.cfg.restarts.enabled and play.setpiece.u() < share
+
+
+def restart_behind(play: Play, *, last_touch: Side, collect: bool) -> float:
+    """The ball goes out behind the goal: a goal kick or corner, or the keeper just collects it."""
+    state = play.state
+    if not play.cfg.restarts.enabled:
+        if collect:
+            keeper_collects(play)
+        return 0.0
+    goal_x = frame_coordinate(1.0, state.attackers.attack_dir)
+    return out_of_play(play, (goal_x, state.carrier.y), last_touch)
+
+
+def keeper_collects(play: Play) -> None:
+    """The keeper picks the ball up near his six-yard box and has possession."""
     state = play.state
     keeper = state.defenders.keeper
     spot_x = frame_coordinate(_KEEPER_RELEASE_FRAME_X, state.defenders.attack_dir)
     take_possession(state, keeper, spot_x, keeper.y)
 
 
-def _record_save(play: Play, shot_id: str) -> None:
+def _record_save(play: Play, shot_id: str) -> float:
     state = play.state
     shooter, keeper = state.carrier, state.defenders.keeper
     meta = Meta(
@@ -145,13 +164,22 @@ def _record_save(play: Play, shot_id: str) -> None:
         headline=f"{label(state.defenders, keeper.player_id)} saves",
     )
     play.emit.emit(state, SaveEvent, meta, keeper_id=keeper.player_id, shot_event_id=shot_id)
+    return after_save(play)
+
+
+def after_save(play: Play) -> float:
+    """The keeper holds, tips it behind (a corner) or parries it loose; return extra seconds."""
+    keeper = play.state.defenders.keeper
     if play.rng.u() < play.cfg.shot.keeper_holds:
-        _keeper_collects(play)
+        keeper_collects(play)
+    elif _deflected_behind(play, play.cfg.restarts.parry_corner_share):
+        return restart_behind(play, last_touch=keeper.side, collect=False)
     else:
-        _loose_ball(play, (keeper.x, keeper.y))
+        loose_ball(play, (keeper.x, keeper.y))
+    return 0.0
 
 
-def _loose_ball(play: Play, spot: tuple[float, float]) -> None:
+def loose_ball(play: Play, spot: tuple[float, float]) -> None:
     """A parried or blocked ball: the nearest attacker or defender gets there first."""
     state = play.state
     attacker_first = play.rng.u() < play.cfg.shot.rebound_attacker_share
@@ -163,7 +191,8 @@ def _loose_ball(play: Play, spot: tuple[float, float]) -> None:
     take_possession(state, winner, spot[0], spot[1])
 
 
-def _score_goal(play: Play, shot_id: str, assist: str | None) -> float:
+def score_goal(play: Play, shot_id: str, assist: str | None) -> float:
+    """Record a goal by the carrier, restart from the centre and return the celebration seconds."""
     state = play.state
     scorer = state.carrier
     state.attackers.score += 1
@@ -187,4 +216,6 @@ def _score_goal(play: Play, shot_id: str, assist: str | None) -> float:
     state.chain_started_at = state.elapsed_s
     state.assist_from = None
     tempo = play.cfg.tempo
-    return tempo.celebration_s + tempo.celebration_spread_s * signed_unit(play.rng.u())
+    seconds = tempo.celebration_s + tempo.celebration_spread_s * signed_unit(play.rng.u())
+    state.stoppage_s += seconds
+    return seconds

@@ -47,6 +47,7 @@ from tests.factories.player import (
     make_technical,
 )
 
+DEMO_REFEREE_ID = RefereeId("ref_demo0001")  # the official every demo setup names
 _FIRST_NAMES = (
     "Brae", "Kell", "Davo", "Mirek", "Tovan", "Sasha", "Ruben", "Jarek", "Ollie", "Pavel",
     "Nando", "Lucan", "Emre", "Tomas", "Arlo", "Viktor", "Hale", "Oren", "Dario", "Soren",
@@ -301,7 +302,7 @@ def make_demo_setup(  # noqa: PLR0913 - a demo match is described by these indep
             club=("clb_har001", "Harbour United", "HAR"),
         ),
         weather=weather or _fair_weather(),
-        referee_id=RefereeId("ref_demo0001"),
+        referee_id=DEMO_REFEREE_ID,
         attendance=18_000,
         is_derby=False,
         importance=0.5,

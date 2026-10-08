@@ -46,12 +46,14 @@ def load_golden(path: Path = GOLDEN_PATH) -> dict[str, object] | None:
 
 
 def differences(current: Mapping[str, object], stored: Mapping[str, object] | None) -> list[str]:
-    """List the cases whose pinned values differ (all of them when nothing is stored)."""
+    """List the cases whose pinned values differ (all of them when nothing is stored).
+
+    The stored `config_hash` is informational: adding a knob changes it without changing any
+    match, and only the digests are the contract.
+    """
     if stored is None:
         return ["golden file missing"]
-    found = []
-    if current["config_hash"] != stored.get("config_hash"):
-        found.append("config_hash")
+    found: list[str] = []
     new_cases, old_cases = current["cases"], stored.get("cases", {})
     assert isinstance(new_cases, dict)  # noqa: S101 - narrows the JSON shape
     assert isinstance(old_cases, dict)  # noqa: S101

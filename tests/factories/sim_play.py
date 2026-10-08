@@ -5,10 +5,12 @@ from __future__ import annotations
 from functools import cache
 
 from footystreams.domain.match import MatchSetup
+from footystreams.domain.referee import Referee
 from footystreams.sim.config import SimConfig
 from footystreams.sim.emit import EventEmitter
 from footystreams.sim.play import Play
 from footystreams.sim.positioning import place_for_kickoff
+from footystreams.sim.referee import referee_profile
 from footystreams.sim.rng import SimRng
 from footystreams.sim.state import build_state
 from footystreams.sim.tables import default_tables
@@ -22,11 +24,22 @@ def _default_setup() -> MatchSetup:
 
 
 def make_play(
-    seed: int = 1, setup: MatchSetup | None = None, config: SimConfig | None = None
+    seed: int = 1,
+    setup: MatchSetup | None = None,
+    config: SimConfig | None = None,
+    referee: Referee | None = None,
 ) -> Play:
     """Build a Play at home's kick-off with fresh streams derived from `seed`."""
     setup = setup or _default_setup()
     root = SimRng(seed)
     state = build_state(setup, default_tables(), root.fork("dayform"))
     place_for_kickoff(state, "home")
-    return Play(state, root.fork("play"), config or SimConfig(), EventEmitter(setup.match_id))
+    return Play(
+        state,
+        root.fork("play"),
+        config or SimConfig(),
+        EventEmitter(setup.match_id),
+        root.fork("discipline"),
+        root.fork("setpiece"),
+        referee_profile(referee),
+    )

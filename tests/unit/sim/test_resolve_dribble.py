@@ -2,6 +2,7 @@ from dataclasses import replace
 
 import pytest
 
+from footystreams.events.discipline import FoulEvent
 from footystreams.events.open_play import (
     ClearanceEvent,
     DribbleEvent,
@@ -31,14 +32,13 @@ def test_resolve_dribble__success_carries_the_ball_forward_without_changing_side
     assert play.state.carrier.side == "home"
 
 
-def test_resolve_dribble__failure_gives_the_ball_to_the_defence_with_a_tackle_when_tackled() -> (
-    None
-):
+def test_resolve_dribble__failure_gives_the_ball_to_the_defence_unless_a_foul_is_called() -> None:
     seen = set()
-    for seed in range(60):
+    for seed in range(80):
         play = make_play(seed)
         resolve_dribble(play, _option(play, ActionKind.DRIBBLE, 0.0))
-        assert play.state.carrier.side == "away"
+        fouled = any(isinstance(e, FoulEvent) for e in play.emit.events)
+        assert play.state.carrier.side == ("home" if fouled else "away")
         dribble = next(e for e in play.emit.events if isinstance(e, DribbleEvent))
         has_tackle = any(isinstance(e, TackleEvent) for e in play.emit.events)
         assert has_tackle == (dribble.outcome == "tackled")
