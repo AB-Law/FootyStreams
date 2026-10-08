@@ -13,6 +13,8 @@ from footystreams.sim.config import SimConfig, merge_config
 from footystreams.sim.decision import team_weights
 from footystreams.sim.options import ActionKind, Option, generate_options
 from footystreams.sim.play import Play, action_duration, label, take_possession
+from footystreams.sim.pressure import nearest_opponents
+from footystreams.sim.state import PlayerState
 from tests.factories.sim_play import make_play
 
 
@@ -68,11 +70,16 @@ def test_resolve_pass__interception_is_emitted_after_and_caused_by_the_pass() ->
     pytest.fail("no interception in 80 seeds")
 
 
+def _closest(play: Play) -> tuple[float, PlayerState]:
+    carrier = play.state.carrier
+    return nearest_opponents(play.state.defenders, carrier.x, carrier.y, 1)[0]
+
+
 def test_attempt_press_tackle__nothing_happens_when_no_defender_is_close() -> None:
     play = make_play()
     for defender in play.state.away.players:
         defender.x, defender.y = 0.9, 0.9
-    assert attempt_press_tackle(play, 1.0) is False
+    assert attempt_press_tackle(play, 1.0, _closest(play)) is False
     assert play.emit.events == []
 
 
@@ -82,7 +89,7 @@ def test_attempt_press_tackle__close_defender_with_certain_attempt_resolves_a_ta
     carrier = play.state.carrier
     defender = play.state.away.players[3]
     defender.x, defender.y = carrier.x + 0.005, carrier.y
-    won = attempt_press_tackle(play, 1.0)
+    won = attempt_press_tackle(play, 1.0, _closest(play))
     event = play.emit.events[-1]
     assert isinstance(event, TackleEvent)
     assert event.outcome == ("won" if won else "missed")

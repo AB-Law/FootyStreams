@@ -21,15 +21,17 @@ def tackle_win_probability(tackler: PlayerState, carrier: PlayerState, play: Pla
     return cfg.tackle_base + cfg.tackle_swing * signed_unit(squash(edge))
 
 
-def attempt_press_tackle(play: Play, pressure: float) -> bool:
-    """Let the nearest defender try to dispossess the carrier; True when the ball changed hands.
+def attempt_press_tackle(play: Play, pressure: float, closest: tuple[float, PlayerState]) -> bool:
+    """Let the closest defender try to dispossess the carrier; True when the ball changed hands.
+
+    `closest` is the (distance_m, defender) pair the caller already ranked for the pressure
+    calculation, so the opponents are sorted once per moment.
 
     Consumes one draw to decide whether a challenge happens and one more to resolve it. A missed
     challenge is emitted as a `tackle` with outcome `missed` and play carries on.
     """
     state, cfg = play.state, play.cfg.challenge
-    nearest = nearest_opponents(state.defenders, state.carrier.x, state.carrier.y, 1)
-    gap, tackler = nearest[0]
+    gap, tackler = closest
     if play.rng.u() >= cfg.attempt_rate * pressure or gap > cfg.attempt_radius_m:
         return False
     carrier = state.carrier

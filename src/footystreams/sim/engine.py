@@ -25,7 +25,7 @@ from footystreams.sim.emit import EventEmitter, Meta, TeamLabel
 from footystreams.sim.options import ActionKind, Option
 from footystreams.sim.play import Play, action_duration
 from footystreams.sim.positioning import place_for_kickoff, update_positions
-from footystreams.sim.pressure import pressure_on
+from footystreams.sim.pressure import NEAREST_PRESSERS, nearest_opponents, pressure_from
 from footystreams.sim.rng import SimRng
 from footystreams.sim.side import Side
 from footystreams.sim.state import REGULATION_PERIOD_S, MatchState, build_state
@@ -107,8 +107,10 @@ class MatchEngine:
             update_positions(state, self._pending_move_s, self._config.positioning)
             self._pending_move_s = 0.0
         state.tick += 1
-        pressure = pressure_on(state.carrier, state.defenders, self._config.pressure)
-        if attempt_press_tackle(play, pressure):
+        carrier = state.carrier
+        nearest = nearest_opponents(state.defenders, carrier.x, carrier.y, NEAREST_PRESSERS)
+        pressure = pressure_from(nearest, state.defenders, self._config.pressure)
+        if attempt_press_tackle(play, pressure, nearest[0]):
             duration = action_duration(play, self._config.tempo.tackle_s)
         else:
             option: Option = decide(state, play.rng, self._config, pressure)
