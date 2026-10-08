@@ -69,6 +69,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0086** Bound the M5 SimConfig knobs like the M4 ones *(M5; scope: sim)*
 - **0076** Ignore the config hash when comparing golden digests *(M5; scope: cli)*
 - **0071** A shot that is not a goal clears the assist, and a new period starts without one *(M4; scope: sim; sim version patch)*
 - **0070** Keep players in the kick-off formation after a goal; the clock still runs through the celebration *(M4; scope: sim; sim version patch)*

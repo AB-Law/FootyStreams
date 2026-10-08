@@ -3,15 +3,12 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Annotated, ClassVar, Self
+from typing import ClassVar, Self
 
 from pydantic import Field, model_validator
 
 from footystreams.domain.base import DomainModel, UsageTag
-
-Share = Annotated[float, Field(ge=0.0, le=1.0)]  # a probability or a fraction of something
-Positive = Annotated[float, Field(gt=0.0)]
-NonNegative = Annotated[float, Field(ge=0.0)]
+from footystreams.sim.config_types import NonNegative, Positive, Share
 
 
 class PositionConfig(DomainModel):
