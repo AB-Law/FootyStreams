@@ -1,8 +1,8 @@
 """`uv run sim`: simulate one match and print a readable play-by-play and summary.
 
-A thin wrapper over `run_match`: all logic lives in the library. Until a world exists the match is
-played between position-aware demo teams from `tests/factories` (`--demo`); loading clubs from a
-world (`--home`, `--away`, `--world`/`--db`) arrives when the world track merges.
+A thin wrapper over `run_match`: all logic lives in the library. The match is played either between
+position-aware demo teams from `tests/factories` (`--demo`) or as a friendly between two clubs of a
+world (`--home A --away B` with `--world DIR` or `--db FILE`; a club is its id, short code or name).
 """
 
 from __future__ import annotations
@@ -12,10 +12,17 @@ import importlib
 import sys
 from collections.abc import Sequence
 from enum import StrEnum
+from pathlib import Path
 
+from footystreams.cli.sim_world import resolve_world_match
 from footystreams.domain.match import MatchSetup
+from footystreams.domain.referee import Referee
+from footystreams.persistence.ports import NotFoundError
+from footystreams.seed.static.files import StaticDataError
+from footystreams.seed.world_io import WorldFileError
 from footystreams.sim import SimConfig, default_tables, run_match
 from footystreams.sim.render import Verbosity, names_for, render_events, render_summary
+from footystreams.sim.tables import StaticTables
 from footystreams.tools.paths import PROJECT_ROOT
 
 DEFAULT_STRENGTH = 62
@@ -42,8 +49,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--away-strength", type=int, default=DEFAULT_STRENGTH)
     parser.add_argument("--home-formation", default="433")
     parser.add_argument("--away-formation", default="433")
-    for option in ("--home", "--away", "--world", "--db"):
-        parser.add_argument(option, help="needs a generated world (not available yet)")
+    parser.add_argument("--home", help="home club of a world: id, short code or name")
+    parser.add_argument("--away", help="away club of a world: id, short code or name")
+    parser.add_argument("--world", type=Path, help="world directory to take the clubs from")
+    parser.add_argument("--db", type=Path, help="SQLite database to take the clubs from")
     return parser
 
 
@@ -61,18 +70,24 @@ def _demo_setup(arguments: argparse.Namespace) -> MatchSetup:
     return setup
 
 
+def _resolve(arguments: argparse.Namespace) -> tuple[MatchSetup, StaticTables, Referee | None]:
+    """The setup, the tables to play it with and its referee (the demo has none)."""
+    if arguments.demo:
+        return _demo_setup(arguments), default_tables(), None
+    found = resolve_world_match(arguments)
+    return found.setup, found.tables, found.referee
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the command and return the process exit code."""
     arguments = build_parser().parse_args(argv)
-    if not arguments.demo:
-        print(
-            "error: pass --demo (clubs from a world need the seed/persistence tracks)",
-            file=sys.stderr,
-        )
+    try:
+        setup, tables, referee = _resolve(arguments)
+    except (ValueError, NotFoundError, WorldFileError, StaticDataError) as error:
+        print(f"error: {error}", file=sys.stderr)
         return EXIT_USAGE
-    setup = _demo_setup(arguments)
     config = SimConfig(emit_frames=arguments.frames, frame_interval_s=arguments.frame_interval)
-    result = run_match(setup, arguments.seed, config, default_tables())
+    result = run_match(setup, arguments.seed, config, tables, referee)
     if arguments.format is OutputFormat.NDJSON:
         for event in result.events:
             print(event.model_dump_json())
