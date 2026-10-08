@@ -1,14 +1,12 @@
 # Project status
 
-Updated at the end of milestone M1 (local, awaiting review — 2026-10-08). Read this first; then the design section for your task.
+Updated on the Track B tip (M11 contracts and transfers — 2026-10-08). Read this first; then the design section for your task.
 
 ## Where we are
 - Design is complete (`docs/design/`, index in `docs/design/README.md`; decisions in `09-schema-decisions.md`).
 - **M0 is merged** to `main` (scaffold, quality gate, changelog, CI, ADRs).
-- **M1 (domain models and schema export) is implemented** on local branch `feat/m1-domain-models`
-  awaiting the owner's review before push / one PR. See `docs/milestones/M1.md`.
-- **Next after M1 merges: M2 ∥ M4** (seed/world generators and sim kernel) as parallel tracks —
-  one branch and one PR per milestone, not stacked slice PRs.
+- **Track A (M1, M4–M7)** and **Track B (M2, M3, M9–M11)** are open as stacked draft PRs; see the tables below.
+- Tip of Track B is `feat/m11-contracts-transfers` (PR #25). Tip of Track A is on `main` through M7.
 
 ## How to work here
 ```bash
@@ -76,7 +74,7 @@ Track A (match engine) is built separately; the sections above predate both trac
 - Known: the economy diverged slowly before M11 (rich clubs hoard, small clubs overdrawn).
 
 ### What M11 added
-- `uv run league --seasons N --transfers`: contract talks at the rollover, expiry, summer and mid-season windows with needs, noisy scouting, negotiated fees, medicals, listings, an outside-world club, a final-day squad fill; `verify` L06; `transfer.yaml`.
+- `uv run league --seasons N`: contract talks at the rollover, expiry, summer and mid-season windows with needs, noisy scouting, negotiated fees, medicals, listings, an outside-world club, a final-day squad fill; `verify` L06; `transfer.yaml`. Add `--transfers` to print every completed deal (the market always runs).
 - Known: money is closed (outside fees are mirrored legs) but the rich/poor gap is only narrowed, not closed.
 
 ### Track B caveats

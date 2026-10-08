@@ -43,7 +43,9 @@ def _parser() -> argparse.ArgumentParser:
         "--seasons", type=int, help="play this many seasons, with the off-season between them"
     )
     parser.add_argument(
-        "--transfers", action="store_true", help="also list every completed transfer"
+        "--transfers",
+        action="store_true",
+        help="print every completed transfer (the market always runs with --seasons)",
     )
     parser.add_argument(
         "--season-only", action="store_true", help="play the current season to its end (default)"
