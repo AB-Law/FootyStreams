@@ -1,6 +1,11 @@
 import type { AnyEvent, BroadcastEvent, FrameEvent, FramePlayer, MatchClock, Pos, Side } from "./events.ts";
 import { shotFlight, type Flight } from "./flights.ts";
 
+/** A contest worth animating: a tackle (won, missed or a foul) or a take-on. */
+export type Contest =
+  | { kind: "tackle"; t: number; tacklerId: string; targetId: string; outcome: "won" | "foul" | "missed" }
+  | { kind: "dribble"; t: number; playerId: string; outcome: "success" | "tackled" | "lost" };
+
 /** Tracking frames are one sim second apart; a frame's index is its time in seconds. */
 export const FRAME_INTERVAL_S = 1;
 
@@ -35,6 +40,7 @@ export class MatchStore {
   readonly frames: Frame[] = [];
   readonly marks: Mark[] = [];
   readonly flights: Flight[] = [];
+  readonly contests: Contest[] = [];
 
   /** The single entry point for events. Unknown types are ignored, never an error. */
   onEvent(event: AnyEvent): void {
@@ -52,6 +58,12 @@ export class MatchStore {
         break;
       case "substitution":
         this.marks.push({ kind: "substitution", t, team: known.team, offId: known.player_off_id, onId: known.player_on_id });
+        break;
+      case "tackle":
+        this.contests.push({ kind: "tackle", t, tacklerId: known.player_id, targetId: known.target_id, outcome: known.outcome });
+        break;
+      case "dribble":
+        this.contests.push({ kind: "dribble", t, playerId: known.player_id, outcome: known.outcome });
         break;
       case "foul":
         this.marks.push({ kind: "foul", t, team: known.team, pos: known.pos });

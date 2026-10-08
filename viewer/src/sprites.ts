@@ -150,6 +150,8 @@ function drawSmall(ctx: CanvasRenderingContext2D, x: number, y: number, dress: D
 }
 
 export interface DrawOptions {
+  /** Lying flat (a slide or a fall) when set; `facing` is the side the feet point to. */
+  lying?: 1 | -1;
   running: boolean;
   /** The clock in seconds, for the stride. */
   phase: number;
@@ -165,6 +167,15 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, x: number, y: number, 
   }
   pixel(ctx, SHADOW, x - 3, y, 7);
   pixel(ctx, SHADOW, x - 2, y + 1, 5);
+  if (options.lying !== undefined) {
+    // Flat on the grass, feet toward `lying`: the standing sprite turned a quarter circle.
+    ctx.save();
+    ctx.translate(x, y - 2);
+    ctx.rotate((options.lying > 0 ? -Math.PI : Math.PI) / 2);
+    ctx.drawImage(sprite(dress, "stand"), -4, -BIG_HEIGHT / 2);
+    ctx.restore();
+    return;
+  }
   const stride = Math.floor(options.phase / STRIDE_SECONDS) % 2 === 0 ? "stepA" : "stepB";
   ctx.drawImage(sprite(dress, options.running ? stride : "stand"), x - 4, y - BIG_HEIGHT);
 }

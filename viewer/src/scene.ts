@@ -6,6 +6,7 @@ import type { Sample } from "./interpolate.ts";
 import { ballOnFlight, type Flight } from "./flights.ts";
 import type { Pos } from "./events.ts";
 import { drawText } from "./font.ts";
+import type { Pose } from "./poses.ts";
 import { drawBall, drawCarrierMark, drawPlayer, drawTrail, type Dress } from "./sprites.ts";
 
 /** Everything besides the sampled frame that changes what is on screen at one moment. */
@@ -18,6 +19,8 @@ export interface Extras {
   whistle: boolean;
   /** True when the camera is zoomed in, so the large sprites are used. */
   big: boolean;
+  /** Players in a tackle, a fall or a take-on, by id. */
+  poses: ReadonlyMap<string, Pose>;
 }
 
 const REFEREE_KIT = { pattern: "solid", primary: "#d8c04a", secondary: "#14171c" } as const;
@@ -58,8 +61,11 @@ export class Scene {
         keeper: keepers.has(player.id) ? KEEPER_COLOURS[side] : null,
         appearance: meta.appearance,
       };
-      const at = this.onPitch(toScreen(player.x, player.y));
-      drawPlayer(ctx, at.x, at.y, dress, { running: player.running, phase: extras.t, big: extras.big });
+      const pose = extras.poses.get(player.id);
+      const base = toScreen(player.x, player.y);
+      const at = this.onPitch({ x: base.x + (pose?.dx ?? 0), y: base.y + (pose?.dy ?? 0) });
+      const lying = pose !== undefined && pose.name !== "stand" ? pose.facing : undefined;
+      drawPlayer(ctx, at.x, at.y, dress, { running: player.running || pose !== undefined, phase: extras.t, big: extras.big, lying });
     }
     if (extras.referee !== null) this.drawReferee(ctx, extras.referee, extras);
     this.drawTheBall(ctx, sample, extras);
@@ -70,7 +76,8 @@ export class Scene {
       const carrier = sample.carrierId === null ? null : this.screenPosition(sample, sample.carrierId);
       if (carrier !== null) drawCarrierMark(ctx, carrier.x, carrier.y, extras.big);
       const resting = toScreen(sample.ballX, sample.ballY);
-      drawBall(ctx, resting.x + BALL_AT_FEET_PX, resting.y, sample.ballHeight);
+      const carried = extras.poses.get(sample.carrierId ?? "");
+      drawBall(ctx, resting.x + BALL_AT_FEET_PX + (carried?.dx ?? 0), resting.y + (carried?.dy ?? 0), sample.ballHeight);
       return;
     }
     const flight = extras.flight;

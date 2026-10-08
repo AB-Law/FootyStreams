@@ -7,6 +7,7 @@
 //   FrameEvent, FramePlayer, Halftime/Fulltime ... src/footystreams/events/structure.py
 //   GoalEvent, PassEvent, ShotEvent ...... src/footystreams/events/open_play.py
 //   CardEvent, FoulEvent, SubstitutionEvent ... src/footystreams/events/discipline.py
+//   TackleEvent, DribbleEvent ............ src/footystreams/events/open_play.py
 //
 // Pitch coordinates are absolute, 0..1: x along the length, y across the width. The home side
 // defends x=0 in period 1 and the sides swap at half-time (ctx.attack_dir is home's direction).
@@ -105,6 +106,19 @@ export interface ShotEvent extends EventBase {
   loft?: number;
 }
 
+export interface TackleEvent extends EventBase {
+  type: "tackle";
+  player_id: string;
+  target_id: string;
+  outcome: "won" | "foul" | "missed";
+}
+
+export interface DribbleEvent extends EventBase {
+  type: "dribble";
+  player_id: string;
+  outcome: "success" | "tackled" | "lost";
+}
+
 export interface FoulEvent extends EventBase {
   type: "foul";
   fouler_id: string;
@@ -131,6 +145,8 @@ export type BroadcastEvent =
   | PassEvent
   | ShotEvent
   | FoulEvent
+  | TackleEvent
+  | DribbleEvent
   | SubstitutionEvent
   | HalftimeEvent
   | FulltimeEvent;

@@ -3,7 +3,8 @@ import { test } from "node:test";
 
 import type { AnyEvent } from "./events.ts";
 import { deadSpans, isDead } from "./deadtime.ts";
-import { sampleAt } from "./interpolate.ts";
+import { sampleAt, separate } from "./interpolate.ts";
+import { posesAt } from "./poses.ts";
 import { overlaysAt } from "./overlays.ts";
 import { Playback } from "./playback.ts";
 import { refereeTrack } from "./referee.ts";
@@ -22,7 +23,7 @@ function frame(x: number, scoreHome = 0, ids = ["a", "b"]): AnyEvent {
     ball_pos_x: x,
     ball_pos_y: 0.5,
     carrier_id: null,
-    players: ids.map((id) => ({ player_id: id, x, y: 0.5, speed_mps: 3, exhaustion: 0 })),
+    players: ids.map((id, index) => ({ player_id: id, x, y: 0.3 + index * 0.2, speed_mps: 3, exhaustion: 0 })),
   } as AnyEvent;
 }
 
@@ -167,4 +168,43 @@ test("deadSpans finds a long stoppage, keeps a lead-in and ignores short pauses"
   assert.equal(isDead(spans, 5), true);
   assert.equal(isDead(spans, 2), false);
   assert.equal(isDead(spans, 13), false);
+});
+
+test("separate pushes overlapping players apart and leaves distant ones alone", () => {
+  const near = [
+    { id: "a", x: 0.5, y: 0.5, running: false },
+    { id: "b", x: 0.5 + 0.5 / 105, y: 0.5, running: false },
+    { id: "c", x: 0.9, y: 0.5, running: false },
+  ];
+  const moved = separate(near);
+  const gap = Math.hypot(((moved[1]?.x ?? 0) - (moved[0]?.x ?? 0)) * 105, ((moved[1]?.y ?? 0) - (moved[0]?.y ?? 0)) * 68);
+  assert.ok(gap >= 1.99);
+  assert.equal(moved[2]?.x, 0.9);
+});
+
+test("separate gives the same result whatever the order of the list", () => {
+  const players = [
+    { id: "a", x: 0.5, y: 0.5, running: false },
+    { id: "b", x: 0.5 + 0.8 / 105, y: 0.5, running: false },
+    { id: "c", x: 0.5, y: 0.5 + 0.8 / 68, running: false },
+  ];
+  const forward = separate(players);
+  const backward = separate([...players].reverse()).reverse();
+  forward.forEach((player, index) => {
+    assert.ok(Math.abs(player.x - (backward[index]?.x ?? 0)) < 1e-12);
+    assert.ok(Math.abs(player.y - (backward[index]?.y ?? 0)) < 1e-12);
+  });
+});
+
+test("a tackle sends the tackler in and a foul puts the player down", () => {
+  const store = loaded(
+    ...Array.from({ length: 3 }, () => frame(0.5, 0, ["t", "c"])),
+    { type: "tackle", team: "away", clock, ctx: { score_home: 0, score_away: 0, attack_dir: 1 }, participants: [], player_id: "t", target_id: "c", outcome: "foul" } as AnyEvent,
+    frame(0.5, 0, ["t", "c"]),
+  );
+  const sample = sampleAt(store.frames, 2);
+  const poses = posesAt(store.contests, sample, 2.3);
+  assert.equal(poses.get("t")?.name, "slide");
+  assert.equal(posesAt(store.contests, sample, 3.5).get("c")?.name, "fall");
+  assert.equal(posesAt(store.contests, sample, 9).size, 0);
 });

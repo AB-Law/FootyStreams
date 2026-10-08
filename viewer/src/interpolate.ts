@@ -35,6 +35,9 @@ const MAX_LIFT_PX = 10;
 const PITCH_LENGTH_M = 105;
 const PITCH_WIDTH_M = 68;
 
+/** Players keep at least this far apart (metres): bodies do not pass through each other. */
+const MIN_GAP_M = 2.0;
+
 function lerp(from: number, to: number, alpha: number): number {
   return from + (to - from) * alpha;
 }
@@ -78,6 +81,35 @@ function ballPlace(from: Frame, to: Frame | undefined, alpha: number, players: S
 }
 
 /**
+ * Push apart players who are closer than a body width, half each way. Every shift is worked out
+ * from the positions before any move, so the result does not depend on the order of the list.
+ */
+export function separate(players: readonly SamplePlayer[]): SamplePlayer[] {
+  const shift = players.map(() => ({ x: 0, y: 0 }));
+  for (let first = 0; first < players.length; first++) {
+    for (let second = first + 1; second < players.length; second++) {
+      const a = players[first];
+      const b = players[second];
+      const pushA = shift[first];
+      const pushB = shift[second];
+      if (a === undefined || b === undefined || pushA === undefined || pushB === undefined) continue;
+      const dx = (b.x - a.x) * PITCH_LENGTH_M;
+      const dy = (b.y - a.y) * PITCH_WIDTH_M;
+      const gap = Math.hypot(dx, dy);
+      if (gap >= MIN_GAP_M) continue;
+      // Players on exactly the same spot are split along the pitch; the list order is stable.
+      const along = gap === 0 ? { x: 1, y: 0 } : { x: dx / gap, y: dy / gap };
+      const half = (MIN_GAP_M - gap) / 2;
+      pushA.x -= (along.x * half) / PITCH_LENGTH_M;
+      pushA.y -= (along.y * half) / PITCH_WIDTH_M;
+      pushB.x += (along.x * half) / PITCH_LENGTH_M;
+      pushB.y += (along.y * half) / PITCH_WIDTH_M;
+    }
+  }
+  return players.map((player, index) => ({ ...player, x: player.x + (shift[index]?.x ?? 0), y: player.y + (shift[index]?.y ?? 0) }));
+}
+
+/**
  * The picture at time `t` seconds: positions blended between the two frames around `t`.
  *
  * Never extrapolates: past the last frame it holds the last frame. A player missing from the next
@@ -92,7 +124,7 @@ export function sampleAt(frames: readonly Frame[], t: number): Sample | null {
   if (from === undefined) return null;
   const alpha = to === undefined ? 0 : position - index;
   const next = new Map((to?.players ?? []).map((player) => [player.player_id, player]));
-  const players = from.players.map((player) => blend(player, next.get(player.player_id), alpha));
+  const players = separate(from.players.map((player) => blend(player, next.get(player.player_id), alpha)));
   const ball = ballPlace(from, to, alpha, players);
   return {
     clock: from.clock,

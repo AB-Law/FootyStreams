@@ -6,6 +6,7 @@ import { sampleAt } from "./interpolate.ts";
 import type { ReplayMeta } from "./meta.ts";
 import { activeFlight } from "./flights.ts";
 import { overlaysAt } from "./overlays.ts";
+import { posesAt } from "./poses.ts";
 import { refereeTrack } from "./referee.ts";
 import { pickKits } from "./palette.ts";
 import { Playback, SPEEDS } from "./playback.ts";
@@ -96,6 +97,7 @@ async function start(): Promise<void> {
       referee: referee === null ? null : referee.spot,
       whistle: referee?.incident ?? false,
       big: camera.zoom > 1,
+      poses: posesAt(store.contests, sample, playback.t),
     });
     context.restore();
     drawScoreboard(context, sample, meta, kits, playback.t >= store.duration);

@@ -51,6 +51,10 @@ Open `http://127.0.0.1:5173/`. Options in the address: `?replay=replays/other` (
   the ball so players and tackles are drawn large. Its position depends only on the time, so
   scrubbing is exact. The ball itself is drawn at the carrier's feet and passes carry it between
   players (`src/interpolate.ts`); only shots keep their own flight.
+- `src/poses.ts`, `separate` in `src/interpolate.ts`: players are kept 2 m apart so nobody walks through
+  the man on the ball; a tackle sends the tackler in (a slide when the tackle is won, a foul puts the
+  other player on the ground, a missed one is sidestepped) and a take-on sways the carrier, all from
+  the real `tackle` and `dribble` events.
 - `src/deadtime.ts`: stoppages where the ball stands still (throw-ins, goal kicks, injuries,
   celebrations) are played 3x faster after a short lead-in, shown by `>>` in the corner.
 - `src/pitch.ts`, `src/sprites.ts`, `src/palette.ts`, `src/font.ts`: everything is drawn in code from
