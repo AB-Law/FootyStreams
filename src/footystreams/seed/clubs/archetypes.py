@@ -114,6 +114,7 @@ class ClubArchetype(YamlModel):
     reputation: IntRange
     quality: FloatRange
     style_weights: dict[str, float]
+    mismatch_styles: tuple[str, ...] = ()  # the "drama" styles allowed; empty means any style
     city_percentile: float = Field(ge=0.0, le=1.0)
     income_m: IntRange
     wage_budget_share: FloatRange

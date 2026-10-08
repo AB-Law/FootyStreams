@@ -1505,55 +1505,55 @@
     },
     "default_tactics": {
       "extensions": {},
-      "formation": "442",
-      "mentality": "balanced",
+      "formation": "4231",
+      "mentality": "positive",
       "modules": {
         "build_up": {
-          "goalkeeper": "long",
+          "goalkeeper": "short",
           "kind": "build_up",
-          "passing_directness": 0.8676,
-          "patience": 0.2,
-          "tempo": 0.7486,
+          "passing_directness": 0.1926,
+          "patience": 0.8,
+          "tempo": 0.5485,
           "version": 1,
-          "width": 0.5927
+          "width": 0.5427
         },
         "defensive_block": {
           "compactness": 0.6,
           "kind": "defensive_block",
-          "line_height": 0.4129,
-          "marking": "mixed",
-          "offside_trap": 0.3,
-          "tackling": "aggressive",
+          "line_height": 0.6629,
+          "marking": "zonal",
+          "offside_trap": 0.5,
+          "tackling": "balanced",
           "version": 1
         },
         "final_third": {
-          "box_occupation": 0.8,
-          "crossing_frequency": 0.7,
-          "dribbling_freedom": 0.35,
-          "focus": "centre",
+          "box_occupation": 0.55,
+          "crossing_frequency": 0.3,
+          "dribbling_freedom": 0.5,
+          "focus": "balanced",
           "kind": "final_third",
-          "shoot_on_sight": 0.6,
+          "shoot_on_sight": 0.35,
           "version": 1
         },
         "game_management": {
-          "foul_tolerance": 0.7,
+          "foul_tolerance": 0.4,
           "kind": "game_management",
-          "time_wasting": 0.2,
+          "time_wasting": 0.1,
           "version": 1
         },
         "pressing": {
-          "cover_shadow": 0.4,
-          "intensity": 0.5581,
+          "cover_shadow": 0.6,
+          "intensity": 0.6581,
           "kind": "pressing",
-          "press_line": 0.45,
-          "trigger": "backpass",
+          "press_line": 0.65,
+          "trigger": "loss_of_ball",
           "version": 1
         },
         "transitions": {
-          "counter_press_seconds": 3,
+          "counter_press_seconds": 5,
           "kind": "transitions",
-          "on_loss": "regroup",
-          "on_win": "counter",
+          "on_loss": "counter_press",
+          "on_win": "hold_shape",
           "version": 1
         }
       },
@@ -1564,17 +1564,17 @@
       "slots": [
         {
           "duty": "support",
-          "role": "goalkeeper",
+          "role": "sweeper_keeper",
           "slot": 0
         },
         {
-          "duty": "defend",
+          "duty": "support",
           "role": "full_back_rb",
           "slot": 1
         },
         {
           "duty": "defend",
-          "role": "central_defender",
+          "role": "ball_playing_defender",
           "slot": 2
         },
         {
@@ -1583,38 +1583,38 @@
           "slot": 3
         },
         {
-          "duty": "defend",
+          "duty": "support",
           "role": "full_back_lb",
           "slot": 4
         },
         {
           "duty": "support",
-          "role": "wide_midfielder_rm",
+          "role": "deep_lying_playmaker_dm",
           "slot": 5
         },
         {
           "duty": "defend",
-          "role": "ball_winning_midfielder_cm",
+          "role": "anchor",
           "slot": 6
         },
         {
           "duty": "support",
-          "role": "central_midfielder",
+          "role": "inside_forward_rw",
           "slot": 7
         },
         {
           "duty": "support",
-          "role": "wide_midfielder_lm",
+          "role": "advanced_playmaker",
           "slot": 8
         },
         {
-          "duty": "support",
-          "role": "target_man",
+          "duty": "attack",
+          "role": "winger_lw",
           "slot": 9
         },
         {
-          "duty": "attack",
-          "role": "poacher",
+          "duty": "support",
+          "role": "complete_forward",
           "slot": 10
         }
       ],
@@ -1793,54 +1793,54 @@
     },
     "default_tactics": {
       "extensions": {},
-      "formation": "532",
-      "mentality": "defensive",
+      "formation": "442",
+      "mentality": "attacking",
       "modules": {
         "build_up": {
-          "goalkeeper": "long",
+          "goalkeeper": "mixed",
           "kind": "build_up",
-          "passing_directness": 0.8076,
-          "patience": 0.4,
-          "tempo": 0.4167,
+          "passing_directness": 0.5576,
+          "patience": 0.45,
+          "tempo": 0.7167,
           "version": 1,
-          "width": 0.5294
+          "width": 0.6295
         },
         "defensive_block": {
-          "compactness": 0.85,
+          "compactness": 0.65,
           "kind": "defensive_block",
-          "line_height": 0.1739,
+          "line_height": 0.7238,
           "marking": "zonal",
-          "offside_trap": 0.1,
-          "tackling": "stay_on_feet",
+          "offside_trap": 0.6,
+          "tackling": "aggressive",
           "version": 1
         },
         "final_third": {
-          "box_occupation": 0.6,
+          "box_occupation": 0.65,
           "crossing_frequency": 0.5,
-          "dribbling_freedom": 0.35,
+          "dribbling_freedom": 0.6,
           "focus": "balanced",
           "kind": "final_third",
-          "shoot_on_sight": 0.45,
+          "shoot_on_sight": 0.5,
           "version": 1
         },
         "game_management": {
-          "foul_tolerance": 0.5,
+          "foul_tolerance": 0.55,
           "kind": "game_management",
-          "time_wasting": 0.45,
+          "time_wasting": 0.0,
           "version": 1
         },
         "pressing": {
-          "cover_shadow": 0.6,
-          "intensity": 0.298,
+          "cover_shadow": 0.5,
+          "intensity": 0.848,
           "kind": "pressing",
-          "press_line": 0.2,
-          "trigger": "none",
+          "press_line": 0.75,
+          "trigger": "loss_of_ball",
           "version": 1
         },
         "transitions": {
-          "counter_press_seconds": 0,
+          "counter_press_seconds": 6,
           "kind": "transitions",
-          "on_loss": "drop",
+          "on_loss": "counter_press",
           "on_win": "counter",
           "version": 1
         }
@@ -1856,8 +1856,8 @@
           "slot": 0
         },
         {
-          "duty": "support",
-          "role": "wing_back_rwb",
+          "duty": "attack",
+          "role": "full_back_rb",
           "slot": 1
         },
         {
@@ -1867,42 +1867,42 @@
         },
         {
           "duty": "defend",
-          "role": "covering_defender",
+          "role": "ball_playing_defender",
           "slot": 3
         },
         {
-          "duty": "defend",
-          "role": "central_defender",
+          "duty": "attack",
+          "role": "full_back_lb",
           "slot": 4
         },
         {
           "duty": "support",
-          "role": "wing_back_lwb",
+          "role": "wide_midfielder_rm",
           "slot": 5
         },
         {
-          "duty": "defend",
-          "role": "ball_winning_midfielder_cm",
+          "duty": "support",
+          "role": "box_to_box_midfielder",
           "slot": 6
         },
         {
-          "duty": "defend",
+          "duty": "support",
           "role": "central_midfielder",
           "slot": 7
         },
         {
           "duty": "support",
-          "role": "box_to_box_midfielder",
+          "role": "wide_midfielder_lm",
           "slot": 8
         },
         {
           "duty": "attack",
-          "role": "poacher",
+          "role": "pressing_forward",
           "slot": 9
         },
         {
-          "duty": "support",
-          "role": "pressing_forward",
+          "duty": "attack",
+          "role": "complete_forward",
           "slot": 10
         }
       ],

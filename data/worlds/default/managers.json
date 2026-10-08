@@ -840,8 +840,8 @@
     },
     "date_of_birth": "1965-05-06",
     "fallback_formations": [
-      "4141",
-      "451"
+      "433",
+      "4141"
     ],
     "first_name": "Rarkhine",
     "flexibility": 0.65,
@@ -849,10 +849,10 @@
       "343": 53,
       "352": 44,
       "4141": 75,
-      "4231": 53,
-      "433": 47,
-      "442": 97,
-      "451": 84,
+      "4231": 94,
+      "433": 65,
+      "442": 44,
+      "451": 44,
       "532": 52
     },
     "gender": "nonbinary",
@@ -875,18 +875,18 @@
       "volatility": 35
     },
     "philosophy": {
-      "defensive_line": 0.3758,
-      "directness": 0.8352,
-      "possession_preference": 0.3837,
-      "pressing_intensity": 0.6162,
-      "risk_taking": 0.3666,
+      "defensive_line": 0.6258,
+      "directness": 0.1352,
+      "possession_preference": 0.8837,
+      "pressing_intensity": 0.7162,
+      "risk_taking": 0.4166,
       "rotation_tendency": 0.4709,
       "set_piece_focus": 0.192,
-      "tempo": 0.8471,
-      "width": 0.6353,
+      "tempo": 0.6471,
+      "width": 0.5853,
       "youth_trust": 0.0575
     },
-    "preferred_formation": "442",
+    "preferred_formation": "4231",
     "press_style": {
       "blame_tendency": 0.341,
       "bold_claims": 0.4,
@@ -894,7 +894,7 @@
       "deflection": 0.56,
       "humor": 0.6,
       "mind_games": 0.1375,
-      "tone": "blunt"
+      "tone": "calm"
     },
     "pronouns": "they/them",
     "pronunciation": {
@@ -904,18 +904,18 @@
     },
     "reputation": 81,
     "second_nationality": null,
-    "style": "direct",
+    "style": "possession",
     "substitution_habits": {
       "aggressiveness": 0.4345,
       "chase_game_bias": 0.6651,
-      "earliest_minute": 65,
+      "earliest_minute": 58,
       "fresh_legs_bias": 0.669,
       "preferred_windows": [
         60,
         75,
         80
       ],
-      "protect_lead_bias": 0.5239,
+      "protect_lead_bias": 0.4239,
       "reacts_to_cards": 0.8755,
       "uses_all_subs": true
     },
@@ -999,20 +999,20 @@
     },
     "date_of_birth": "1971-10-20",
     "fallback_formations": [
-      "4141",
-      "451"
+      "4231",
+      "433"
     ],
     "first_name": "Pemewin",
     "flexibility": 0.7,
     "formation_proficiency": {
       "343": 35,
       "352": 33,
-      "4141": 73,
-      "4231": 49,
-      "433": 44,
-      "442": 40,
-      "451": 65,
-      "532": 89
+      "4141": 47,
+      "4231": 80,
+      "433": 81,
+      "442": 95,
+      "451": 41,
+      "532": 44
     },
     "gender": "male",
     "id": "mgr_00007",
@@ -1034,18 +1034,18 @@
       "volatility": 57
     },
     "philosophy": {
-      "defensive_line": 0.1477,
-      "directness": 0.8652,
-      "possession_preference": 0.1414,
-      "pressing_intensity": 0.346,
-      "risk_taking": 0.2497,
+      "defensive_line": 0.6977,
+      "directness": 0.6152,
+      "possession_preference": 0.4414,
+      "pressing_intensity": 0.896,
+      "risk_taking": 0.6497,
       "rotation_tendency": 0.7931,
       "set_piece_focus": 0.473,
-      "tempo": 0.4333,
-      "width": 0.5589,
+      "tempo": 0.7333,
+      "width": 0.6589,
       "youth_trust": 0.9933
     },
-    "preferred_formation": "532",
+    "preferred_formation": "442",
     "press_style": {
       "blame_tendency": 0.3006,
       "bold_claims": 0.56,
@@ -1063,22 +1063,22 @@
     },
     "reputation": 90,
     "second_nationality": null,
-    "style": "low_block",
+    "style": "high_press",
     "substitution_habits": {
-      "aggressiveness": 0.3869,
-      "chase_game_bias": 0.406,
-      "earliest_minute": 64,
+      "aggressiveness": 0.6869,
+      "chase_game_bias": 0.606,
+      "earliest_minute": 54,
       "fresh_legs_bias": 0.35,
       "preferred_windows": [
         55,
         60,
         75
       ],
-      "protect_lead_bias": 0.734,
+      "protect_lead_bias": 0.3408,
       "reacts_to_cards": 0.5473,
       "uses_all_subs": true
     },
-    "touchline_behaviour": "stoic"
+    "touchline_behaviour": "calm"
   },
   {
     "appearance": {
