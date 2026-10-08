@@ -1,0 +1,184 @@
+"""Mutable match state: the only place in the simulation where objects are changed in place.
+
+Hot-path data lives in `__slots__` dataclasses and plain floats (docs/design/11 section 6.2);
+Pydantic is used only at the boundary where events are built. Everything here is owned by one
+`simulate_match` call and never shared.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from enum import IntEnum
+
+from footystreams.domain.match import LineupSlot, MatchSetup, TeamSheet
+from footystreams.domain.snapshot import PlayerSnapshot
+from footystreams.domain.types import FormationId, PlayerId, Position, RoleId
+from footystreams.sim.effective import Skills, build_skills, day_form_multiplier, multipliers
+from footystreams.sim.errors import InvalidSetupError
+from footystreams.sim.geometry import frame_coordinate
+from footystreams.sim.rng import SimRng
+from footystreams.sim.side import Side, opposite
+from footystreams.sim.tables import Formation, StaticTables
+from footystreams.sim.tactics_view import TacticsView, build_view
+
+REGULATION_PERIOD_S = 2700.0
+
+
+class Line(IntEnum):
+    """Which row of the team a player belongs to; indexes per-line tables."""
+
+    KEEPER = 0
+    DEFENCE = 1
+    MIDFIELD = 2
+    ATTACK = 3
+
+
+_LINE_OF = {
+    Position.GK: Line.KEEPER,
+    Position.CB: Line.DEFENCE,
+    Position.RB: Line.DEFENCE,
+    Position.LB: Line.DEFENCE,
+    Position.RWB: Line.DEFENCE,
+    Position.LWB: Line.DEFENCE,
+    Position.DM: Line.MIDFIELD,
+    Position.CM: Line.MIDFIELD,
+    Position.AM: Line.MIDFIELD,
+    Position.RM: Line.MIDFIELD,
+    Position.LM: Line.MIDFIELD,
+    Position.RW: Line.ATTACK,
+    Position.LW: Line.ATTACK,
+    Position.SS: Line.ATTACK,
+    Position.ST: Line.ATTACK,
+}
+
+
+@dataclass(slots=True)
+class PlayerState:
+    """One player on the pitch: identity, effective skills and live position (absolute)."""
+
+    player_id: PlayerId
+    side: Side
+    slot: int
+    position: Position
+    line: Line
+    role: RoleId
+    skills: Skills
+    base_x: float  # formation slot in the team's own frame
+    base_y: float
+    x: float
+    y: float
+    shirt: int | None = None
+
+
+@dataclass(slots=True)
+class TeamState:
+    """One side's live state."""
+
+    side: Side
+    sheet: TeamSheet
+    formation: Formation
+    view: TacticsView
+    attack_dir: int
+    players: list[PlayerState]
+    score: int = 0
+
+    @property
+    def keeper(self) -> PlayerState:
+        """The goalkeeper on the pitch (the first goalkeeper, else the player in slot order 0)."""
+        for candidate in self.players:
+            if candidate.position is Position.GK:
+                return candidate
+        return self.players[0]
+
+    def player(self, player_id: PlayerId) -> PlayerState:
+        """Return the on-pitch player with this id."""
+        for candidate in self.players:
+            if candidate.player_id == player_id:
+                return candidate
+        msg = f"player {player_id} is not on the pitch for {self.sheet.club.id}"
+        raise KeyError(msg)
+
+
+@dataclass(slots=True)
+class MatchState:
+    """The whole live match: both teams, the clock, the ball and who has it."""
+
+    home: TeamState
+    away: TeamState
+    carrier: PlayerState
+    period: int = 1
+    t_period: float = 0.0
+    tick: int = 0
+    ball_x: float = 0.5
+    ball_y: float = 0.5
+    chain: int = 0
+    chain_started_at: float = 0.0
+    assist_from: PlayerState | None = None  # passer of the last completed pass in this chain
+    last_turnover_s: float = field(default=-1e9)  # elapsed_s of the latest change of possession
+
+    def team(self, side: Side) -> TeamState:
+        """Return the team on a side."""
+        return self.home if side == "home" else self.away
+
+    @property
+    def elapsed_s(self) -> float:
+        """Playing seconds since kick-off, counted across periods (half-time excluded)."""
+        return (self.period - 1) * REGULATION_PERIOD_S + self.t_period
+
+    @property
+    def attackers(self) -> TeamState:
+        """The team currently in possession."""
+        return self.team(self.carrier.side)
+
+    @property
+    def defenders(self) -> TeamState:
+        """The team currently out of possession."""
+        return self.team(opposite(self.carrier.side))
+
+
+def line_of(position: Position) -> Line:
+    """Return the row a position belongs to."""
+    return _LINE_OF[position]
+
+
+def build_state(setup: MatchSetup, tables: StaticTables, day_rng: SimRng) -> MatchState:
+    """Build the initial state: players on their slots, home to kick off in period 1."""
+    home = _build_team("home", setup.home, tables, day_rng)
+    away = _build_team("away", setup.away, tables, day_rng)
+    return MatchState(home=home, away=away, carrier=home.players[0])
+
+
+def _build_team(side: Side, sheet: TeamSheet, tables: StaticTables, day_rng: SimRng) -> TeamState:
+    formation_id = sheet.tactics.formation
+    formation = tables.formations.get(FormationId(formation_id))
+    if formation is None:
+        msg = f"unknown formation {formation_id!r} on {sheet.club.id}"
+        raise InvalidSetupError(msg)
+    attack_dir = 1 if side == "home" else -1
+    ordered = sorted(sheet.lineup, key=lambda lineup_slot: lineup_slot.slot)
+    players = [_build_player(side, sheet, formation, item, day_rng) for item in ordered]
+    return TeamState(side, sheet, formation, build_view(sheet), attack_dir, players)
+
+
+def _build_player(
+    side: Side, sheet: TeamSheet, formation: Formation, lineup_slot: LineupSlot, day_rng: SimRng
+) -> PlayerState:
+    snapshot: PlayerSnapshot = sheet.squad[lineup_slot.player_id]
+    formation_slot = formation.slots[lineup_slot.slot]
+    day = day_form_multiplier(snapshot.hidden.consistency, day_rng)
+    mult = multipliers(snapshot, formation_slot.position, lineup_slot.role, day)
+    attack_dir = 1 if side == "home" else -1
+    return PlayerState(
+        player_id=lineup_slot.player_id,
+        side=side,
+        slot=lineup_slot.slot,
+        position=formation_slot.position,
+        line=line_of(formation_slot.position),
+        role=lineup_slot.role,
+        skills=build_skills(snapshot, mult),
+        base_x=formation_slot.x,
+        base_y=formation_slot.y,
+        x=frame_coordinate(formation_slot.x, attack_dir),
+        y=frame_coordinate(formation_slot.y, attack_dir),
+        shirt=snapshot.squad_number,
+    )

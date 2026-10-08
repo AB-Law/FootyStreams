@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+
 import pytest
 from hypothesis import given
 from hypothesis import strategies as st
@@ -68,9 +70,9 @@ def test_position_enum__includes_gk_and_st() -> None:
     assert Position.ST.value == "ST"
 
 
-def test_versions__initial_constants() -> None:
-    assert SCHEMA_VERSION == "0.1.2"
-    assert SIM_VERSION == "0.0.0"
+def test_versions__are_three_part_semver_strings() -> None:
+    for version in (SCHEMA_VERSION, SIM_VERSION):
+        assert re.fullmatch(r"\d+\.\d+\.\d+", version)
 
 
 def test_canonical_json__sorts_keys_and_compacts() -> None:

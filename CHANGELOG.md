@@ -9,6 +9,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0058** Add the golden tool and the cross-process determinism test *(M4; scope: cli, sim)*
+- **0056** Add verify_match with invariants M01-M05, M10 and M17 *(M4; scope: verify)*
+- **0055** Add the sim command and the text renderer *(M4; scope: cli)*
+- **0054** Add simulate_match, run_match, the match loop and an event-derived summary *(M4; scope: sim, events)*
+- **0051** Resolve shots, saves, goals and the restart after a goal *(M4; scope: sim)*
+- **0050** Resolve dribbles and clearances *(M4; scope: sim)*
+- **0049** Resolve passes: completion, interception, loose ball and out of play *(M4; scope: sim)*
+- **0048** Add the match clock helpers and the event emitter *(M4; scope: sim, events)*
+- **0047** Add the carrier decision model *(M4; scope: sim)*
+- **0046** Add pressure model and pass, shot and dribble probability models *(M4; scope: sim)*
+- **0045** Add mutable match state and the positioning model *(M4; scope: sim)*
+- **0044** Add pitch geometry, tactics view and effective skills *(M4; scope: sim)*
+- **0043** Add SimConfig with config hash and merge, and static formation tables *(M4; scope: sim)*
+- **0042** Add SimRng (xoshiro256**) and exact-arithmetic mathx helpers *(M4; scope: sim)*
 - **0038** Enforce SCHEMA_VERSION bump when schemas change *(M1; scope: tools)*
 - **0037** Export initial schemas tree for SCHEMA_VERSION 0.1.0 *(M1; scope: schemas; schema version minor)*
 - **0036** Add usage registry and export-schemas with drift test *(M1; scope: domain, cli, schemas; schema version minor)*
@@ -34,6 +48,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0072** Bound the SimConfig knobs and move the remaining magic numbers into it *(M4; scope: sim; sim version patch)*
+- **0059** Bump SIM_VERSION to 0.1.0 and SCHEMA_VERSION to 0.1.3 *(M4; scope: schemas, sim; sim version minor; schema version patch)*
+- **0057** Damp skill effects and add the totality, strength and performance tests *(M4; scope: sim)*
+- **0053** Calibrate default shot model to about 2.9 goals a match *(M4; scope: sim)*
 - **0040** Tune valuation peak/contract and document rating constants *(M1; scope: domain; schema version patch)*
 - **0020** Deliver each milestone as one branch and one PR; PR size becomes informational *(M0; scope: design, ci)*
 - **0006** Make .claude/rules the source of agent rules and generate .cursor/rules from it; remove docs/rules. *(design; scope: design, tools)*
@@ -42,15 +60,33 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0071** A shot that is not a goal clears the assist, and a new period starts without one *(M4; scope: sim; sim version patch)*
+- **0070** Keep players in the kick-off formation after a goal; the clock still runs through the celebration *(M4; scope: sim; sim version patch)*
+- **0065** M17 now rejects a log that has no fulltime or does not end with the match summary *(M4; scope: verify)*
+- **0064** Derive SimRng forks from the wrapped seed so equal-mod-2^64 seeds fork alike *(M4; scope: sim)*
+- **0063** Raise EngineError, not InvalidSetupError, when a match ends without a summary *(M4; scope: sim)*
 - **0041** Close M1 test gaps for union usage and aggregates *(M1; scope: domain, events, docs; schema version patch)*
 
 ### Removed
 - **0008** Remove the Cursor rules generator; keep plain, hand-maintained .cursor/rules copies. *(design; scope: tools, design)*
 
+### Performance
+- **0067** Rank the carrier's nearest opponents once per moment instead of twice *(M4; scope: sim)*
+- **0052** Speed up option generation and refresh positions every 4 seconds *(M4; scope: sim)*
+
+### Refactoring
+- **0068** Move the text renderer from cli to sim so cli stays a thin wrapper *(M4; scope: sim, cli)*
+- **0066** Remove duplicated constants from the simulation modules *(M4; scope: sim)*
+- **0062** Share the one-player-on-two-teams check between sim and verify *(M4; scope: domain, verify, sim)*
+
 ### Tests
+- **0069** Replace a near-vacuous equal-teams assertion with meaningful strength checks *(M4; scope: sim)*
+- **0060** Pin the M4 golden digests *(M4; scope: sim; sim version minor)*
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0074** Record the digest decision (ADR 0006), the M4 perf exception and the review round *(M4; scope: design, docs)*
+- **0061** Write the M4 report and the Track A status section *(M4; scope: docs, sim)*
 - **0039** Record M1 decisions and refresh design paths *(M1; scope: design, docs)*
 - **0021** Add the parallel match-engine track to the milestone plan *(M0; scope: design)*
 - **0019** Add ADRs, glossary, project status and the M0 milestone report *(M0; scope: docs)*
@@ -58,6 +94,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0001** Add the Phase 1 design document set (entities, simulation, events, architecture, seeding, milestones). *(design; scope: design)*
 
 ### Build and tooling
+- **0073** Bump SIM_VERSION to 0.1.1 and SCHEMA_VERSION to 0.1.4, add two golden cases *(M4; scope: schemas; sim version patch; schema version patch)*
 - **0018** Add the CI workflow and CODEOWNERS *(M0; scope: ci)*
 - **0010** Add test plugins, Hypothesis profiles, a coverage floor and the 'pr' tier of 'uv run check'. *(M0; scope: tools, ci)*
 - **0009** Replace .gitignore with a complete Python, tooling and project ruleset. *(M0; scope: tools)*
