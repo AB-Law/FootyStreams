@@ -17,6 +17,7 @@ from footystreams.events.summary import TeamStats
 
 FIRST_HALF, SECOND_HALF = 1, 2
 LATE_MINUTE = 75  # "the last 15 minutes" of regulation, stoppage time included
+HALF_MINUTE = 45  # the break: changes at or after it (first-half stoppage) are half-time changes
 INJURY_REASON = "injury"
 
 
@@ -77,6 +78,15 @@ def _side(stats: TeamStats, goals: int, substitutions: int) -> SideSample:
     )
 
 
+def _is_early_tactical(event: SubstitutionEvent) -> bool:
+    """A non-injury change before the break; the half-time window is free and not counted."""
+    return (
+        event.clock.period == FIRST_HALF
+        and event.clock.minute < HALF_MINUTE
+        and event.reason != INJURY_REASON
+    )
+
+
 def sample_from(result: MatchResult, gap: float) -> MatchSample:
     """Reduce a finished match to its sample; ``gap`` is the home side's rating advantage."""
     goals_second_half = goals_late = injuries = early_tactical = 0
@@ -94,7 +104,7 @@ def sample_from(result: MatchResult, gap: float) -> MatchSample:
             injuries += 1
         elif isinstance(event, SubstitutionEvent):
             subs[event.team if event.team in subs else "home"] += 1
-            early_tactical += event.clock.period == FIRST_HALF and event.reason != INJURY_REASON
+            early_tactical += _is_early_tactical(event)
         elif isinstance(event, AddedTimeEvent) and event.clock.period in added:
             added[event.clock.period] = event.minutes
     summary = result.summary
