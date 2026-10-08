@@ -9,6 +9,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0156** Add the league command *(M9; scope: cli)*
+- **0155** Add league invariants L01 to L03 *(M9; scope: verify)*
+- **0154** Add the daily tick, matchday play and the season runner *(M9; scope: league)*
+- **0153** Add the world clock and daily recovery *(M9; scope: league)*
+- **0151** Add post-match world deltas *(M9; scope: league)*
+- **0150** Add club finance and the ledger *(M9; scope: league)*
+- **0149** Add match setup building and the lineup AI *(M9; scope: league)*
+- **0148** Add weather generation and attendance *(M9; scope: league)*
+- **0147** Add rule-based modifiers and the world-event generator *(M9; scope: league)*
+- **0146** Add WorldDelta and stateless derived ids *(M9; scope: league)*
+- **0145** Add the mood resolver *(M9; scope: league)*
+- **0144** Add the MatchSimulator seam and the result-only simulator *(M9; scope: league)*
+- **0142** Add league config, calendar, double round-robin schedule and standings with tie-breaks *(M9; scope: data)*
 - **0140** (migration needed) Add SQLite repositories, Alembic 0001_initial and seed --db *(M3; scope: cli)*
 - **0139** Add repository ports, table specs, codec and in-memory repositories *(M3; scope: persistence)*
 - **0136** Commit the default world (seed 1) with a regeneration test *(M2; scope: seed)*
@@ -93,6 +106,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0152** Derive fixture ids and flag derbies when scheduling *(M9; scope: league)*
 - **0118** Enable the M7 context and event enrichment by default (SIM_VERSION stays 0.4.0, goldens re-pinned) *(M7; scope: sim; sim version minor)*
 - **0115** sim: show story tags, the player of the match, top ratings, injuries and stories; add --frames and --frame-interval *(M7; scope: cli)*
 - **0103** Finalise the M7 schema (causal context tags, pass and dribble end positions, frame players, summary stats and analytics rows) and bump SIM_VERSION to 0.4.0 *(M7; scope: events, schemas; sim version minor; schema version minor)*
@@ -141,6 +155,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0062** Share the one-player-on-two-teams check between sim and verify *(M4; scope: domain, verify, sim)*
 
 ### Tests
+- **0183** Skip the world-gen wall-clock tripwire under coverage *(M9; scope: seed)*
+- **0182** Stop the season tests timing out under coverage *(M9; scope: league)*
 - **0135** Share cached worlds across seed tests *(M2; scope: cli)*
 - **0119** Add the M7 slow-tier sweeps; write the M7 report, design notes and status *(M7; scope: sim)*
 - **0100** Add the M6 sweeps and metamorphic tests; write the M6 report *(M6; scope: sim)*
@@ -150,6 +166,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0016** Add unit tests for the end-of-turn quality gate hook *(M0; scope: tools, ci)*
 
 ### Documentation
+- **0157** Write the M9 milestone report and refresh status and design docs *(M9; scope: league)*
 - **0141** Write the M3 milestone report and refresh status and architecture docs *(M3; scope: design)*
 - **0137** Write the M2 milestone report and refresh design docs and status *(M2; scope: design)*
 - **0074** Record the digest decision (ADR 0006), the M4 perf exception and the review round *(M4; scope: design, docs)*
@@ -161,6 +178,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0001** Add the Phase 1 design document set (entities, simulation, events, architecture, seeding, milestones). *(design; scope: design)*
 
 ### Build and tooling
+- **0184** Cap coverage pytest-xdist workers to avoid CI OOM crashes *(M9; scope: tools)*
+- **0143** Run the test tiers in parallel with pytest-xdist *(M9; scope: tools)*
 - **0073** Bump SIM_VERSION to 0.1.1 and SCHEMA_VERSION to 0.1.4, add two golden cases *(M4; scope: schemas; sim version patch; schema version patch)*
 - **0018** Add the CI workflow and CODEOWNERS *(M0; scope: ci)*
 - **0010** Add test plugins, Hypothesis profiles, a coverage floor and the 'pr' tier of 'uv run check'. *(M0; scope: tools, ci)*

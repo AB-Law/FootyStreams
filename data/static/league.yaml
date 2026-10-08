@@ -1,0 +1,93 @@
+# League-layer tunables: calendar, money, attendance, recovery and world events.
+# Everything here is read by pure league code through LeagueConfig (loaded by the composition root).
+calendar:
+  season_start: [8, 15]
+  season_end: [5, 31]
+  matchday_spacing_days: 21        # 14 matchdays x 21 days fits one in-world year with the off-season
+  midseason_window_after_matchday: 7
+  midseason_window_days: 14
+  summer_window_open: [6, 15]
+  summer_window_close: [8, 14]
+  contract_end: [6, 30]
+
+finance:
+  weeks_per_year: 52
+  home_matches_per_season: 7
+  hospitality_share_of_gate: 0.18
+  merchandise_per_fan_per_season: 14
+  merchandise_form_weight: 0.3        # share of merchandise that follows results (win share)
+  facilities_upkeep_per_level_week: 450
+  youth_academy_per_level_week: 160
+  ticket_price_scale: 2.5              # crowns per unit of a stadium's ticket_price_base
+  pay_weekday: 0                       # weekly accruals fall on this weekday (0 = Monday)
+  prize_pool_share_of_broadcast: 0.45  # prize pool as a share of all clubs' broadcast income
+  prize_position_decay: 0.78           # each place earns this share of the one above
+  broadcast_merit_share: 0.2           # share of broadcast income paid as merit by final position
+  merchandise_outcome_factor: {win: 1.4, draw: 1.0, loss: 0.6}  # home-match merchandise by result
+
+attendance:
+  base_fill: 0.62
+  reputation_weight: 0.30
+  form_weight: 0.10
+  derby_bonus: 0.12
+  bad_weather_penalty: 0.08
+  fickleness_weight: 0.5               # how strongly form moves attendance for fickle fanbases
+  noise: 0.04
+  minimum_fill: 0.25
+
+weather:
+  rain_temperature_limit: 3            # below this temperature rain becomes snow
+  hot_threshold: 28
+  cold_threshold: 2
+  kickoff_hours: [15, 17, 20]
+  night_hour: 19
+  temperature_noise: 3.0
+  wind_noise: 2.0
+
+recovery:
+  fatigue_rest_day: 0.10
+  fitness_gain_rest_day: 0.004
+  sharpness_decay_idle_week: 0.03     # applied on pay day to everyone, down to the floor
+  sharpness_floor: 0.3
+  sharpness_gain_per_match: 0.12
+  morale_drift_per_day: 0.01
+  morale_win: 0.04
+  morale_loss: -0.05
+  form_weight_new_rating: 0.3          # exponential moving average weight of the latest match rating
+  injury_day_per_medical_level: 0.003  # shortens healing by this share per medical level point
+  suspension_yellow_threshold: 5
+  fatigue_per_match_minute: 0.0035
+  rotation_fatigue_threshold: 0.55
+  rotation_ability_margin: 5
+  red_card_ban_matches: 2
+  injury_severity_weights: {knock: 0.5, minor: 0.28, moderate: 0.16, severe: 0.06}
+
+world_events:
+  daily_hazard: 0.006                  # base chance per player per day of a life event
+  roll_interval_days: 7                # events are rolled once per this many days (on pay day)
+  volatility_weight: 0.5
+  media_weight: 0.5
+  kind_weights:
+    media_storm: 3
+    manager_row: 2
+    personal_turmoil: 2
+    family_matter: 1
+    dressing_room_row: 2
+    fan_abuse: 1
+    homesickness: 1
+  duration_days: [10, 35]
+  magnitude: [0.25, 0.8]
+
+# The deterministic stand-in for the event simulator (and the production fallback, docs 10 section 7).
+result_only:
+  goals_per_match: 2.7
+  home_advantage: 0.30          # extra goals for the home side
+  goals_per_rating_point: 0.03  # goal-difference per point of team strength difference, per side
+  mood_gain: 2.0                # how strongly the mood multipliers move a player's effective ability
+  form_weight: 0.08
+  fatigue_weight: 0.10
+  goal_chances: 12              # a side's goals are Binomial(chances, expected goals / chances)
+  yellow_chance: 0.07
+  red_chance: 0.004
+  injury_chance: 0.012
+  rating_noise: 0.6

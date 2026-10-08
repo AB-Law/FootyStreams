@@ -56,7 +56,9 @@ class StepResult:
 
 StepRunner = Callable[[CheckStep], StepResult]
 
-_PYTEST = (PYTHON, "-m", "pytest", "-m", "not slow", "-q")
+# Fast tier: as many workers as cores. Coverage: cap workers — each traced process is
+# several times heavier, and -n auto has OOMed Windows CI runners (worker crashes).
+_PYTEST_BASE = (PYTHON, "-m", "pytest", "-m", "not slow", "-q")
 LINT_STEPS: tuple[CheckStep, ...] = (
     CheckStep("ruff lint", (PYTHON, "-m", "ruff", "check", ".")),
     CheckStep("ruff format", (PYTHON, "-m", "ruff", "format", "--check", ".")),
@@ -67,9 +69,10 @@ CHANGELOG_STEPS: tuple[CheckStep, ...] = (
     CheckStep("changelog fragments", (*_CHANGELOG, "check")),
     CheckStep("changelog up to date", (*_CHANGELOG, "build", "--check")),
 )
-FAST_TEST_STEP = CheckStep("pytest (fast tier)", _PYTEST)
+FAST_TEST_STEP = CheckStep("pytest (fast tier)", (*_PYTEST_BASE, "-n", "auto"))
 COVERAGE_TEST_STEP = CheckStep(
-    "pytest + coverage floor", (*_PYTEST, "--cov", "--cov-report=term-missing:skip-covered")
+    "pytest + coverage floor",
+    (*_PYTEST_BASE, "-n", "2", "--cov", "--cov-report=term-missing:skip-covered"),
 )
 
 

@@ -186,3 +186,11 @@ All thresholds are editable in `data/static/balance_targets.yaml` (02 §14.6).
 ## 9. Tests (summary; detail in 06)
 
 Determinism of a multi-season run (hash of standings + ledger + squads after N seasons); development monotonic limits (CA ≤ PA; age curve shape); transfer atomicity (failure mid-transfer rolls back); ledger identities; squad-constraint invariants at window close; mood clamps (property test: any modifier set stays within caps); LLM-modifier validator rejects over-cap/uncited/over-rate proposals; `resolve_mood` is pure (same inputs ⇒ same output).
+
+## 10. As built (M9)
+
+- Calendar: matchdays are 21 days apart (not 7) so a 14-matchday season plus the off-season fills one in-world year; `calendar` in `data/static/league.yaml`.
+- Daily tick as built: recovery, life events, club admin (weekly, on the configured pay weekday), season end, then the matchday (one transaction per match, standings snapshot when the matchday is complete). Training, contracts and transfers join the list in M10/M11. Stages are idempotent through `world_log`.
+- Mood as built: effects in `mood.yaml` are fractions of the hard caps per unit of strength; negatives and positives stack separately with `1 - prod(1 - e)`, scale by personality sensitivity (clamped) and are clamped to the caps. Rule-based modifiers (derby hero, confidence surge, blamed for defeat, joy of returning) and weekly seeded life events create the modifiers; thresholds live in `mood.yaml`.
+- Finance as built: streams are sized against the archetype incomes (gate about 30% with hospitality, sponsors, broadcast 22% less a merit share paid by final position, merchandise, a prize pool of 45% of the league's broadcast income); expenses are wages, staff, facilities and academy upkeep and debt interest. Money moves only through `Posting` rows booked by `ledger.book`.
+- Result-only simulator parameters (`result_only` in `league.yaml`): mood gain is calibrated so one starter with a strong negative mood costs 0.04-0.10 expected goal difference.

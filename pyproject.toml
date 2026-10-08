@@ -20,6 +20,7 @@ pr-size = "footystreams.tools.prsize:main"
 export-schemas = "footystreams.cli.export_schemas:main"
 sim = "footystreams.cli.sim:main"
 golden = "footystreams.cli.golden:main"
+league = "footystreams.cli.league:main"
 
 [dependency-groups]
 dev = [
