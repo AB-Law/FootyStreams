@@ -102,6 +102,6 @@ class SimRng:
     def fork(self, label: str) -> SimRng:
         """Derive an independent child stream named `label` (same seed + label => same stream)."""
         digest = hashlib.blake2b(
-            f"{self.seed}:{label}".encode(), digest_size=_FORK_DIGEST_BYTES
+            f"{self.seed & MASK64}:{label}".encode(), digest_size=_FORK_DIGEST_BYTES
         ).digest()
         return SimRng(int.from_bytes(digest, "big"))

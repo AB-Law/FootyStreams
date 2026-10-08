@@ -8,22 +8,21 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 
-from footystreams.domain.match import MatchSetup
+from footystreams.domain.match import MatchSetup, players_on_both_sheets
 from footystreams.domain.referee import Referee
 from footystreams.events.result import MatchResult
 from footystreams.events.summary import MatchSummaryEvent
 from footystreams.events.types import MatchEvent
 from footystreams.sim.config import SimConfig, config_hash
 from footystreams.sim.engine import MatchEngine
-from footystreams.sim.errors import InvalidSetupError
+from footystreams.sim.errors import EngineError, InvalidSetupError
 from footystreams.sim.summary import setup_ref
 from footystreams.sim.tables import StaticTables
 
 
 def validate_setup(setup: MatchSetup) -> None:
     """Reject a setup that cannot be simulated, before any event is produced."""
-    home_ids = set(setup.home.squad)
-    shared = sorted(home_ids & set(setup.away.squad))
+    shared = players_on_both_sheets(setup)
     if shared:
         msg = f"players on both sheets of {setup.match_id}: {', '.join(shared)}"
         raise InvalidSetupError(msg)
@@ -60,7 +59,7 @@ def run_match(
     last = events[-1]
     if not isinstance(last, MatchSummaryEvent):
         msg = f"match {setup.match_id} ended without a summary"
-        raise InvalidSetupError(msg)
+        raise EngineError(msg)
     summary = last.summary
     return MatchResult(
         events=events,

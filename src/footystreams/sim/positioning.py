@@ -12,16 +12,15 @@ from math import sqrt
 from footystreams.sim.config import PositionConfig
 from footystreams.sim.config_rules import OffsideConfig
 from footystreams.sim.geometry import CENTRE, PITCH_LENGTH_M, PITCH_WIDTH_M, frame_coordinate
-from footystreams.sim.mathx import clamp
+from footystreams.sim.mathx import PERCENT, clamp
 from footystreams.sim.offside import offside_line
 from footystreams.sim.side import Side, opposite
 from footystreams.sim.state import Line, MatchState, PlayerState, TeamState
 
 # Share of the line-height shift and the push/drop each row takes: GK, defence, mid, attack.
 _LINE_SHIFT_WEIGHT = (0.0, 1.0, 0.6, 0.3)
-_MAX_FRAME_X = 0.98
-_MIN_FRAME_X = 0.02
-_PERCENT = 100.0
+_MAX_TARGET_FRAME_X = 0.98
+_MIN_TARGET_FRAME_X = 0.02
 KICKOFF_MAX_X = 0.49  # nobody but the taker is in the opponent's half at kick-off
 
 
@@ -41,12 +40,12 @@ def target_in_frame(
     width = cfg.width_min + (cfg.width_max - cfg.width_min) * team.view.width
     target_y = CENTRE + (player.base_y - CENTRE) * width
     target_y += cfg.pull_y * (ball[1] - target_y)
-    return clamp(target_x, _MIN_FRAME_X, _MAX_FRAME_X), clamp(target_y, 0.0, 1.0)
+    return clamp(target_x, _MIN_TARGET_FRAME_X, _MAX_TARGET_FRAME_X), clamp(target_y, 0.0, 1.0)
 
 
 def speed_mps(player: PlayerState, cfg: PositionConfig) -> float:
     """Return how fast the player can move toward his target, in metres per second."""
-    return cfg.base_speed_mps + cfg.speed_range_mps * player.skills.pace / _PERCENT
+    return cfg.base_speed_mps + cfg.speed_range_mps * player.skills.pace / PERCENT
 
 
 def move_toward(player: PlayerState, target_x: float, target_y: float, max_metres: float) -> None:
@@ -70,7 +69,7 @@ def offside_ceiling(
     Sharper off-the-ball movers (higher `off_ball_movement`) hug the line more tightly.
     """
     line = offside_line(opponents, team.attack_dir)
-    margin = cfg.margin_min + cfg.margin_range * (1.0 - player.skills.off_ball_movement / _PERCENT)
+    margin = cfg.margin_min + cfg.margin_range * (1.0 - player.skills.off_ball_movement / PERCENT)
     return line - margin
 
 

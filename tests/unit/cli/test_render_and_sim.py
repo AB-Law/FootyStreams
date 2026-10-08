@@ -5,7 +5,11 @@ from pathlib import Path
 
 import pytest
 
-from footystreams.cli.render import (
+from footystreams.cli.sim import main
+from footystreams.events.clock import match_clock
+from footystreams.events.types import MATCH_EVENT_ADAPTER
+from footystreams.sim import SimConfig, default_tables, run_match
+from footystreams.sim.render import (
     Verbosity,
     clock_text,
     is_key_event,
@@ -14,10 +18,6 @@ from footystreams.cli.render import (
     render_events,
     render_summary,
 )
-from footystreams.cli.sim import main
-from footystreams.events.clock import match_clock
-from footystreams.events.types import MATCH_EVENT_ADAPTER
-from footystreams.sim import SimConfig, default_tables, run_match
 from footystreams.tools.paths import PROJECT_ROOT
 from tests.factories.sim_teams import make_demo_setup
 

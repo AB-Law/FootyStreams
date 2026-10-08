@@ -7,11 +7,9 @@ from enum import StrEnum
 
 from footystreams.sim.config import PassConfig
 from footystreams.sim.effective import Skills
-from footystreams.sim.geometry import Point
-from footystreams.sim.mathx import clamp, squash
+from footystreams.sim.geometry import CENTRE, Point
+from footystreams.sim.mathx import PERCENT, clamp, squash
 
-_PERCENT = 100.0
-_WIDE_CENTRE = 0.5
 _BACKWARD = -0.02  # frame-x change below which a pass counts as a back pass
 
 
@@ -30,8 +28,8 @@ def classify_pass(carrier: Point, mate: Point, length_m: float, cfg: PassConfig)
     gain = mate[0] - carrier[0]
     if gain < _BACKWARD:
         return PassKind.BACK
-    wide_target = abs(mate[1] - _WIDE_CENTRE) > cfg.cross_wide_offset
-    wide_carrier = abs(carrier[1] - _WIDE_CENTRE) > cfg.cross_wide_offset
+    wide_target = abs(mate[1] - CENTRE) > cfg.cross_wide_offset
+    wide_carrier = abs(carrier[1] - CENTRE) > cfg.cross_wide_offset
     if carrier[0] >= cfg.cross_min_frame_x and wide_carrier and not wide_target:
         return PassKind.CROSS
     if length_m > cfg.long_pass_m:
@@ -84,7 +82,7 @@ def pass_success_probability(attempt: PassAttempt, cfg: PassConfig) -> float:
     skill_term = cfg.skill_swing * (
         squash((attempt.skill - cfg.skill_pivot) / cfg.skill_scale) - 0.5
     )
-    touch_term = cfg.receiver_touch_weight * (attempt.receiver_touch - cfg.skill_pivot) / _PERCENT
+    touch_term = cfg.receiver_touch_weight * (attempt.receiver_touch - cfg.skill_pivot) / PERCENT
     probability = (
         _base(attempt.kind, cfg)
         - cfg.length_penalty_per_m * attempt.length_m

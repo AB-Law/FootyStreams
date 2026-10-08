@@ -14,7 +14,6 @@ from footystreams.sim.mathx import clamp
 from footystreams.sim.state import PlayerState, TeamState
 
 NEAREST_PRESSERS = 3
-_PERCENT = 100.0
 _FAR_SQUARED = 1e12  # larger than any squared pitch distance
 _ATTRIBUTE_PAIR_SCALE = 200.0  # work_rate + aggression, each on 1-100
 
@@ -36,14 +35,22 @@ def presser_intensity(player: PlayerState, cfg: PressureConfig) -> float:
     return cfg.presser_floor + (1.0 - cfg.presser_floor) * drive
 
 
-def pressure_on(carrier: PlayerState, opponents: TeamState, cfg: PressureConfig) -> float:
-    """Return the pressure on the carrier in [0, 1] from the nearest opponents."""
+def pressure_from(
+    nearest: list[tuple[float, PlayerState]], opponents: TeamState, cfg: PressureConfig
+) -> float:
+    """Return the pressure in [0, 1] from already-ranked nearest opponents (nearest first)."""
     radius = cfg.radius_base_m + cfg.radius_range_m * opponents.view.press_intensity
     total = 0.0
-    for gap, presser in nearest_opponents(opponents, carrier.x, carrier.y, NEAREST_PRESSERS):
+    for gap, presser in nearest:
         reach = max(0.0, 1.0 - gap / radius)
         total += reach * presser_intensity(presser, cfg)
     return clamp(total, 0.0, 1.0)
+
+
+def pressure_on(carrier: PlayerState, opponents: TeamState, cfg: PressureConfig) -> float:
+    """Return the pressure on the carrier in [0, 1] from the nearest opponents."""
+    nearest = nearest_opponents(opponents, carrier.x, carrier.y, NEAREST_PRESSERS)
+    return pressure_from(nearest, opponents, cfg)
 
 
 def openness(

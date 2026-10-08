@@ -111,3 +111,14 @@ def test_goal_given_on_target__better_keepers_concede_less() -> None:
         play, XG, shares, weak
     )
     assert keeper_rating(strong) > keeper_rating(weak)
+
+
+def test_resolve_shot__a_shot_that_is_not_a_goal_clears_the_pass_that_set_it_up() -> None:
+    for seed in range(200):
+        play, option = _shooting_play(seed)
+        resolve_shot(play, option)
+        shot = play.emit.events[0]
+        if isinstance(shot, ShotEvent) and shot.outcome != "goal":
+            assert play.state.assist_from is None
+            return
+    pytest.fail("no non-goal shot in 200 seeds")

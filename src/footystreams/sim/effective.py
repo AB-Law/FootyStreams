@@ -11,6 +11,7 @@ from dataclasses import dataclass
 
 from footystreams.domain.snapshot import PlayerSnapshot
 from footystreams.domain.types import Position, RoleId
+from footystreams.sim.mathx import PERCENT
 from footystreams.sim.rng import SimRng
 
 FORM_SWING = 0.08
@@ -29,7 +30,6 @@ LOWER_BOUND = 0.55
 UPPER_BOUND = 1.15
 DEFAULT_COMPETENCE = 20
 DEFAULT_FAMILIARITY = 50
-PERCENT = 100.0
 
 
 @dataclass(frozen=True, slots=True)

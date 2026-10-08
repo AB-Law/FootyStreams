@@ -135,3 +135,9 @@ def test_choice_weighted__last_bucket_gets_the_remainder() -> None:
     rng = SimRng(9)
     picks = [rng.choice_weighted([1.0, 1.0, 1.0]) for _ in range(600)]
     assert set(picks) == {0, 1, 2}
+
+
+def test_fork__seeds_equal_modulo_two_to_the_64__give_the_same_child_stream() -> None:
+    wrapped, negative = SimRng(2**64 - 1), SimRng(-1)
+
+    assert wrapped.fork("play").next_u64() == negative.fork("play").next_u64()

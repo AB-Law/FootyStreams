@@ -12,5 +12,5 @@ milestone that changes match output bumps it (goldens: ``uv run golden update``)
 
 from __future__ import annotations
 
-SCHEMA_VERSION = "0.1.4"
+SCHEMA_VERSION = "0.1.5"
 SIM_VERSION = "0.2.0"

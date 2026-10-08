@@ -6,8 +6,18 @@ from footystreams.events.digest import log_digest
 from footystreams.events.open_play import GoalEvent
 from footystreams.events.structure import FulltimeEvent, HalftimeEvent, KickoffEvent
 from footystreams.events.summary import MatchSummaryEvent
-from footystreams.sim import InvalidSetupError, SimConfig, default_tables, run_match, simulate_match
-from footystreams.sim.config import config_hash
+from footystreams.sim import (
+    EngineError,
+    InvalidSetupError,
+    SimConfig,
+    default_tables,
+    engine,
+    run_match,
+    simulate_match,
+)
+from footystreams.sim.config import OffsideConfig, PositionConfig, config_hash
+from footystreams.sim.positioning import update_positions
+from footystreams.sim.state import MatchState
 from tests.factories.match import make_setup, make_team_sheet
 from tests.factories.sim_teams import make_demo_setup
 
@@ -105,3 +115,43 @@ def test_simulate_match__same_club_on_both_sides__is_rejected() -> None:
     away = make_team_sheet(club_id="clb_home01", side="away")
     with pytest.raises(InvalidSetupError, match="same club"):
         simulate_match(make_setup(away=away), 1, CFG, TABLES)
+
+
+def test_run_match__stream_without_a_summary__raises_engine_error(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    truncated = run_match(SETUP, 1, CFG, TABLES).events[:-1]
+    monkeypatch.setattr("footystreams.sim.api.simulate_match", lambda *_: iter(truncated))
+
+    with pytest.raises(EngineError, match="without a summary"):
+        run_match(SETUP, 1, CFG, TABLES)
+
+
+def test_run_match__no_position_update_spans_a_goal_celebration(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The clock runs through a celebration, but players stay in the kick-off formation.
+
+    Dead balls and cards also stop the clock for a while, so only the first update after a goal
+    is held to the celebration length.
+    """
+    after_goal: list[float] = []
+    goals_seen = 0
+
+    def spy(
+        state: MatchState, dt: float, cfg: PositionConfig, offside: OffsideConfig | None
+    ) -> None:
+        nonlocal goals_seen
+        goals = state.home.score + state.away.score
+        if goals > goals_seen:
+            after_goal.append(dt)
+        goals_seen = goals
+        update_positions(state, dt, cfg, offside)
+
+    monkeypatch.setattr(engine, "update_positions", spy)
+
+    result = run_match(SETUP, 7, CFG, TABLES)
+
+    assert result.summary.score_home + result.summary.score_away > 0
+    assert after_goal
+    assert max(after_goal) < CFG.tempo.celebration_s - CFG.tempo.celebration_spread_s

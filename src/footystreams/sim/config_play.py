@@ -3,11 +3,15 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import ClassVar
+from typing import Annotated, ClassVar, Self
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from footystreams.domain.base import DomainModel, UsageTag
+
+Share = Annotated[float, Field(ge=0.0, le=1.0)]  # a probability or a fraction of something
+Positive = Annotated[float, Field(gt=0.0)]
+NonNegative = Annotated[float, Field(ge=0.0)]
 
 
 class PositionConfig(DomainModel):
@@ -26,16 +30,16 @@ class PositionConfig(DomainModel):
         "step_s": "S",
     }
 
-    push_in_possession: float = 0.09
-    drop_out_of_possession: float = 0.07
-    line_range: float = 0.20  # x shift of the defensive line between line_height 0 and 1
+    push_in_possession: NonNegative = 0.09
+    drop_out_of_possession: NonNegative = 0.07
+    line_range: NonNegative = 0.20  # x shift of the defensive line between line_height 0 and 1
     pull_x: tuple[float, float, float, float] = (0.10, 0.28, 0.40, 0.35)  # GK, DEF, MID, ATT
-    pull_y: float = 0.22
-    width_min: float = 0.80
-    width_max: float = 1.25
-    base_speed_mps: float = 4.5
-    speed_range_mps: float = 3.5
-    step_s: float = 4.0  # positions are refreshed once this much match time has passed
+    pull_y: Share = 0.22
+    width_min: Positive = 0.80
+    width_max: Positive = 1.25
+    base_speed_mps: Positive = 4.5
+    speed_range_mps: NonNegative = 3.5
+    step_s: Positive = 4.0  # positions are refreshed once this much match time has passed
 
 
 class PressureConfig(DomainModel):
@@ -50,12 +54,12 @@ class PressureConfig(DomainModel):
         "open_weight": "S",
     }
 
-    radius_base_m: float = 3.0
-    radius_range_m: float = 8.0  # extra radius at full pressing intensity
-    presser_floor: float = 0.4  # share of a presser's pressure that every defender brings
-    open_distance_m: float = 8.0  # distance to the nearest opponent that counts as fully open
-    lane_clear_m: float = 4.0  # defender distance to the passing lane that counts as clear
-    open_weight: float = 0.55  # share of openness from the receiver's own space vs the lane
+    radius_base_m: Positive = 3.0
+    radius_range_m: NonNegative = 8.0  # extra radius at full pressing intensity
+    presser_floor: Share = 0.4  # share of a presser's pressure that every defender brings
+    open_distance_m: Positive = 8.0  # distance to the nearest opponent that counts as fully open
+    lane_clear_m: Positive = 4.0  # defender distance to the passing lane that counts as clear
+    open_weight: Share = 0.55  # share of openness from the receiver's own space vs the lane
 
 
 class PassConfig(DomainModel):
@@ -83,25 +87,33 @@ class PassConfig(DomainModel):
         "through_min_length_m": "S",
     }
 
-    base_short: float = 0.98
-    base_long: float = 0.80
-    base_through: float = 0.74
-    base_cross: float = 0.62
-    base_back: float = 1.0
+    base_short: Share = 0.98
+    base_long: Share = 0.80
+    base_through: Share = 0.74
+    base_cross: Share = 0.62
+    base_back: Share = 1.0
     length_penalty_per_m: float = 0.0035
     skill_swing: float = 0.12  # damped: skill gaps must not compound into lopsided matches
     skill_pivot: float = 55.0
-    skill_scale: float = 25.0
+    skill_scale: Positive = 25.0
     receiver_touch_weight: float = 0.04
     pressure_penalty: float = 0.30
     openness_penalty: float = 0.20
-    min_probability: float = 0.02
-    max_probability: float = 0.985
-    long_pass_m: float = 32.0
+    min_probability: Share = 0.02
+    max_probability: Share = 0.985
+    long_pass_m: Positive = 32.0
     cross_min_frame_x: float = 0.62
     cross_wide_offset: float = 0.28
     through_min_gain: float = 0.15
     through_min_length_m: float = 15.0
+
+    @model_validator(mode="after")
+    def _probability_bounds_are_ordered(self) -> Self:
+        """The probability floor must not exceed the ceiling."""
+        if self.min_probability > self.max_probability:
+            msg = "passing.min_probability must not exceed passing.max_probability"
+            raise ValueError(msg)
+        return self
 
 
 class ShotConfig(DomainModel):
@@ -120,6 +132,8 @@ class ShotConfig(DomainModel):
         "block_pressure": "S",
         "off_target_base": "S",
         "off_target_skill_swing": "S",
+        "off_target_min": "S",
+        "off_target_max": "S",
         "woodwork_share": "S",
         "keeper_swing": "S",
         "max_goal_given_on_target": "S",
@@ -127,23 +141,36 @@ class ShotConfig(DomainModel):
         "rebound_attacker_share": "S",
     }
 
-    range_m: float = 35.0
-    xg_cap: float = 0.40
-    xg_half: float = 0.44  # geometry constant: larger means lower xG from every spot
-    pressure_penalty: float = 0.7
-    finishing_floor: float = 0.80
-    finishing_span: float = 0.40
-    min_xg: float = 0.02
-    long_range_m: float = 20.0  # beyond this the shooter's long_shots replaces finishing
-    block_base: float = 0.12  # share of shots a defender gets in the way of
-    block_pressure: float = 0.15  # extra blocked share at full pressure
-    off_target_base: float = 0.43
-    off_target_skill_swing: float = 0.12  # a better finisher misses the frame less
-    woodwork_share: float = 0.03
-    keeper_swing: float = 0.5  # how much keeper quality bends the chance of a goal
-    max_goal_given_on_target: float = 0.95
-    keeper_holds: float = 0.62  # share of saves the keeper catches
-    rebound_attacker_share: float = 0.40  # share of loose balls an attacker reaches first
+    range_m: Positive = 35.0
+    xg_cap: Positive = 0.40
+    xg_half: Positive = 0.44  # geometry constant: larger means lower xG from every spot
+    pressure_penalty: Share = 0.7
+    finishing_floor: Positive = 0.80
+    finishing_span: NonNegative = 0.40
+    min_xg: Share = 0.02
+    long_range_m: Positive = 20.0  # beyond this the shooter's long_shots replaces finishing
+    block_base: Share = 0.12  # share of shots a defender gets in the way of
+    block_pressure: Share = 0.15  # extra blocked share at full pressure
+    off_target_base: Share = 0.43
+    off_target_skill_swing: Share = 0.12  # a better finisher misses the frame less
+    off_target_min: Share = 0.05  # floor and ceiling of the off-target share after skill
+    off_target_max: Share = 0.6
+    woodwork_share: float = Field(ge=0.0, lt=1.0, default=0.03)
+    keeper_swing: NonNegative = 0.5  # how much keeper quality bends the chance of a goal
+    max_goal_given_on_target: Share = 0.95
+    keeper_holds: Share = 0.62  # share of saves the keeper catches
+    rebound_attacker_share: Share = 0.40  # share of loose balls an attacker reaches first
+
+    @model_validator(mode="after")
+    def _shares_leave_room_for_an_on_target_shot(self) -> Self:
+        """Blocked + off-target must stay below 1, or no shot could ever be on target."""
+        if self.off_target_min > self.off_target_max:
+            msg = "shot.off_target_min must not exceed shot.off_target_max"
+            raise ValueError(msg)
+        if self.block_base + self.block_pressure + self.off_target_max >= 1.0:
+            msg = "shot.block_base + block_pressure + off_target_max must stay below 1"
+            raise ValueError(msg)
+        return self
 
 
 class DribbleConfig(DomainModel):
@@ -159,13 +186,21 @@ class DribbleConfig(DomainModel):
         "distance_m": "S",
     }
 
-    base: float = 0.55
+    base: Share = 0.55
     swing: float = 0.12
-    scale: float = 20.0
+    scale: Positive = 20.0
     pressure_penalty: float = 0.15
-    min_probability: float = 0.05
-    max_probability: float = 0.95
-    distance_m: float = 8.0  # how far a dribble carries the ball
+    min_probability: Share = 0.05
+    max_probability: Share = 0.95
+    distance_m: Positive = 8.0  # how far a dribble carries the ball
+
+    @model_validator(mode="after")
+    def _probability_bounds_are_ordered(self) -> Self:
+        """The probability floor must not exceed the ceiling."""
+        if self.min_probability > self.max_probability:
+            msg = "dribble.min_probability must not exceed dribble.max_probability"
+            raise ValueError(msg)
+        return self
 
 
 class DecisionConfig(DomainModel):
@@ -194,6 +229,7 @@ class DecisionConfig(DomainModel):
         "temperature_scale": "S",
         "temperature_pressure": "S",
         "weight_floor": "S",
+        "min_utility_weight": "S",
     }
 
     candidates: int = Field(ge=1, le=10, default=4)
@@ -214,10 +250,11 @@ class DecisionConfig(DomainModel):
     recycle_bias: float = 0.4  # extra appeal of a back pass per unit of pressure
     mentality_swing: float = 0.5
     urgency_swing: float = 0.3
-    temperature_base: float = 0.35
-    temperature_scale: float = 2.0
+    temperature_base: Positive = 0.35
+    temperature_scale: Positive = 2.0
     temperature_pressure: float = 0.4
-    weight_floor: float = 0.02
+    weight_floor: Positive = 0.02
+    min_utility_weight: Positive = 0.2  # floor of the progress, keep and risk weights
 
 
 class TempoConfig(DomainModel):
@@ -236,16 +273,18 @@ class TempoConfig(DomainModel):
         "tempo_swing": "S",
     }
 
-    pass_base_s: float = 2.6
+    pass_base_s: Positive = 2.6
     pass_per_m_s: float = 0.06
-    dribble_s: float = 3.6
-    shot_s: float = 2.2
-    clear_s: float = 2.8
-    tackle_s: float = 1.6
-    celebration_s: float = 55.0  # goal celebration and restart
-    celebration_spread_s: float = 12.0
-    noise: float = 0.3  # +-30% on every duration
-    tempo_swing: float = 0.3  # tempo 0 -> x1.15 slower, tempo 1 -> x0.85 quicker
+    dribble_s: Positive = 3.6
+    shot_s: Positive = 2.2
+    clear_s: Positive = 2.8
+    tackle_s: Positive = 1.6
+    celebration_s: Positive = 55.0  # goal celebration and restart
+    celebration_spread_s: NonNegative = 12.0
+    noise: float = Field(ge=0.0, lt=1.0, default=0.3)  # +-30% on every duration
+    tempo_swing: float = Field(
+        ge=0.0, lt=1.0, default=0.3
+    )  # tempo 0 -> x1.15 slower, tempo 1 -> x0.85 quicker
 
 
 class ChallengeConfig(DomainModel):
@@ -265,14 +304,22 @@ class ChallengeConfig(DomainModel):
         "clearance_spread": "S",
     }
 
-    attempt_rate: float = 0.10  # per moment, times the pressure on the carrier
-    attempt_radius_m: float = 3.0
-    tackle_base: float = 0.45
+    attempt_rate: NonNegative = 0.10  # per moment, times the pressure on the carrier
+    attempt_radius_m: Positive = 3.0
+    tackle_base: Share = 0.45
     tackle_swing: float = 0.10
-    tackle_scale: float = 20.0
-    fail_intercept: float = 0.42
-    fail_loose: float = 0.18  # the rest of failed passes go out of play
-    fail_out_long_shift: float = 0.15  # long balls and crosses are likelier to go out
-    dribble_tackled_share: float = 0.8
-    clearance_teammate_share: float = 0.42
+    tackle_scale: Positive = 20.0
+    fail_intercept: Share = 0.42
+    fail_loose: Share = 0.18  # the rest of failed passes go out of play
+    fail_out_long_shift: Share = 0.15  # long balls and crosses are likelier to go out
+    dribble_tackled_share: Share = 0.8
+    clearance_teammate_share: Share = 0.42
     clearance_spread: float = 0.15
+
+    @model_validator(mode="after")
+    def _failed_pass_shares_fit(self) -> Self:
+        """Intercepted + loose cannot exceed 1; the remainder goes out of play."""
+        if self.fail_intercept + self.fail_loose > 1.0:
+            msg = "challenge.fail_intercept + fail_loose must not exceed 1"
+            raise ValueError(msg)
+        return self

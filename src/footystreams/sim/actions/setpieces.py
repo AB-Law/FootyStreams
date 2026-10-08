@@ -5,13 +5,14 @@ Delays are drawn from the `setpiece` stream.
 
 from __future__ import annotations
 
+from footystreams.sim.mathx import signed_unit
 from footystreams.sim.play import Play
 from footystreams.sim.state import PlayerState, TeamState
 
 
 def restart_delay(play: Play, centre_s: float, spread_s: float) -> float:
     """Return a stoppage length of `centre_s +- spread_s` seconds (one `setpiece` draw)."""
-    return centre_s + spread_s * (play.setpiece.u() - 0.5) * 2.0
+    return centre_s + spread_s * signed_unit(play.setpiece.u())
 
 
 def choose_free_kick_taker(team: TeamState) -> PlayerState:

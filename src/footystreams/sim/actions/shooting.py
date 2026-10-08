@@ -7,9 +7,8 @@ from dataclasses import dataclass
 from footystreams.sim.config import ShotConfig
 from footystreams.sim.effective import Skills
 from footystreams.sim.geometry import GOAL_WIDTH_M, PITCH_LENGTH_M, goal_distance_m
-from footystreams.sim.mathx import clamp
+from footystreams.sim.mathx import PERCENT, clamp
 
-_PERCENT = 100.0
 _COMPOSURE_SHIELD = 150.0  # composure/150: even a perfectly composed shooter feels some pressure
 
 
@@ -56,5 +55,5 @@ def shot_chance(
         1.0 - shooter.composure / _COMPOSURE_SHIELD
     )
     skill = finishing_skill(shooter, distance, cfg)
-    skill_factor = cfg.finishing_floor + cfg.finishing_span * skill / _PERCENT
+    skill_factor = cfg.finishing_floor + cfg.finishing_span * skill / PERCENT
     return ShotChance(distance, base, clamp(base * pressure_factor * skill_factor, 0.0, 1.0))
