@@ -42,6 +42,12 @@ def _team_meta(sheet: TeamSheet, appearances: dict[str, Player]) -> dict[str, ob
     return {
         "name": sheet.club.name,
         "short_code": sheet.club.short_code,
+        "formation": sheet.tactics.formation,
+        "lineup": [
+            {"slot": slot.slot, "player_id": slot.player_id, "role": slot.role}
+            for slot in sheet.lineup
+        ],
+        "bench": list(sheet.bench),
         "kits": {"home": _kit_meta(colours.home_kit), "away": _kit_meta(colours.away_kit)},
         "players": players,
     }

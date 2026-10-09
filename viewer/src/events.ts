@@ -67,7 +67,7 @@ export interface FrameEvent extends EventBase {
 export interface GoalEvent extends EventBase {
   type: "goal";
   scorer_id: string;
-  assist_id: string | null;
+  assist_id?: string | null;
   own_goal: boolean;
 }
 
@@ -91,6 +91,7 @@ export interface PassEvent extends EventBase {
   outcome: "complete" | "incomplete" | "intercepted" | "out";
   length_m: number;
   end_pos: Pos | null;
+  progressive?: boolean;
 }
 
 /**
@@ -100,6 +101,8 @@ export interface PassEvent extends EventBase {
 export interface ShotEvent extends EventBase {
   type: "shot";
   player_id: string;
+  xg?: number;
+  assist_id?: string | null;
   outcome: "goal" | "saved" | "blocked" | "off_target" | "woodwork";
   target?: Pos | null;
   curve?: number;
@@ -132,6 +135,26 @@ export interface FoulEvent extends EventBase {
   fouled_id: string;
 }
 
+export interface InterceptionEvent extends EventBase {
+  type: "interception";
+  player_id: string;
+}
+
+export interface ClearanceEvent extends EventBase {
+  type: "clearance";
+  player_id: string;
+}
+
+export interface OffsideEvent extends EventBase {
+  type: "offside";
+  player_id: string;
+}
+
+export interface SaveEvent extends EventBase {
+  type: "save";
+  keeper_id: string;
+}
+
 export interface HalftimeEvent extends EventBase {
   type: "halftime";
 }
@@ -155,6 +178,10 @@ export type BroadcastEvent =
   | TackleEvent
   | RestartEvent
   | DribbleEvent
+  | InterceptionEvent
+  | ClearanceEvent
+  | OffsideEvent
+  | SaveEvent
   | SubstitutionEvent
   | HalftimeEvent
   | FulltimeEvent;

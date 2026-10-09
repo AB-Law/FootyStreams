@@ -19,9 +19,19 @@ export interface KitMeta {
   colours: string[];
 }
 
+/** One starting slot: who began there and the role he was given (older replays lack the lineup). */
+export interface LineupSlotMeta {
+  slot: number;
+  player_id: string;
+  role: string;
+}
+
 export interface TeamMeta {
   name: string;
   short_code: string;
+  formation?: string;
+  lineup?: LineupSlotMeta[];
+  bench?: string[];
   kits: { home: KitMeta; away: KitMeta };
   players: Record<string, PlayerMeta>;
 }
