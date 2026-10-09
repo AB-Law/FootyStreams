@@ -1,6 +1,6 @@
 import type { Appearance } from "./meta.ts";
-import { hairColour, shirtColour, skinColour } from "./palette.ts";
-import { BIG_HEIGHT, BIG_WIDTH, BOOT, KEEPER_SHORTS, OUTLINE, SHADOW, SMALL_HEIGHT, STRIDE_SECONDS, colourOf, pixel, type Dress } from "./sprites.ts";
+import { skinColour } from "./palette.ts";
+import { BIG_HEIGHT, BIG_WIDTH, OUTLINE, SHADOW, STRIDE_SECONDS, colourOf, pixel, type Dress } from "./sprites.ts";
 
 // Side-on players for the broadcast view. The art faces right and is flipped to face left. Row
 // letters: h hair, s skin, e eye, a sleeve, j shirt, k shorts, l sock, b boot, . empty.
@@ -79,61 +79,35 @@ export interface ProfileOptions {
   running: boolean;
   /** The clock in seconds, for the stride. */
   phase: number;
-  big: boolean;
+  /** How large to draw him: 1 is the full 11-pixel player; smaller is further from the camera. */
+  scale: number;
   /** A skill or a kick overrides the walk and run poses. */
   pose?: ProfilePose;
   lying?: 1 | -1;
   arms?: boolean;
 }
 
-/** The legs through a stride: reaching, passing, reaching the other way, passing. */
+/** The legs through a stride: reaching, then passing. */
 function strideOf(phase: number): ProfilePose {
   const step = Math.floor(phase / STRIDE_SECONDS) % 4;
   return step === 0 ? "stepA" : "stepB";
 }
 
-/** The five-by-seven side-on player of the wide view, facing right or left. */
-function drawSmall(ctx: CanvasRenderingContext2D, x: number, y: number, dress: Dress, options: ProfileOptions): void {
-  const skin = skinColour(dress.appearance);
-  const sign = options.facing;
-  const put = (colour: string, dx: number, dy: number): void => {
-    ctx.fillStyle = colour;
-    ctx.fillRect(sign > 0 ? x + dx : x - dx - 1, y - SMALL_HEIGHT + 1 + dy, 1, 1);
-  };
-  ctx.fillStyle = SHADOW;
-  ctx.fillRect(x - 3, y + 1, 7, 1);
-  const hair = dress.appearance.hair_style === "bald" ? skin : hairColour(dress.appearance);
-  put(hair, -1, 0);
-  put(hair, 0, 0);
-  put(skin, 1, 0);
-  put(skin, 0, 1);
-  put(hair, -1, 1);
-  for (const dx of [-1, 0, 1]) {
-    put(dress.keeper ?? shirtColour(dress.kit, dx + 1, 0), dx, 2);
-    put(dress.keeper ?? shirtColour(dress.kit, dx + 1, 1), dx, 3);
-  }
-  const shorts = dress.keeper === null ? dress.kit.secondary : KEEPER_SHORTS;
-  put(shorts, -1, 4);
-  put(shorts, 0, 4);
-  const pose = options.pose ?? (options.running ? strideOf(options.phase) : "stand");
-  const spread = pose === "stand" || pose === "stepB" ? 0 : 1;
-  put(dress.kit.primary, -1 - spread, 5);
-  put(dress.kit.primary, spread, 5);
-  put(BOOT, -1 - spread, 6);
-  put(BOOT, spread, 6);
-}
-
-/** Draw one player side-on with the feet at (x, y), facing the way he is going. */
+/**
+ * Draw one player side-on with the feet at (x, y), facing the way he is going.
+ *
+ * One sprite serves every depth: it is scaled by `scale` with no smoothing, so a player a little
+ * further away is a little smaller instead of jumping between two sizes.
+ */
 export function drawProfilePlayer(ctx: CanvasRenderingContext2D, x: number, y: number, dress: Dress, options: ProfileOptions): void {
-  if (!options.big) {
-    drawSmall(ctx, x, y, dress, options);
-    return;
-  }
-  pixel(ctx, SHADOW, x - 3, y, 7);
-  pixel(ctx, SHADOW, x - 2, y + 1, 5);
+  ctx.save();
+  ctx.imageSmoothingEnabled = false;
+  ctx.translate(x, y);
+  ctx.scale(options.scale, options.scale);
+  pixel(ctx, SHADOW, -3, 0, 7);
+  pixel(ctx, SHADOW, -2, 1, 5);
   if (options.lying !== undefined) {
-    ctx.save();
-    ctx.translate(x, y - 2);
+    ctx.translate(0, -2);
     ctx.rotate((options.lying > 0 ? -Math.PI : Math.PI) / 2);
     ctx.drawImage(sprite(dress, "stand"), -4, -BIG_HEIGHT / 2);
     ctx.restore();
@@ -141,17 +115,17 @@ export function drawProfilePlayer(ctx: CanvasRenderingContext2D, x: number, y: n
   }
   const pose = options.pose ?? (options.running ? strideOf(options.phase) : "stand");
   ctx.save();
-  ctx.translate(x, 0);
   ctx.scale(options.facing, 1);
-  ctx.drawImage(sprite(dress, pose), -4, y - BIG_HEIGHT);
+  ctx.drawImage(sprite(dress, pose), -4, -BIG_HEIGHT);
   ctx.restore();
   if (options.arms === true) {
     const skin = skinColour(dress.appearance);
     for (const side of [-1, 1]) {
       ctx.fillStyle = OUTLINE;
-      ctx.fillRect(x + side - 1, y - BIG_HEIGHT - 4, 3, 7);
+      ctx.fillRect(side - 1, -BIG_HEIGHT - 4, 3, 7);
       ctx.fillStyle = skin;
-      ctx.fillRect(x + side, y - BIG_HEIGHT - 3, 1, 5);
+      ctx.fillRect(side, -BIG_HEIGHT - 3, 1, 5);
     }
   }
+  ctx.restore();
 }

@@ -39,8 +39,17 @@ const PITCH_WIDTH_M = 68;
 const CENTRE_X = WIDTH / 2;
 /** The top-down view's pixels per metre, which pose offsets and flight heights are measured in. */
 const TOP_DOWN_PPM = 300 / PITCH_LENGTH_M;
-/** The large sprite is used where a metre is at least this many pixels. */
-const BIG_FROM_PPM = 5;
+/** A full-size player is 11 pixels for 1.8 m: this many pixels to the metre. */
+const FULL_SIZE_PPM = 6.1;
+/** Nobody is drawn smaller than this share of full size: smaller would be too few pixels to read. */
+const MIN_SCALE = 0.62;
+/** The carrier and focus marks come in two sizes: the larger above this scale. */
+const BIG_MARK_FROM = 0.85;
+
+/** How large to draw a player at a depth with this many pixels to the metre. */
+function sizeAt(ppm: number): number {
+  return Math.max(ppm / FULL_SIZE_PPM, MIN_SCALE);
+}
 /** The camera follows the ball as it was over this many seconds, so it glides. */
 const FOLLOW_SECONDS = 1.5;
 const FOLLOW_SAMPLES = 4;
@@ -291,13 +300,13 @@ export class SideView {
       drawables.push({
         y,
         draw: () => {
-          if (player.id === extras.focusId) drawFocusMark(ctx, x, y, at.ppm >= BIG_FROM_PPM);
+          if (player.id === extras.focusId) drawFocusMark(ctx, x, y, sizeAt(at.ppm) >= BIG_MARK_FROM);
           drawProfilePlayer(ctx, x, y, dress, {
             facing: pose?.turn === -1 ? flipped(facingOf(player.vx, player.x, sample.ballX)) : facingOf(player.vx, player.x, sample.ballX),
             pose: pose?.profile,
             running: player.running || pose !== undefined,
             phase: extras.t + strideOffset(player.id),
-            big: at.ppm >= BIG_FROM_PPM,
+            scale: sizeAt(at.ppm),
             lying,
             arms: pose?.name === "throw",
           });
@@ -317,7 +326,7 @@ export class SideView {
     const dress: Dress = { kit: { pattern: "solid", primary: "#d8c04a", secondary: "#14171c" }, keeper: null, appearance: { skin_tone: 3, hair_style: "short", hair_colour: "black", facial_hair: "none", build: "lean" } };
     drawables.push({
       y: Math.round(at.y),
-      draw: () => drawProfilePlayer(ctx, Math.round(at.x), Math.round(at.y), dress, { facing: 1, running: true, phase: extras.t, big: at.ppm >= BIG_FROM_PPM }),
+      draw: () => drawProfilePlayer(ctx, Math.round(at.x), Math.round(at.y), dress, { facing: 1, running: true, phase: extras.t, scale: sizeAt(at.ppm) }),
     });
   }
 
@@ -351,7 +360,7 @@ export class SideView {
     return {
       y: Math.round(ground.y) + 1,
       draw: () => {
-        if (carrier !== null) drawCarrierMark(ctx, carrier.x, carrier.y, ground.ppm >= BIG_FROM_PPM);
+        if (carrier !== null) drawCarrierMark(ctx, carrier.x, carrier.y, sizeAt(ground.ppm) >= BIG_MARK_FROM);
         drawBall(ctx, Math.round(ground.x), Math.round(ground.y), lift);
       },
     };
