@@ -65,6 +65,12 @@ export function toTeamFrame(pos: Pos, team: TeamSide, homeDir: number): Pos {
   return attackingPositive ? pos : { x: 1 - pos.x, y: 1 - pos.y };
 }
 
+/** Match seconds as minutes:seconds, the way the scrubber shows them. */
+export function formatClock(seconds: number): string {
+  const whole = Math.floor(seconds);
+  return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, "0")}`;
+}
+
 export function metres(a: Pos, b: Pos): number {
   return Math.hypot((b.x - a.x) * PITCH_LENGTH_M, (b.y - a.y) * PITCH_WIDTH_M);
 }

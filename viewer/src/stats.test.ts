@@ -4,7 +4,9 @@ import { passMap, pressMap } from "./analysis.ts";
 import type { AnyEvent } from "./events.ts";
 import type { ReplayMeta } from "./meta.ts";
 import { StatsIndex, formRating, toTeamFrame } from "./stats.ts";
-import { MatchStore } from "./store.ts";
+import { cameraAt } from "./camera.ts";
+import { hit, type Hotspot } from "./mapview.ts";
+import { MatchStore, homeDirection } from "./store.ts";
 
 const clock = { period: 1, minute: 0, second: 0, stoppage: 0 };
 const appearance = { skin_tone: 1, hair_style: "short", hair_colour: "black", facial_hair: "none", build: "average" };
@@ -131,4 +133,32 @@ test("the press map counts our players near the ball only while the other side h
   const map = pressMap(store, meta, { team: "home", playerId: null, from: 0, to: 3 });
   assert.ok(map.pressure.max >= 0);
   assert.ok(map.pressure.cells.some((value) => value > 0));
+});
+
+test("home attacks toward x = 1 in the first half and x = 0 in the second, whatever the context says", () => {
+  assert.equal(homeDirection(1), 1);
+  assert.equal(homeDirection(2), -1);
+  const second = { ...(frame("h1", 0.5, -1) as object), clock: { ...clock, period: 2 }, ctx: { score_home: 0, score_away: 0, attack_dir: 1 } } as AnyEvent;
+  const store = build(second).store;
+  assert.equal(store.frames[0]?.homeDir, -1);
+});
+
+test("hit prefers the dot over the zone behind it and misses empty pitch", () => {
+  const spots: Hotspot[] = [
+    { shape: "rect", x: 0, y: 0, w: 100, h: 100, text: "zone" },
+    { shape: "circle", x: 50, y: 50, r: 6, text: "dot" },
+    { shape: "segment", x: 0, y: 90, x2: 100, y2: 90, text: "line" },
+  ];
+  assert.equal(hit(spots, 52, 52)?.text, "dot");
+  assert.equal(hit(spots, 10, 10)?.text, "zone");
+  assert.equal(hit(spots, 30, 91)?.text, "line");
+  assert.equal(hit(spots, 300, 300), null);
+});
+
+test("the camera follows the chosen player instead of the ball", () => {
+  const events = Array.from({ length: 6 }, () => frame(null, 0.9));
+  const store = build(...events).store;
+  const onBall = cameraAt(store.frames, 3, 2, null);
+  const onPlayer = cameraAt(store.frames, 3, 2, "h1");
+  assert.ok(onBall.x > onPlayer.x, `ball ${onBall.x}, player ${onPlayer.x}`);
 });

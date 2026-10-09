@@ -1,8 +1,8 @@
 import { averagePositions, heatMap, passMap, pressMap, shotMap, type MapFilter } from "./analysis.ts";
-import { drawHeatMap, drawPassLines, drawPassNetwork, drawPressMap, drawShape, drawShotMap, MAP_HEIGHT, MAP_WIDTH } from "./mapview.ts";
+import { drawHeatMap, drawPassLines, drawPassNetwork, drawPressMap, drawShape, drawShotMap, hit, MAP_HEIGHT, MAP_WIDTH, type Hotspot, type Words } from "./mapview.ts";
 import { playerName, type ReplayMeta, type TeamSide } from "./meta.ts";
 import type { Kit } from "./palette.ts";
-import { MOMENTUM_WINDOW_S, formRating, type PlayerTally, type StatsIndex, type TeamStats } from "./stats.ts";
+import { MOMENTUM_WINDOW_S, formRating, formatClock, type PlayerTally, type StatsIndex, type TeamStats } from "./stats.ts";
 import type { MatchStore, Mark } from "./store.ts";
 
 const SIDES: readonly TeamSide[] = ["home", "away"];
@@ -94,6 +94,12 @@ function prettyRole(role: string): string {
   return role.replace(/_/g, " ");
 }
 
+/** What the panels can ask of the page: jump the replay, or have the camera follow a player. */
+export interface PanelActions {
+  seek: (seconds: number) => void;
+  follow: (playerId: string | null) => void;
+}
+
 /** Everything beside the pitch: live statistics, lineups and the map drawer. */
 export class Panels {
   private readonly store: MatchStore;
@@ -105,6 +111,9 @@ export class Panels {
   private readonly canvases: Record<TeamSide, HTMLCanvasElement>;
   private readonly titles: Record<TeamSide, HTMLElement>;
   private readonly playerSelect: HTMLSelectElement;
+  private readonly actions: PanelActions;
+  private readonly tip: HTMLElement;
+  private readonly hotspots: Record<TeamSide, Hotspot[]> = { home: [], away: [] };
   private mapKind: MapKind = "network";
   private windowIndex = 0;
   private selected: { side: TeamSide; id: string } | null = null;
@@ -112,7 +121,8 @@ export class Panels {
   private lastRefresh = 0;
   private time = 0;
 
-  constructor(store: MatchStore, meta: ReplayMeta, kits: { home: Kit; away: Kit }, stats: StatsIndex) {
+  constructor(store: MatchStore, meta: ReplayMeta, kits: { home: Kit; away: Kit }, stats: StatsIndex, actions: PanelActions) {
+    this.actions = actions;
     this.store = store;
     this.meta = meta;
     this.stats = stats;
@@ -126,11 +136,52 @@ export class Panels {
     this.titles = { home: el("div", "map-title"), away: el("div", "map-title") };
     this.playerSelect = el("select");
     maps.append(this.controls(), canvases);
+    this.tip = el("div", "map-tip");
+    document.body.append(this.tip);
     for (const side of SIDES) {
       const holder = el("div", "map-holder");
       holder.append(this.titles[side], this.canvases[side]);
       canvases.append(holder);
+      this.listen(side);
     }
+  }
+
+  /** The names and times the maps use in their tooltips. */
+  private words(): Words {
+    return { name: (id) => lastName(playerName(this.meta, id)), clock: formatClock };
+  }
+
+  private listen(side: TeamSide): void {
+    const canvas = this.canvases[side];
+    const spot = (event: MouseEvent): Hotspot | null => {
+      const box = canvas.getBoundingClientRect();
+      return hit(this.hotspots[side], ((event.clientX - box.left) * MAP_WIDTH) / box.width, ((event.clientY - box.top) * MAP_HEIGHT) / box.height);
+    };
+    canvas.addEventListener("mousemove", (event) => {
+      const found = spot(event);
+      this.tip.style.display = found === null ? "none" : "block";
+      canvas.style.cursor = found?.seekTo !== undefined || found?.playerId !== undefined ? "pointer" : "default";
+      if (found === null) return;
+      this.tip.textContent = found.text;
+      this.tip.style.left = `${Math.min(event.clientX + 14, window.innerWidth - 280)}px`;
+      this.tip.style.top = `${event.clientY + 14}px`;
+    });
+    canvas.addEventListener("mouseleave", () => {
+      this.tip.style.display = "none";
+    });
+    canvas.addEventListener("click", (event) => {
+      const found = spot(event);
+      if (found?.seekTo !== undefined) this.actions.seek(found.seekTo);
+      else if (found?.playerId !== undefined) this.select(found.playerId === this.selected?.id ? null : { side, id: found.playerId });
+    });
+  }
+
+  /** Choose (or release) the player the maps filter to and the camera follows. */
+  select(choice: { side: TeamSide; id: string } | null): void {
+    this.selected = choice;
+    this.playerSelect.value = choice === null ? "" : `${choice.side}|${choice.id}`;
+    this.actions.follow(choice === null ? null : choice.id);
+    this.refresh(true);
   }
 
   private mount(id: string, title: string): HTMLElement {
@@ -170,8 +221,7 @@ export class Panels {
     this.fillPlayers();
     this.playerSelect.addEventListener("change", () => {
       const [side, id] = this.playerSelect.value.split("|");
-      this.selected = id === undefined || id === "" ? null : { side: side as TeamSide, id };
-      this.refresh(true);
+      this.select(id === undefined || id === "" ? null : { side: side as TeamSide, id });
     });
     bar.append(tabs, windows, this.playerSelect);
     return bar;
@@ -285,11 +335,7 @@ export class Panels {
     const badges = this.badges(id, tally);
     row.append(el("span", "badges", `${subbedOn ? "SUB " : ""}${badges}`.trim()));
     row.append(el("span", "rating", benched ? "" : formRating(tally).toFixed(1)));
-    row.addEventListener("click", () => {
-      this.selected = this.selected?.id === id ? null : { side, id };
-      this.playerSelect.value = this.selected === null ? "" : `${side}|${id}`;
-      this.refresh(true);
-    });
+    row.addEventListener("click", () => this.select(this.selected?.id === id ? null : { side, id }));
     return row;
   }
 
@@ -300,31 +346,39 @@ export class Panels {
   }
 
   private drawMaps(): void {
+    const dpr = window.devicePixelRatio || 1;
     for (const side of SIDES) {
       const canvas = this.canvases[side];
+      const wide = Math.max(MAP_WIDTH, Math.round(canvas.clientWidth * dpr));
+      if (canvas.width !== wide) {
+        canvas.width = wide;
+        canvas.height = Math.round((wide * MAP_HEIGHT) / MAP_WIDTH);
+      }
       const ctx = canvas.getContext("2d");
       if (ctx === null) continue;
+      ctx.setTransform(wide / MAP_WIDTH, 0, 0, wide / MAP_WIDTH, 0, 0);
       const filter = this.filterFor(side);
-      const nameOf = (id: string): string => lastName(playerName(this.meta, id));
+      const words = this.words();
       const colour = this.colours[side];
+      const chosen = this.selected !== null && this.selected.side === side ? this.selected.id : null;
       switch (this.mapKind) {
         case "network":
-          drawPassNetwork(ctx, passMap(this.store, this.meta, filter), colour, nameOf);
+          this.hotspots[side] = drawPassNetwork(ctx, passMap(this.store, this.meta, filter), colour, words, chosen);
           break;
         case "passes":
-          drawPassLines(ctx, passMap(this.store, this.meta, filter));
+          this.hotspots[side] = drawPassLines(ctx, passMap(this.store, this.meta, filter), words);
           break;
         case "press":
-          drawPressMap(ctx, pressMap(this.store, this.meta, filter), colour);
+          this.hotspots[side] = drawPressMap(ctx, pressMap(this.store, this.meta, filter), colour, words);
           break;
         case "heat":
-          drawHeatMap(ctx, heatMap(this.store, this.meta, filter));
+          this.hotspots[side] = drawHeatMap(ctx, heatMap(this.store, this.meta, filter));
           break;
         case "shots":
-          drawShotMap(ctx, shotMap(this.store, filter));
+          this.hotspots[side] = drawShotMap(ctx, shotMap(this.store, filter), words);
           break;
         case "shape":
-          drawShape(ctx, averagePositions(this.store, this.meta, filter), colour, nameOf);
+          this.hotspots[side] = drawShape(ctx, averagePositions(this.store, this.meta, filter), colour, words, chosen);
           break;
       }
       const who = filter.playerId === null ? this.meta[side].name : playerName(this.meta, filter.playerId);

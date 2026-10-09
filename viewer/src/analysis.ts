@@ -16,6 +16,7 @@ export interface PassNode {
   x: number;
   y: number;
   count: number;
+  completed: number;
 }
 
 export interface PassEdge {
@@ -25,10 +26,14 @@ export interface PassEdge {
 }
 
 export interface PassLine {
+  t: number;
   start: Pos;
   end: Pos;
   outcome: string;
   progressive: boolean;
+  fromId: string | null;
+  toId: string | null;
+  lengthM: number;
 }
 
 export interface PassMapData {
@@ -38,6 +43,7 @@ export interface PassMapData {
 }
 
 export interface ShotDot {
+  t: number;
   at: Pos;
   xg: number;
   outcome: string;
@@ -51,11 +57,21 @@ export interface Grid {
   max: number;
 }
 
+/** A ball won back: a tackle won or an interception. */
+export interface BallWin {
+  t: number;
+  at: Pos;
+  playerId: string | null;
+  how: "tackle" | "interception";
+}
+
 export interface PressMapData {
   /** Average number of our players within pressing reach of the ball, by where the ball was. */
   pressure: Grid;
-  /** Where we won the ball back: tackles won and interceptions. */
-  wins: Pos[];
+  /** How many samples each cell's average is made of (the ball was there this many times). */
+  samples: number[];
+  /** Where we won the ball back. */
+  wins: BallWin[];
 }
 
 export interface AveragePosition {
@@ -95,7 +111,7 @@ function wanted(filter: MapFilter, id: string | null, meta: ReplayMeta): boolean
 
 /** Passes in the window: lines for each, plus the network of who played to whom. */
 export function passMap(store: MatchStore, meta: ReplayMeta, filter: MapFilter): PassMapData {
-  const sums = new Map<string, { x: number; y: number; count: number }>();
+  const sums = new Map<string, { x: number; y: number; count: number; completed: number }>();
   const edges = new Map<string, PassEdge>();
   const lines: PassLine[] = [];
   for (const event of store.log) {
@@ -104,18 +120,20 @@ export function passMap(store: MatchStore, meta: ReplayMeta, filter: MapFilter):
     const start = toTeamFrame(event.pos, filter.team, event.homeDir);
     const end = event.endPos === null ? null : toTeamFrame(event.endPos, filter.team, event.homeDir);
     if (wanted(filter, event.playerId, meta) && end !== null) {
-      lines.push({ start, end, outcome: event.outcome ?? "", progressive: event.progressive });
+      const lengthM = metres(start, end);
+      lines.push({ t: event.t, start, end, outcome: event.outcome ?? "", progressive: event.progressive, fromId: event.playerId, toId: event.targetId, lengthM });
     }
     if (event.playerId === null) continue;
-    const node = sums.get(event.playerId) ?? { x: 0, y: 0, count: 0 };
-    sums.set(event.playerId, { x: node.x + start.x, y: node.y + start.y, count: node.count + 1 });
+    const node = sums.get(event.playerId) ?? { x: 0, y: 0, count: 0, completed: 0 };
+    const done = event.outcome === "complete" ? 1 : 0;
+    sums.set(event.playerId, { x: node.x + start.x, y: node.y + start.y, count: node.count + 1, completed: node.completed + done });
     if (event.outcome === "complete" && event.targetId !== null) {
       const key = `${event.playerId}>${event.targetId}`;
       const edge = edges.get(key) ?? { from: event.playerId, to: event.targetId, count: 0 };
       edges.set(key, { ...edge, count: edge.count + 1 });
     }
   }
-  const nodes = [...sums].map(([id, node]) => ({ id, x: node.x / node.count, y: node.y / node.count, count: node.count }));
+  const nodes = [...sums].map(([id, node]) => ({ id, x: node.x / node.count, y: node.y / node.count, count: node.count, completed: node.completed }));
   return { nodes, edges: [...edges.values()], lines };
 }
 
@@ -125,7 +143,7 @@ export function shotMap(store: MatchStore, filter: MapFilter): ShotDot[] {
     if (event.type !== "shot" || event.t < filter.from || event.t > filter.to || event.pos === null) continue;
     if (event.team !== filter.team) continue;
     if (filter.playerId !== null && event.playerId !== filter.playerId) continue;
-    dots.push({ at: toTeamFrame(event.pos, filter.team, event.homeDir), xg: event.xg, outcome: event.outcome ?? "", playerId: event.playerId });
+    dots.push({ t: event.t, at: toTeamFrame(event.pos, filter.team, event.homeDir), xg: event.xg, outcome: event.outcome ?? "", playerId: event.playerId });
   }
   return dots;
 }
@@ -158,6 +176,7 @@ export function pressMap(store: MatchStore, meta: ReplayMeta, filter: MapFilter)
     addToGrid(pressure, at, pressers);
     addToGrid(samples, at, 1);
   });
+  const counts = samples.cells.slice();
   pressure.max = 0;
   pressure.cells = pressure.cells.map((total, index) => {
     const count = samples.cells[index] ?? 0;
@@ -165,13 +184,13 @@ export function pressMap(store: MatchStore, meta: ReplayMeta, filter: MapFilter)
     pressure.max = Math.max(pressure.max, average);
     return average;
   });
-  const wins: Pos[] = [];
+  const wins: BallWin[] = [];
   for (const event of store.log) {
     if (event.t < filter.from || event.t > filter.to || event.pos === null || event.team !== filter.team) continue;
-    const won = event.type === "interception" || (event.type === "tackle" && event.outcome === "won");
-    if (won) wins.push(toTeamFrame(event.pos, filter.team, event.homeDir));
+    const how = event.type === "interception" ? "interception" : event.type === "tackle" && event.outcome === "won" ? "tackle" : null;
+    if (how !== null) wins.push({ t: event.t, at: toTeamFrame(event.pos, filter.team, event.homeDir), playerId: event.playerId, how });
   }
-  return { pressure, wins };
+  return { pressure, samples: counts, wins };
 }
 
 /** Each player's average position over the window, in the team's frame. */

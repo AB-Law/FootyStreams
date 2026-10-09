@@ -43,9 +43,14 @@
       .tabs { display: flex; gap: 4px; flex-wrap: wrap; }
       .map-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
       .map-title { color: var(--muted); margin-bottom: 4px; }
+      .map-tip { display: none; position: fixed; z-index: 10; max-width: 260px; background: #0b121a; border: 1px solid #3b5068; border-radius: 6px; padding: 6px 9px; font-size: 12px; pointer-events: none; box-shadow: 0 4px 14px rgba(0,0,0,.5); }
       canvas.map { width: 100%; height: auto; border-radius: 6px; display: block; }
       @media (max-width: 1180px) {
         #app { grid-template-columns: minmax(0, 1fr); }
+        #stage { order: 0; width: 100%; box-sizing: border-box; }
+        #stats { order: 1; }
+        #lineups { order: 2; }
+        #maps { order: 3; }
         canvas#screen { max-width: 100%; height: auto; }
       }
     </style>

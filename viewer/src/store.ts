@@ -10,6 +10,14 @@ export type Contest =
 /** Tracking frames are one sim second apart; a frame's index is its time in seconds. */
 export const FRAME_INTERVAL_S = 1;
 
+/**
+ * Home's attacking direction (+1 toward x = 1) in a period. `ctx.attack_dir` on an event is the
+ * direction of the side in possession, not home's, so the period is the reliable source.
+ */
+export function homeDirection(period: number): number {
+  return period <= 1 ? 1 : -1;
+}
+
 /** An event that counts toward the statistics and maps, stamped like a mark (frame seconds). */
 export interface LogEvent {
   t: number;
@@ -122,7 +130,7 @@ export class MatchStore {
     if (!Array.isArray(event.players)) return;
     this.frames.push({
       clock: event.clock,
-      homeDir: event.ctx.attack_dir,
+      homeDir: homeDirection(event.clock.period),
       scoreHome: event.ctx.score_home,
       scoreAway: event.ctx.score_away,
       ballX: event.ball_pos_x,
@@ -133,9 +141,9 @@ export class MatchStore {
   }
 }
 
-/** The end of the pitch (x = 0 or 1) a shot is at: the home side's direction is in the context. */
+/** The end of the pitch (x = 0 or 1) a shot is at, from the period and the shooting side. */
 function attackedGoal(event: BroadcastEvent): 0 | 1 {
-  const homeRight = event.ctx.attack_dir > 0;
+  const homeRight = homeDirection(event.clock.period) > 0;
   return homeRight === (event.team === "home") ? 1 : 0;
 }
 
@@ -170,6 +178,6 @@ function logEvent(event: BroadcastEvent, t: number): LogEvent | null {
     outcome: text("outcome"),
     xg: typeof fields["xg"] === "number" ? fields["xg"] : 0,
     progressive: fields["progressive"] === true,
-    homeDir: event.ctx.attack_dir,
+    homeDir: homeDirection(event.clock.period),
   };
 }

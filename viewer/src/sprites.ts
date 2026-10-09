@@ -218,3 +218,19 @@ export function drawTrail(ctx: CanvasRenderingContext2D, points: { x: number; y:
     ctx.fillRect(point.x - 1, point.y - 1 - Math.round(point.height), 2, 2);
   });
 }
+
+const FOCUS = "#4cd9ff";
+
+/** A ring at a followed player's feet and a marker over his head, so he is easy to pick out. */
+export function drawFocusMark(ctx: CanvasRenderingContext2D, x: number, y: number, big: boolean): void {
+  const wide = big ? 7 : 5;
+  ctx.fillStyle = FOCUS;
+  ctx.fillRect(x - wide + 2, y + 1, wide * 2 - 3, 1);
+  ctx.fillRect(x - wide + 2, y + 3, wide * 2 - 3, 1);
+  ctx.fillRect(x - wide, y + 2, 2, 1);
+  ctx.fillRect(x + wide - 1, y + 2, 2, 1);
+  const top = y - (big ? BIG_HEIGHT + 9 : SMALL_HEIGHT + 8);
+  ctx.fillRect(x - 2, top, 5, 1);
+  ctx.fillRect(x - 1, top + 1, 3, 1);
+  ctx.fillRect(x, top + 2, 1, 1);
+}

@@ -3,7 +3,7 @@ import { deadSpans, isDead } from "./deadtime.ts";
 import { drawText } from "./font.ts";
 import { drawOverlays, drawScoreboard } from "./hud.ts";
 import { sampleAt } from "./interpolate.ts";
-import type { ReplayMeta } from "./meta.ts";
+import { playerName, type ReplayMeta } from "./meta.ts";
 import { activeFlight } from "./flights.ts";
 import { overlaysAt } from "./overlays.ts";
 import { posesAt } from "./poses.ts";
@@ -14,7 +14,7 @@ import { HEIGHT, WIDTH } from "./pitch.ts";
 import { Panels } from "./panels.ts";
 import { Scene } from "./scene.ts";
 import { loadReplay } from "./source.ts";
-import { StatsIndex } from "./stats.ts";
+import { StatsIndex, formatClock } from "./stats.ts";
 import { MatchStore } from "./store.ts";
 
 const FRAME_MILLISECONDS = 1000 / 30;
@@ -42,11 +42,6 @@ function fitCanvas(canvas: HTMLCanvasElement): void {
   canvas.style.height = `${HEIGHT * scale}px`;
 }
 
-function formatTime(seconds: number): string {
-  const whole = Math.floor(seconds);
-  return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, "0")}`;
-}
-
 async function start(): Promise<void> {
   const params = new URLSearchParams(location.search);
   const canvas = element<HTMLCanvasElement>("screen");
@@ -70,8 +65,19 @@ async function start(): Promise<void> {
 
   const scene = new Scene(meta);
   const kits = pickKits(meta);
-  const panels = new Panels(store, meta, kits, new StatsIndex(store, meta));
+  let focusId: string | null = null;
   const playback = new Playback();
+  const panels = new Panels(store, meta, kits, new StatsIndex(store, meta), {
+    seek: (seconds) => {
+      playback.seek(seconds, store.duration);
+      playback.playing = true;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    follow: (id) => {
+      focusId = id;
+      status.textContent = id === null ? `${meta.home.name} v ${meta.away.name}` : `Following ${playerName(meta, id)} (click him again to release the camera)`;
+    },
+  });
   playback.seek(Number(params.get("t") ?? 0), store.duration);
   const scrubber = element<HTMLInputElement>("scrubber");
   const playButton = element<HTMLButtonElement>("play");
@@ -97,7 +103,7 @@ async function start(): Promise<void> {
     const sample = sampleAt(store.frames, playback.t);
     const overlays = overlaysAt(store.marks, playback.t, playback.speed);
     const referee = refereeTrack(store.frames, store.marks, playback.t);
-    const camera = cameraAt(store.frames, playback.t, zoom);
+    const camera = cameraAt(store.frames, playback.t, focusId !== null && zoom < 2 ? 2 : zoom, focusId);
     context.save();
     context.setTransform(camera.zoom, 0, 0, camera.zoom, -camera.x * camera.zoom, -camera.y * camera.zoom);
     scene.draw(context, sample, {
@@ -107,6 +113,7 @@ async function start(): Promise<void> {
       whistle: referee?.incident ?? false,
       big: camera.zoom > 1,
       poses: posesAt(store.contests, sample, playback.t, store.frames),
+      focusId,
     });
     context.restore();
     drawScoreboard(context, sample, meta, kits, playback.t >= store.duration);
@@ -114,7 +121,7 @@ async function start(): Promise<void> {
     if (hurrying()) drawText(context, ">>", WIDTH - 14, 24, "#ffd23f", 2);
     scrubber.value = String(Math.floor(playback.t));
     playButton.textContent = playback.playing ? "Pause" : "Play";
-    time.textContent = `${formatTime(playback.t)} / ${formatTime(store.duration)}`;
+    time.textContent = `${formatClock(playback.t)} / ${formatClock(store.duration)}`;
     panels.update(playback.t, performance.now());
   };
 

@@ -7,7 +7,7 @@ import { ballOnFlight, type Flight } from "./flights.ts";
 import type { Pos } from "./events.ts";
 import { drawText } from "./font.ts";
 import type { Pose } from "./poses.ts";
-import { drawBall, drawCarrierMark, drawPlayer, drawTrail, type Dress } from "./sprites.ts";
+import { drawBall, drawCarrierMark, drawFocusMark, drawPlayer, drawTrail, type Dress } from "./sprites.ts";
 
 /** Everything besides the sampled frame that changes what is on screen at one moment. */
 export interface Extras {
@@ -21,6 +21,8 @@ export interface Extras {
   big: boolean;
   /** Players in a tackle, a fall or a take-on, by id. */
   poses: ReadonlyMap<string, Pose>;
+  /** A player the viewer asked to follow: he is marked on the pitch. */
+  focusId?: string | null;
 }
 
 const REFEREE_KIT = { pattern: "solid", primary: "#d8c04a", secondary: "#14171c" } as const;
@@ -65,6 +67,7 @@ export class Scene {
       const base = toScreen(player.x, player.y);
       const at = this.onPitch({ x: base.x + (pose?.dx ?? 0), y: base.y + (pose?.dy ?? 0) });
       const lying = pose !== undefined && (pose.name === "slide" || pose.name === "fall") ? pose.facing : undefined;
+      if (player.id === extras.focusId) drawFocusMark(ctx, at.x, at.y, extras.big);
       drawPlayer(ctx, at.x, at.y, dress, { running: player.running || pose !== undefined, phase: extras.t, big: extras.big, lying, arms: pose?.name === "throw" });
     }
     if (extras.referee !== null) this.drawReferee(ctx, extras.referee, extras);
