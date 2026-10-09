@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VPL News Channel — FootyStreams</title>
+    <style>body { margin: 0; background: #070b10; }</style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">VPL News</div>
+      <nav>
+        <a href="index.html">Match</a>
+        <a href="studio.html">News desk</a>
+        <a class="on" href="channel.html">Channel</a>
+      </nav>
+    </header>
+    <main>
+      <div id="stage">
+        <section class="monitor" id="monitor" aria-label="VPL News live channel">
+          <div class="monitor-bar"><span>VPL News · 24/7</span><span class="rec paused" id="rec">Stand by</span></div>
+          <div class="glass">
+            <canvas id="screen" width="480" height="270" role="img" aria-label="Anchors at the VPL News desk"></canvas>
+          </div>
+        </section>
+        <div id="nowbar">
+          <span class="pill" id="now-kind">Stand by</span>
+          <strong id="now-title">Tuning in to the channel…</strong>
+          <span class="muted" id="queue"></span>
+        </div>
+        <div id="replay-bar" class="replay-bar" hidden>
+          <button id="go-live" class="tool live" type="button">Back to live</button>
+          <button id="replay-pause" class="tool" type="button">Pause</button>
+          <input id="replay-scrub" type="range" min="0" max="0" value="0" step="1" aria-label="Position in this report" />
+          <span id="replay-time" class="muted">0 / 0 s</span>
+        </div>
+        <div id="empty" hidden>
+          <strong>The channel is not on air yet.</strong> Start the producer (LM Studio must be running with a model loaded):
+          <code>uv run channel --model qwen/qwen3.5-9b</code>
+          This page looks for <code>replays/channel/index.json</code> and will start by itself.
+        </div>
+      </div>
+      <aside id="side" aria-label="Channel details">
+        <section class="panel">
+          <h2 class="panel-title">On air</h2>
+          <ol id="lines" class="lines plain"></ol>
+        </section>
+        <section class="panel">
+          <h2 class="panel-title">Up next</h2>
+          <ol id="upnext" class="rows"></ol>
+        </section>
+        <section class="panel">
+          <h2 class="panel-title">Earlier on VPL News</h2>
+          <ol id="earlier" class="rows"></ol>
+        </section>
+        <section class="panel">
+          <h2 class="panel-title">What the desk remembers</h2>
+          <ul id="memories" class="rows"></ul>
+        </section>
+        <section class="panel">
+          <h2 class="panel-title">Control room</h2>
+          <form id="breaking-form" class="control" autocomplete="off">
+            <label for="breaking-text">Breaking news</label>
+            <div class="row">
+              <input id="breaking-text" maxlength="120" placeholder="A headline, e.g. Seisund County sack their manager" />
+              <button class="tool" type="submit">Break in</button>
+            </div>
+          </form>
+          <form id="guest-form" class="control" autocomplete="off">
+            <label for="guest-text">Invite a guest</label>
+            <div class="row">
+              <input id="guest-text" list="people" maxlength="60" placeholder="A manager or a player" />
+              <datalist id="people"></datalist>
+              <button class="tool" type="submit">Invite</button>
+            </div>
+          </form>
+          <p id="control-status" class="muted"></p>
+        </section>
+      </aside>
+    </main>
+    <script type="module" src="dist/channel-app.js"></script>
+  </body>
+</html>
