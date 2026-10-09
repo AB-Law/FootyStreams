@@ -103,8 +103,8 @@ export class Scene {
       const resting = toScreen(sample.ballX, sample.ballY);
       const carried = extras.poses.get(sample.carrierId ?? "");
       const follows = carried?.ballFollows !== false;
-      const shiftX = follows ? (carried?.dx ?? 0) : 0;
-      const shiftY = follows ? (carried?.dy ?? 0) : 0;
+      const shiftX = (follows ? (carried?.dx ?? 0) : 0) + (carried?.ballDx ?? 0);
+      const shiftY = (follows ? (carried?.dy ?? 0) : 0) + (carried?.ballDy ?? 0);
       return {
         // Just in front of its carrier, so the ball at his feet is drawn on him, not behind him.
         y: resting.y + shiftY + BALL_IN_FRONT_PX,

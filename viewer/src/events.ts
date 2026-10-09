@@ -126,6 +126,8 @@ export interface DribbleEvent extends EventBase {
   type: "dribble";
   player_id: string;
   outcome: "success" | "tackled" | "lost";
+  /** How the take-on was done (schema 0.6.0 and later); null or absent is a plain run. */
+  skill_move?: string | null;
 }
 
 /** A dead-ball restart: the taker stands over the ball and the rest take up their shapes. */

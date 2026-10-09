@@ -79,6 +79,18 @@ it is computed in the browser from the replay at the current time, so scrubbing 
 - The lineup needs the formation, lineup and bench that `record_match.py` writes into the meta file; replays
   recorded before that show the statistics and maps without lineups.
 
+## The broadcast view and skill moves
+The page opens in a side-on "TV gantry" view (the Top-down button switches back). `sideview.ts` projects the
+pitch as a trapezoid (the far touchline is about 60% the size of the near one, rows are spaced the way a
+camera spaces them), draws the stands, boards, striped grass, markings and goals, and sorts players, referee
+and ball back to front. The camera pans along the pitch only, following the ball or a chosen player. Wide
+shows the whole pitch; Broadcast shows about half of it. `profile.ts` holds the side-on player art (facing
+right, flipped to face left), with run, lean, feint, kick and flick poses.
+
+Dribbles carry the move the sim chose (`skill_move`, schema 0.6.0): `skillposes.ts` gives each move its
+shape (player shift, ball path, ball lift, pose, a turn for the roulette) and `poses.ts` plays it for 1.6 s.
+The defender is not shown reacting yet: the event does not name him.
+
 ## Deliberately missing
 
 Audio, commentary, TTS, LLM text, studio scenes, recording or encoding for a stream, any WebSocket or

@@ -1,10 +1,11 @@
 import type { AnyEvent, BroadcastEvent, FrameEvent, FramePlayer, MatchClock, Pos, Side } from "./events.ts";
 import { shotFlight, type Flight } from "./flights.ts";
+import { isSkillMove, type SkillMoveName } from "./skillposes.ts";
 
 /** A contest worth animating: a tackle (won, missed or a foul) or a take-on. */
 export type Contest =
   | { kind: "tackle"; t: number; tacklerId: string; targetId: string; outcome: "won" | "foul" | "missed" }
-  | { kind: "dribble"; t: number; playerId: string; outcome: "success" | "tackled" | "lost" }
+  | { kind: "dribble"; t: number; playerId: string; outcome: "success" | "tackled" | "lost"; move: SkillMoveName | null }
   | { kind: "restart"; t: number; restart: "throw_in" | "goal_kick" | "corner" | "free_kick" | "penalty"; takerId: string; team: Side };
 
 /** Tracking frames are one sim second apart; a frame's index is its time in seconds. */
@@ -95,7 +96,7 @@ export class MatchStore {
         this.contests.push({ kind: "tackle", t, tacklerId: known.player_id, targetId: known.target_id, outcome: known.outcome });
         break;
       case "dribble":
-        this.contests.push({ kind: "dribble", t, playerId: known.player_id, outcome: known.outcome });
+        this.contests.push({ kind: "dribble", t, playerId: known.player_id, outcome: known.outcome, move: isSkillMove(known.skill_move) ? known.skill_move : null });
         break;
       case "throw_in":
       case "goal_kick":

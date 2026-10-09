@@ -8,13 +8,13 @@ export interface Dress {
   appearance: Appearance;
 }
 
-const SHADOW = "rgba(0, 0, 0, 0.30)";
-const OUTLINE = "#12161c";
+export const SHADOW = "rgba(0, 0, 0, 0.30)";
+export const OUTLINE = "#12161c";
 const CARRIER_MARK = "#fff36b";
-const STRIDE_SECONDS = 0.18;
+export const STRIDE_SECONDS = 0.18;
 const EYE = "#1b1b1b";
-const BOOT = "#1b1b1b";
-const KEEPER_SHORTS = "#222222";
+export const BOOT = "#1b1b1b";
+export const KEEPER_SHORTS = "#222222";
 
 /**
  * Sprite art: 7 wide, 11 tall, one string per row. h hair, s skin, e eye, a sleeve, j shirt,
@@ -37,7 +37,7 @@ type Pose = keyof typeof LEGS;
 
 const cache = new Map<string, HTMLCanvasElement>();
 
-function colourOf(char: string, dress: Dress, column: number, row: number): string | null {
+export function colourOf(char: string, dress: Dress, column: number, row: number): string | null {
   const skin = skinColour(dress.appearance);
   switch (char) {
     case "h":
@@ -125,7 +125,7 @@ function sprite(dress: Dress, pose: Pose): HTMLCanvasElement {
   return found;
 }
 
-function pixel(ctx: CanvasRenderingContext2D, colour: string, x: number, y: number, width = 1): void {
+export function pixel(ctx: CanvasRenderingContext2D, colour: string, x: number, y: number, width = 1): void {
   ctx.fillStyle = colour;
   ctx.fillRect(x, y, width, 1);
 }

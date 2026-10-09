@@ -1,4 +1,4 @@
-import { ZOOMS, cameraAt, type Zoom } from "./camera.ts";
+import { ZOOMS, cameraAt, toView, type Zoom } from "./camera.ts";
 import { deadSpans, isDead } from "./deadtime.ts";
 import { drawText } from "./font.ts";
 import { drawOverlays, drawScoreboard } from "./hud.ts";
@@ -13,6 +13,7 @@ import { Playback, SPEEDS } from "./playback.ts";
 import { HEIGHT, WIDTH } from "./pitch.ts";
 import { Panels } from "./panels.ts";
 import { Scene } from "./scene.ts";
+import { SideView, sideCameraX, type SideMode } from "./sideview.ts";
 import { loadReplay } from "./source.ts";
 import { StatsIndex, formatClock } from "./stats.ts";
 import { MatchStore } from "./store.ts";
@@ -64,6 +65,8 @@ async function start(): Promise<void> {
   status.textContent = `${meta.home.name} v ${meta.away.name}`;
 
   const scene = new Scene(meta);
+  const sideView = new SideView(meta);
+  let view: "side" | "top" = params.get("view") === "top" ? "top" : "side";
   const kits = pickKits(meta);
   let focusId: string | null = null;
   const playback = new Playback();
@@ -99,25 +102,54 @@ async function start(): Promise<void> {
   const stoppages = deadSpans(store.frames);
   const hurrying = (): boolean => playback.playing && isDead(stoppages, playback.t);
 
+  const viewButton = element<HTMLButtonElement>("view");
+  /** In the broadcast view the zoom buttons choose how much of the pitch is in shot. */
+  const labelZoomButtons = (): void => {
+    const side = view === "side";
+    element<HTMLButtonElement>("zoom-1").textContent = side ? "Wide" : "Full";
+    element<HTMLButtonElement>("zoom-2").textContent = side ? "Broadcast" : "2x";
+    element<HTMLButtonElement>("zoom-3").style.display = side ? "none" : "";
+    viewButton.textContent = side ? "Top-down" : "Broadcast view";
+  };
+  viewButton.addEventListener("click", () => {
+    view = view === "side" ? "top" : "side";
+    labelZoomButtons();
+    render();
+  });
+  labelZoomButtons();
+
   const render = (): void => {
     const sample = sampleAt(store.frames, playback.t);
     const overlays = overlaysAt(store.marks, playback.t, playback.speed);
     const referee = refereeTrack(store.frames, store.marks, playback.t);
-    const camera = cameraAt(store.frames, playback.t, focusId !== null && zoom < 2 ? 2 : zoom, focusId);
-    context.save();
-    context.setTransform(camera.zoom, 0, 0, camera.zoom, -camera.x * camera.zoom, -camera.y * camera.zoom);
-    scene.draw(context, sample, {
+    const extras = {
       t: playback.t,
       flight: activeFlight(store.flights, playback.t),
       referee: referee === null ? null : referee.spot,
       whistle: referee?.incident ?? false,
-      big: camera.zoom > 1,
+      big: false,
       poses: posesAt(store.contests, sample, playback.t, store.frames),
       focusId,
-    });
-    context.restore();
+    };
+    let locate: (playerId: string) => { x: number; y: number } | null;
+    if (view === "side") {
+      const mode: SideMode = zoom === 1 ? "wide" : "broadcast";
+      const camX = sideCameraX(store.frames, playback.t, mode, focusId);
+      sideView.draw(context, sample, extras, mode, camX);
+      locate = (playerId) => (sample === null ? null : sideView.locate(sample, mode, camX, playerId));
+    } else {
+      const camera = cameraAt(store.frames, playback.t, focusId !== null && zoom < 2 ? 2 : zoom, focusId);
+      context.save();
+      context.setTransform(camera.zoom, 0, 0, camera.zoom, -camera.x * camera.zoom, -camera.y * camera.zoom);
+      scene.draw(context, sample, { ...extras, big: camera.zoom > 1 });
+      context.restore();
+      locate = (playerId) => {
+        const world = sample === null ? null : scene.screenPosition(sample, playerId);
+        return world === null ? null : toView(camera, world);
+      };
+    }
     drawScoreboard(context, sample, meta, kits, playback.t >= store.duration);
-    drawOverlays(context, overlays, meta, scene, sample, camera);
+    drawOverlays(context, overlays, meta, locate);
     if (hurrying()) drawText(context, ">>", WIDTH - 14, 24, "#ffd23f", 2);
     scrubber.value = String(Math.floor(playback.t));
     playButton.textContent = playback.playing ? "Pause" : "Play";
