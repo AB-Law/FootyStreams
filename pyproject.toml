@@ -23,6 +23,7 @@ golden = "footystreams.cli.golden:main"
 league = "footystreams.cli.league:main"
 balance = "footystreams.cli.balance:main"
 engine = "footystreams.cli.engine:main"
+narrate = "footystreams.cli.narrate:main"
 
 [dependency-groups]
 dev = [
