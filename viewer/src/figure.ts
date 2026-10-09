@@ -16,7 +16,7 @@ export const FIGURE_HEIGHT_PX = 31;
 
 const OUTLINE = "#10141a";
 const BOOT = "#1c1c20";
-const SOLE = "#e9e9ee";
+const BOOT_LIGHT = "#4b4e5c";
 const GLOVE = "#f4f4f6";
 const KEEPER_SHORTS = "#202226";
 const EYE = "#14161b";
@@ -239,8 +239,9 @@ function leg(raster: Raster, hip: { x: number; y: number }, joint: Leg, paint: P
   // A turn-over band at the top of the sock.
   raster.line(kneeX + (ankleX - kneeX) * sockFrom, kneeY + (ankleY - kneeY) * sockFrom, kneeX + (ankleX - kneeX) * (sockFrom + 0.1), kneeY + (ankleY - kneeY) * (sockFrom + 0.1), 4, shade(paint.trim, dim));
   raster.line(ankleX, ankleY, toeX, toeY, 3, shade(BOOT, dim));
-  raster.set(ankleX + 1, ankleY + 1.6, shade(SOLE, dim));
-  raster.set(toeX - 0.5, toeY + 1, shade(SOLE, dim));
+  // A little light on the top of the boot, and nothing else: no white to read as a sole or a lace.
+  raster.set(ankleX + 0.6, ankleY - 0.2, shade(BOOT_LIGHT, dim));
+  raster.set(ankleX + 1.8, ankleY + 0.1, shade(BOOT_LIGHT, dim));
 }
 
 function arm(raster: Raster, shoulder: { x: number; y: number }, joint: Arm, paint: Paint, far: boolean): void {
@@ -534,6 +535,10 @@ export const STANCES = {
   stepOverRaise: { bob: -0.4, lean: 0.12, near: { a: 1.05, k: 1.15 }, far: { a: -0.1, k: 0.2 }, nearArm: { c: 0.6, e: 0.6 }, farArm: { c: -0.7, e: 0.6 } },
   /** Near foot planted beyond the ball after the step-over, weight going over it. */
   stepOverPlant: { bob: 0.5, lean: 0.22, near: { a: 0.62, k: 0.18 }, far: { a: -0.35, k: 0.55 }, nearArm: { c: 0.2, e: 0.7 }, farArm: { c: -0.9, e: 0.7 } },
+  /** The other foot's knee lifted and swung over the ball (the second step-over). */
+  stepOverRaiseFar: { bob: -0.4, lean: 0.12, near: { a: -0.1, k: 0.2 }, far: { a: 1.05, k: 1.15 }, nearArm: { c: -0.7, e: 0.6 }, farArm: { c: 0.6, e: 0.6 } },
+  /** The other foot planted beyond the ball, the near leg trailing ready to push. */
+  stepOverPlantFar: { bob: 0.5, lean: 0.22, near: { a: -0.4, k: 0.6 }, far: { a: 0.62, k: 0.18 }, nearArm: { c: -0.9, e: 0.7 }, farArm: { c: 0.2, e: 0.7 } },
   /** The far foot drives through the ball, the other planted. */
   strike: { bob: -0.2, lean: 0.1, near: { a: -0.18, k: 0.3 }, far: { a: 1.05, k: 0.12 }, nearArm: { c: -0.7, e: 0.6 }, farArm: { c: 0.8, e: 0.5 } },
   /** The near foot kicks the ball forward. */
@@ -541,7 +546,7 @@ export const STANCES = {
   /** The near sole on top of the ball, toe up, ready to roll it. */
   soleOnBall: { bob: 0.4, lean: -0.02, near: { a: 0.72, k: 0.5 }, far: { a: -0.1, k: 0.35 }, nearArm: { c: 0.5, e: 0.6 }, farArm: { c: -0.5, e: 0.6 } },
   /** The near foot drawn back under the body with the ball. */
-  soleBack: { bob: 0.5, lean: 0.05, near: { a: 0.05, k: 0.4 }, far: { a: 0.1, k: 0.3 }, nearArm: { c: 0.1, e: 0.7 }, farArm: { c: -0.4, e: 0.7 } },
+  soleBack: { bob: 0.5, lean: 0.05, near: { a: 0.5, k: 0.55 }, far: { a: 0.1, k: 0.3 }, nearArm: { c: 0.1, e: 0.7 }, farArm: { c: -0.4, e: 0.7 } },
   /** Low and turning on the spot. */
   pivot: { bob: 0.9, lean: 0.2, near: { a: 0.3, k: 0.55 }, far: { a: -0.2, k: 0.5 }, nearArm: { c: 0.9, e: 0.5 }, farArm: { c: -0.9, e: 0.5 } },
   /** The ball held between the heels, near heel kicked up behind. */
@@ -551,9 +556,25 @@ export const STANCES = {
   /** Shoulder dropped, weight over the planted foot, the other foot reaching across the ball. */
   cutReach: { bob: 0.5, lean: 0.3, near: { a: 0.7, k: 0.22 }, far: { a: -0.25, k: 0.45 }, nearArm: { c: 0.3, e: 0.8 }, farArm: { c: -0.8, e: 0.7 } },
   /** A defender wide-legged, weight low. */
-  legsApart: { bob: 0.6, lean: 0.08, near: { a: 0.5, k: 0.2 }, far: { a: -0.5, k: 0.2 }, nearArm: { c: 0.5, e: 0.5 }, farArm: { c: -0.5, e: 0.5 } },
+  legsApart: { bob: 0.9, lean: 0.06, near: { a: 0.78, k: 0.12 }, far: { a: -0.78, k: 0.12 }, nearArm: { c: 0.5, e: 0.5 }, farArm: { c: -0.5, e: 0.5 } },
   /** A defender in a jockeying crouch. */
   jockey: { bob: 0.7, lean: 0.1, near: { a: 0.35, k: 0.45 }, far: { a: -0.3, k: 0.4 }, nearArm: { c: 0.6, e: 0.6 }, farArm: { c: -0.5, e: 0.6 } },
+  /** A tackle: the near leg thrust at the ball, the other bent and braced, body leaning in. */
+  tackleReach: { bob: 0.6, lean: 0.38, near: { a: 1.3, k: 0.05 }, far: { a: -0.5, k: 0.75 }, nearArm: { c: 0.9, e: 0.4 }, farArm: { c: -1.0, e: 0.5 } },
+  /** Both knees drawn up, off the ground: hopping a challenge, or in the air before a header. */
+  hop: { bob: -5, lean: 0.05, near: { a: 0.55, k: 1.3 }, far: { a: 0.25, k: 1.15 }, nearArm: { c: 0.6, e: 0.5 }, farArm: { c: -0.6, e: 0.5 } },
+  /** Leaping to head the ball: legs trailing, back arched, arms back for balance. */
+  headerJump: { bob: -8, lean: -0.12, near: { a: -0.5, k: 1.25 }, far: { a: -0.2, k: 1.0 }, nearArm: { c: -0.7, e: 0.3 }, farArm: { c: -1.1, e: 0.3 } },
+  /** The head thrown at the ball: body whipped forward at the top of the jump. */
+  headerSwing: { bob: -8, lean: 0.5, near: { a: -0.35, k: 1.1 }, far: { a: 0.1, k: 0.8 }, nearArm: { c: 0.9, e: 0.3 }, farArm: { c: 0.2, e: 0.3 } },
+  /** The kicking leg drawn right back before a free kick. */
+  kickBack: { bob: 0.3, lean: 0.12, near: { a: -1.0, k: 1.0 }, far: { a: 0.08, k: 0.3 }, nearArm: { c: 0.9, e: 0.3 }, farArm: { c: -0.9, e: 0.3 } },
+  /** The ball struck: the leg driving through, body leaning back, arms wide. */
+  freeKickStrike: { bob: -0.6, lean: -0.22, near: { a: 1.4, k: 0.04 }, far: { a: -0.12, k: 0.15 }, nearArm: { c: -1.3, e: 0.3 }, farArm: { c: 1.2, e: 0.3 } },
+  /** The follow-through: leg high, the other foot off the ground. */
+  freeKickFollow: { bob: -2.2, lean: -0.3, near: { a: 1.65, k: 0.5 }, far: { a: -0.1, k: 0.6 }, nearArm: { c: -1.5, e: 0.3 }, farArm: { c: 1.3, e: 0.3 } },
+  /** Hands on hips, getting a breath before the run-up. */
+  hips: { bob: 0.4, lean: 0.04, near: { a: 0.1, k: 0.1 }, far: { a: -0.1, k: 0.1 }, nearArm: { c: 0.45, e: 1.6 }, farArm: { c: -0.45, e: 1.6 } },
   /** A defender thrown off balance, reaching. */
   stumble: { bob: 0.2, lean: 0.35, near: { a: 0.75, k: 0.3 }, far: { a: -0.5, k: 0.35 }, nearArm: { c: 1.2, e: 0.3 }, farArm: { c: -1.0, e: 0.4 } },
 } satisfies Record<string, Joints>;

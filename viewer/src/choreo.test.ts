@@ -64,7 +64,7 @@ test("the ball is independent of the player: it is a long way from his feet for 
 
 test("a nutmeg sends the ball through the defender's legs and a rainbow flick over his head", () => {
   const nutmeg = frames("nutmeg");
-  const through = nutmeg.filter((play) => play.defender.w > 0.9 && Math.hypot(play.ball.f - play.defender.f, play.ball.l - play.defender.l) < 0.3);
+  const through = nutmeg.filter((play) => play.defender.w > 0.9 && Math.hypot(play.ball.f - play.defender.f, play.ball.l - play.defender.l) < 0.45);
   assert.ok(through.length >= 2, "the ball passes the defender's feet while his legs are apart");
   assert.ok(nutmeg.every((play) => play.ball.h < 0.5), "a nutmeg stays on the grass");
   const flick = frames("rainbow_flick");

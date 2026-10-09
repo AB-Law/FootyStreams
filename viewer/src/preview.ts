@@ -1,7 +1,8 @@
-import { CARRY_AHEAD_M, MOVE_SECONDS, playMove, touchTimes } from "./choreo.ts";
+import { CARRY_AHEAD_M, MOVE_SCRIPTS, playScript, touchTimes, type Foot, type Lying, type Script } from "./choreo.ts";
 import { FEET_X, FEET_Y, FIGURE_H, FIGURE_HEIGHT_PX, FIGURE_W, STANCES, STRIDE_STEPS, blendJoints, figureFromJoints, figureSprite, gaitFor, swing, type FigureDress } from "./figure.ts";
 import type { Kit } from "./palette.ts";
-import { SKILL_MOVES, type SkillMoveName } from "./skillposes.ts";
+import { CHALLENGE_MODES, FREE_KICK_SCRIPT, failedMove, headerScript, tackleScript, type ChallengeMode } from "./scenes.ts";
+import { SKILL_MOVES } from "./skillposes.ts";
 
 const home: Kit = { pattern: "halves", primary: "#5d4037", secondary: "#f5deb3" };
 const away: Kit = { pattern: "solid", primary: "#7a22b0", secondary: "#e8e8e8" };
@@ -38,11 +39,14 @@ function cell(parent: HTMLElement, label: string, width: number, height: number)
   return ctx;
 }
 
-/** Draw a sprite with its feet at (x, y), `scale` screen pixels per grid pixel, facing right or left. */
-function stamp(ctx: CanvasRenderingContext2D, sprite: HTMLCanvasElement, x: number, y: number, scale: number, flip = false): void {
+/** Draw a sprite with its feet at (x, y), `scale` screen pixels per grid pixel, facing right or left, upright or lying. */
+function stamp(ctx: CanvasRenderingContext2D, sprite: HTMLCanvasElement, x: number, y: number, scale: number, flip = false, lying: Lying | null = null): void {
   ctx.save();
   ctx.translate(x, y);
+  if (lying !== null) ctx.translate(0, -5 * scale);
   if (flip) ctx.scale(-1, 1);
+  if (lying === "forward") ctx.rotate(Math.PI / 2);
+  if (lying === "slide") ctx.rotate(-Math.PI / 2);
   ctx.drawImage(sprite, -FEET_X * scale, -FEET_Y * scale, FIGURE_W * scale, FIGURE_H * scale);
   ctx.restore();
 }
@@ -57,7 +61,8 @@ function grass(ctx: CanvasRenderingContext2D, width: number, height: number): vo
   ctx.fillRect(0, 0, width, height);
 }
 
-// Run cycle: eight still frames, and one that runs.
+// ---- Static sheets ----
+
 const cycle = section("Run cycle: eight frames, then the same figure running at stride speed");
 for (let step = 0; step < STRIDE_STEPS; step++) {
   const ctx = cell(cycle, `frame ${step + 1}`, BOX_W, BOX_H);
@@ -66,7 +71,6 @@ for (let step = 0; step < STRIDE_STEPS; step++) {
 }
 const live = cell(cycle, "running (live)", BOX_W, BOX_H);
 
-// Heads: hair and facial hair at large size, so they can be compared.
 const heads = section("Heads, enlarged: hair styles, then facial hair, then skin tones");
 function headCrop(label: string, figure: FigureDress): void {
   const ctx = cell(heads, label, 18 * 9, 18 * 9);
@@ -79,7 +83,6 @@ function headCrop(label: string, figure: FigureDress): void {
 [1, 2, 3, 4, 5, 6, 7, 8].forEach((tone) => headCrop(`skin ${tone}`, dress(away, { skin_tone: tone, hair_colour: tone % 2 ? "black" : "blond" })));
 (["black", "brown", "blond", "red", "grey"] as const).forEach((colour) => headCrop(`hair ${colour}`, dress(away, { hair_colour: colour, skin_tone: 2 })));
 
-// Kits and builds.
 const kits = section("Kits and builds, standing: halves, solid, stripes, hoops, sash, keeper, referee");
 const outfits: [string, FigureDress][] = [
   ["halves", dress(home, { skin_tone: 3, hair_colour: "black" })],
@@ -96,127 +99,193 @@ outfits.forEach(([label, figure]) => {
   stamp(ctx, figureSprite(figure, "stand", 0, 0), BOX_W / 2, BOX_H - 24, SCALE);
 });
 
-// Gaits, animated: a figure at each speed running on the spot.
 const gaitSection = section("Gaits on the spot, live: stand, walk, jog, run, sprint");
 const gaitCells = [0, 1.2, 3, 5, 8].map((speed) => ({ speed, ctx: cell(gaitSection, `${speed} m/s`, BOX_W, BOX_H) }));
 
-// Skill moves, animated: attacker (halves kit) beats a defender (purple) with each move.
-const skills = section("Skill moves, live: the ball is its own object and only moves where a boot touches it (rings mark each touch)");
-const SKILL_W = 760;
-const SKILL_H = 330;
-const SKILL_SCALE = 3;
-const PPM = (FIGURE_HEIGHT_PX / 1.8) * SKILL_SCALE;
-const RUN_SPEED = 3.2;
-const MOVE_START_S = 0.7;
-const LOOP_S = MOVE_START_S + MOVE_SECONDS + 0.9;
-const skillCells = SKILL_MOVES.map((move) => ({ move, ctx: cell(skills, move.replace("_", " "), SKILL_W, SKILL_H) }));
+// ---- Scenes: skill moves, challenges, headers and a free kick ----
+
 const attackerLook = dress(home, { skin_tone: 3, hair_colour: "black" });
 const defenderLook = dress(away, { skin_tone: 2, hair_colour: "blond" });
+const SKILL_SCALE = 3;
+const PPM = (FIGURE_HEIGHT_PX / 1.8) * SKILL_SCALE;
+const SCENE_H = 330;
+const SCENE_W = 760;
+const STRIP_W = 330;
+const APPROACH_S = 0.7;
+const TAIL_S = 0.9;
 
-function drawBall(ctx: CanvasRenderingContext2D, x: number, y: number, lift: number, touching: boolean): void {
+interface Setup {
+  label: string;
+  script: Script;
+  /** The carrier's speed before and through the scene, in metres per second. */
+  speed: number;
+  /** Where the defender really is relative to the carrier when the scene starts, and how fast he closes. */
+  defenderStart: number;
+  closing: number;
+  /** Three players in a line (a wall) instead of one defender. */
+  wall: boolean;
+  /** The ball sits still at the carrier's feet before the scene (a set piece) instead of being carried. */
+  setPiece: boolean;
+  /** Zoom out for wide scenes, live and in the frame strips. */
+  zoomLive?: number;
+  zoomStrip?: number;
+}
+
+function outcomeMode(outcome: string): ChallengeMode | null {
+  return outcome === "tackled" ? "won" : outcome === "foul" ? "foul" : outcome === "lost" ? "lost" : null;
+}
+
+function setups(outcome: string, kind: "moves" | "tackles" | "other"): Setup[] {
+  const run = { speed: 3.2, defenderStart: 3.3, closing: 0.6, wall: false, setPiece: false };
+  if (kind === "moves") {
+    const mode = outcomeMode(outcome);
+    return SKILL_MOVES.map((move) => ({ ...run, label: `${move.replace("_", " ")}${mode === null ? "" : ` (${outcome})`}`, script: mode === null ? MOVE_SCRIPTS[move] : failedMove(move, mode) }));
+  }
+  if (kind === "tackles") return CHALLENGE_MODES.map((mode) => ({ ...run, label: `tackle: ${mode.replace("_", " ")}`, script: tackleScript(mode) }));
+  const still = { speed: 0, defenderStart: 0.4, closing: 0, wall: false, setPiece: true };
+  return [
+    { ...still, label: "header: shot", script: headerScript("shot") },
+    { ...still, label: "header: clearance", script: headerScript("clear") },
+    { ...still, label: "free kick (wall jumps)", script: FREE_KICK_SCRIPT, defenderStart: 9.15, wall: true, zoomLive: 0.7, zoomStrip: 0.38 },
+  ];
+}
+
+function drawBall(ctx: CanvasRenderingContext2D, x: number, y: number, lift: number, touching: boolean, k = 1): void {
   ctx.fillStyle = "rgba(0,0,0,0.3)";
   ctx.beginPath();
-  ctx.ellipse(x, y, 13, 4, 0, 0, Math.PI * 2);
+  ctx.ellipse(x, y, 13 * k, 4 * k, 0, 0, Math.PI * 2);
   ctx.fill();
-  const top = y - 10 - lift;
+  const top = y - 10 * k - lift;
   ctx.fillStyle = "#10141a";
   ctx.beginPath();
-  ctx.arc(x, top, 11, 0, Math.PI * 2);
+  ctx.arc(x, top, 11 * k, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = "#ffffff";
   ctx.beginPath();
-  ctx.arc(x, top, 9, 0, Math.PI * 2);
+  ctx.arc(x, top, 9 * k, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = "#222";
-  ctx.fillRect(x - 2, top - 3, 5, 5);
+  ctx.fillRect(x - 2 * k, top - 3 * k, 5 * k, 5 * k);
   if (touching) {
     ctx.strokeStyle = "#ffd23f";
     ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.arc(x, top, 18, 0, Math.PI * 2);
+    ctx.arc(x, top, 18 * Math.max(k, 0.7), 0, Math.PI * 2);
     ctx.stroke();
   }
 }
 
-function drawSkill(ctx: CanvasRenderingContext2D, move: SkillMoveName, t: number, width = SKILL_W, strip = false): void {
-  const ground = SKILL_H - 90;
-  const origin = (time: number): number => RUN_SPEED * time;
+function drawScene(ctx: CanvasRenderingContext2D, setup: Setup, t: number, foot: Foot, width: number, strip: boolean): void {
+  const k = (strip ? setup.zoomStrip : setup.zoomLive) ?? 1;
+  const ppm = PPM * k;
+  const sprite = SKILL_SCALE * k;
+  const ground = SCENE_H - 100;
+  const origin = (time: number): number => setup.speed * Math.min(time, APPROACH_S + setup.script.duration);
   const here = origin(t);
   ctx.fillStyle = GRASS;
-  ctx.fillRect(0, 0, width, SKILL_H);
+  ctx.fillRect(0, 0, width, SCENE_H);
   ctx.fillStyle = "#388538";
-  const stripe = PPM * 4;
-  for (let k = -2; k < 12; k += 2) ctx.fillRect(k * stripe - ((here * PPM) % (2 * stripe)) + 0, 0, stripe, SKILL_H);
-  const screenX = (f: number): number => (strip ? 80 : 190) + (f - here) * PPM;
-  const screenY = (l: number): number => ground - l * PPM * 0.55;
-  const gait = gaitFor(RUN_SPEED);
+  const stripe = ppm * 4;
+  for (let n = -2; n < 24; n += 2) ctx.fillRect(n * stripe - ((here * ppm) % (2 * stripe)), 0, stripe, SCENE_H);
+  const base = k < 1 ? (strip ? 95 : 200) : strip ? 80 : 190;
+  const screenX = (f: number): number => base + (f - here) * ppm;
+  const screenY = (l: number, h = 0): number => ground - l * ppm * 0.55 - h * ppm;
+  const gait = gaitFor(setup.speed);
   const phase = t / gait.period;
-  const s = t - MOVE_START_S;
-  const active = s >= 0 && s <= MOVE_SECONDS;
-  const play = active ? playMove(move, s, phase, gait.amp) : null;
-  // The defender walks toward him; the replay's own positions are what the move pulls him from.
-  const realDefenderF = origin(MOVE_START_S) + 3.3 - 0.6 * (t - MOVE_START_S);
-  const relF = realDefenderF - here;
-  const relL = 0.25;
+  const s = t - APPROACH_S;
+  const active = s >= 0;
+  const run = swing(phase, gait.amp);
+  const strideAmp = setup.script.body.some((key) => key.stance === "hips") ? 1 : gait.amp;
+  const play = active ? playScript(setup.script, Math.min(s, setup.script.duration), phase, strideAmp, foot) : null;
+  const done = s > setup.script.duration;
   const items: { y: number; draw: () => void }[] = [];
-  const attackerF = here + (play === null ? 0 : play.attacker.f);
-  const attackerL = play === null ? 0 : play.attacker.l;
-  const attackerJoints = play === null ? swing(phase, gait.amp) : play.attacker.joints;
+  const attackerF = here + (play?.attacker.f ?? 0);
+  const attackerL = play?.attacker.l ?? 0;
+  const attackerH = play?.attacker.h ?? 0;
+  const attackerJoints = play === null ? (setup.speed === 0 ? STANCES.ready : run) : play.attacker.joints;
   items.push({
     y: screenY(attackerL),
-    draw: () => stamp(ctx, figureFromJoints(attackerLook, attackerJoints), screenX(attackerF), screenY(attackerL), SKILL_SCALE, play?.attacker.turn === true),
+    draw: () => stamp(ctx, figureFromJoints(attackerLook, attackerJoints), screenX(attackerF), screenY(attackerL, attackerH), sprite, play?.attacker.turn === true, play?.attacker.lying ?? null),
   });
-  const pull = play === null ? 0 : play.defender.w;
-  const defF = here + relF + pull * ((play?.defender.f ?? relF) - relF);
-  const defL = relL + pull * ((play?.defender.l ?? relL) - relL);
-  const defJoints = play === null ? STANCES.jockey : blendJoints(STANCES.jockey, play.defender.joints, pull);
-  items.push({
-    y: screenY(defL),
-    draw: () => stamp(ctx, figureFromJoints(defenderLook, defJoints), screenX(defF), screenY(defL), SKILL_SCALE, play?.defender.turn !== true),
+  const realRel = setup.defenderStart - setup.closing * Math.max(s, 0);
+  const copies = setup.wall ? [-0.9, 0, 0.9] : [0];
+  copies.forEach((offset) => {
+    const pull = play?.defender.w ?? 0;
+    const stanceW = play?.defender.stanceW ?? 0;
+    const relL = 0.25 + offset;
+    const defF = here + realRel + pull * ((play?.defender.f ?? realRel) - realRel);
+    const defL = relL + pull * ((play?.defender.l ?? relL) - relL);
+    const defH = play?.defender.h ?? 0;
+    const joints = play === null ? STANCES.jockey : blendJoints(STANCES.jockey, play.defender.joints, Math.max(stanceW, pull));
+    const faces = setup.wall ? true : play?.defender.turn !== true;
+    items.push({ y: screenY(defL), draw: () => stamp(ctx, figureFromJoints(defenderLook, joints), screenX(defF), screenY(defL, defH), sprite, faces, play?.defender.lying ?? null) });
   });
-  const carried = { f: here + CARRY_AHEAD_M, l: 0, h: 0.11 };
-  const ballPos = play === null ? carried : { f: here + play.ball.f, l: play.ball.l, h: play.ball.h };
-  items.push({ y: screenY(ballPos.l) + 1, draw: () => drawBall(ctx, screenX(ballPos.f), screenY(ballPos.l), (ballPos.h - 0.11) * PPM, play?.touching != null) });
+  const carriedBall = setup.setPiece ? { f: 0, l: 0, h: 0.11 } : { f: CARRY_AHEAD_M, l: 0, h: 0.11 };
+  const ball = play === null ? carriedBall : play.ball;
+  const settledOwner = done && play !== null ? play.owner : null;
+  const ballF = settledOwner === "defender" ? here + realRel - CARRY_AHEAD_M : here + ball.f;
+  const ballL = settledOwner === "defender" ? 0.25 : ball.l;
+  items.push({ y: screenY(ballL) + 1, draw: () => drawBall(ctx, screenX(ballF), screenY(ballL), (ball.h - 0.11) * ppm, play?.touching != null, k) });
   items.sort((a, b) => a.y - b.y).forEach((item) => item.draw());
   if (strip) {
     ctx.fillStyle = "rgba(0,0,0,0.55)";
     ctx.fillRect(0, 0, 70, 16);
     ctx.fillStyle = "#fff";
     ctx.font = "12px system-ui, sans-serif";
-    ctx.fillText(`${(t - MOVE_START_S).toFixed(2)} s`, 6, 12);
+    ctx.fillText(`${Math.max(s, 0).toFixed(2)} s`, 6, 12);
     return;
   }
+  const loop = APPROACH_S + setup.script.duration + TAIL_S;
   ctx.fillStyle = "rgba(255,255,255,0.8)";
-  ctx.fillRect(0, SKILL_H - 4, (SKILL_W * (t % LOOP_S)) / LOOP_S, 4);
-  touchTimes(move).forEach((time) => {
+  ctx.fillRect(0, SCENE_H - 4, (width * (t % loop)) / loop, 4);
+  touchTimes(setup.script).forEach((time) => {
     ctx.fillStyle = "#ffd23f";
-    ctx.fillRect(((MOVE_START_S + time) / LOOP_S) * SKILL_W - 1, SKILL_H - 12, 3, 8);
+    ctx.fillRect(((APPROACH_S + time) / loop) * width - 1, SCENE_H - 12, 3, 8);
   });
 }
 
-
-// The same moves as still frames, so each position can be checked on its own.
-const stripSection = section("Skill moves frame by frame (seconds into the move shown top-left; rings mark a boot on the ball)");
+const controls = { outcome: "success", foot: "near" as Foot };
+const sceneSections = [
+  { key: "moves" as const, title: "Skill moves, live (choose the outcome and the foot above; rings mark each touch of the ball)" },
+  { key: "tackles" as const, title: "Tackles, live: a firm tackle, a missed lunge, a foul, a slide that wins it, a slide that fouls, a heavy touch lost" },
+  { key: "other" as const, title: "Headers and a free kick, live" },
+];
+let liveScenes: { setup: Setup; ctx: CanvasRenderingContext2D }[] = [];
+const liveHolders = sceneSections.map((entry) => section(entry.title));
+const stripHolders = sceneSections.map((entry) => section(`${entry.title.split(",")[0]}: frame by frame`));
 const STRIP_TIMES = [0.15, 0.4, 0.65, 0.9, 1.2, 1.6];
-SKILL_MOVES.forEach((move) => {
-  const row = document.createElement("div");
-  row.style.cssText = "display:flex;gap:2px;flex-basis:100%;align-items:flex-start";
-  const label = document.createElement("div");
-  label.textContent = move.replace("_", " ");
-  label.style.cssText = "width:80px;color:#8fa3b8;font-size:12px;padding-top:6px";
-  row.append(label);
-  stripSection.append(row);
-  STRIP_TIMES.forEach((time) => {
-    const canvas = document.createElement("canvas");
-    canvas.width = 330;
-    canvas.height = SKILL_H;
-    const ctx = canvas.getContext("2d");
-    if (ctx === null) return;
-    ctx.imageSmoothingEnabled = false;
-    drawSkill(ctx, move, MOVE_START_S + time, 330, true);
-    row.append(canvas);
+
+function rebuild(): void {
+  liveScenes = [];
+  sceneSections.forEach((entry, index) => {
+    const holder = liveHolders[index] as HTMLElement;
+    const strips = stripHolders[index] as HTMLElement;
+    holder.querySelectorAll("figure").forEach((node) => node.remove());
+    strips.querySelectorAll("div").forEach((node) => node.remove());
+    for (const setup of setups(controls.outcome, entry.key)) {
+      liveScenes.push({ setup, ctx: cell(holder, setup.label, SCENE_W, SCENE_H) });
+      const row = document.createElement("div");
+      row.style.cssText = "display:flex;gap:2px;flex-basis:100%;align-items:flex-start";
+      const label = document.createElement("div");
+      label.textContent = setup.label;
+      label.style.cssText = "width:90px;color:#8fa3b8;font-size:12px;padding-top:6px";
+      row.append(label);
+      strips.append(row);
+      const times = setup.script.duration > 2.2 ? [0.3, 0.9, 1.5, 2.1, 2.6, 2.9, 3.3] : STRIP_TIMES.filter((time) => time <= setup.script.duration);
+      times.forEach((time) => {
+        const canvas = document.createElement("canvas");
+        canvas.width = STRIP_W;
+        canvas.height = SCENE_H;
+        const ctx = canvas.getContext("2d");
+        if (ctx === null) return;
+        ctx.imageSmoothingEnabled = false;
+        drawScene(ctx, setup, APPROACH_S + time, controls.foot, STRIP_W, true);
+        row.append(canvas);
+      });
+    }
   });
-});
+}
+rebuild();
 
 let slow = 1;
 let paused = false;
@@ -232,6 +301,14 @@ document.getElementById("pause")?.addEventListener("click", (event) => {
 document.getElementById("restart")?.addEventListener("click", () => {
   clock = 0;
 });
+document.getElementById("outcome")?.addEventListener("change", (event) => {
+  controls.outcome = (event.target as HTMLSelectElement).value;
+  rebuild();
+});
+document.getElementById("foot")?.addEventListener("change", (event) => {
+  controls.foot = (event.target as HTMLSelectElement).value as Foot;
+  rebuild();
+});
 
 function frameLoop(now: number): void {
   if (!paused) clock += ((now - last) / 1000) * slow;
@@ -244,9 +321,10 @@ function frameLoop(now: number): void {
     const gait = gaitFor(speed);
     stamp(ctx, figureSprite(dress(home, { skin_tone: 3, hair_colour: "black" }), gait.pose, clock / gait.period, gait.amp), BOX_W / 2, BOX_H - 24, SCALE);
   });
-  skillCells.forEach(({ move, ctx }) => drawSkill(ctx, move, clock % LOOP_S));
+  liveScenes.forEach(({ setup, ctx }) => {
+    const loop = APPROACH_S + setup.script.duration + TAIL_S;
+    drawScene(ctx, setup, clock % loop, controls.foot, SCENE_W, false);
+  });
   requestAnimationFrame(frameLoop);
 }
 requestAnimationFrame(frameLoop);
-
-void FIGURE_H;

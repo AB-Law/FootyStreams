@@ -24,6 +24,8 @@
       <button id="pause" type="button">Pause</button>
       <button id="restart" type="button">Restart</button>
       <label>Speed <input id="speed" type="range" min="0.1" max="1.5" step="0.05" value="1" /></label>
+      <label>Outcome <select id="outcome"><option value="success">success</option><option value="tackled">tackled (ball won)</option><option value="foul">foul</option><option value="lost">lost (heavy touch)</option></select></label>
+      <label>Foot <select id="foot"><option value="near">near foot</option><option value="far">far foot</option></select></label>
     </div>
     <div id="sheet"></div>
     <script type="module" src="dist/preview.js"></script>
