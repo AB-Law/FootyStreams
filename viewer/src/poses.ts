@@ -1,6 +1,5 @@
 import { sampleAt, type Sample } from "./interpolate.ts";
 import { toScreen } from "./pitch.ts";
-import type { ProfilePose } from "./profile.ts";
 import { SKILL_MOVE_S, skillFrame } from "./skillposes.ts";
 import type { Contest, Frame } from "./store.ts";
 
@@ -20,9 +19,6 @@ export interface Pose {
   /** Where the ball is, beyond the shift it shares with the player (a skill move), in pixels. */
   ballDx?: number;
   ballDy?: number;
-  /** The side-on pose and the way he faces (-1 turns him against his running, mid-roulette). */
-  profile?: ProfilePose;
-  turn?: 1 | -1;
 }
 
 /** How long a contest plays, in match seconds (so it is quick at 4x and 16x, as everything is). */
@@ -101,8 +97,6 @@ function skillMove(contest: Extract<Contest, { kind: "dribble" }>, move: NonNull
     ballDx: along.x * frame.ballAlong + across.x * frame.ballAcross,
     ballDy: along.y * frame.ballAlong + across.y * frame.ballAcross,
     ballLift: frame.ballLift,
-    profile: frame.profile,
-    turn: frame.turn,
   });
 }
 

@@ -1,5 +1,3 @@
-import type { ProfilePose } from "./profile.ts";
-
 /** The skill moves the sim records on a dribble (src/footystreams/events/open_play.py). */
 export type SkillMoveName = "knock_past" | "step_over" | "drag_back" | "cut_inside" | "nutmeg" | "roulette" | "rainbow_flick";
 
@@ -19,17 +17,12 @@ export interface SkillFrame {
   ballAcross: number;
   /** The ball lifts off the grass by this many pixels. */
   ballLift: number;
-  profile: ProfilePose;
-  /** +1 keeps facing the way he runs, -1 has him turned round (the middle of a roulette). */
-  turn: 1 | -1;
 }
 
 const SMOOTH = (progress: number): number => progress * progress * (3 - 2 * progress);
 const HUMP = (progress: number): number => Math.sin(Math.PI * Math.min(Math.max(progress, 0), 1));
 
-function plain(profile: ProfilePose): SkillFrame {
-  return { along: 0, across: 0, ballAlong: 0, ballAcross: 0, ballLift: 0, profile, turn: 1 };
-}
+const NONE: SkillFrame = { along: 0, across: 0, ballAlong: 0, ballAcross: 0, ballLift: 0 };
 
 /** Every offset eases to nothing over the last part of a move, so nothing snaps back when it ends. */
 const FADE_FROM = 0.7;
@@ -61,31 +54,30 @@ function shape(move: SkillMoveName, p: number): SkillFrame {
   switch (move) {
     case "knock_past":
       // The ball is pushed a little ahead and he strides on to it.
-      return { ...plain("lean"), ballAlong: 8 * HUMP(Math.min(p / 0.8, 1)), along: 2 * HUMP(p) };
+      return { ...NONE, ballAlong: 8 * HUMP(Math.min(p / 0.8, 1)), along: 2 * HUMP(p) };
     case "step_over":
       // A foot swung over the ball one way, then a push off the other.
-      return { ...plain(p < 0.45 ? "feint" : "stepA"), across: 2.5 * Math.sin(Math.PI * 2 * p), along: 1.5 * HUMP(p) };
+      return { ...NONE, across: 2.5 * Math.sin(Math.PI * 2 * p), along: 1.5 * HUMP(p) };
     case "drag_back":
       // The ball is pulled back under the sole, then he turns away with it.
-      return { ...plain(p < 0.5 ? "kick" : "stepB"), ballAlong: -6 * HUMP(Math.min(p / 0.6, 1)), along: -1.5 * HUMP(p) };
+      return { ...NONE, ballAlong: -6 * HUMP(Math.min(p / 0.6, 1)), along: -1.5 * HUMP(p) };
     case "cut_inside":
       // He drops a shoulder and takes the ball across his body toward the middle.
-      return { ...plain("lean"), across: 2.5 * HUMP(p), ballAcross: 8 * HUMP(Math.min(p / 0.7, 1)), along: 2 * HUMP(p) };
+      return { ...NONE, across: 2.5 * HUMP(p), ballAcross: 8 * HUMP(Math.min(p / 0.7, 1)), along: 2 * HUMP(p) };
     case "nutmeg":
       // The ball goes through the defender's legs and he steps round to collect it.
-      return { ...plain(p < 0.35 ? "kick" : "lean"), ballAlong: 9 * HUMP(Math.min(p / 0.8, 1)), across: 1.5 * HUMP(p) };
+      return { ...NONE, ballAlong: 9 * HUMP(Math.min(p / 0.8, 1)), across: 1.5 * HUMP(p) };
     case "roulette":
       // A full turn over the ball, the ball dragged round in a small circle.
       return {
-        ...plain(p < 0.5 ? "stepA" : "stepB"),
-        turn: p > 0.3 && p < 0.65 ? -1 : 1,
+        ...NONE,
         ballAlong: 3 * Math.sin(2 * Math.PI * p),
         ballAcross: 3 * (1 - Math.cos(2 * Math.PI * p)),
         along: 1.5 * HUMP(p),
       };
     case "rainbow_flick":
       // The ball flicked up and over his own head and the defender's.
-      return { ...plain("flick"), ballAlong: 10 * HUMP(Math.min(p / 0.9, 1)), ballLift: 16 * HUMP(Math.min(p / 0.9, 1)), along: 2 * HUMP(p) };
+      return { ...NONE, ballAlong: 10 * HUMP(Math.min(p / 0.9, 1)), ballLift: 16 * HUMP(Math.min(p / 0.9, 1)), along: 2 * HUMP(p) };
   }
 }
 
