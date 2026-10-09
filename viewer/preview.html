@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>FootyStreams player sprites</title>
+    <style>
+      body { margin: 0; padding: 16px 20px 60px; background: #0a0f15; color: #d7e0ea; font: 14px system-ui, sans-serif; }
+      h1 { font-size: 18px; margin: 0 0 4px; }
+      p { color: #8fa3b8; margin: 0 0 10px; }
+      #bar { position: sticky; top: 0; z-index: 5; display: flex; gap: 12px; align-items: center; padding: 8px 0; background: #0a0f15; }
+      button { background: #243344; color: inherit; border: 1px solid #3b5068; border-radius: 4px; padding: 4px 12px; font: inherit; cursor: pointer; }
+      h2 { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #8fa3b8; margin: 22px 0 8px; }
+      section { display: flex; flex-wrap: wrap; gap: 10px; }
+      section > h2 { flex-basis: 100%; margin: 22px 0 0; }
+      figure { margin: 0; }
+      figcaption { color: #8fa3b8; font-size: 12px; margin-top: 3px; text-align: center; }
+      canvas { image-rendering: pixelated; display: block; border-radius: 6px; }
+    </style>
+  </head>
+  <body>
+    <h1>Player sprites</h1>
+    <p>Procedural side-on figures at near-camera size. Everything below animates; use the controls to slow it down.</p>
+    <div id="bar">
+      <button id="pause" type="button">Pause</button>
+      <button id="restart" type="button">Restart</button>
+      <label>Speed <input id="speed" type="range" min="0.1" max="1.5" step="0.05" value="1" /></label>
+    </div>
+    <div id="sheet"></div>
+    <script type="module" src="dist/preview.js"></script>
+  </body>
+</html>
