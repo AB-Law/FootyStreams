@@ -55,6 +55,7 @@ class PositionConfig(DomainModel):
         "support_travel_m": "S",
         "support_lane_m": "S",
         "support_space_share": "S",
+        "support_stickiness": "S",
     }
 
     push_in_possession: NonNegative = 0.09
@@ -108,6 +109,7 @@ class PositionConfig(DomainModel):
     )
     support_lane_m: Positive = 4.0  # a defender this far from the passing lane leaves it clear
     support_space_share: Share = 0.5  # share of an angle's worth from room round it vs a clear lane
+    support_stickiness: NonNegative = 0.3  # extra worth of the angle he already holds
 
 
 class PressureConfig(DomainModel):

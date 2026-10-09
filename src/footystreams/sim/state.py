@@ -71,6 +71,7 @@ class PlayerState:
     exhaustion: float = 0.0
     drain: float = 0.0  # this player's share of the exhaustion rate (before team context)
     energy_step: int = 0  # exhaustion bucket the current `skills` were built for
+    support_angle: int = -1  # the angle round the carrier he offered himself at last step, or -1
 
 
 @dataclass(slots=True)

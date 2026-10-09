@@ -135,3 +135,31 @@ def test_support_weight__sharper_off_the_ball_movers_commit_more() -> None:
     lazy = replace(player, skills=replace(player.skills, off_ball_movement=20.0))
     assert support_weight(keen, CFG) > support_weight(lazy, CFG)
     assert 0.0 <= support_weight(keen, CFG) <= 1.0
+
+
+def test_support_spots__a_player_keeps_the_angle_he_holds_when_another_is_a_little_better() -> None:
+    state = _state()
+    mover = state.home.players[5]
+    at = (0.52, 0.5)
+    carrier = (0.5, 0.5)
+    first = support_spots([(mover, at)], carrier, [], CFG)[mover.slot]
+    held = mover.support_angle
+    assert held >= 0
+    # A defender now stands near that angle; with no stickiness he would move to another one.
+    near_held = (first[0] + 1.0 / PITCH_LENGTH_M, first[1])
+    keen = CFG.model_copy(update={"support_stickiness": 0.0})
+    swapped = support_spots([(mover, at)], carrier, [near_held], keen)[mover.slot]
+    mover.support_angle = held
+    stayed = support_spots(
+        [(mover, at)], carrier, [near_held], CFG.model_copy(update={"support_stickiness": 5.0})
+    )[mover.slot]
+    assert swapped != first
+    assert stayed == first
+
+
+def test_support_spots__a_team_mate_who_is_not_asked_forgets_his_angle() -> None:
+    state = _state()
+    mover = state.home.players[5]
+    mover.support_angle = 3
+    support_spots([(mover, (0.05, 0.05))], (0.9, 0.9), [], CFG)
+    assert mover.support_angle == -1

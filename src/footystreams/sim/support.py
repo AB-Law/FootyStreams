@@ -92,27 +92,34 @@ def support_spots(
     # A rival further than the longest angle plus the room an angle needs changes neither term.
     reach = (_FURTHEST_ANGLE_M + cfg.spacing_m) ** 2
     rivals = [r for r in rivals if squared_distance_m(carrier[0], carrier[1], r[0], r[1]) <= reach]
-    worth = {}
-    for angle in ANGLES:
+    worth: dict[int, tuple[Point, float]] = {}
+    for index, angle in enumerate(ANGLES):
         spot = _spot(carrier, angle)
-        worth[spot] = _freedom(carrier, spot, rivals, cfg) + (
-            _FORWARD_BONUS if spot[0] > carrier[0] else 0.0
-        )
+        value = _freedom(carrier, spot, rivals, cfg)
+        worth[index] = (spot, value + (_FORWARD_BONUS if spot[0] > carrier[0] else 0.0))
     claimed: dict[int, Point] = {}
+    asked = {player.slot for _, _, player, _ in near[: cfg.support_count]}
     for _, _, player, at in near[: cfg.support_count]:
         if not worth:
             break
+        # Perf: M8-sim-profile - a bonus for the angle he already holds keeps him from swapping
+        # sides every step (a run out wide and back for nothing); it is nearest-first so a
+        # team-mate nearer the carrier chooses before him.
         best = max(
             worth,
-            key=lambda spot: (
-                worth[spot]
-                - sqrt(squared_distance_m(at[0], at[1], spot[0], spot[1])) / cfg.support_travel_m,
-                -spot[0],
-                spot[1],
+            key=lambda index: (
+                worth[index][1]
+                + (cfg.support_stickiness if index == player.support_angle else 0.0)
+                - sqrt(squared_distance_m(at[0], at[1], worth[index][0][0], worth[index][0][1]))
+                / cfg.support_travel_m,
+                -index,
             ),
         )
-        del worth[best]
-        claimed[player.slot] = best
+        claimed[player.slot] = worth.pop(best)[0]
+        player.support_angle = best
+    for player, _ in movers:
+        if player.slot not in asked:
+            player.support_angle = -1
     return claimed
 
 
