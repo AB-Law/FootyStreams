@@ -59,6 +59,19 @@ def segment_distance_m(point: Point, start: Point, end: Point) -> float:
     return sqrt(dx * dx + dy * dy)
 
 
+def closest_point_on_segment(point: Point, start: Point, end: Point) -> Point:
+    """Return the point of the segment `start`-`end` nearest to `point` (all normalised)."""
+    abx = (end[0] - start[0]) * PITCH_LENGTH_M
+    aby = (end[1] - start[1]) * PITCH_WIDTH_M
+    length_squared = abx * abx + aby * aby
+    if length_squared == 0.0:
+        return start
+    apx = (point[0] - start[0]) * PITCH_LENGTH_M
+    apy = (point[1] - start[1]) * PITCH_WIDTH_M
+    along = max(0.0, min(1.0, (apx * abx + apy * aby) / length_squared))
+    return start[0] + along * (end[0] - start[0]), start[1] + along * (end[1] - start[1])
+
+
 def in_penalty_area(frame_x: float, frame_y: float) -> bool:
     """True when a frame point lies inside the penalty area the team attacks."""
     return frame_x >= 1.0 - PENALTY_AREA_DEPTH and abs(frame_y - CENTRE) <= PENALTY_AREA_HALF_WIDTH

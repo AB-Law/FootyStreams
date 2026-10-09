@@ -6,7 +6,7 @@ from footystreams.events.open_play import InterceptionEvent, TackleEvent
 from footystreams.sim.actions.dribbling import defending_rating, dribbling_rating
 from footystreams.sim.actions.foul import contest_foul
 from footystreams.sim.emit import Meta
-from footystreams.sim.geometry import Point, segment_distance_m
+from footystreams.sim.geometry import Point, closest_point_on_segment, segment_distance_m
 from footystreams.sim.injury import injure_in_tackle
 from footystreams.sim.mathx import signed_unit, squash
 from footystreams.sim.play import Play, action_duration, actor, take_possession
@@ -78,15 +78,23 @@ def pick_interceptor(play: Play, start: Point, end: Point) -> PlayerState:
     return defenders[play.rng.choice_weighted(weights)]
 
 
-def record_interception(play: Play, defender: PlayerState, pass_event_id: str) -> None:
-    """Emit the interception caused by a failed pass and hand the ball to the defender."""
+def record_interception(
+    play: Play, defender: PlayerState, pass_event_id: str, lane: tuple[Point, Point]
+) -> None:
+    """Emit the interception caused by a failed pass and hand the ball to the defender.
+
+    He cuts the ball out where it passes him: the nearest point of the pass `lane` (passer to
+    intended receiver), so the ball is seen heading for its target and stopped on the way rather
+    than flying to an opponent standing off the line.
+    """
     state = play.state
     passer = state.carrier
+    spot = closest_point_on_segment((defender.x, defender.y), lane[0], lane[1])
     meta = Meta(
         team=defender.side,
         participants=(actor(defender, "actor"), actor(passer, "target")),
-        pos=(defender.x, defender.y),
+        pos=spot,
         caused_by=pass_event_id,
     )
     play.emit.emit(state, InterceptionEvent, meta, player_id=defender.player_id)
-    take_possession(state, defender, defender.x, defender.y)
+    take_possession(state, defender, spot[0], spot[1])

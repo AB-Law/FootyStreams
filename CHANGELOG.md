@@ -180,6 +180,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
+- **0252** Cut an intercepted pass out on its passing lane and keep the viewer ball on the frame's flight *(M8; scope: sim; sim version patch; schema version patch)*
 - **0247** Substitute only at a real stoppage and clear corners to the top of the box *(M8; scope: sim; sim version patch)*
 - **0243** Move the frame ball at ball speed through long dead moments *(M8; scope: sim)*
 - **0225** Count a denied goal-scoring chance only when it was a clear chance *(M8; scope: sim; sim version patch)*
