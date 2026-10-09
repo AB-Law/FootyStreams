@@ -185,7 +185,7 @@ export function posesAt(contests: readonly Contest[], sample: Sample | null, t: 
     if (t - contest.t > FALL_S + (contest.kind === "restart" ? SEARCH_S : 0)) break;
     if (contest.kind === "tackle") tackle(contest, sample, t, out);
     else if (contest.kind === "dribble") dribble(contest, sample, t, out);
-    else restart(contest, sample, frames, t, out);
+    else if (contest.kind === "restart") restart(contest, sample, frames, t, out);
   }
   return out;
 }

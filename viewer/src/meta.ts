@@ -11,6 +11,9 @@ export interface Appearance {
 export interface PlayerMeta {
   name: string;
   number: number | null;
+  /** Which foot he prefers and how good the other is, 1 to 100 (replays recorded before the foot was written lack them). */
+  preferred_foot?: "left" | "right" | "both";
+  weak_foot?: number;
   appearance: Appearance;
 }
 

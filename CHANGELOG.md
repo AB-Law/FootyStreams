@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0261** Play tackles, skill moves, headers and free kicks as scenes in the hi-res broadcast view *(M8; scope: tools)*
 - **0260** Mark a shot taken with the head so a renderer can show a header *(M8; scope: events, sim; sim version patch; schema version minor)*
 - **0258** Add a side-on broadcast view with profile players and skill-move animations to the pixel viewer *(M8; scope: tools)*
 - **0257** Record how a take-on is done: a skill move chosen from the dribbler's ability and the situation *(M8; scope: events, sim; sim version patch; schema version minor)*

@@ -113,6 +113,8 @@ export interface ShotEvent extends EventBase {
   curve?: number;
   speed_mps?: number;
   loft?: number;
+  /** What the shot was taken with (schema 0.7.0 and later): a header starts at head height. */
+  body_part?: "foot" | "head";
 }
 
 export interface TackleEvent extends EventBase {

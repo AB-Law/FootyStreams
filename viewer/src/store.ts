@@ -6,6 +6,7 @@ import { isSkillMove, type SkillMoveName } from "./skillposes.ts";
 export type Contest =
   | { kind: "tackle"; t: number; tacklerId: string; targetId: string; outcome: "won" | "foul" | "missed" }
   | { kind: "dribble"; t: number; playerId: string; outcome: "success" | "tackled" | "lost"; move: SkillMoveName | null }
+  | { kind: "header"; t: number; playerId: string }
   | { kind: "restart"; t: number; restart: "throw_in" | "goal_kick" | "corner" | "free_kick" | "penalty"; takerId: string; team: Side };
 
 /** Tracking frames are one sim second apart; a frame's index is its time in seconds. */
@@ -110,6 +111,7 @@ export class MatchStore {
         break;
       case "shot":
         this.addFlight(shotFlight(known, t, attackedGoal(known)));
+        if (known.body_part === "head") this.contests.push({ kind: "header", t, playerId: known.player_id });
         break;
       case "halftime":
       case "fulltime":
@@ -176,7 +178,7 @@ function logEvent(event: BroadcastEvent, t: number): LogEvent | null {
     type,
     team: event.team,
     playerId: text("player_id") ?? text("from_player_id") ?? text("fouler_id") ?? text("taker_id") ?? text("keeper_id") ?? text("scorer_id"),
-    targetId: text("to_player_id") ?? text("target_id") ?? text("assist_id"),
+    targetId: text("to_player_id") ?? text("target_id") ?? text("fouled_id") ?? text("assist_id"),
     pos: event.pos,
     endPos: (fields["end_pos"] as Pos | null | undefined) ?? null,
     outcome: text("outcome"),
