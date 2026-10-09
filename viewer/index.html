@@ -7,6 +7,17 @@
     <style>
       :root { color-scheme: dark; --panel: #131b24; --edge: #2c3a4a; --muted: #8fa3b8; }
       body { margin: 0; background: #0a0f15; color: #d7e0ea; font: 14px system-ui, sans-serif; min-height: 100vh; }
+      header.top {
+        display: flex; gap: 16px; align-items: center; justify-content: space-between;
+        padding: 10px 16px; border-bottom: 1px solid var(--edge); background: #0c1218;
+      }
+      header.top .brand { font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #f2c200; }
+      header.top nav { display: flex; gap: 8px; }
+      header.top a {
+        color: var(--muted); text-decoration: none; border: 1px solid transparent;
+        padding: 5px 10px; border-radius: 6px;
+      }
+      header.top a.on { color: inherit; background: #243344; border-color: #3b5068; }
       #app { display: grid; grid-template-columns: 250px minmax(0, 1fr) 270px; gap: 12px; padding: 12px; align-items: start; max-width: 1900px; margin: 0 auto; }
       #stage { justify-self: center; padding: 10px; background: #1a222c; border-radius: 10px; box-shadow: 0 0 0 2px var(--edge); }
       canvas#screen { display: block; image-rendering: pixelated; width: 960px; height: 678px; background: #000; }
@@ -56,6 +67,14 @@
     </style>
   </head>
   <body>
+    <header class="top">
+      <div class="brand">FootyStreams</div>
+      <nav>
+        <a class="on" href="index.html">Match</a>
+        <a href="studio.html">News desk</a>
+        <a href="channel.html">Channel</a>
+      </nav>
+    </header>
     <div id="app">
       <aside id="lineups" class="panel"></aside>
       <main id="stage">

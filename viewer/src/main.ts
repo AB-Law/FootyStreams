@@ -59,7 +59,6 @@ async function start(): Promise<void> {
   fitCanvas(canvas);
   window.addEventListener("resize", () => fitCanvas(canvas));
 
-  // The file reader is the only source today; a live feed would call store.onEvent the same way.
   const store = new MatchStore();
   let meta: ReplayMeta;
   try {
@@ -74,7 +73,9 @@ async function start(): Promise<void> {
   const sideView = new SideView(meta);
   const scenes = new ScenePlayer(store, meta);
   let view: "side" | "top" = params.get("view") === "top" ? "top" : "side";
-  let names: NameMode = NAME_MODES.includes(params.get("names") as NameMode) ? (params.get("names") as NameMode) : "carrier";
+  let names: NameMode = NAME_MODES.includes(params.get("names") as NameMode)
+    ? (params.get("names") as NameMode)
+    : "carrier";
   const kits = pickKits(meta);
   let focusId: string | null = null;
   const playback = new Playback();
@@ -86,7 +87,10 @@ async function start(): Promise<void> {
     },
     follow: (id) => {
       focusId = id;
-      status.textContent = id === null ? `${meta.home.name} v ${meta.away.name}` : `Following ${playerName(meta, id)} (click him again to release the camera)`;
+      status.textContent =
+        id === null
+          ? `${meta.home.name} v ${meta.away.name}`
+          : `Following ${playerName(meta, id)} (click him again to release the camera)`;
     },
   });
   playback.seek(Number(params.get("t") ?? 0), store.duration);
@@ -95,7 +99,9 @@ async function start(): Promise<void> {
   const time = element<HTMLElement>("time");
   scrubber.max = String(Math.floor(store.duration));
 
-  let zoom: Zoom = ZOOMS.includes(Number(params.get("zoom")) as Zoom) ? (Number(params.get("zoom")) as Zoom) : DEFAULT_ZOOM;
+  let zoom: Zoom = ZOOMS.includes(Number(params.get("zoom")) as Zoom)
+    ? (Number(params.get("zoom")) as Zoom)
+    : DEFAULT_ZOOM;
   const zoomButtons = ZOOMS.map((level) => {
     const button = element<HTMLButtonElement>(`zoom-${level}`);
     button.addEventListener("click", () => {
@@ -111,7 +117,6 @@ async function start(): Promise<void> {
   const hurrying = (): boolean => playback.playing && isDead(stoppages, playback.t);
 
   const viewButton = element<HTMLButtonElement>("view");
-  /** In the broadcast view the zoom buttons choose how much of the pitch is in shot. */
   const labelZoomButtons = (): void => {
     const side = view === "side";
     element<HTMLButtonElement>("zoom-1").textContent = side ? "Wide" : "Full";
@@ -127,7 +132,6 @@ async function start(): Promise<void> {
   });
   labelZoomButtons();
 
-  // Name tags in the broadcast view: just the player on the ball (and the one followed), everyone, or none.
   const namesButton = element<HTMLButtonElement>("names");
   const labelNames = (): void => {
     namesButton.textContent = `Names: ${names}`;
@@ -139,7 +143,10 @@ async function start(): Promise<void> {
   });
   labelNames();
 
-  const debug: { locate: (playerId: string) => { x: number; y: number } | null; scenes: ScenePlayer } = { locate: () => null, scenes };
+  const debug: { locate: (playerId: string) => { x: number; y: number } | null; scenes: ScenePlayer } = {
+    locate: () => null,
+    scenes,
+  };
   const render = (): void => {
     const sample = sampleAt(store.frames, playback.t);
     const overlays = overlaysAt(store.marks, playback.t, playback.speed);
@@ -159,7 +166,6 @@ async function start(): Promise<void> {
       const mode: SideMode = zoom === 1 ? "wide" : "broadcast";
       const camX = sideCameraX(store.frames, playback.t, mode, focusId);
       sideView.draw(context, sample, extras, mode, camX, scenes.at(playback.t, sample), names);
-      // The view is drawn at full resolution; the scoreboard and overlays are placed in logical pixels.
       locate = (playerId) => {
         const at = sample === null ? null : sideView.locate(sample, mode, camX, playerId);
         return at === null ? null : { x: at.x / PIXEL_RATIO, y: at.y / PIXEL_RATIO };
@@ -221,7 +227,6 @@ async function start(): Promise<void> {
   };
   render();
   requestAnimationFrame(frame);
-  // Debug hook for checking the picture from the console or a test driver.
   Object.assign(window, { viewer: { store, playback, render, debug } });
 }
 
