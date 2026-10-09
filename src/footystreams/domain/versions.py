@@ -18,5 +18,7 @@ output bumps it (goldens: ``uv run golden update``).
 
 from __future__ import annotations
 
-SCHEMA_VERSION = "0.7.0"
-SIM_VERSION = "0.7.5"
+# 0.8.0: WiderClub catalog for speakable career-history employers outside the league.
+# SIM 0.7.6: digests re-pin after SCHEMA_VERSION 0.8.0 (schema_version string in events only).
+SCHEMA_VERSION = "0.8.0"
+SIM_VERSION = "0.7.6"

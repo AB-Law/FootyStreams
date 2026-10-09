@@ -19,7 +19,7 @@ from footystreams.domain.types import (
     RoleAssignment,
 )
 from footystreams.domain.valuation import market_value_of
-from footystreams.domain.world import WIDER_WORLD_PREFIX
+from footystreams.domain.world import WIDER_WORLD_CLUB_COUNT, WIDER_WORLD_PREFIX
 from footystreams.seed.people import PersonBrief, make_person
 from footystreams.seed.players.attributes import AttributeBrief, AttributeSet, generate_attributes
 from footystreams.seed.players.body import foot_and_weak_foot, height_and_weight
@@ -37,7 +37,6 @@ REPUTATION_ABILITY_WEIGHT = 0.8
 REPUTATION_CLUB_WEIGHT = 0.2
 REPUTATION_NOISE = 4.0
 TRAINING_INTENSITY_RANGE = (0.4, 0.7)
-WIDER_WORLD_CLUB_POOL = 40
 ADULT_AGE = 21
 MAX_PRIOR_STINTS = 2
 STINT_YEARS_RANGE = (1, 4)
@@ -107,7 +106,7 @@ def prior_stints(rng: WorldRng, spec: PlayerSpec, today: dt.date) -> tuple[Caree
     for _ in range(rng.randint(0, MAX_PRIOR_STINTS)):
         years = rng.randint(*STINT_YEARS_RANGE)
         appearances = years * rng.randint(*APPEARANCES_PER_YEAR)
-        club = ClubId(f"{WIDER_WORLD_PREFIX}{rng.randint(1, WIDER_WORLD_CLUB_POOL):03d}")
+        club = ClubId(f"{WIDER_WORLD_PREFIX}{rng.randint(1, WIDER_WORLD_CLUB_COUNT):03d}")
         stints.append(
             CareerStint(
                 club_id=club,

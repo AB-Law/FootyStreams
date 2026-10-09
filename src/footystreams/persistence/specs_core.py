@@ -16,7 +16,7 @@ from footystreams.domain.proposals import Proposal
 from footystreams.domain.referee import Referee
 from footystreams.domain.relationship import Relationship
 from footystreams.domain.staff import StaffMember
-from footystreams.domain.world import City, Nation, SquadEntry
+from footystreams.domain.world import City, Nation, SquadEntry, WiderClub
 from footystreams.persistence.records import (
     MetaEntry,
     StandingsSnapshot,
@@ -125,6 +125,16 @@ CORE_TABLES: dict[str, TableSpec[Any]] = {
             _col("reputation", "int", lambda c: c.club_reputation),
             _col("balance", "int", lambda c: c.finances.balance),
             _col("nation_id", "str", lambda c: str(c.location.nation_id), "nations.id"),
+        ),
+    ),
+    "wider_clubs": TableSpec[WiderClub](
+        "wider_clubs",
+        WiderClub,
+        lambda c: str(c.id),
+        (
+            _col("name", "str", lambda c: c.name),
+            _col("city", "str", lambda c: c.city),
+            _col("region", "str", lambda c: c.region),
         ),
     ),
     "players": TableSpec[Player]("players", Player, lambda p: str(p.id), _player_columns()),

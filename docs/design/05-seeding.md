@@ -65,6 +65,8 @@ Per club: **25 senior** (3 GK, 8 DF [2 RB, 2 LB, 4 CB], 9 MF [3 DM/CM, 3 CM, 3 A
 
 Each club's manager is matched to the club's archetype with intentional imperfection (a 20% chance of "mismatch" for drama). Generation: choose style → philosophy sliders from a style prototype ± noise; 1 preferred + 2–3 fallback formations drawn from a style-compatible set; `formation_proficiency` high for preferred, tapering for others; attributes drawn around a quality level correlated with club reputation but with *specialist spikes* (a tactician with weak man-management; a motivator with limited tactical depth); personality/press style by rules; age 38–66, career history of 2–4 plausible stints (clubs from a "wider world" list of fictional clubs); contract; and `substitution_habits` from style (e.g. conservative: late, protect-lead bias high).
 
+**Wider world (career employers).** Player and manager prior stints use fixed ids `clb_wd001`…`clb_wd040`. The seed also writes a thin `wider_clubs.json` catalog (name, short_name, nickname, city, region only — no squads) so commentary can say "three seasons at Northmere Rovers" without inventing names. League clubs stay the eight archetype-driven VPL sides; the wider catalog reuses the place-name grammar and club suffixes, avoiding league names.
+
 **Tactics presets.** `data/static/tactic_presets.yaml` holds full `TeamTactics` documents (e.g. `gegen_press_4231`, `low_block_532`, `possession_433`, `wing_play_442`); a club's default tactics = the manager's best-matching preset adjusted by `Manager.philosophy`. **Voice casting.** Each commentator gets a `VoiceCasting` consistent with persona, gender and age (12 §7); `bindings` stay empty until the TTS phase. 
 
 ### 3.3 Stadium, finances, board, fanbase, facilities, staff

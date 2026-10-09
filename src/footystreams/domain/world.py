@@ -35,6 +35,27 @@ from footystreams.domain.types import (
 
 # Clubs outside the league (a player's or manager's earlier employers) have ids with this prefix.
 WIDER_WORLD_PREFIX = "clb_wd"
+WIDER_WORLD_CLUB_COUNT = 40
+
+
+class WiderClub(DomainModel):
+    """A thin identity for a club outside the league (career history only; no squad)."""
+
+    __usage__: ClassVar[Mapping[str, UsageTag]] = {
+        "id": "L",
+        "name": "R",
+        "short_name": "R",
+        "nickname": "R",
+        "city": "R",
+        "region": "R",
+    }
+
+    id: ClubId
+    name: str = Field(min_length=1, max_length=60)
+    short_name: str = Field(min_length=1, max_length=40)
+    nickname: str = Field(min_length=1, max_length=40)
+    city: str = Field(min_length=1, max_length=40)
+    region: str = Field(default="", max_length=40)
 
 
 class Nation(DomainModel):
@@ -127,6 +148,7 @@ class World:
     competitions: tuple[Competition, ...]
     seasons: tuple[Season, ...]
     clubs: tuple[Club, ...]
+    wider_clubs: tuple[WiderClub, ...]
     squad_entries: tuple[SquadEntry, ...]
     players: tuple[Player, ...]
     managers: tuple[Manager, ...]
