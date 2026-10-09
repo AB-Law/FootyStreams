@@ -15,7 +15,7 @@ from itertools import pairwise
 from footystreams.domain.types import PlayerId
 from footystreams.events.structure import FrameEvent, FramePlayer
 from footystreams.sim.emit import EventEmitter, Meta
-from footystreams.sim.geometry import distance_m
+from footystreams.sim.geometry import PITCH_LENGTH_M, PITCH_WIDTH_M, distance_m
 from footystreams.sim.mathx import clamp, lerp
 from footystreams.sim.state import Keyframe, MatchState
 
@@ -36,6 +36,12 @@ CARRY_SHARE = 0.5  # of the pass length: a short pass is not a reason to run mos
 # pitch in a single step. A frame never shows that: he runs there, at no more than a sprinter's
 # pace, and until he has reached the ball it is loose rather than "carried" by him.
 MAX_SPEED_MPS = 9.0
+# A pass longer than this leaves the ground: its height is a parabola peaking at LOFT_PER_M metres
+# of height per metre of pass, up to MAX_LOFT_M. Shorter ones run along the grass.
+LOFT_FROM_M = 15.0
+LOFT_PER_M = 0.12
+MAX_LOFT_M = 8.0
+_PARABOLA = 4.0  # 4 s (1 - s) peaks at 1 halfway through the flight
 CONTROL_RADIUS_M = 2.5
 
 
@@ -122,12 +128,16 @@ class FrameRecorder:
                 x, y = positions.get(player.player_id, (player.x, player.y))
                 before = self._last.get(player.player_id, (x, y))
                 speed = distance_m(before[0], before[1], x, y) / self._interval
+                vx = (x - before[0]) * PITCH_LENGTH_M / self._interval
+                vy = (y - before[1]) * PITCH_WIDTH_M / self._interval
                 rows.append(
                     FramePlayer(
                         player_id=player.player_id,
                         x=round(clamp(x, 0.0, 1.0), PRECISION),
                         y=round(clamp(y, 0.0, 1.0), PRECISION),
                         speed_mps=round(speed, 1),
+                        vx=round(vx, 1),
+                        vy=round(vy, 1),
                         exhaustion=round(min(1.0, player.exhaustion), PRECISION),
                     )
                 )
@@ -144,6 +154,7 @@ class FrameRecorder:
                 ball_pos_x=round(clamp(ball[0], 0.0, 1.0), PRECISION),
                 ball_pos_y=round(clamp(ball[1], 0.0, 1.0), PRECISION),
                 carrier_id=carrier,
+                ball_height_m=round(view.ball_height(), 2),
                 players=tuple(rows),
             )
         finally:
@@ -247,6 +258,18 @@ class _FrameView:
         if moment.ball_first:
             held = moment.start.ball
         return _blend(held, moment.end.ball, self._flown)
+
+    def ball_height(self) -> float:
+        """Metres above the grass: zero on the ground, a parabola for a long pass in the air."""
+        moment = self.moment
+        flown = self._flown
+        if not moment.passes or flown <= 0.0 or flown >= 1.0:
+            return 0.0
+        metres = distance_m(*moment.start.ball, *moment.end.ball)
+        if metres <= LOFT_FROM_M:
+            return 0.0
+        peak = min(LOFT_PER_M * metres, MAX_LOFT_M)
+        return peak * _PARABOLA * flown * (1.0 - flown)
 
     def carrier(self) -> PlayerId:
         """The man on the ball: the old carrier until the ball has landed, then the new one."""

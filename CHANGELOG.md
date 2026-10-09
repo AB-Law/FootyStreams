@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0255** Give tracking frames player velocity and the ball's height *(M8; scope: events, sim; sim version patch; schema version minor)*
 - **0254** Add live statistics, lineups and tactical maps to the pixel viewer *(M8; scope: tools)*
 - **0248** Add a frame-metrics script to measure replay movement realism *(M8; scope: tools)*
 - **0245** Give dead balls a shape: wall, box crowd, throw-in outlets, goal-kick spread *(M8; scope: sim; sim version minor)*

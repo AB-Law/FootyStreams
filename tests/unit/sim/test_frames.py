@@ -8,6 +8,7 @@ from footystreams.events.structure import FrameEvent
 from footystreams.sim import SimConfig, default_tables, merge_config, run_match
 from footystreams.sim.frames import (
     MAX_CARRY_M,
+    MAX_LOFT_M,
     MAX_SPEED_MPS,
     FrameRecorder,
     Snapshot,
@@ -165,3 +166,31 @@ def test_recorder__the_ball_is_loose_until_its_carrier_has_reached_it() -> None:
     assert FrameRecorder._controlling(A, positions, (0.5, 0.5)) is None
     assert FrameRecorder._controlling(A, {A: near}, far) == A
     assert FrameRecorder._controlling(None, positions, far) is None
+
+
+def test_frames__players_carry_the_velocity_they_moved_with_since_the_last_frame() -> None:
+    play = make_play(config=FRAMES)
+    state = play.state
+    mover = state.home.players[3]
+    recorder = FrameRecorder(1)
+    recorder.reset(state)
+    start_x, start_y = mover.x, mover.y
+    mover.x, mover.y = start_x + 3.0 / 105, start_y - 2.0 / 68  # 3 m along, 2 m across in a second
+    state.t_period = 1.0
+    recorder.record(state, play.emit)
+    frame = next(e for e in play.emit.events if isinstance(e, FrameEvent))
+    shown = next(p for p in frame.players if p.player_id == mover.player_id)
+    assert (shown.vx, shown.vy) == pytest.approx((3.0, -2.0), abs=0.1)
+    assert shown.speed_mps == pytest.approx(3.6, abs=0.1)
+
+
+def test_moment__a_long_pass_rises_and_falls_and_a_short_one_stays_on_the_grass() -> None:
+    long_moment = _Moment.of(_snapshot(0.0, 0.1, A, 0.7), _snapshot(4.0, 0.6, B, 0.9))
+    heights = [_FrameView(long_moment, t / 10).ball_height() for t in range(41)]
+    assert heights[0] == 0.0
+    assert heights[-1] == 0.0
+    assert 0.0 < max(heights) <= MAX_LOFT_M
+    peak = heights.index(max(heights))
+    assert heights[peak - 3] < heights[peak] > heights[peak + 3]
+    short = _Moment.of(_snapshot(0.0, 0.2, A, 0.7), _snapshot(4.0, 0.25, B, 0.9))
+    assert all(_FrameView(short, t / 10).ball_height() == 0.0 for t in range(41))
