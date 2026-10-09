@@ -11,11 +11,17 @@ import { refereeTrack } from "./referee.ts";
 import { pickKits } from "./palette.ts";
 import { Playback, SPEEDS } from "./playback.ts";
 import { HEIGHT, WIDTH } from "./pitch.ts";
+import { Panels } from "./panels.ts";
 import { Scene } from "./scene.ts";
 import { loadReplay } from "./source.ts";
+import { StatsIndex } from "./stats.ts";
 import { MatchStore } from "./store.ts";
 
 const FRAME_MILLISECONDS = 1000 / 30;
+/** Below this width the side panels stack under the pitch; above it they flank it. */
+const SIDE_BY_SIDE_FROM_PX = 1180;
+const SIDE_PANELS_PX = 250 + 270 + 84;
+const STAGE_PADDING_PX = 64;
 const DEFAULT_REPLAY = "replays/replay";
 const DEFAULT_ZOOM: Zoom = 2;
 /** Dead ball time (throw-ins, goal kicks, injuries) is played this much faster. */
@@ -29,7 +35,9 @@ function element<T extends HTMLElement>(id: string): T {
 
 /** The largest whole-number scale that fits, so pixels stay square and crisp. */
 function fitCanvas(canvas: HTMLCanvasElement): void {
-  const scale = Math.max(1, Math.floor(Math.min(window.innerWidth / WIDTH, (window.innerHeight - 110) / HEIGHT)));
+  const wide = window.innerWidth >= SIDE_BY_SIDE_FROM_PX;
+  const room = wide ? window.innerWidth - SIDE_PANELS_PX : window.innerWidth - STAGE_PADDING_PX;
+  const scale = Math.max(1, Math.floor(Math.min(room / WIDTH, (window.innerHeight - 140) / HEIGHT)));
   canvas.style.width = `${WIDTH * scale}px`;
   canvas.style.height = `${HEIGHT * scale}px`;
 }
@@ -62,6 +70,7 @@ async function start(): Promise<void> {
 
   const scene = new Scene(meta);
   const kits = pickKits(meta);
+  const panels = new Panels(store, meta, kits, new StatsIndex(store, meta));
   const playback = new Playback();
   playback.seek(Number(params.get("t") ?? 0), store.duration);
   const scrubber = element<HTMLInputElement>("scrubber");
@@ -106,6 +115,7 @@ async function start(): Promise<void> {
     scrubber.value = String(Math.floor(playback.t));
     playButton.textContent = playback.playing ? "Pause" : "Play";
     time.textContent = `${formatTime(playback.t)} / ${formatTime(store.duration)}`;
+    panels.update(playback.t, performance.now());
   };
 
   playButton.addEventListener("click", () => playback.toggle(store.duration));

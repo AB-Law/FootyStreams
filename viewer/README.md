@@ -66,6 +66,19 @@ Open `http://127.0.0.1:5173/`. Options in the address: `?replay=replays/other` (
 - `src/events.ts`, `src/meta.ts`: hand-written types for only the events used, each pointing at its
   Python source. They are not generated: the broadcast schema export waits for the next schema bump.
 
+## Stats, lineups and maps
+Beside the pitch the page shows lineups (left), live statistics (right) and an analysis drawer below. All of
+it is computed in the browser from the replay at the current time, so scrubbing updates it.
+
+- `stats.ts` turns the store's event log and running sums over the frames into team statistics (possession,
+  field tilt, momentum over the last five minutes, xG, shots, passes, tackles, a pressing metric, distance),
+  player tallies and a form figure. `analysis.ts` builds the map data from the same log.
+- Maps are drawn by `mapview.ts`, one team attacking left to right: pass network, pass lines, press map,
+  heatmap, shots and average shape. Choose the window (whole match, last 15 or last 5 minutes) and a player,
+  or click a player in the lineup.
+- The lineup needs the formation, lineup and bench that `record_match.py` writes into the meta file; replays
+  recorded before that show the statistics and maps without lineups.
+
 ## Deliberately missing
 
 Audio, commentary, TTS, LLM text, studio scenes, recording or encoding for a stream, any WebSocket or
