@@ -1,7 +1,8 @@
 # Pixel replay viewer (prototype)
 
-A silent browser page that replays a recorded match as a 320x226 pixel pitch scaled up without
-smoothing. It exists to iterate on the look before a live feed exists. It is **not a milestone**: no
+A silent browser page that replays a recorded match as pixel art scaled up without smoothing: the
+canvas is 640x452, the scoreboard and the top-down view are drawn on a logical 320x226 screen at twice
+the size, and the broadcast view is drawn at the full 640x452. It exists to iterate on the look before a live feed exists. It is **not a milestone**: no
 engine, schema or sim change, and it lives outside `src/` and `tests/` so the Python gate ignores it.
 
 Design context: `docs/design/08-roadmap.md` section 3a (the studio, social and stream wishlist).
@@ -31,7 +32,8 @@ npm start          # builds with tsc, serves http://127.0.0.1:5173/
 ```
 
 Open `http://127.0.0.1:5173/`. Options in the address: `?replay=replays/other` (another recording),
-`?t=2500` (start at a second), `?autoplay=1`. Space toggles play and pause. Other commands:
+`?t=2500` (start at a second), `?autoplay=1`, `?names=all` (name tags, see below). Space toggles play and
+pause. `preview.html` (served next to the page) is the review sheet for the player art and the scenes. Other commands:
 `npm run typecheck`, `npm test` (Node's built-in test runner, no extra dependencies).
 
 ## How it is built
@@ -51,10 +53,10 @@ Open `http://127.0.0.1:5173/`. Options in the address: `?replay=replays/other` (
   the ball so players and tackles are drawn large. Its position depends only on the time, so
   scrubbing is exact. The ball itself is drawn at the carrier's feet and passes carry it between
   players (`src/interpolate.ts`); only shots keep their own flight.
-- `src/poses.ts`, `separate` in `src/interpolate.ts`: players are kept 2 m apart so nobody walks through
-  the man on the ball; a tackle sends the tackler in (a slide when the tackle is won, a foul puts the
-  other player on the ground, a missed one is sidestepped) and a take-on sways the carrier, all from
-  the real `tackle` and `dribble` events.
+- `src/poses.ts` (top-down view), `separate` in `src/interpolate.ts`: players are kept 3.2 m apart so
+  nobody walks through the man on the ball. Two paths that cross would swap the pair's places in one
+  frame, so the push is averaged over the moments around the time shown: they slide past each other.
+  In the top-down view a tackle sends the tackler in and a take-on sways the carrier.
 - Set pieces (`src/poses.ts`): the taker of a corner, free kick, goal kick or penalty takes a run-up and
   lunges at the kick; a throw-in is taken with both arms over the head and the ball held up, on
   the line. The kick is found where the still ball first moves again. The sim places the wall, the
@@ -79,17 +81,32 @@ it is computed in the browser from the replay at the current time, so scrubbing 
 - The lineup needs the formation, lineup and bench that `record_match.py` writes into the meta file; replays
   recorded before that show the statistics and maps without lineups.
 
-## The broadcast view and skill moves
+## The broadcast view, figures and scenes
 The page opens in a side-on "TV gantry" view (the Top-down button switches back). `sideview.ts` projects the
-pitch as a trapezoid (the far touchline is about 60% the size of the near one, rows are spaced the way a
+pitch as a trapezoid (the far touchline is drawn at 74% of the near one's size, rows are spaced the way a
 camera spaces them), draws the stands, boards, striped grass, markings and goals, and sorts players, referee
 and ball back to front. The camera pans along the pitch only, following the ball or a chosen player. Wide
-shows the whole pitch; Broadcast shows about half of it. `profile.ts` holds the side-on player art (facing
-right, flipped to face left), with run, lean, feint, kick and flick poses.
+shows the whole pitch; Broadcast shows about half of it. The Names button cycles name tags: the player on the
+ball (and the one being followed), everybody, or nobody. The referee wears black and yellow.
 
-Dribbles carry the move the sim chose (`skill_move`, schema 0.6.0): `skillposes.ts` gives each move its
-shape (player shift, ball path, ball lift, pose, a turn for the roulette) and `poses.ts` plays it for 1.6 s.
-The defender is not shown reacting yet: the event does not name him.
+Players are articulated figures (`figure.ts`): thighs, shins, arms, torso and a head with hair, face and
+beard, painted pixel by pixel from joint angles and cached per look and pose. A run is a stride cycle by
+speed; a scene poses the joints directly (`STANCES`).
+
+Scenes (`choreo.ts`, `scenes.ts`) are scripts in the carrier's own frame (forward, toward the middle, up):
+the seven skill moves, a take-on that ends in a tackle (won, missed, a foul, a slide that wins or fouls, a
+heavy touch), a header and a dead-ball kick with a wall. The ball is its own object: it follows a player
+only where a script says so, and each touch is placed on a boot taken from the figure's skeleton. A move
+is done with either foot (the legs are swapped), by the foot his `preferred_foot` and `weak_foot` give.
+
+`sceneplan.ts` turns each `dribble`, `tackle`, header (`shot` with `body_part: "head"`) and restart in the
+log into a plan, built for where the replay really has the two players: a defender too far away to be part
+of it is left out, one behind the carrier is brought in chasing from behind, one on the other side is put
+there, and a long way to cover gets a longer run in, so nobody dashes or runs through the carrier. Nothing
+is invented: the replay's own positions stay the truth, and `sceneplay.ts` plays the plan as offsets from
+them, anchors the defender and a loose ball where the contact was as the carrier runs on, and eases
+everyone and the ball back onto the replay at the end. `skillposes.ts` is now only the top-down view's
+version of the same moves.
 
 ## Deliberately missing
 
@@ -104,5 +121,8 @@ event types (pass, shot, foul and so on are accepted and ignored).
   seconds of the second half.
 - A pass is placed to the nearest second, so a very long pass crosses the pitch in under a second.
 - Event overlays are timed to the latest frame before the event (one second resolution).
+- Scenes are played from the replay's 1 Hz positions, so a tackle that the sim places a second away from
+  where the two players are shown is left out (only duels with the defender within 7 m at the contact play),
+  and a scene never changes who has the ball afterwards.
 - Playback time is the frame index (one frame per sim second); the scoreboard shows the match clock
   of the frame on screen, so the two differ by the break.
