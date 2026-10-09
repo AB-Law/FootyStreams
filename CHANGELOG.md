@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0248** Add a frame-metrics script to measure replay movement realism *(M8; scope: tools)*
 - **0245** Give dead balls a shape: wall, box crowd, throw-in outlets, goal-kick spread *(M8; scope: sim; sim version minor)*
 - **0242** Record how a shot travels: target, curve, speed and loft *(M8; scope: events; sim version minor; schema version minor)*
 - **0232** Add a pixel-art replay viewer prototype (silent, file replay only) *(design; scope: tools)*
