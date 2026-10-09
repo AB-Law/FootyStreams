@@ -28,10 +28,15 @@ PRECISION = 4
 BALL_SPEED_MPS = 25.0
 LONG_MOMENT_S = 5.0
 MIN_TRAVEL_S = 0.4
-CARRY_SPEED_MPS = 3.0
-MAX_CARRY_M = 4.0
+CARRY_SPEED_MPS = 4.5
+MAX_CARRY_M = 7.0
 _EPSILON = 1e-9  # a ball that lands at the very end of the moment has landed
 CARRY_SHARE = 0.5  # of the pass length: a short pass is not a reason to run most of the way
+# The sim places players where an action ends, so a restart or a won ball can move one across the
+# pitch in a single step. A frame never shows that: he runs there, at no more than a sprinter's
+# pace, and until he has reached the ball it is loose rather than "carried" by him.
+MAX_SPEED_MPS = 9.0
+CONTROL_RADIUS_M = 2.5
 
 
 Snapshot = Keyframe
@@ -57,12 +62,14 @@ class FrameRecorder:
         self._base: Snapshot | None = None
         self._next_t = interval_s
         self._last: dict[PlayerId, tuple[float, float]] = {}
+        self._shown: dict[PlayerId, tuple[float, float]] = {}
 
     def reset(self, state: MatchState) -> None:
         """Begin a period: the base is the kick-off positions and the first frame is due."""
         self._base = snapshot(state)
         self._next_t = self._interval
         self._last = dict(self._base.players)
+        self._shown = dict(self._base.players)
 
     def record(self, state: MatchState, emitter: EventEmitter) -> None:
         """Emit the frames due between the previous step and now, then rebase on now."""
@@ -80,8 +87,35 @@ class FrameRecorder:
                 self._next_t += self._interval
         self._base = current
 
+    def _catch_up(
+        self, wanted: dict[PlayerId, tuple[float, float]]
+    ) -> dict[PlayerId, tuple[float, float]]:
+        """Move each shown player toward where the sim has him by at most a sprint's distance."""
+        reach = MAX_SPEED_MPS * self._interval
+        shown: dict[PlayerId, tuple[float, float]] = {}
+        for pid, target in wanted.items():
+            at = self._shown.get(pid, target)
+            gap = distance_m(at[0], at[1], target[0], target[1])
+            shown[pid] = target if gap <= reach else _blend(at, target, reach / gap)
+        self._shown = shown
+        return shown
+
+    @staticmethod
+    def _controlling(
+        carrier: PlayerId | None,
+        positions: dict[PlayerId, tuple[float, float]],
+        ball: tuple[float, float],
+    ) -> PlayerId | None:
+        """The carrier, but only once he has actually reached the ball."""
+        if carrier is None or carrier not in positions:
+            return carrier
+        spot = positions[carrier]
+        return (
+            carrier if distance_m(spot[0], spot[1], ball[0], ball[1]) <= CONTROL_RADIUS_M else None
+        )
+
     def _emit(self, state: MatchState, emitter: EventEmitter, at: float, view: _FrameView) -> None:
-        positions = view.positions()
+        positions = self._catch_up(view.positions())
         rows = []
         for team in (state.home, state.away):
             for player in team.players:
@@ -99,6 +133,7 @@ class FrameRecorder:
                 )
         self._last = positions
         ball = view.ball()
+        carrier = self._controlling(view.carrier(), positions, ball)
         saved = state.t_period
         state.t_period = at
         try:
@@ -108,7 +143,7 @@ class FrameRecorder:
                 Meta(),
                 ball_pos_x=round(clamp(ball[0], 0.0, 1.0), PRECISION),
                 ball_pos_y=round(clamp(ball[1], 0.0, 1.0), PRECISION),
-                carrier_id=view.carrier(),
+                carrier_id=carrier,
                 players=tuple(rows),
             )
         finally:

@@ -6,7 +6,14 @@ from footystreams.domain.types import PlayerId
 from footystreams.events.result import MatchResult
 from footystreams.events.structure import FrameEvent
 from footystreams.sim import SimConfig, default_tables, merge_config, run_match
-from footystreams.sim.frames import FrameRecorder, Snapshot, _FrameView, _Moment
+from footystreams.sim.frames import (
+    MAX_CARRY_M,
+    MAX_SPEED_MPS,
+    FrameRecorder,
+    Snapshot,
+    _FrameView,
+    _Moment,
+)
 from tests.factories.sim_play import make_play
 from tests.factories.sim_teams import make_demo_setup
 from tests.helpers.logs import without_frames_renumbered
@@ -47,7 +54,7 @@ def test_frames__switching_them_on_changes_no_other_event() -> None:
 def test_frames__players_do_not_teleport_between_frames() -> None:
     frames = [e for e in _with_frames().events if isinstance(e, FrameEvent)]
     fastest = max(p.speed_mps for frame in frames[1:] for p in frame.players)
-    assert fastest < 60.0  # kick-off and restarts jump players, but never across the pitch twice
+    assert fastest <= MAX_SPEED_MPS + 0.1  # restarts place players far away; frames make them run
 
 
 def test_frames__the_summary_ignores_them() -> None:
@@ -117,7 +124,7 @@ def test_moment__a_short_pass_is_held_and_jogged_then_flies_and_lands_with_the_r
 def test_moment__the_passer_never_jogs_further_than_the_cap() -> None:
     moment = _Moment.of(_snapshot(0.0, 0.1, A, 0.7), _snapshot(4.0, 0.9, B, 0.9))
     furthest = max(abs(_FrameView(moment, t / 10).positions()[A][0] - 0.2) for t in range(41))
-    assert furthest * 105 <= 4.0 + 0.1
+    assert furthest * 105 <= MAX_CARRY_M + 0.1
 
 
 def test_moment__a_long_moment_shows_the_ball_arrive_first_and_then_the_wait() -> None:
@@ -135,3 +142,26 @@ def test_moment__a_carried_ball_travels_with_its_carrier_all_the_way() -> None:
     half = _FrameView(_Moment.of(start, end), 1.5)
     assert abs(half.ball()[0] - 0.25) < 1e-9
     assert half.carrier() == A
+
+
+def test_recorder__a_player_the_sim_moves_far_runs_there_at_a_sprint_not_instantly() -> None:
+    play = make_play(config=FRAMES)
+    state = play.state
+    runner = state.home.players[3]
+    recorder = FrameRecorder(1)
+    recorder.reset(state)
+    start_x = runner.x
+    runner.x = start_x + 0.5  # 52 m in one step
+    state.t_period = 1.0
+    recorder.record(state, play.emit)
+    frame = next(e for e in play.emit.events if isinstance(e, FrameEvent))
+    shown = next(p for p in frame.players if p.player_id == runner.player_id)
+    assert (shown.x - start_x) * 105 == pytest.approx(MAX_SPEED_MPS, abs=0.05)
+
+
+def test_recorder__the_ball_is_loose_until_its_carrier_has_reached_it() -> None:
+    far, near = (0.1, 0.5), (0.1 + 1.0 / 105, 0.5)
+    positions = {A: far}
+    assert FrameRecorder._controlling(A, positions, (0.5, 0.5)) is None
+    assert FrameRecorder._controlling(A, {A: near}, far) == A
+    assert FrameRecorder._controlling(None, positions, far) is None

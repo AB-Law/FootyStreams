@@ -51,6 +51,8 @@ def compute(frames: list[dict[str, object]]) -> dict[str, float]:
     run_total = 0.0
     run_carrier = None
     for before, after in pairwise(frames):
+        if before["clock"]["period"] != after["clock"]["period"]:  # type: ignore[index]
+            continue  # the break teleports everyone to the kick-off; there is no play to measure
         index = {p["player_id"]: p for p in before["players"]}  # type: ignore[attr-defined]
         for player in after["players"]:  # type: ignore[attr-defined]
             previous = index.get(player["player_id"])
