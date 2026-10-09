@@ -112,7 +112,7 @@ const SCENE_H = 330;
 const SCENE_W = 760;
 const STRIP_W = 330;
 const APPROACH_S = 0.7;
-const TAIL_S = 0.9;
+const TAIL_S = 1.2;
 
 interface Setup {
   label: string;
@@ -136,7 +136,8 @@ function outcomeMode(outcome: string): ChallengeMode | null {
 }
 
 function setups(outcome: string, kind: "moves" | "tackles" | "other"): Setup[] {
-  const run = { speed: 3.2, defenderStart: 3.3, closing: 0.6, wall: false, setPiece: false };
+  // He stands his ground while the carrier runs at him at 3.2 m/s: the carrier is past him after about a second.
+  const run = { speed: 3.2, defenderStart: 3.3, closing: 2.6, wall: false, setPiece: false };
   if (kind === "moves") {
     const mode = outcomeMode(outcome);
     return SKILL_MOVES.map((move) => ({ ...run, label: `${move.replace("_", " ")}${mode === null ? "" : ` (${outcome})`}`, script: mode === null ? MOVE_SCRIPTS[move] : failedMove(move, mode) }));
@@ -196,7 +197,7 @@ function drawScene(ctx: CanvasRenderingContext2D, setup: Setup, t: number, foot:
   const active = s >= 0;
   const run = swing(phase, gait.amp);
   const strideAmp = setup.script.body.some((key) => key.stance === "hips") ? 1 : gait.amp;
-  const play = active ? playScript(setup.script, Math.min(s, setup.script.duration), phase, strideAmp, foot) : null;
+  const play = active ? playScript(setup.script, Math.min(s, setup.script.duration + 0.6), phase, strideAmp, foot) : null;
   const done = s > setup.script.duration;
   const items: { y: number; draw: () => void }[] = [];
   const attackerF = here + (play?.attacker.f ?? 0);
@@ -216,8 +217,10 @@ function drawScene(ctx: CanvasRenderingContext2D, setup: Setup, t: number, foot:
     const defF = here + realRel + pull * ((play?.defender.f ?? realRel) - realRel);
     const defL = relL + pull * ((play?.defender.l ?? relL) - relL);
     const defH = play?.defender.h ?? 0;
-    const joints = play === null ? STANCES.jockey : blendJoints(STANCES.jockey, play.defender.joints, Math.max(stanceW, pull));
-    const faces = setup.wall ? true : play?.defender.turn !== true;
+    const base = realRel < 0 && pull < 0.5 ? swing(phase + 0.3, 0.7) : STANCES.jockey;
+    const joints = play === null ? STANCES.jockey : blendJoints(base, play.defender.joints, Math.max(stanceW, pull));
+    const beaten = realRel < 0 && pull < 0.5;
+    const faces = setup.wall ? true : beaten ? false : play?.defender.turn !== true;
     items.push({ y: screenY(defL), draw: () => stamp(ctx, figureFromJoints(defenderLook, joints), screenX(defF), screenY(defL, defH), sprite, faces, play?.defender.lying ?? null) });
   });
   const carriedBall = setup.setPiece ? { f: 0, l: 0, h: 0.11 } : { f: CARRY_AHEAD_M, l: 0, h: 0.11 };
@@ -253,7 +256,7 @@ const sceneSections = [
 let liveScenes: { setup: Setup; ctx: CanvasRenderingContext2D }[] = [];
 const liveHolders = sceneSections.map((entry) => section(entry.title));
 const stripHolders = sceneSections.map((entry) => section(`${entry.title.split(",")[0]}: frame by frame`));
-const STRIP_TIMES = [0.15, 0.4, 0.65, 0.9, 1.2, 1.6];
+const STRIP_TIMES = [0.15, 0.4, 0.65, 0.9, 1.2, 1.6, 2.1];
 
 function rebuild(): void {
   liveScenes = [];
@@ -271,7 +274,7 @@ function rebuild(): void {
       label.style.cssText = "width:90px;color:#8fa3b8;font-size:12px;padding-top:6px";
       row.append(label);
       strips.append(row);
-      const times = setup.script.duration > 2.2 ? [0.3, 0.9, 1.5, 2.1, 2.6, 2.9, 3.3] : STRIP_TIMES.filter((time) => time <= setup.script.duration);
+      const times = setup.script.duration > 2.2 ? [0.3, 0.9, 1.5, 2.1, 2.6, 2.9, 3.3] : STRIP_TIMES.filter((time) => time <= setup.script.duration + 0.4);
       times.forEach((time) => {
         const canvas = document.createElement("canvas");
         canvas.width = STRIP_W;

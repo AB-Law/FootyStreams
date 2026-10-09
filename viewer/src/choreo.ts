@@ -392,6 +392,8 @@ export function mirrorJoints(J: Joints): Joints {
 }
 
 const TOUCH_WINDOW_S = 0.05;
+/** How long after a scene a beaten defender takes to get his balance back. */
+export const DEFENDER_RECOVERY_S = 0.6;
 
 function touchAt(script: Script, s: number): "near" | "far" | null {
   for (const key of script.ball) {
@@ -409,6 +411,8 @@ export type Foot = "near" | "far";
  * the carrier's real place, the ball where `script.owner` says and the defender where the replay has him.
  */
 export function playScript(script: Script, s: number, phase: number, amp: number, foot: Foot = "near"): MovePlay {
+  // For a moment after the end the beaten defender is still off balance, then he is just running again.
+  const fade = s > script.duration ? Math.max(0, 1 - (s - script.duration) / DEFENDER_RECOVERY_S) : 1;
   const at = Math.min(Math.max(s, 0), script.duration);
   const body = bodyAt(script, at, phase, amp);
   const ball = ballAt(script, at, phase, amp);
@@ -418,7 +422,7 @@ export function playScript(script: Script, s: number, phase: number, amp: number
     attacker: { f: body.f, l: body.l, h: body.h, turn: body.turn, lying: body.lying, joints: foot === "far" ? mirrorJoints(body.joints) : body.joints },
     ball,
     touching: touching === null ? null : foot === "far" ? (touching === "near" ? "far" : "near") : touching,
-    defender,
+    defender: { ...defender, stanceW: defender.stanceW * fade },
     owner: script.owner,
   };
 }
