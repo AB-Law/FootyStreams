@@ -1,4 +1,4 @@
-import { CARRY_AHEAD_M, MOVE_SCRIPTS, playScript, touchTimes, type Foot, type Lying, type Script } from "./choreo.ts";
+import { CARRY_AHEAD_M, MOVE_SCRIPTS, keepApart, playScript, touchTimes, type Foot, type Lying, type Script } from "./choreo.ts";
 import { FEET_X, FEET_Y, FIGURE_H, FIGURE_HEIGHT_PX, FIGURE_W, STANCES, STRIDE_STEPS, blendJoints, figureFromJoints, figureSprite, gaitFor, swing, type FigureDress } from "./figure.ts";
 import type { Kit } from "./palette.ts";
 import { CHALLENGE_MODES, FREE_KICK_SCRIPT, failedMove, headerScript, tackleScript, type ChallengeMode } from "./scenes.ts";
@@ -138,11 +138,12 @@ function outcomeMode(outcome: string): ChallengeMode | null {
 function setups(outcome: string, kind: "moves" | "tackles" | "other"): Setup[] {
   // He stands his ground while the carrier runs at him at 3.2 m/s: the carrier is past him after about a second.
   const run = { speed: 3.2, defenderStart: 3.3, closing: 2.6, wall: false, setPiece: false };
+  const stand = { ...run, closing: 0.6 };
   if (kind === "moves") {
     const mode = outcomeMode(outcome);
     return SKILL_MOVES.map((move) => ({ ...run, label: `${move.replace("_", " ")}${mode === null ? "" : ` (${outcome})`}`, script: mode === null ? MOVE_SCRIPTS[move] : failedMove(move, mode) }));
   }
-  if (kind === "tackles") return CHALLENGE_MODES.map((mode) => ({ ...run, label: `tackle: ${mode.replace("_", " ")}`, script: tackleScript(mode) }));
+  if (kind === "tackles") return CHALLENGE_MODES.map((mode) => ({ ...stand, label: `tackle: ${mode.replace("_", " ")}`, script: tackleScript(mode) }));
   const still = { speed: 0, defenderStart: 0.4, closing: 0, wall: false, setPiece: true };
   return [
     { ...still, label: "header: shot", script: headerScript("shot") },
@@ -197,8 +198,8 @@ function drawScene(ctx: CanvasRenderingContext2D, setup: Setup, t: number, foot:
   const active = s >= 0;
   const run = swing(phase, gait.amp);
   const strideAmp = setup.script.body.some((key) => key.stance === "hips") ? 1 : gait.amp;
-  const play = active ? playScript(setup.script, Math.min(s, setup.script.duration + 0.6), phase, strideAmp, foot) : null;
-  const done = s > setup.script.duration;
+  const raw = active ? playScript(setup.script, Math.min(s, setup.script.duration + 0.6), phase, strideAmp, foot) : null;
+  const play = raw === null ? null : keepApart(raw);
   const items: { y: number; draw: () => void }[] = [];
   const attackerF = here + (play?.attacker.f ?? 0);
   const attackerL = play?.attacker.l ?? 0;
@@ -225,9 +226,8 @@ function drawScene(ctx: CanvasRenderingContext2D, setup: Setup, t: number, foot:
   });
   const carriedBall = setup.setPiece ? { f: 0, l: 0, h: 0.11 } : { f: CARRY_AHEAD_M, l: 0, h: 0.11 };
   const ball = play === null ? carriedBall : play.ball;
-  const settledOwner = done && play !== null ? play.owner : null;
-  const ballF = settledOwner === "defender" ? here + realRel - CARRY_AHEAD_M : here + ball.f;
-  const ballL = settledOwner === "defender" ? 0.25 : ball.l;
+  const ballF = here + ball.f;
+  const ballL = ball.l;
   items.push({ y: screenY(ballL) + 1, draw: () => drawBall(ctx, screenX(ballF), screenY(ballL), (ball.h - 0.11) * ppm, play?.touching != null, k) });
   items.sort((a, b) => a.y - b.y).forEach((item) => item.draw());
   if (strip) {

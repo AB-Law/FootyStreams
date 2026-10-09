@@ -124,12 +124,12 @@ export function challengeScript(base: Script, from: number, mode: ChallengeMode)
     case "foul": {
       // A clumsy lunge catches the legs: the carrier goes down, the ball runs loose.
       defender.push({ s: at(0.14), w: 1, f: bf + REACH_M, l: bl, stance: "tackleReach" });
-      defender.push({ s: at(0.3), w: 1, f: bf + 0.4, l: bl, stance: "tackleReach", lying: "slide" });
-      defender.push({ s: end, w: 1, f: bf - 0.2, l: bl, stance: "tackleReach", lying: "slide" });
+      defender.push({ s: at(0.3), w: 1, f: bf + 0.4, l: bl - 0.5, stance: "tackleReach", lying: "slide" });
+      defender.push({ s: end, w: 1, f: bf - 0.4, l: bl - 0.7, stance: "tackleReach", lying: "slide" });
       body.push({ s: at(0.22), w: 1, stance: "stumble", f: bodyF, l: snap.body.l });
-      body.push({ s: at(0.42), w: 1, stance: "stumble", f: bodyF + 0.4, l: snap.body.l, lying: "forward" });
-      body.push({ s: end, w: 1, stance: "stumble", f: bodyF + 0.5, l: snap.body.l, lying: "forward" });
-      ball.push({ s: end, f: bf + 1.4, l: bl, ease: "out" });
+      body.push({ s: at(0.55), w: 1, stance: "stumble", f: bodyF + 0.5, l: snap.body.l + 0.35, lying: "forward" });
+      body.push({ s: end, w: 1, stance: "stumble", f: bodyF + 0.6, l: snap.body.l + 0.4, lying: "forward" });
+      ball.push({ s: end, f: bf + 0.9, l: bl + 0.2, ease: "out" });
       return { duration: end, owner: "none", body, ball, defender };
     }
     case "lost": {
@@ -153,8 +153,8 @@ export function challengeScript(base: Script, from: number, mode: ChallengeMode)
       defender.push({ s: at(0.8), w: 1, f: bf - 0.5, l: bl + 0.1, stance: "tackleReach", lying: "slide" });
       defender.push({ s: end, w: 0.9, f: bf - 0.5, l: bl + 0.1, stance: "tackleReach", lying: "slide" });
       ball.push({ s: at(0.34), f: bf, l: bl, h: BALL_RADIUS_M });
-      ball.push({ s: at(0.9), f: bf + 0.2, l: bl + 1.5, ease: "out" });
-      ball.push({ s: end, f: bf + 0.2, l: bl + 1.5 });
+      ball.push({ s: at(0.8), f: bf - 0.35, l: bl + 0.5, ease: "out" });
+      ball.push({ s: end, f: bf - 0.35, l: bl + 0.5 });
       body.push({ s: at(0.24), w: 1, stance: "hop", f: bodyF + 0.1, l: snap.body.l, h: 0.3 });
       body.push({ s: at(0.5), w: 0.4, f: bodyF + 0.25, l: snap.body.l, h: 0 });
       body.push({ s: end, w: 0, f: 0, l: 0, h: 0 });
@@ -163,12 +163,12 @@ export function challengeScript(base: Script, from: number, mode: ChallengeMode)
     case "slide_foul": {
       // The slide arrives late and takes the carrier's legs.
       defender.push({ s: at(0.04), w: 1, f: bf + 2.2, l: bl + 0.1, stance: "tackleReach", lying: "slide" });
-      defender.push({ s: at(0.3), w: 1, f: bf + 0.1, l: bl, stance: "tackleReach", lying: "slide" });
-      defender.push({ s: end, w: 1, f: bf - 0.6, l: bl, stance: "tackleReach", lying: "slide" });
+      defender.push({ s: at(0.3), w: 1, f: bf + 0.1, l: bl - 0.5, stance: "tackleReach", lying: "slide" });
+      defender.push({ s: end, w: 1, f: bf - 0.7, l: bl - 0.8, stance: "tackleReach", lying: "slide" });
       body.push({ s: at(0.26), w: 1, stance: "stumble", f: bodyF, l: snap.body.l });
-      body.push({ s: at(0.46), w: 1, stance: "stumble", f: bodyF + 0.5, l: snap.body.l, lying: "forward" });
-      body.push({ s: end, w: 1, stance: "stumble", f: bodyF + 0.55, l: snap.body.l, lying: "forward" });
-      ball.push({ s: end, f: bf + 1.6, l: bl + 0.2, ease: "out" });
+      body.push({ s: at(0.58), w: 1, stance: "stumble", f: bodyF + 0.5, l: snap.body.l + 0.35, lying: "forward" });
+      body.push({ s: end, w: 1, stance: "stumble", f: bodyF + 0.55, l: snap.body.l + 0.4, lying: "forward" });
+      ball.push({ s: end, f: bf + 0.9, l: bl + 0.3, ease: "out" });
       return { duration: end, owner: "none", body, ball, defender };
     }
   }

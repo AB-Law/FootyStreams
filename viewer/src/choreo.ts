@@ -427,6 +427,22 @@ export function playScript(script: Script, s: number, phase: number, amp: number
   };
 }
 
+/** The closest two players in a scene are allowed to stand (their bodies are about a metre across). */
+export const MIN_GAP_M = 0.9;
+
+/**
+ * Keep the defender from standing inside the carrier: if they are closer than `MIN_GAP_M` the
+ * defender is moved straight away from him (unless he is the one who is down, sliding through).
+ */
+export function keepApart(play: MovePlay, minimum = MIN_GAP_M): MovePlay {
+  const df = play.defender.f - play.attacker.f;
+  const dl = play.defender.l - play.attacker.l;
+  const gap = Math.hypot(df, dl);
+  if (gap >= minimum || play.defender.w < 0.05) return play;
+  const along = gap < 1e-6 ? { f: 1, l: 0 } : { f: df / gap, l: dl / gap };
+  return { ...play, defender: { ...play.defender, f: play.attacker.f + along.f * minimum, l: play.attacker.l + along.l * minimum } };
+}
+
 /** A skill move `s` seconds in (see `playScript`). */
 export function playMove(move: SkillMoveName, s: number, phase: number, amp: number, foot: Foot = "near"): MovePlay {
   return playScript(MOVE_SCRIPTS[move], s, phase, amp, foot);

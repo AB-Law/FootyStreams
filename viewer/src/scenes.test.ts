@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { ballAt, playScript, type MovePlay, type Script } from "./choreo.ts";
+import { MIN_GAP_M, ballAt, keepApart, playScript, type MovePlay, type Script } from "./choreo.ts";
 import { CHALLENGE_MODES, FREE_KICK_SCRIPT, failedMove, headerScript, tackleScript } from "./scenes.ts";
 import { SKILL_MOVES } from "./skillposes.ts";
 
@@ -85,4 +85,26 @@ test("every scene can be played with either foot, and each touch is still on a b
   }
   const far = playScript(FREE_KICK_SCRIPT, FREE_KICK_SCRIPT.ball.find((key) => key.touch !== undefined)?.s ?? 0, 0, 1, "far");
   assert.equal(far.touching, "far");
+});
+
+test("no scene leaves the ball stranded or the players standing inside each other", () => {
+  const scripts: [string, Script][] = [];
+  for (const mode of CHALLENGE_MODES) {
+    scripts.push([`tackle ${mode}`, tackleScript(mode)]);
+    for (const move of SKILL_MOVES) scripts.push([`${move} ${mode}`, failedMove(move, mode)]);
+  }
+  for (const [name, script] of scripts) {
+    for (const play of all(script).map((frame) => keepApart(frame))) {
+      if (play.defender.w < 0.05) continue;
+      const gap = Math.hypot(play.defender.f - play.attacker.f, play.defender.l - play.attacker.l);
+      assert.ok(gap >= MIN_GAP_M - 1e-9, `${name}: the players are ${gap.toFixed(2)} m apart`);
+    }
+    const end = playScript(script, script.duration, 0, 0.7);
+    const nearest = Math.min(Math.hypot(end.ball.f - end.attacker.f, end.ball.l - end.attacker.l), Math.hypot(end.ball.f - end.defender.f, end.ball.l - end.defender.l));
+    assert.ok(nearest < 2.2, `${name}: the ball ends ${nearest.toFixed(2)} m from the nearest player`);
+    if (end.owner === "defender") {
+      const toDefender = Math.hypot(end.ball.f - end.defender.f, end.ball.l - end.defender.l);
+      assert.ok(toDefender < 1.0, `${name}: the tackler is ${toDefender.toFixed(2)} m from the ball he won`);
+    }
+  }
 });
