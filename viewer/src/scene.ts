@@ -31,6 +31,8 @@ const REFEREE_LOOK = { skin_tone: 3, hair_style: "short", hair_colour: "black", 
 const TOP_CLEARANCE_PX = 0;
 /** The ball sits at a player's feet, not under them. */
 const BALL_AT_FEET_PX = 2;
+/** Sorts the ball a hair in front of a player standing on the same line, so it is not hidden by him. */
+const BALL_IN_FRONT_PX = 0.5;
 const LABEL_COLOUR = "#d8c04a";
 
 /** Draws the pitch, the 22 players and the ball for one sample. Overlays are drawn on top by hud.ts. */
@@ -53,8 +55,10 @@ export class Scene {
     drawPitch(ctx);
     if (sample === null) return;
     const keepers = this.keeperIds(sample);
-    const ordered = [...sample.players].sort((a, b) => a.y - b.y);
-    for (const player of ordered) {
+    // Everything is drawn back to front by where it stands on the pitch, the ball included, so a
+    // player nearer the camera than the ball is drawn over it instead of the ball showing through him.
+    const drawables: { y: number; draw: () => void }[] = [];
+    for (const player of sample.players) {
       const side = teamOf(this.meta, player.id);
       const meta = side === null ? undefined : this.meta[side].players[player.id];
       if (side === null || meta === undefined) continue;
@@ -67,33 +71,54 @@ export class Scene {
       const base = toScreen(player.x, player.y);
       const at = this.onPitch({ x: base.x + (pose?.dx ?? 0), y: base.y + (pose?.dy ?? 0) });
       const lying = pose !== undefined && (pose.name === "slide" || pose.name === "fall") ? pose.facing : undefined;
-      if (player.id === extras.focusId) drawFocusMark(ctx, at.x, at.y, extras.big);
-      drawPlayer(ctx, at.x, at.y, dress, { running: player.running || pose !== undefined, phase: extras.t, big: extras.big, lying, arms: pose?.name === "throw" });
+      drawables.push({
+        y: at.y,
+        draw: () => {
+          if (player.id === extras.focusId) drawFocusMark(ctx, at.x, at.y, extras.big);
+          drawPlayer(ctx, at.x, at.y, dress, { running: player.running || pose !== undefined, phase: extras.t, big: extras.big, lying, arms: pose?.name === "throw" });
+        },
+      });
     }
-    if (extras.referee !== null) this.drawReferee(ctx, extras.referee, extras);
-    this.drawTheBall(ctx, sample, extras);
+    if (extras.referee !== null) {
+      const spot = extras.referee;
+      drawables.push({ y: this.onPitch(toScreen(spot.x, spot.y)).y, draw: () => this.drawReferee(ctx, spot, extras) });
+    }
+    drawables.push(this.theBall(ctx, sample, extras));
+    drawables.sort((a, b) => a.y - b.y);
+    for (const item of drawables) item.draw();
   }
 
-  private drawTheBall(ctx: CanvasRenderingContext2D, sample: Sample, extras: Extras): void {
+  /** The ball (and its carrier mark or trail) as something to draw, with the ground line it stands on. */
+  private theBall(ctx: CanvasRenderingContext2D, sample: Sample, extras: Extras): { y: number; draw: () => void } {
     if (extras.flight === null) {
-      const carrier = sample.carrierId === null ? null : this.screenPosition(sample, sample.carrierId);
-      if (carrier !== null) drawCarrierMark(ctx, carrier.x, carrier.y, extras.big);
       const resting = toScreen(sample.ballX, sample.ballY);
       const carried = extras.poses.get(sample.carrierId ?? "");
       const follows = carried?.ballFollows !== false;
       const shiftX = follows ? (carried?.dx ?? 0) : 0;
       const shiftY = follows ? (carried?.dy ?? 0) : 0;
-      drawBall(ctx, resting.x + BALL_AT_FEET_PX + shiftX, resting.y + shiftY, sample.ballHeight + (carried?.ballLift ?? 0));
-      return;
+      return {
+        // Just in front of its carrier, so the ball at his feet is drawn on him, not behind him.
+        y: resting.y + shiftY + BALL_IN_FRONT_PX,
+        draw: () => {
+          const carrier = sample.carrierId === null ? null : this.screenPosition(sample, sample.carrierId);
+          if (carrier !== null) drawCarrierMark(ctx, carrier.x, carrier.y, extras.big);
+          drawBall(ctx, resting.x + BALL_AT_FEET_PX + shiftX, resting.y + shiftY, sample.ballHeight + (carried?.ballLift ?? 0));
+        },
+      };
     }
     const flight = extras.flight;
-    if (flight.fast) {
-      const behind = [0.06, 0.12, 0.18].map((lag) => ballOnFlight(flight, extras.t - lag * (flight.t1 - flight.t0)));
-      drawTrail(ctx, behind.map((point) => ({ ...toScreen(point.x, point.y), height: point.height })));
-    }
     const point = ballOnFlight(flight, extras.t);
     const at = toScreen(point.x, point.y);
-    drawBall(ctx, at.x, at.y, point.height);
+    return {
+      y: at.y + BALL_IN_FRONT_PX,
+      draw: () => {
+        if (flight.fast) {
+          const behind = [0.06, 0.12, 0.18].map((lag) => ballOnFlight(flight, extras.t - lag * (flight.t1 - flight.t0)));
+          drawTrail(ctx, behind.map((spot) => ({ ...toScreen(spot.x, spot.y), height: spot.height })));
+        }
+        drawBall(ctx, at.x, at.y, point.height);
+      },
+    };
   }
 
   private drawReferee(ctx: CanvasRenderingContext2D, spot: Pos, extras: Extras): void {

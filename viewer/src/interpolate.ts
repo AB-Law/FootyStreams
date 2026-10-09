@@ -35,8 +35,8 @@ const MAX_LIFT_PX = 10;
 const PITCH_LENGTH_M = 105;
 const PITCH_WIDTH_M = 68;
 
-/** Players keep at least this far apart (metres): bodies do not pass through each other. */
-const MIN_GAP_M = 2.0;
+/** Players keep at least this far apart (metres), a little over a body, so the large sprites do not stack on each other. */
+const MIN_GAP_M = 3.2;
 
 function lerp(from: number, to: number, alpha: number): number {
   return from + (to - from) * alpha;
