@@ -155,6 +155,49 @@ export function separate(players: readonly SamplePlayer[]): SamplePlayer[] {
   return players.map((player, index) => ({ ...player, x: player.x + (shift[index]?.x ?? 0), y: player.y + (shift[index]?.y ?? 0) }));
 }
 
+/** The players at `t`, each blended between the two frames around it, before anyone is kept apart. */
+function blendedAt(frames: readonly Frame[], t: number): SamplePlayer[] {
+  const position = Math.max(t, 0) / FRAME_INTERVAL_S;
+  const index = Math.min(Math.floor(position), frames.length - 1);
+  const from = frames[index];
+  const to = frames[index + 1];
+  if (from === undefined) return [];
+  const alpha = to === undefined ? 0 : position - index;
+  const next = new Map((to?.players ?? []).map((player) => [player.player_id, player]));
+  return from.players.map((player) => blend(player, next.get(player.player_id), alpha));
+}
+
+/**
+ * The push that keeps a body's width between players flips sides in an instant when two paths
+ * cross, so it is averaged over the moments around `t` (a tent of this half-width, in taps this
+ * far apart): the pair slide past each other over most of a second instead of swapping places in
+ * one frame.
+ */
+const SPACING_HALF_WIDTH_S = 0.4;
+const SPACING_STEP_S = 0.05;
+const SPACING_TAPS: readonly (readonly [number, number])[] = (() => {
+  const offsets: number[] = [];
+  for (let step = -Math.round(SPACING_HALF_WIDTH_S / SPACING_STEP_S); step <= Math.round(SPACING_HALF_WIDTH_S / SPACING_STEP_S); step++) offsets.push(step * SPACING_STEP_S);
+  const raw = offsets.map((offset) => SPACING_HALF_WIDTH_S + SPACING_STEP_S - Math.abs(offset));
+  const total = raw.reduce((sum, weight) => sum + weight, 0);
+  return offsets.map((offset, index) => [offset, (raw[index] ?? 0) / total] as const);
+})();
+
+function spacedOut(frames: readonly Frame[], t: number, players: readonly SamplePlayer[]): SamplePlayer[] {
+  const total = new Map(players.map((player) => [player.id, { x: 0, y: 0 }]));
+  for (const [offset, weight] of SPACING_TAPS) {
+    const here = offset === 0 ? players : blendedAt(frames, t + offset);
+    for (const moved of separate(here)) {
+      const origin = here.find((player) => player.id === moved.id);
+      const sum = total.get(moved.id);
+      if (origin === undefined || sum === undefined) continue;
+      sum.x += (moved.x - origin.x) * weight;
+      sum.y += (moved.y - origin.y) * weight;
+    }
+  }
+  return players.map((player) => ({ ...player, x: player.x + (total.get(player.id)?.x ?? 0), y: player.y + (total.get(player.id)?.y ?? 0) }));
+}
+
 /**
  * The picture at time `t` seconds: positions blended between the two frames around `t`.
  *
@@ -169,8 +212,7 @@ export function sampleAt(frames: readonly Frame[], t: number): Sample | null {
   const to = frames[index + 1];
   if (from === undefined) return null;
   const alpha = to === undefined ? 0 : position - index;
-  const next = new Map((to?.players ?? []).map((player) => [player.player_id, player]));
-  const players = separate(from.players.map((player) => blend(player, next.get(player.player_id), alpha)));
+  const players = spacedOut(frames, t, blendedAt(frames, t));
   const ball = ballPlace(from, to, alpha, players);
   return {
     clock: from.clock,

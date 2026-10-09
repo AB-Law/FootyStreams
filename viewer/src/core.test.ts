@@ -230,3 +230,36 @@ test("kickTime finds where a still ball starts to move, and a throw-in raises th
   assert.equal(posesAt(store.contests, sample, kick - 0.2, store.frames).get("t")?.name, "throw");
   assert.equal(posesAt(store.contests, sample, kick - 5, store.frames).get("t"), undefined);
 });
+
+test("two players whose paths cross slide past each other instead of swapping places in one frame", () => {
+  const cross = (x: number, ay: number, by: number): AnyEvent =>
+    ({
+      type: "frame",
+      team: "none",
+      clock,
+      ctx: { score_home: 0, score_away: 0, attack_dir: 1 },
+      participants: [],
+      ball_pos_x: 0.5,
+      ball_pos_y: 0.5,
+      carrier_id: null,
+      players: [
+        { player_id: "a", x, y: ay, speed_mps: 4, exhaustion: 0 },
+        { player_id: "b", x: 1 - x, y: by, speed_mps: 4, exhaustion: 0 },
+      ],
+    }) as AnyEvent;
+  // They run toward each other along the pitch and pass a hair's breadth apart: a straight push-apart flips sides at that instant.
+  const store = loaded(cross(0.3, 0.5, 0.5003), cross(0.4, 0.5, 0.5003), cross(0.5, 0.5, 0.5003), cross(0.6, 0.5, 0.5003), cross(0.7, 0.5, 0.5003));
+  let before: { x: number; y: number } | null = null;
+  let widest = 0;
+  for (let t = 0; t <= 4; t += 0.02) {
+    const sample = sampleAt(store.frames, t);
+    const a = sample?.players.find((p) => p.id === "a");
+    const b = sample?.players.find((p) => p.id === "b");
+    if (a === undefined || b === undefined) continue;
+    const apart = { x: (b.x - a.x) * 105, y: (b.y - a.y) * 68 };
+    if (before !== null) widest = Math.max(widest, Math.hypot(apart.x - before.x, apart.y - before.y));
+    before = apart;
+  }
+  // A swap is a jump of the whole 3.2 m body gap or more in a step; running past each other is a few tenths.
+  assert.ok(widest < 1.3, `the pair's separation changes by ${widest.toFixed(2)} m in a single 0.02 s step`);
+});
