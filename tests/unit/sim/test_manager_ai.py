@@ -20,8 +20,9 @@ DECISIVE = {
 LATE_S = 4500.0  # 75 minutes in
 
 
-def _late_trailing_play() -> tuple[Play, ManagerAI]:
+def _late_trailing_play(manager: dict[str, object] | None = None) -> tuple[Play, ManagerAI]:
     config = merge_config(SimConfig(), DECISIVE)
+    config = merge_config(config, {"manager": manager or {}})
     play = make_play(seed=2, setup=make_demo_setup(), config=config)
     play.state.played_before_s = LATE_S
     play.state.away.score = 1
@@ -51,6 +52,24 @@ def test_after_action__a_goal_at_a_stoppage_makes_a_trailing_side_react() -> Non
     assert _of_type(play, SubstitutionEvent)
     assert _of_type(play, TacticalChangeEvent)
     assert play.state.home.view.mentality > 0.0
+
+
+def test_after_action__several_changes_at_one_stoppage_use_one_window() -> None:
+    play, manager = _late_trailing_play()
+
+    manager.after_action([_goal()])
+
+    home = play.state.home
+    assert home.subs_used > 1
+    assert home.windows_used == 1
+
+
+def test_after_action__a_manager_who_wants_more_changes_stops_at_the_limit() -> None:
+    play, manager = _late_trailing_play({"max_subs": 1})
+
+    manager.after_action([_goal()])
+
+    assert play.state.home.subs_used == 1
 
 
 def test_after_action__a_dismissal_triggers_a_review_too() -> None:

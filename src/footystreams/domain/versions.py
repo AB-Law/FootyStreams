@@ -6,7 +6,8 @@
 Initial ``SCHEMA_VERSION`` is ``0.1.0`` (not ``1.0.0``): design 03 treats field
 meaning/shape changes as major, so starting at 1.0.0 would force the first
 parallel-track fix to 2.0.0. Promote to 1.0.0 once M2 and M4 have exercised the
-contracts. ``SIM_VERSION`` is ``0.7.5`` (headers are marked) after ``0.7.4`` (skill moves) after
+contracts. ``SIM_VERSION`` is ``0.7.6`` (managers batch their changes into three windows) after
+``0.7.5`` (headers are marked) after ``0.7.4`` (skill moves) after
 ``0.7.3`` (supporters keep their angle) after ``0.7.2`` (frames carry velocity) after ``0.7.1``
 (an intercepted pass is cut out on its lane) after ``0.7.0``
 (lane-cutting defence, free defenders with a job,
@@ -18,5 +19,5 @@ output bumps it (goldens: ``uv run golden update``).
 
 from __future__ import annotations
 
-SCHEMA_VERSION = "0.7.0"
-SIM_VERSION = "0.7.5"
+SCHEMA_VERSION = "0.7.1"
+SIM_VERSION = "0.7.6"

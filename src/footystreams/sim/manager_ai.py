@@ -3,7 +3,9 @@
 Each side's manager reviews the match every few minutes (sooner for a flexible one), at half-time
 and after a goal or a dismissal. A review reads the assessment, weighs the candidate plans and
 draws one; a change of players or mentality is made at the next stoppage (docs/design/02 section
-11). Only the manager's own stream is drawn from, so swapping the AI never moves the play stream.
+11). After a change of players he looks again at the same stoppage, so a batch of changes shares
+one substitution window. Only the manager's own stream is drawn from, so swapping the AI never
+moves the play stream.
 Deviations: no formation changes, no opponent-threat response and no half-time talk yet.
 """
 
@@ -99,16 +101,33 @@ class ManagerAI:
         return 0.0
 
     def _review(self, side: Side, window: Window) -> float:
+        self._agents[side].triggered = False
+        plan = self._consider(side)
+        self._schedule(side)
+        return self._carry_out_batch(side, plan, window)
+
+    def _consider(self, side: Side) -> Plan | None:
+        """Read the match and draw a plan, or None to leave things as they are."""
         play, agent = self._play, self._agents[side]
         cfg = play.cfg.manager
-        team = play.state.team(side)
-        agent.triggered = False
         view = assess(play.state, side, agent.rng, cfg)
-        plans = candidate_plans(view, team.sheet.manager.sub_habits, agent.seen_difference, cfg)
+        habits = play.state.team(side).sheet.manager.sub_habits
+        plans = candidate_plans(view, habits, agent.seen_difference, cfg)
         agent.seen_difference = view.men_difference
-        self._schedule(side)
-        plan = choose_plan(plans, agent.rng, cfg)
-        return 0.0 if plan is None else self._carry_out(side, plan, window)
+        return choose_plan(plans, agent.rng, cfg)
+
+    def _carry_out_batch(self, side: Side, plan: Plan | None, window: Window) -> float:
+        """Carry out `plan`, then look again at the same stoppage after each player change.
+
+        A manager who makes one change often makes several together; they share one window, which
+        is how a side gets its five changes into the three windows the rules allow.
+        """
+        seconds = 0.0
+        while plan is not None:
+            spent = self._carry_out(side, plan, window)
+            seconds += spent
+            plan = self._consider(side) if spent > 0.0 else None
+        return seconds
 
     def _carry_out(self, side: Side, plan: Plan, window: Window) -> float:
         agent = self._agents[side]
