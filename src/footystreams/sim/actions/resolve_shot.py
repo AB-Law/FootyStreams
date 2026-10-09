@@ -108,7 +108,7 @@ def resolve_shot(play: Play, option: Option) -> float:
         xg=round(option.xg, 4),
         outcome=outcome,
         assist_id=assist,
-        **shot_fields(play, option.xg, shooter, outcome),
+        **shot_fields(play, option.xg, shooter, outcome, header=option.header),
     )
     return _after_shot(play, outcome, shot_id, assist) + action_duration(
         play, play.cfg.tempo.shot_s

@@ -123,6 +123,7 @@ class ShotEvent(EventBase):
         curve="S",
         speed_mps="S",
         loft="S",
+        body_part="S",
     )
 
     type: Literal["shot"] = "shot"
@@ -138,6 +139,8 @@ class ShotEvent(EventBase):
     curve: Signed = 0.0  # bend of the path in -1..1; the sign is the side it bows toward
     speed_mps: float = Field(ge=0.0, default=0.0)
     loft: Unit = 0.0  # peak height of the flight, 0 flat to 1 high
+    # What the shot was taken with, so a renderer can show a header. Only with the context on.
+    body_part: Literal["foot", "head"] = "foot"
 
 
 class SaveEvent(EventBase):

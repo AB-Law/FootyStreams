@@ -37,6 +37,8 @@ def _team_meta(sheet: TeamSheet, appearances: dict[str, Player]) -> dict[str, ob
         players[player_id] = {
             "name": snapshot.known_as,
             "number": snapshot.squad_number,
+            "preferred_foot": snapshot.preferred_foot.value,
+            "weak_foot": snapshot.weak_foot,
             "appearance": look.model_dump(mode="json"),
         }
     return {

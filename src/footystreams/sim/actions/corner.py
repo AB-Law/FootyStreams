@@ -99,7 +99,7 @@ def _header(play: Play, duel: Duel, taker: PlayerState) -> float:
     state.assist_from = taker
     goal = (frame_coordinate(1.0, direction), frame_coordinate(CENTRE, direction))
     xg = header_xg(play, shooter, duel.share)
-    option = Option(ActionKind.SHOOT, 0.0, xg, goal, HEADER_PRESSURE, xg=xg)
+    option = Option(ActionKind.SHOOT, 0.0, xg, goal, HEADER_PRESSURE, xg=xg, header=True)
     # Lazy import breaks the cycle shot -> out_of_play -> corner -> shot.
     from footystreams.sim.actions.resolve_shot import resolve_shot  # noqa: PLC0415
 

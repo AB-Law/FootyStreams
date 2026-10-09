@@ -36,6 +36,7 @@ def _without_context(event: MatchEvent) -> dict[str, object]:
     for name in (
         "end_pos",
         "skill_move",
+        "body_part",
         "progressive",
         "xt_gain",
         "big_chance",

@@ -62,8 +62,10 @@ def _skill_move(play: Play, option: Option) -> str | None:
     return None if move is None else move.value
 
 
-def shot_fields(play: Play, xg: float, shooter: PlayerState, outcome: str) -> dict[str, object]:
-    """Return whether a shot was a big chance and how it travelled (target, bend, pace, loft)."""
+def shot_fields(
+    play: Play, xg: float, shooter: PlayerState, outcome: str, *, header: bool = False
+) -> dict[str, object]:
+    """Return whether a shot was a big chance, how it travelled and whether it was a header."""
     if not play.cfg.context.enabled:
         return {}
     path = shot_flight(play, shooter, outcome)
@@ -73,4 +75,5 @@ def shot_fields(play: Play, xg: float, shooter: PlayerState, outcome: str) -> di
         "curve": round(path.curve, PRECISION),
         "speed_mps": path.speed_mps,
         "loft": path.loft,
+        "body_part": "head" if header else "foot",
     }
