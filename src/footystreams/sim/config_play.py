@@ -115,7 +115,7 @@ class ShotConfig(DomainModel):
     pressure_penalty: Share = 0.7
     finishing_floor: Positive = 0.40
     finishing_span: NonNegative = 0.52
-    min_xg: Share = 0.06  # below this a chance is not worth taking: no 20 m punts
+    min_xg: Share = 0.055  # below this a chance is not worth taking: no 20 m punts
     long_range_m: Positive = 20.0  # beyond this the shooter's long_shots replaces finishing
     block_base: Share = 0.12  # share of shots a defender gets in the way of
     block_pressure: Share = 0.15  # extra blocked share at full pressure
@@ -216,7 +216,7 @@ class DecisionConfig(DomainModel):
     loss_cost_own_third: float = 0.55  # extra cost of losing the ball at the own goal line
     lead_frame_x: float = 0.012  # passes are aimed slightly ahead of the receiver
     min_pass_m: float = 4.0
-    shot_scale: float = 8.6
+    shot_scale: float = 15.0
     shoot_on_sight_swing: float = 0.8
     clear_pressure: float = 0.422
     clear_max_frame_x: float = 0.30

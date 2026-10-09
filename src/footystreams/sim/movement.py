@@ -87,13 +87,15 @@ def assign_marks(
     opponents: TeamState,
     free: list[tuple[PlayerState, Point]],
     cfg: PositionConfig,
+    taken: set[int] | None = None,
 ) -> dict[int, Point]:
     """Pair each free defender with the opponent nearest his slot; return the goal-side spots.
 
     `free` is each marker's slot target in the team's frame. Pairing is greedy in slot order and a
     man is marked by one player only; the keeper is never marked. Spots are in the team's frame.
+    `taken` holds the slots of rivals already marked; it is filled in, so a second pass sees them.
     """
-    taken: set[int] = set()
+    taken = set() if taken is None else taken
     spots: dict[int, Point] = {}
     reach = cfg.marking_range_m**2
     goalside = cfg.marking_goalside_m / PITCH_LENGTH_M
