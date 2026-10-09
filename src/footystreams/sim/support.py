@@ -32,6 +32,7 @@ ANGLES: tuple[tuple[float, float], ...] = (
     (-8.0, -8.0),
     (-8.0, 8.0),
 )
+_FURTHEST_ANGLE_M = 18.0  # the longest angle in `ANGLES`
 _FAR_SQUARED = 1e12  # larger than any squared pitch distance
 _FORWARD_BONUS = 0.15  # a spot ahead of the ball is worth a little more than one behind it
 
@@ -88,6 +89,9 @@ def support_spots(
     )
     # Perf: M8-sim-profile - how open an angle is does not depend on who takes it, so it is scored
     # once per angle, not once per player and angle (it was 28% of a match).
+    # A rival further than the longest angle plus the room an angle needs changes neither term.
+    reach = (_FURTHEST_ANGLE_M + cfg.spacing_m) ** 2
+    rivals = [r for r in rivals if squared_distance_m(carrier[0], carrier[1], r[0], r[1]) <= reach]
     worth = {}
     for angle in ANGLES:
         spot = _spot(carrier, angle)

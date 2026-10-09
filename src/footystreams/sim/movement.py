@@ -82,44 +82,64 @@ def choose_pressers(
     return tuple(chosen)
 
 
+def opponents_in_frame(team: TeamState, opponents: TeamState) -> list[tuple[PlayerState, Point]]:
+    """The opponent outfielders as (player, position in the team's frame), keepers left out."""
+    return [
+        (
+            rival,
+            (
+                frame_coordinate(rival.x, team.attack_dir),
+                frame_coordinate(rival.y, team.attack_dir),
+            ),
+        )
+        for rival in opponents.players
+        if rival.line is not Line.KEEPER
+    ]
+
+
+def mark_spots(
+    rivals: list[tuple[PlayerState, Point]],
+    free: list[tuple[PlayerState, Point]],
+    reach_m: float,
+    goalside_m: float,
+    taken: set[int],
+) -> dict[int, Point]:
+    """Pair each free defender with the rival nearest his slot within `reach_m`; return the spots.
+
+    `rivals` come from `opponents_in_frame`; the spot is `goalside_m` goal-side of the man. Pairing
+    is greedy in slot order and a man is marked once: `taken` holds the slots of rivals already
+    marked and is filled in, so a second pass sees them.
+    """
+    spots: dict[int, Point] = {}
+    reach = reach_m**2
+    goalside = goalside_m / PITCH_LENGTH_M
+    for player, slot_target in free:
+        best: tuple[float, Point, int] | None = None
+        for rival, spot in rivals:
+            if rival.slot in taken:
+                continue
+            gap = squared_distance_m(slot_target[0], slot_target[1], spot[0], spot[1])
+            if gap <= reach and (best is None or gap < best[0]):
+                best = (gap, spot, rival.slot)
+        if best is not None:
+            taken.add(best[2])
+            spots[player.slot] = (best[1][0] - goalside, best[1][1])
+    return spots
+
+
 def assign_marks(
     team: TeamState,
     opponents: TeamState,
     free: list[tuple[PlayerState, Point]],
     cfg: PositionConfig,
-    taken: set[int] | None = None,
 ) -> dict[int, Point]:
     """Pair each free defender with the opponent nearest his slot; return the goal-side spots.
 
     `free` is each marker's slot target in the team's frame. Pairing is greedy in slot order and a
     man is marked by one player only; the keeper is never marked. Spots are in the team's frame.
-    `taken` holds the slots of rivals already marked; it is filled in, so a second pass sees them.
     """
-    taken = set() if taken is None else taken
-    spots: dict[int, Point] = {}
-    reach = cfg.marking_range_m**2
-    goalside = cfg.marking_goalside_m / PITCH_LENGTH_M
-    for player, slot_target in free:
-        best: tuple[float, PlayerState] | None = None
-        for rival in opponents.players:
-            if rival.slot in taken or rival.line is Line.KEEPER:
-                continue
-            gap = squared_distance_m(
-                slot_target[0],
-                slot_target[1],
-                frame_coordinate(rival.x, team.attack_dir),
-                frame_coordinate(rival.y, team.attack_dir),
-            )
-            if gap <= reach and (best is None or gap < best[0]):
-                best = (gap, rival)
-        if best is not None:
-            rival = best[1]
-            taken.add(rival.slot)
-            spots[player.slot] = (
-                frame_coordinate(rival.x, team.attack_dir) - goalside,
-                frame_coordinate(rival.y, team.attack_dir),
-            )
-    return spots
+    rivals = opponents_in_frame(team, opponents)
+    return mark_spots(rivals, free, cfg.marking_range_m, cfg.marking_goalside_m, set())
 
 
 def spread_out(

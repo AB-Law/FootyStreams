@@ -144,6 +144,14 @@ def _frame_spot(player: PlayerState, team: TeamState) -> Point:
     return frame_coordinate(player.x, team.attack_dir), frame_coordinate(player.y, team.attack_dir)
 
 
+def _frame_spots(players: list[PlayerState], team: TeamState) -> list[Point]:
+    """Positions in the team's frame for a list of players."""
+    # Perf: M8-sim-profile - 22 conversions per position step; inlined, no call per coordinate.
+    if team.attack_dir < 0:
+        return [(1.0 - player.x, 1.0 - player.y) for player in players]
+    return [(player.x, player.y) for player in players]
+
+
 def _roles(
     state: MatchState,
     team: TeamState,
@@ -163,14 +171,11 @@ def _roles(
     )
     opponents = state.team(opposite(team.side))
     if in_possession:
-        movers = [
-            (player, _frame_spot(player, team))
-            for player, _ in slots
-            if player.line is not Line.KEEPER
-        ]
-        rivals = [_frame_spot(rival, team) for rival in opponents.players]
+        outfield = [player for player, _ in slots if player.line is not Line.KEEPER]
+        movers = list(zip(outfield, _frame_spots(outfield, team), strict=True))
+        rivals = _frame_spots(opponents.players, team)
         spots = support_spots(movers, ball, rivals, cfg)
-        by_slot = {player.slot: player for player, _ in slots}
+        by_slot = {player.slot: player for player in outfield}
         return (), {s: (spot, support_weight(by_slot[s], cfg)) for s, spot in spots.items()}
     keeper_has_it = state.carrier.line is Line.KEEPER
     pressers = choose_pressers(team, (state.ball_x, state.ball_y), cfg, keeper_has_it=keeper_has_it)

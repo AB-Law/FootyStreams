@@ -214,6 +214,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0008** Remove the Cursor rules generator; keep plain, hand-maintained .cursor/rules copies. *(design; scope: tools, design)*
 
 ### Performance
+- **0253** Speed up off-ball positioning without changing any match *(M8; scope: sim)*
 - **0202** Skip the causal context in balance runs; no metric reads it and samples are identical *(M8; scope: tools)*
 - **0201** Find the offside line once per team in a position update, not once per player *(M8; scope: sim)*
 - **0067** Rank the carrier's nearest opponents once per moment instead of twice *(M4; scope: sim)*

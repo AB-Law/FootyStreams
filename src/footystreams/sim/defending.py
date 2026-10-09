@@ -14,11 +14,10 @@ from footystreams.sim.geometry import (
     PITCH_LENGTH_M,
     PITCH_WIDTH_M,
     Point,
-    frame_coordinate,
     squared_distance_m,
 )
-from footystreams.sim.movement import assign_marks
-from footystreams.sim.state import Line, PlayerState, TeamState
+from footystreams.sim.movement import mark_spots, opponents_in_frame
+from footystreams.sim.state import PlayerState, TeamState
 
 Free = list[tuple[PlayerState, Point]]  # an unassigned defender and his slot target (team frame)
 Assignments = dict[int, tuple[Point, float]]  # slot -> (spot to stand on, weight toward it)
@@ -27,21 +26,6 @@ _BEHIND_CARRIER = 0.05  # frame x beyond the carrier at which a receiver is a ba
 
 def _gap_squared(a: Point, b: Point) -> float:
     return squared_distance_m(a[0], a[1], b[0], b[1])
-
-
-def _rivals_in_frame(team: TeamState, opponents: TeamState) -> list[tuple[PlayerState, Point]]:
-    """The opponent outfielders as (player, position in the team's frame)."""
-    return [
-        (
-            rival,
-            (
-                frame_coordinate(rival.x, team.attack_dir),
-                frame_coordinate(rival.y, team.attack_dir),
-            ),
-        )
-        for rival in opponents.players
-        if rival.line is not Line.KEEPER
-    ]
 
 
 def lane_cutting_spots(
@@ -104,22 +88,25 @@ def plan_defending(
     `ball_and_press` is the ball and the spot the first presser closes in to (team frame).
     """
     ball, close_in = ball_and_press
-    rivals = _rivals_in_frame(team, opponents)
+    rivals = opponents_in_frame(team, opponents)
     plan: Assignments = {}
     for slot, spot in lane_cutting_spots(free, rivals, ball, cfg).items():
         plan[slot] = (spot, cfg.lane_cut_weight)
     rest = [(player, target) for player, target in free if player.slot not in plan]
     marked: set[int] = set()
     lines = {player.slot: player.line for player, _ in rest}
-    for slot, spot in assign_marks(team, opponents, rest, cfg, marked).items():
+    for slot, spot in mark_spots(
+        rivals, rest, cfg.marking_range_m, cfg.marking_goalside_m, marked
+    ).items():
         plan[slot] = (spot, cfg.marking_weight[lines[slot]])
     rest = [(player, target) for player, target in rest if player.slot not in plan]
     if rest:
         coverer = min(rest, key=lambda entry: (_gap_squared(entry[1], close_in), entry[0].slot))
         plan[coverer[0].slot] = (cover_spot(close_in, ball, cfg), cfg.cover_weight)
         rest = [(player, target) for player, target in rest if player is not coverer[0]]
-    wide = cfg.model_copy(update={"marking_range_m": cfg.free_marking_range_m})
-    for slot, spot in assign_marks(team, opponents, rest, wide, marked).items():
+    for slot, spot in mark_spots(
+        rivals, rest, cfg.free_marking_range_m, cfg.marking_goalside_m, marked
+    ).items():
         plan[slot] = (spot, cfg.free_mark_weight)
     for player, target in rest:
         plan.setdefault(player.slot, (balance_spot(target, ball, cfg), 1.0))
