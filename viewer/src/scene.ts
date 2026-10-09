@@ -35,6 +35,15 @@ const BALL_AT_FEET_PX = 2;
 const BALL_IN_FRONT_PX = 0.5;
 const LABEL_COLOUR = "#d8c04a";
 
+/** A player's stride starts at his own point in the cycle, so a team does not run in lockstep. */
+function strideOffset(playerId: string): number {
+  let hash = 0;
+  for (const char of playerId) hash = (hash * 31 + char.charCodeAt(0)) % STRIDE_OFFSETS;
+  return (hash / STRIDE_OFFSETS) * STRIDE_CYCLE_S;
+}
+const STRIDE_OFFSETS = 97;
+const STRIDE_CYCLE_S = 0.36;
+
 /** Draws the pitch, the 22 players and the ball for one sample. Overlays are drawn on top by hud.ts. */
 export class Scene {
   private readonly meta: ReplayMeta;
@@ -75,7 +84,7 @@ export class Scene {
         y: at.y,
         draw: () => {
           if (player.id === extras.focusId) drawFocusMark(ctx, at.x, at.y, extras.big);
-          drawPlayer(ctx, at.x, at.y, dress, { running: player.running || pose !== undefined, phase: extras.t, big: extras.big, lying, arms: pose?.name === "throw" });
+          drawPlayer(ctx, at.x, at.y, dress, { running: player.running || pose !== undefined, phase: extras.t + strideOffset(player.id), big: extras.big, lying, arms: pose?.name === "throw" });
         },
       });
     }

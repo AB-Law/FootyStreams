@@ -182,9 +182,9 @@ test("deadSpans finds a long stoppage, keeps a lead-in and ignores short pauses"
 
 test("separate pushes overlapping players apart and leaves distant ones alone", () => {
   const near = [
-    { id: "a", x: 0.5, y: 0.5, running: false },
-    { id: "b", x: 0.5 + 0.5 / 105, y: 0.5, running: false },
-    { id: "c", x: 0.9, y: 0.5, running: false },
+    { id: "a", x: 0.5, y: 0.5, running: false, vx: 0, vy: 0 },
+    { id: "b", x: 0.5 + 0.5 / 105, y: 0.5, running: false, vx: 0, vy: 0 },
+    { id: "c", x: 0.9, y: 0.5, running: false, vx: 0, vy: 0 },
   ];
   const moved = separate(near);
   const gap = Math.hypot(((moved[1]?.x ?? 0) - (moved[0]?.x ?? 0)) * 105, ((moved[1]?.y ?? 0) - (moved[0]?.y ?? 0)) * 68);
@@ -194,9 +194,9 @@ test("separate pushes overlapping players apart and leaves distant ones alone", 
 
 test("separate gives the same result whatever the order of the list", () => {
   const players = [
-    { id: "a", x: 0.5, y: 0.5, running: false },
-    { id: "b", x: 0.5 + 0.8 / 105, y: 0.5, running: false },
-    { id: "c", x: 0.5, y: 0.5 + 0.8 / 68, running: false },
+    { id: "a", x: 0.5, y: 0.5, running: false, vx: 0, vy: 0 },
+    { id: "b", x: 0.5 + 0.8 / 105, y: 0.5, running: false, vx: 0, vy: 0 },
+    { id: "c", x: 0.5, y: 0.5 + 0.8 / 68, running: false, vx: 0, vy: 0 },
   ];
   const forward = separate(players);
   const backward = separate([...players].reverse()).reverse();

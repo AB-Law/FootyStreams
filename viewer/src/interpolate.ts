@@ -12,6 +12,9 @@ export interface SamplePlayer {
   x: number;
   y: number;
   running: boolean;
+  /** Velocity in metres per second along and across the pitch (zero for replays without it). */
+  vx: number;
+  vy: number;
 }
 
 export interface Sample {
@@ -42,18 +45,57 @@ function lerp(from: number, to: number, alpha: number): number {
   return from + (to - from) * alpha;
 }
 
+/** How far a smoothed path may stray beyond its two frames before it is held back (frame units). */
+const OVERSHOOT = 0.015;
+/** The ball is played this far in front of a running carrier, so it is not glued to his feet. */
+const BALL_AHEAD_M = 0.9;
+/** Below this speed (m/s) a carrier has no running direction and the ball stays at his feet. */
+const AHEAD_MIN_SPEED = 1.0;
+
+/** A cubic Hermite step between two frames using their velocities; falls back to a straight line. */
+function smooth(from: number, to: number, fromSpeed: number | undefined, toSpeed: number | undefined, alpha: number): number {
+  if (fromSpeed === undefined || toSpeed === undefined) return lerp(from, to, alpha);
+  const a2 = alpha * alpha;
+  const a3 = a2 * alpha;
+  const dt = FRAME_INTERVAL_S;
+  const value = (2 * a3 - 3 * a2 + 1) * from + (a3 - 2 * a2 + alpha) * dt * fromSpeed + (-2 * a3 + 3 * a2) * to + (a3 - a2) * dt * toSpeed;
+  return Math.min(Math.max(value, Math.min(from, to) - OVERSHOOT), Math.max(from, to) + OVERSHOOT);
+}
+
 function blend(from: FramePlayer, to: FramePlayer | undefined, alpha: number): SamplePlayer {
   const running = from.speed_mps > RUNNING_SPEED_MPS;
+  const vx = from.vx ?? 0;
+  const vy = from.vy ?? 0;
   if (to === undefined || Math.hypot(to.x - from.x, to.y - from.y) > MAX_PLAYER_STEP) {
-    return { id: from.player_id, x: from.x, y: from.y, running };
+    return { id: from.player_id, x: from.x, y: from.y, running, vx, vy };
   }
-  return { id: from.player_id, x: lerp(from.x, to.x, alpha), y: lerp(from.y, to.y, alpha), running };
+  const known = from.vx !== undefined && from.vy !== undefined && to.vx !== undefined && to.vy !== undefined;
+  const x = known ? smooth(from.x, to.x, vx / PITCH_LENGTH_M, (to.vx ?? 0) / PITCH_LENGTH_M, alpha) : lerp(from.x, to.x, alpha);
+  const y = known ? smooth(from.y, to.y, vy / PITCH_WIDTH_M, (to.vy ?? 0) / PITCH_WIDTH_M, alpha) : lerp(from.y, to.y, alpha);
+  return { id: from.player_id, x, y, running, vx: lerp(vx, to.vx ?? vx, alpha), vy: lerp(vy, to.vy ?? vy, alpha) };
 }
 
 interface BallPlace {
   x: number;
   y: number;
   height: number;
+}
+
+/** Screen pixels per metre of ball height: the pitch is about 2.86 px a metre, with a cap for the picture. */
+const HEIGHT_PX_PER_M = 2.86;
+const MAX_HEIGHT_PX = 14;
+
+/** The ball's height between two frames in screen pixels, from the frames' own metres when they have them. */
+function frameHeight(from: Frame, to: Frame, alpha: number): number {
+  if (from.ballHeightM === null || to.ballHeightM === null) return 0;
+  return Math.min(lerp(from.ballHeightM, to.ballHeightM, alpha) * HEIGHT_PX_PER_M, MAX_HEIGHT_PX);
+}
+
+/** Where a carried ball is: a little ahead of a running carrier, at his feet when he is standing. */
+function carriedBall(holder: SamplePlayer): { x: number; y: number } {
+  const speed = Math.hypot(holder.vx, holder.vy);
+  if (speed < AHEAD_MIN_SPEED) return { x: holder.x, y: holder.y };
+  return { x: holder.x + ((holder.vx / speed) * BALL_AHEAD_M) / PITCH_LENGTH_M, y: holder.y + ((holder.vy / speed) * BALL_AHEAD_M) / PITCH_WIDTH_M };
 }
 
 /**
@@ -64,22 +106,23 @@ interface BallPlace {
 function ballPlace(from: Frame, to: Frame | undefined, alpha: number, players: SamplePlayer[]): BallPlace {
   const reset = to !== undefined && Math.hypot(to.ballX - from.ballX, to.ballY - from.ballY) > MAX_BALL_STEP;
   const end = to === undefined || reset ? from : to;
-  const fallback = { x: lerp(from.ballX, end.ballX, alpha), y: lerp(from.ballY, end.ballY, alpha), height: 0 };
+  const fallback = { x: lerp(from.ballX, end.ballX, alpha), y: lerp(from.ballY, end.ballY, alpha), height: frameHeight(from, end, alpha) };
   // A frame with nobody on the ball is the ball in flight (or loose): the frame's own ball is the
   // truth, so follow it rather than gluing the ball to the last holder until the next frame.
   if (from.carrierId === null || (to !== undefined && to.carrierId === null)) return fallback;
   const holder = players.find((player) => player.id === from.carrierId);
   if (holder === undefined) return fallback;
   const receiver = to === undefined || to.carrierId === from.carrierId ? undefined : players.find((player) => player.id === to.carrierId);
-  if (receiver === undefined) return { x: holder.x, y: holder.y, height: 0 };
+  if (receiver === undefined) return { ...carriedBall(holder), height: frameHeight(from, to ?? from, alpha) };
   const share = Math.min(alpha / PASS_SHARE, 1);
   const travelled = share; // a ball in the air does not ease in and out
   const metres = Math.hypot((receiver.x - holder.x) * PITCH_LENGTH_M, (receiver.y - holder.y) * PITCH_WIDTH_M);
   const loft = Math.min(Math.max((metres - LOFT_FROM_M) / LOFT_SPAN_M, 0), 1) * MAX_LIFT_PX;
+  const measured = from.ballHeightM !== null && to?.ballHeightM !== null && to !== undefined;
   return {
     x: lerp(holder.x, receiver.x, travelled),
     y: lerp(holder.y, receiver.y, travelled),
-    height: loft * 4 * share * (1 - share),
+    height: measured ? frameHeight(from, to, alpha) : loft * 4 * share * (1 - share),
   };
 }
 

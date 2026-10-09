@@ -52,6 +52,9 @@ export interface FramePlayer {
   x: number;
   y: number;
   speed_mps: number;
+  /** Velocity over the last frame interval, metres per second along and across the pitch (schema 0.5.0 and later). */
+  vx?: number;
+  vy?: number;
   exhaustion: number;
 }
 
@@ -61,6 +64,8 @@ export interface FrameEvent extends EventBase {
   ball_pos_x: number;
   ball_pos_y: number;
   carrier_id: string | null;
+  /** Height of the ball above the grass in metres (schema 0.5.0 and later). */
+  ball_height_m?: number;
   players: FramePlayer[];
 }
 

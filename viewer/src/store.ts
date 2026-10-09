@@ -43,6 +43,8 @@ export interface Frame {
   ballX: number;
   ballY: number;
   carrierId: string | null;
+  /** Metres above the grass, or null for a replay recorded before frames carried it. */
+  ballHeightM: number | null;
   players: FramePlayer[];
 }
 
@@ -136,6 +138,7 @@ export class MatchStore {
       ballX: event.ball_pos_x,
       ballY: event.ball_pos_y,
       carrierId: event.carrier_id ?? null,
+      ballHeightM: typeof event.ball_height_m === "number" ? event.ball_height_m : null,
       players: event.players,
     });
   }
