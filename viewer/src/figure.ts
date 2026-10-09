@@ -40,17 +40,17 @@ export interface FigureDress {
 
 export type FigurePose = "stand" | "run" | "lean" | "feint" | "kick" | "flick" | "throw";
 
-interface Leg {
+export interface Leg {
   a: number;
   k: number;
 }
 
-interface Arm {
+export interface Arm {
   c: number;
   e: number;
 }
 
-interface Joints {
+export interface Joints {
   bob: number;
   lean: number;
   near: Leg;
@@ -59,7 +59,7 @@ interface Joints {
   farArm: Arm;
 }
 
-function swing(phase: number, amp: number): Joints {
+export function swing(phase: number, amp: number): Joints {
   const t = 2 * Math.PI * phase;
   const reach = 0.8 * amp;
   const bend = (angle: number): number => 0.12 + 0.95 * amp * Math.max(0, Math.cos(angle));
@@ -377,10 +377,9 @@ function shirt(raster: Raster, hip: { x: number; y: number }, shoulder: { x: num
 }
 
 /** Paint one figure and outline it. */
-function render(dress: FigureDress, pose: FigurePose, phase: number, amp: number): (string | null)[] {
+function render(dress: FigureDress, J: Joints): (string | null)[] {
   const raster = new Raster();
   const paint = paintOf(dress);
-  const J = joints(pose, phase, amp);
   const width = shoulderWidth(dress.appearance);
   const hip = { x: FEET_X, y: FEET_Y - LEG_LENGTH + J.bob };
   const shoulder = { x: hip.x + TORSO * Math.sin(J.lean), y: hip.y - TORSO * Math.cos(J.lean) };
@@ -428,7 +427,7 @@ export function figureSprite(dress: FigureDress, pose: FigurePose, phase: number
   canvas.height = FIGURE_H;
   const ctx = canvas.getContext("2d");
   if (ctx !== null) {
-    render(dress, pose, step / STRIDE_STEPS, amp).forEach((colour, index) => {
+    render(dress, joints(pose, step / STRIDE_STEPS, amp)).forEach((colour, index) => {
       if (colour === null) return;
       ctx.fillStyle = colour;
       ctx.fillRect(index % FIGURE_W, Math.floor(index / FIGURE_W), 1, 1);
@@ -454,3 +453,109 @@ export function gaitFor(speed: number): StrideGait {
   if (speed < 6.5) return { pose: "run", amp: 1, period: 0.5 };
   return { pose: "lean", amp: 1.2, period: 0.42 };
 }
+
+// ---- Posing by joints, for choreographed moves ----
+
+/** Mix two poses joint by joint: `weight` 0 is `a`, 1 is `b`. */
+export function blendJoints(a: Joints, b: Joints, weight: number): Joints {
+  const mixNumber = (x: number, y: number): number => x + (y - x) * weight;
+  const leg = (x: Leg, y: Leg): Leg => ({ a: mixNumber(x.a, y.a), k: mixNumber(x.k, y.k) });
+  const arm = (x: Arm, y: Arm): Arm => ({ c: mixNumber(x.c, y.c), e: mixNumber(x.e, y.e) });
+  return {
+    bob: mixNumber(a.bob, b.bob),
+    lean: mixNumber(a.lean, b.lean),
+    near: leg(a.near, b.near),
+    far: leg(a.far, b.far),
+    nearArm: arm(a.nearArm, b.nearArm),
+    farArm: arm(a.farArm, b.farArm),
+  };
+}
+
+const QUANTUM = 0.12;
+const q = (value: number): number => Math.round(value / QUANTUM) * QUANTUM;
+const jointCache = new Map<string, HTMLCanvasElement>();
+const JOINT_CACHE_LIMIT = 600;
+
+/** A sprite for any set of joint angles (rounded to a fine step so sprites can be shared and cached). */
+export function figureFromJoints(dress: FigureDress, J: Joints): HTMLCanvasElement {
+  const rounded: Joints = {
+    bob: Math.round(J.bob * 2) / 2,
+    lean: q(J.lean),
+    near: { a: q(J.near.a), k: q(J.near.k) },
+    far: { a: q(J.far.a), k: q(J.far.k) },
+    nearArm: { c: q(J.nearArm.c), e: q(J.nearArm.e) },
+    farArm: { c: q(J.farArm.c), e: q(J.farArm.e) },
+  };
+  const key = `${lookKey(dress)}|${JSON.stringify(rounded)}`;
+  const found = jointCache.get(key);
+  if (found !== undefined) return found;
+  if (jointCache.size > JOINT_CACHE_LIMIT) jointCache.clear();
+  const canvas = document.createElement("canvas");
+  canvas.width = FIGURE_W;
+  canvas.height = FIGURE_H;
+  const ctx = canvas.getContext("2d");
+  if (ctx !== null) {
+    render(dress, rounded).forEach((colour, index) => {
+      if (colour === null) return;
+      ctx.fillStyle = colour;
+      ctx.fillRect(index % FIGURE_W, Math.floor(index / FIGURE_W), 1, 1);
+    });
+  }
+  jointCache.set(key, canvas);
+  return canvas;
+}
+
+/** Grid pixels to metres: a full-size figure is 1.8 m. */
+export const METRES_PER_PX = 1.8 / FIGURE_HEIGHT_PX;
+
+/**
+ * Where a boot is, in metres from the point on the ground between the feet: `forward` along the way
+ * he faces and `height` above the grass. `tip` is the toe, where the ball is struck from.
+ */
+export function bootPosition(J: Joints, foot: "near" | "far", where: "tip" | "ankle" | "sole" = "tip"): { forward: number; height: number } {
+  const leg = foot === "near" ? J.near : J.far;
+  const hipY = FEET_Y - LEG_LENGTH + J.bob;
+  const kneeX = THIGH * Math.sin(leg.a);
+  const kneeY = hipY + THIGH * Math.cos(leg.a);
+  const shin = leg.a - leg.k;
+  const ankleX = kneeX + SHIN * Math.sin(shin);
+  const ankleY = kneeY + SHIN * Math.cos(shin);
+  const toeX = ankleX + 5 * Math.cos(shin * 0.5);
+  const toeY = ankleY - 5 * Math.sin(shin * 0.5) + 0.5;
+  const point = where === "ankle" ? { x: ankleX, y: ankleY } : where === "sole" ? { x: ankleX + 2.2 * Math.cos(shin * 0.5), y: ankleY + 1.6 } : { x: toeX, y: toeY };
+  return { forward: point.x * METRES_PER_PX, height: Math.max(0, (FEET_Y - point.y) * METRES_PER_PX) };
+}
+
+/** The named stances a skill move passes through. Angles are radians from straight down. */
+export const STANCES = {
+  /** Standing, weight on both feet, knees soft. */
+  ready: { bob: 0.5, lean: 0.06, near: { a: 0.12, k: 0.15 }, far: { a: -0.12, k: 0.1 }, nearArm: { c: -0.3, e: 0.5 }, farArm: { c: 0.3, e: 0.5 } },
+  /** Near knee lifted and swung forward over the ball. */
+  stepOverRaise: { bob: -0.4, lean: 0.12, near: { a: 1.05, k: 1.15 }, far: { a: -0.1, k: 0.2 }, nearArm: { c: 0.6, e: 0.6 }, farArm: { c: -0.7, e: 0.6 } },
+  /** Near foot planted beyond the ball after the step-over, weight going over it. */
+  stepOverPlant: { bob: 0.5, lean: 0.22, near: { a: 0.62, k: 0.18 }, far: { a: -0.35, k: 0.55 }, nearArm: { c: 0.2, e: 0.7 }, farArm: { c: -0.9, e: 0.7 } },
+  /** The far foot drives through the ball, the other planted. */
+  strike: { bob: -0.2, lean: 0.1, near: { a: -0.18, k: 0.3 }, far: { a: 1.05, k: 0.12 }, nearArm: { c: -0.7, e: 0.6 }, farArm: { c: 0.8, e: 0.5 } },
+  /** The near foot kicks the ball forward. */
+  kickNear: { bob: -0.2, lean: 0.1, near: { a: 1.1, k: 0.12 }, far: { a: -0.2, k: 0.3 }, nearArm: { c: -0.8, e: 0.5 }, farArm: { c: 0.9, e: 0.5 } },
+  /** The near sole on top of the ball, toe up, ready to roll it. */
+  soleOnBall: { bob: 0.4, lean: -0.02, near: { a: 0.72, k: 0.5 }, far: { a: -0.1, k: 0.35 }, nearArm: { c: 0.5, e: 0.6 }, farArm: { c: -0.5, e: 0.6 } },
+  /** The near foot drawn back under the body with the ball. */
+  soleBack: { bob: 0.5, lean: 0.05, near: { a: 0.05, k: 0.4 }, far: { a: 0.1, k: 0.3 }, nearArm: { c: 0.1, e: 0.7 }, farArm: { c: -0.4, e: 0.7 } },
+  /** Low and turning on the spot. */
+  pivot: { bob: 0.9, lean: 0.2, near: { a: 0.3, k: 0.55 }, far: { a: -0.2, k: 0.5 }, nearArm: { c: 0.9, e: 0.5 }, farArm: { c: -0.9, e: 0.5 } },
+  /** The ball held between the heels, near heel kicked up behind. */
+  heelFlick: { bob: -0.6, lean: 0.2, near: { a: -0.95, k: 1.75 }, far: { a: 0.12, k: 0.25 }, nearArm: { c: 0.6, e: 0.6 }, farArm: { c: -0.6, e: 0.6 } },
+  /** Head up, watching the ball drop. */
+  watch: { bob: 0, lean: -0.05, near: { a: 0.1, k: 0.1 }, far: { a: -0.1, k: 0.1 }, nearArm: { c: 0.3, e: 0.4 }, farArm: { c: -0.3, e: 0.4 } },
+  /** Shoulder dropped, weight over the planted foot, the other foot reaching across the ball. */
+  cutReach: { bob: 0.5, lean: 0.3, near: { a: 0.7, k: 0.22 }, far: { a: -0.25, k: 0.45 }, nearArm: { c: 0.3, e: 0.8 }, farArm: { c: -0.8, e: 0.7 } },
+  /** A defender wide-legged, weight low. */
+  legsApart: { bob: 0.6, lean: 0.08, near: { a: 0.5, k: 0.2 }, far: { a: -0.5, k: 0.2 }, nearArm: { c: 0.5, e: 0.5 }, farArm: { c: -0.5, e: 0.5 } },
+  /** A defender in a jockeying crouch. */
+  jockey: { bob: 0.7, lean: 0.1, near: { a: 0.35, k: 0.45 }, far: { a: -0.3, k: 0.4 }, nearArm: { c: 0.6, e: 0.6 }, farArm: { c: -0.5, e: 0.6 } },
+  /** A defender thrown off balance, reaching. */
+  stumble: { bob: 0.2, lean: 0.35, near: { a: 0.75, k: 0.3 }, far: { a: -0.5, k: 0.35 }, nearArm: { c: 1.2, e: 0.3 }, farArm: { c: -1.0, e: 0.4 } },
+} satisfies Record<string, Joints>;
+
+export type StanceName = keyof typeof STANCES;

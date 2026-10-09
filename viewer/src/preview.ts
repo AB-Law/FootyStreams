@@ -1,6 +1,7 @@
-import { FEET_X, FEET_Y, FIGURE_H, FIGURE_W, STRIDE_STEPS, figureSprite, gaitFor, type FigureDress, type FigurePose } from "./figure.ts";
+import { CARRY_AHEAD_M, MOVE_SECONDS, playMove, touchTimes } from "./choreo.ts";
+import { FEET_X, FEET_Y, FIGURE_H, FIGURE_HEIGHT_PX, FIGURE_W, STANCES, STRIDE_STEPS, blendJoints, figureFromJoints, figureSprite, gaitFor, swing, type FigureDress } from "./figure.ts";
 import type { Kit } from "./palette.ts";
-import { SKILL_MOVES, SKILL_MOVE_S, skillFrame, type SkillMoveName } from "./skillposes.ts";
+import { SKILL_MOVES, type SkillMoveName } from "./skillposes.ts";
 
 const home: Kit = { pattern: "halves", primary: "#5d4037", secondary: "#f5deb3" };
 const away: Kit = { pattern: "solid", primary: "#7a22b0", secondary: "#e8e8e8" };
@@ -100,86 +101,122 @@ const gaitSection = section("Gaits on the spot, live: stand, walk, jog, run, spr
 const gaitCells = [0, 1.2, 3, 5, 8].map((speed) => ({ speed, ctx: cell(gaitSection, `${speed} m/s`, BOX_W, BOX_H) }));
 
 // Skill moves, animated: attacker (halves kit) beats a defender (purple) with each move.
-const skills = section("Skill moves, live: the attacker takes on a defender with each move (slow with the slider)");
-const SKILL_W = 560;
-const SKILL_H = 230;
-const SKILL_SCALE = 2;
-const PIXELS_PER_METRE = (FIGURE_HEIGHT_FOR_PREVIEW() * SKILL_SCALE) / 1.8;
-function FIGURE_HEIGHT_FOR_PREVIEW(): number {
-  return 31;
-}
-const TOP_DOWN_PPM = 300 / 105;
-const LOOP_S = 4.2;
-const MOVE_START_S = 1.2;
+const skills = section("Skill moves, live: the ball is its own object and only moves where a boot touches it (rings mark each touch)");
+const SKILL_W = 760;
+const SKILL_H = 330;
+const SKILL_SCALE = 3;
+const PPM = (FIGURE_HEIGHT_PX / 1.8) * SKILL_SCALE;
+const RUN_SPEED = 3.2;
+const MOVE_START_S = 0.7;
+const LOOP_S = MOVE_START_S + MOVE_SECONDS + 0.9;
 const skillCells = SKILL_MOVES.map((move) => ({ move, ctx: cell(skills, move.replace("_", " "), SKILL_W, SKILL_H) }));
+const attackerLook = dress(home, { skin_tone: 3, hair_colour: "black" });
+const defenderLook = dress(away, { skin_tone: 2, hair_colour: "blond" });
 
-function figurePose(profile: string): FigurePose {
-  if (profile === "feint" || profile === "kick" || profile === "flick" || profile === "lean" || profile === "stand") return profile;
-  return "run";
-}
-
-function drawBall(ctx: CanvasRenderingContext2D, x: number, y: number, lift: number): void {
+function drawBall(ctx: CanvasRenderingContext2D, x: number, y: number, lift: number, touching: boolean): void {
   ctx.fillStyle = "rgba(0,0,0,0.3)";
   ctx.beginPath();
-  ctx.ellipse(x, y, 9, 3, 0, 0, Math.PI * 2);
+  ctx.ellipse(x, y, 13, 4, 0, 0, Math.PI * 2);
   ctx.fill();
+  const top = y - 10 - lift;
   ctx.fillStyle = "#10141a";
   ctx.beginPath();
-  ctx.arc(x, y - 7 - lift, 7.5, 0, Math.PI * 2);
+  ctx.arc(x, top, 11, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = "#ffffff";
   ctx.beginPath();
-  ctx.arc(x, y - 7 - lift, 6, 0, Math.PI * 2);
+  ctx.arc(x, top, 9, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = "#222";
-  ctx.fillRect(x - 1, y - 9 - lift, 3, 3);
+  ctx.fillRect(x - 2, top - 3, 5, 5);
+  if (touching) {
+    ctx.strokeStyle = "#ffd23f";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(x, top, 18, 0, Math.PI * 2);
+    ctx.stroke();
+  }
 }
 
-function drawSkill(ctx: CanvasRenderingContext2D, move: SkillMoveName, t: number): void {
+function drawSkill(ctx: CanvasRenderingContext2D, move: SkillMoveName, t: number, width = SKILL_W, strip = false): void {
+  const ground = SKILL_H - 90;
+  const origin = (time: number): number => RUN_SPEED * time;
+  const here = origin(t);
   ctx.fillStyle = GRASS;
-  ctx.fillRect(0, 0, SKILL_W, SKILL_H);
+  ctx.fillRect(0, 0, width, SKILL_H);
   ctx.fillStyle = "#388538";
-  for (let band = 0; band < 8; band += 2) ctx.fillRect(band * 70, 0, 70, SKILL_H);
-  const ground = SKILL_H - 84;
-  const speed = 3;
-  const gait = gaitFor(speed);
-  const baseX = 40 + speed * PIXELS_PER_METRE * t;
-  const progress = (t - MOVE_START_S) / SKILL_MOVE_S;
-  const active = progress >= 0 && progress < 1;
-  const frame = active ? skillFrame(move, progress) : null;
-  const toPx = (topDown: number): number => (topDown / TOP_DOWN_PPM) * PIXELS_PER_METRE;
-  const attackerX = baseX + (frame === null ? 0 : toPx(frame.along));
-  const attackerY = ground + (frame === null ? 0 : toPx(frame.across));
+  const stripe = PPM * 4;
+  for (let k = -2; k < 12; k += 2) ctx.fillRect(k * stripe - ((here * PPM) % (2 * stripe)) + 0, 0, stripe, SKILL_H);
+  const screenX = (f: number): number => (strip ? 80 : 190) + (f - here) * PPM;
+  const screenY = (l: number): number => ground - l * PPM * 0.55;
+  const gait = gaitFor(RUN_SPEED);
   const phase = t / gait.period;
-  let pose: FigurePose = gait.pose;
-  let amp = gait.amp;
-  if (frame !== null) {
-    pose = figurePose(frame.profile);
-    amp = pose === "run" || pose === "lean" ? 1 : 0;
+  const s = t - MOVE_START_S;
+  const active = s >= 0 && s <= MOVE_SECONDS;
+  const play = active ? playMove(move, s, phase, gait.amp) : null;
+  // The defender walks toward him; the replay's own positions are what the move pulls him from.
+  const realDefenderF = origin(MOVE_START_S) + 3.3 - 0.6 * (t - MOVE_START_S);
+  const relF = realDefenderF - here;
+  const relL = 0.25;
+  const items: { y: number; draw: () => void }[] = [];
+  const attackerF = here + (play === null ? 0 : play.attacker.f);
+  const attackerL = play === null ? 0 : play.attacker.l;
+  const attackerJoints = play === null ? swing(phase, gait.amp) : play.attacker.joints;
+  items.push({
+    y: screenY(attackerL),
+    draw: () => stamp(ctx, figureFromJoints(attackerLook, attackerJoints), screenX(attackerF), screenY(attackerL), SKILL_SCALE, play?.attacker.turn === true),
+  });
+  const pull = play === null ? 0 : play.defender.w;
+  const defF = here + relF + pull * ((play?.defender.f ?? relF) - relF);
+  const defL = relL + pull * ((play?.defender.l ?? relL) - relL);
+  const defJoints = play === null ? STANCES.jockey : blendJoints(STANCES.jockey, play.defender.joints, pull);
+  items.push({
+    y: screenY(defL),
+    draw: () => stamp(ctx, figureFromJoints(defenderLook, defJoints), screenX(defF), screenY(defL), SKILL_SCALE, play?.defender.turn !== true),
+  });
+  const carried = { f: here + CARRY_AHEAD_M, l: 0, h: 0.11 };
+  const ballPos = play === null ? carried : { f: here + play.ball.f, l: play.ball.l, h: play.ball.h };
+  items.push({ y: screenY(ballPos.l) + 1, draw: () => drawBall(ctx, screenX(ballPos.f), screenY(ballPos.l), (ballPos.h - 0.11) * PPM, play?.touching != null) });
+  items.sort((a, b) => a.y - b.y).forEach((item) => item.draw());
+  if (strip) {
+    ctx.fillStyle = "rgba(0,0,0,0.55)";
+    ctx.fillRect(0, 0, 70, 16);
+    ctx.fillStyle = "#fff";
+    ctx.font = "12px system-ui, sans-serif";
+    ctx.fillText(`${(t - MOVE_START_S).toFixed(2)} s`, 6, 12);
+    return;
   }
-  // The defender comes to meet the ball, lunges as the move starts, and is left standing.
-  const meetX = 40 + speed * PIXELS_PER_METRE * (MOVE_START_S + SKILL_MOVE_S * 0.45) + 70;
-  const defenderX = t < MOVE_START_S + 0.5 ? 470 - (470 - meetX) * Math.min(t / (MOVE_START_S + 0.5), 1) : meetX + (active && progress > 0.5 ? toPx(6) * Math.min((progress - 0.5) * 3, 1) : 0);
-  const defenderPose: FigurePose = active && progress > 0.25 && progress < 0.65 ? "kick" : t < MOVE_START_S ? "run" : "stand";
-  const defenderY = ground + 40;
-  const past = baseX > defenderX + 10;
-  const sprites: { y: number; draw: () => void }[] = [
-    {
-      y: attackerY,
-      draw: () => stamp(ctx, figureSprite(dress(home, { skin_tone: 3, hair_colour: "black" }), pose, phase, amp), attackerX, attackerY, SKILL_SCALE, frame?.turn === -1),
-    },
-    {
-      y: defenderY,
-      draw: () => stamp(ctx, figureSprite(dress(away, { skin_tone: 2, hair_colour: "blond" }), defenderPose, t / 0.55, 0.8), defenderX, defenderY, SKILL_SCALE, !past),
-    },
-  ];
-  const ballX = attackerX + 26 + (frame === null ? 0 : toPx(frame.ballAlong));
-  const ballY = attackerY + (frame === null ? 0 : toPx(frame.ballAcross));
-  sprites.push({ y: ballY + 1, draw: () => drawBall(ctx, ballX, ballY, frame === null ? 0 : toPx(frame.ballLift) * 1.2) });
-  sprites.sort((a, b) => a.y - b.y).forEach((item) => item.draw());
   ctx.fillStyle = "rgba(255,255,255,0.8)";
   ctx.fillRect(0, SKILL_H - 4, (SKILL_W * (t % LOOP_S)) / LOOP_S, 4);
+  touchTimes(move).forEach((time) => {
+    ctx.fillStyle = "#ffd23f";
+    ctx.fillRect(((MOVE_START_S + time) / LOOP_S) * SKILL_W - 1, SKILL_H - 12, 3, 8);
+  });
 }
+
+
+// The same moves as still frames, so each position can be checked on its own.
+const stripSection = section("Skill moves frame by frame (seconds into the move shown top-left; rings mark a boot on the ball)");
+const STRIP_TIMES = [0.15, 0.4, 0.65, 0.9, 1.2, 1.6];
+SKILL_MOVES.forEach((move) => {
+  const row = document.createElement("div");
+  row.style.cssText = "display:flex;gap:2px;flex-basis:100%;align-items:flex-start";
+  const label = document.createElement("div");
+  label.textContent = move.replace("_", " ");
+  label.style.cssText = "width:80px;color:#8fa3b8;font-size:12px;padding-top:6px";
+  row.append(label);
+  stripSection.append(row);
+  STRIP_TIMES.forEach((time) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 330;
+    canvas.height = SKILL_H;
+    const ctx = canvas.getContext("2d");
+    if (ctx === null) return;
+    ctx.imageSmoothingEnabled = false;
+    drawSkill(ctx, move, MOVE_START_S + time, 330, true);
+    row.append(canvas);
+  });
+});
 
 let slow = 1;
 let paused = false;
