@@ -146,6 +146,16 @@ test("the ball stays on its carrier, and a pass carries it from one player to th
   assert.equal(sampleAt(store.frames, 1.5)?.ballX, 0.4);
 });
 
+test("a ball in flight between two frames follows the frame's ball, not the last holder", () => {
+  const held = withCarrier(frame(0.2), "a", { a: 0.2, b: 0.6 });
+  const flying = { ...(frame(0.4) as object), carrier_id: null } as AnyEvent;
+  const landed = withCarrier(frame(0.6), "b", { a: 0.2, b: 0.6 });
+  const store = loaded(held, flying, landed);
+  const halfway = sampleAt(store.frames, 0.5)?.ballX ?? 0;
+  assert.ok(Math.abs(halfway - 0.3) < 1e-9, `ball at ${halfway}`);
+  assert.ok(Math.abs((sampleAt(store.frames, 1.5)?.ballX ?? 0) - 0.5) < 1e-9);
+});
+
 test("the ball never jumps between two samples a tenth of a second apart", () => {
   const first = withCarrier(frame(0.2), "a", { a: 0.2, b: 0.6 });
   const second = withCarrier(frame(0.2), "b", { a: 0.2, b: 0.6 });

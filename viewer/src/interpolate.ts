@@ -65,6 +65,9 @@ function ballPlace(from: Frame, to: Frame | undefined, alpha: number, players: S
   const reset = to !== undefined && Math.hypot(to.ballX - from.ballX, to.ballY - from.ballY) > MAX_BALL_STEP;
   const end = to === undefined || reset ? from : to;
   const fallback = { x: lerp(from.ballX, end.ballX, alpha), y: lerp(from.ballY, end.ballY, alpha), height: 0 };
+  // A frame with nobody on the ball is the ball in flight (or loose): the frame's own ball is the
+  // truth, so follow it rather than gluing the ball to the last holder until the next frame.
+  if (from.carrierId === null || (to !== undefined && to.carrierId === null)) return fallback;
   const holder = players.find((player) => player.id === from.carrierId);
   if (holder === undefined) return fallback;
   const receiver = to === undefined || to.carrierId === from.carrierId ? undefined : players.find((player) => player.id === to.carrierId);
