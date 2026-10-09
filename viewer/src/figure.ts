@@ -573,6 +573,8 @@ export const STANCES = {
   freeKickStrike: { bob: -0.6, lean: -0.22, near: { a: 1.4, k: 0.04 }, far: { a: -0.12, k: 0.15 }, nearArm: { c: -1.3, e: 0.3 }, farArm: { c: 1.2, e: 0.3 } },
   /** The follow-through: leg high, the other foot off the ground. */
   freeKickFollow: { bob: -2.2, lean: -0.3, near: { a: 1.65, k: 0.5 }, far: { a: -0.1, k: 0.6 }, nearArm: { c: -1.5, e: 0.3 }, farArm: { c: 1.3, e: 0.3 } },
+  /** A throw-in: the ball held back behind the head, both arms straight up. */
+  throwIn: { bob: 0.3, lean: -0.12, near: { a: 0.35, k: 0.25 }, far: { a: -0.35, k: 0.2 }, nearArm: { c: 3.0, e: 0.15 }, farArm: { c: 2.9, e: 0.15 } },
   /** Hands on hips, getting a breath before the run-up. */
   hips: { bob: 0.4, lean: 0.04, near: { a: 0.1, k: 0.1 }, far: { a: -0.1, k: 0.1 }, nearArm: { c: 0.45, e: 1.6 }, farArm: { c: -0.45, e: 1.6 } },
   /** A defender thrown off balance, reaching. */

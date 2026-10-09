@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { MIN_GAP_M, ballAt, keepApart, playScript, type MovePlay, type Script } from "./choreo.ts";
-import { CHALLENGE_MODES, FREE_KICK_SCRIPT, failedMove, headerScript, tackleScript } from "./scenes.ts";
+import { CHALLENGE_MODES, FREE_KICK_SCRIPT, defenderSide, failedMove, headerScript, tackleScript, withLeadIn } from "./scenes.ts";
 import { SKILL_MOVES } from "./skillposes.ts";
 
 const STEP = 1 / 60;
@@ -106,5 +106,72 @@ test("no scene leaves the ball stranded or the players standing inside each othe
       const toDefender = Math.hypot(end.ball.f - end.defender.f, end.ball.l - end.defender.l);
       assert.ok(toDefender < 1.0, `${name}: the tackler is ${toDefender.toFixed(2)} m from the ball he won`);
     }
+  }
+});
+
+test("a defender can come from behind: he strikes from short of the ball, facing the way the carrier runs", () => {
+  for (const mode of CHALLENGE_MODES) {
+    const front = tackleScript(mode, 1);
+    const behind = tackleScript(mode, -1);
+    // Just before the contact he is on the side he came from (a slide goes through the ball, so not at the contact itself).
+    const at = Math.round(((front.contactAt ?? 0) - 0.2) / STEP);
+    const ahead = all(front)[at] as MovePlay;
+    const chasing = all(behind)[at] as MovePlay;
+    assert.ok(ahead.defender.f - chasing.defender.f > 1.0, `${mode}: from behind he is ${(ahead.defender.f - chasing.defender.f).toFixed(2)} m nearer the carrier's back than from the front`);
+    assert.ok(chasing.defender.f < chasing.ball.f + 0.2, `${mode}: from behind he has not got ahead of the ball`);
+    assert.equal(chasing.defender.turn, true, `${mode}: from behind he faces the way the carrier runs`);
+    assert.notEqual(ahead.defender.turn, true, `${mode}: from the front he faces the carrier`);
+    assert.equal(behind.owner, front.owner, `${mode}: the scene ends the same way whichever side he comes from`);
+  }
+});
+
+test("a defender's path is continuous in every scene, from either side, once he is kept clear of the carrier", () => {
+  const scripts: [string, Script][] = [];
+  for (const approach of [1, -1] as const) {
+    for (const mode of CHALLENGE_MODES) {
+      scripts.push([`tackle ${mode} ${approach}`, tackleScript(mode, approach)]);
+      for (const move of SKILL_MOVES) scripts.push([`${move} ${mode} ${approach}`, failedMove(move, mode, approach)]);
+    }
+  }
+  for (const [name, script] of scripts) {
+    const side = defenderSide(script);
+    const frames = all(script).map((frame) => keepApart(frame, side));
+    frames.slice(1).forEach((now, index) => {
+      const before = frames[index] as MovePlay;
+      const moved = Math.hypot(now.defender.f - before.defender.f, now.defender.l - before.defender.l) / STEP;
+      assert.ok(moved < 14, `${name}: the defender moves ${moved.toFixed(1)} m/s at ${(index * STEP).toFixed(2)} s`);
+    });
+  }
+});
+
+test("a lead-in gives the defender a longer run at the scene without changing anything else about it", () => {
+  const script = tackleScript("won");
+  const longer = withLeadIn(script, 0.8);
+  assert.ok(Math.abs(longer.duration - (script.duration + 0.8)) < 1e-9);
+  assert.ok(Math.abs((longer.contactAt ?? 0) - ((script.contactAt ?? 0) + 0.8)) < 1e-9);
+  for (const s of [0.1, 0.6, 1.2]) {
+    const now = playScript(longer, s + 0.8, 0, 0.7);
+    const before = playScript(script, s, 0, 0.7);
+    assert.ok(Math.hypot(now.attacker.f - before.attacker.f, now.attacker.l - before.attacker.l) < 1e-9, `the carrier is where he was at ${s}`);
+    assert.ok(Math.hypot(now.ball.f - before.ball.f, now.ball.l - before.ball.l) < 1e-9, `the ball is where it was at ${s}`);
+  }
+  // He is already on his way when the scene proper starts, and no further on than the original ramp would have him.
+  const ramp = playScript(longer, 0.8, 0, 0.7).defender.w;
+  assert.ok(ramp > 0 && ramp <= playScript(script, script.defender[1]?.s ?? 0, 0, 0.7).defender.w + 1e-9);
+  assert.equal(withLeadIn(script, 0), script);
+});
+
+test("a path that runs through the carrier swings round him on one side instead of jumping to the other", () => {
+  const apart = (f: number, l: number): MovePlay => {
+    const play = playScript(tackleScript("won"), 0.2, 0, 0.7);
+    return { ...play, attacker: { ...play.attacker, f: 0, l: 0 }, defender: { ...play.defender, w: 1, f, l } };
+  };
+  let before: MovePlay | null = null;
+  for (let f = 2; f >= -2; f -= 0.02) {
+    const kept = keepApart(apart(f, 0.05), 1);
+    const gap = Math.hypot(kept.defender.f, kept.defender.l);
+    assert.ok(gap >= MIN_GAP_M - 1e-9, `${gap} m apart at f=${f}`);
+    if (before !== null) assert.ok(Math.hypot(kept.defender.f - before.defender.f, kept.defender.l - before.defender.l) < 0.2, `he jumps at f=${f.toFixed(2)}`);
+    before = kept;
   }
 });

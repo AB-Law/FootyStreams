@@ -69,6 +69,12 @@ export interface Script {
   defender: DefenderKey[];
   /** Who has the ball when the scene ends. */
   owner: Owner;
+  /** When the ball changes hands or the carrier goes down, in seconds into the scene (for lining it up with the replay). */
+  contactAt?: number;
+  /** The ball follows the script only from this time (before it the replay's own ball is shown). */
+  ballFrom?: number;
+  /** The ball follows the script only until this time (a shot or a kick then takes over). */
+  ballUntil?: number;
 }
 
 export const MOVE_SCRIPTS: Record<SkillMoveName, Script> = {
@@ -431,16 +437,21 @@ export function playScript(script: Script, s: number, phase: number, amp: number
 export const MIN_GAP_M = 0.9;
 
 /**
- * Keep the defender from standing inside the carrier: if they are closer than `MIN_GAP_M` the
- * defender is moved straight away from him (unless he is the one who is down, sliding through).
+ * Keep the defender from standing inside the carrier: if they are closer than `MIN_GAP_M` he is put
+ * on a circle that far round him. The direction leans toward his `side` (1 inside, -1 outside; by
+ * default the side he is on) the closer he is, so a defender whose path runs through the carrier
+ * swings round him on that side instead of being thrown from one side to the other in a frame.
  */
-export function keepApart(play: MovePlay, minimum = MIN_GAP_M): MovePlay {
+export function keepApart(play: MovePlay, side?: 1 | -1, minimum = MIN_GAP_M): MovePlay {
   const df = play.defender.f - play.attacker.f;
   const dl = play.defender.l - play.attacker.l;
   const gap = Math.hypot(df, dl);
   if (gap >= minimum || play.defender.w < 0.05) return play;
-  const along = gap < 1e-6 ? { f: 1, l: 0 } : { f: df / gap, l: dl / gap };
-  return { ...play, defender: { ...play.defender, f: play.attacker.f + along.f * minimum, l: play.attacker.l + along.l * minimum } };
+  const lean = side ?? (dl >= 0 ? 1 : -1);
+  const toward = { f: df, l: dl + lean * (minimum - gap) };
+  const length = Math.hypot(toward.f, toward.l);
+  const away = length < 1e-6 ? { f: 0, l: lean } : { f: toward.f / length, l: toward.l / length };
+  return { ...play, defender: { ...play.defender, f: play.attacker.f + away.f * minimum, l: play.attacker.l + away.l * minimum } };
 }
 
 /** A skill move `s` seconds in (see `playScript`). */
