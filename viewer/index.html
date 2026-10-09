@@ -5,36 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FootyStreams pixel replay</title>
     <style>
-      :root { color-scheme: dark; }
-      body { margin: 0; background: #0a0f15; color: #d7e0ea; font: 14px system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-      #stage { margin-top: 12px; padding: 10px; background: #1a222c; border-radius: 10px; box-shadow: 0 0 0 2px #2c3a4a; }
-      canvas { display: block; image-rendering: pixelated; width: 960px; height: 540px; background: #000; }
-      #controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; width: 100%; }
+      :root { color-scheme: dark; --panel: #131b24; --edge: #2c3a4a; --muted: #8fa3b8; }
+      body { margin: 0; background: #0a0f15; color: #d7e0ea; font: 14px system-ui, sans-serif; min-height: 100vh; }
+      #app { display: grid; grid-template-columns: 250px minmax(0, 1fr) 270px; gap: 12px; padding: 12px; align-items: start; max-width: 1900px; margin: 0 auto; }
+      #stage { justify-self: center; padding: 10px; background: #1a222c; border-radius: 10px; box-shadow: 0 0 0 2px var(--edge); }
+      canvas#screen { display: block; image-rendering: pixelated; width: 960px; height: 678px; background: #000; }
+      #controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; width: 100%; flex-wrap: wrap; }
       #scrubber { flex: 1; min-width: 80px; }
-      button { background: #243344; color: inherit; border: 1px solid #3b5068; border-radius: 4px; padding: 4px 10px; font: inherit; cursor: pointer; }
+      button, select { background: #243344; color: inherit; border: 1px solid #3b5068; border-radius: 4px; padding: 4px 10px; font: inherit; cursor: pointer; }
       button.on { background: #3b6ea5; }
       .gap { width: 8px; }
       #time { font-variant-numeric: tabular-nums; min-width: 8em; text-align: right; }
-      #status { margin: 8px 0 0; color: #8fa3b8; }
+      #status { margin: 8px 0 0; color: var(--muted); }
+      .panel { background: var(--panel); border-radius: 10px; box-shadow: 0 0 0 1px var(--edge); padding: 10px 12px; }
+      .panel h2 { margin: 0 0 8px; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+      #maps { grid-column: 1 / -1; }
+      .stat-head { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 4px; }
+      .stat { margin: 7px 0; }
+      .stat .values { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; font-variant-numeric: tabular-nums; }
+      .stat .values span:first-child { text-align: left; }
+      .stat .values span:last-child { text-align: right; }
+      .stat .label { color: var(--muted); font-size: 12px; text-align: center; }
+      .bar { display: flex; height: 5px; border-radius: 3px; overflow: hidden; background: #243344; margin-top: 3px; gap: 2px; }
+      .team { margin-bottom: 14px; }
+      .team-title { display: flex; justify-content: space-between; font-weight: 600; border-bottom: 2px solid; padding-bottom: 3px; margin-bottom: 4px; }
+      .formation { color: var(--muted); font-weight: 400; }
+      .bench-title { color: var(--muted); font-size: 12px; margin: 8px 0 2px; }
+      .player { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto 30px; gap: 6px; padding: 2px 4px; border-radius: 4px; cursor: pointer; align-items: baseline; }
+      .player .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .player .badges { font-size: 11px; color: #ffd23f; text-align: right; }
+      .player .rating { text-align: right; font-variant-numeric: tabular-nums; }
+      .player.benched { opacity: .65; }
+      .player:hover { background: #1d2a38; }
+      .player.selected { background: #28476b; }
+      .player .number { color: var(--muted); text-align: right; }
+      .map-controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+      .tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+      .map-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+      .map-title { color: var(--muted); margin-bottom: 4px; }
+      .map-tip { display: none; position: fixed; z-index: 10; max-width: 260px; background: #0b121a; border: 1px solid #3b5068; border-radius: 6px; padding: 6px 9px; font-size: 12px; pointer-events: none; box-shadow: 0 4px 14px rgba(0,0,0,.5); }
+      canvas.map { width: 100%; height: auto; border-radius: 6px; display: block; }
+      @media (max-width: 1180px) {
+        #app { grid-template-columns: minmax(0, 1fr); }
+        #stage { order: 0; width: 100%; box-sizing: border-box; }
+        #stats { order: 1; }
+        #lineups { order: 2; }
+        #maps { order: 3; }
+        canvas#screen { max-width: 100%; height: auto; }
+      }
     </style>
   </head>
   <body>
-    <div id="stage">
-      <canvas id="screen" width="320" height="180"></canvas>
-      <div id="controls">
-        <button id="play" type="button">Play</button>
-        <button id="zoom-1" type="button" title="Whole pitch">Full</button>
-        <button id="zoom-2" type="button" title="Follow the ball">2x</button>
-        <button id="zoom-3" type="button" title="Close in">3x</button>
-        <span class="gap"></span>
-        <button id="speed-1" type="button">1x</button>
-        <button id="speed-4" type="button">4x</button>
-        <button id="speed-16" type="button">16x</button>
-        <input id="scrubber" type="range" min="0" max="0" value="0" step="1" aria-label="Position" />
-        <span id="time">0:00 / 0:00</span>
-      </div>
+    <div id="app">
+      <aside id="lineups" class="panel"></aside>
+      <main id="stage">
+        <canvas id="screen" width="640" height="452"></canvas>
+        <div id="controls">
+          <button id="play" type="button">Play</button>
+          <button id="view" type="button" title="Switch between the broadcast and top-down views">Top-down</button>
+          <button id="zoom-1" type="button" title="Whole pitch">Full</button>
+          <button id="zoom-2" type="button" title="Follow the ball">2x</button>
+          <button id="zoom-3" type="button" title="Close in">3x</button>
+          <button id="names" type="button" title="Name tags in the broadcast view: the player on the ball, everyone, or none">Names: carrier</button>
+          <span class="gap"></span>
+          <button id="speed-1" type="button">1x</button>
+          <button id="speed-4" type="button">4x</button>
+          <button id="speed-16" type="button">16x</button>
+          <input id="scrubber" type="range" min="0" max="0" value="0" step="1" aria-label="Position" />
+          <span id="time">0:00 / 0:00</span>
+        </div>
+        <p id="status">Loading the replay...</p>
+      </main>
+      <aside id="stats" class="panel"></aside>
+      <section id="maps" class="panel"><h2>Analysis</h2></section>
     </div>
-    <p id="status">Loading the replay...</p>
     <script type="module" src="dist/main.js"></script>
   </body>
 </html>

@@ -146,6 +146,16 @@ test("the ball stays on its carrier, and a pass carries it from one player to th
   assert.equal(sampleAt(store.frames, 1.5)?.ballX, 0.4);
 });
 
+test("a ball in flight between two frames follows the frame's ball, not the last holder", () => {
+  const held = withCarrier(frame(0.2), "a", { a: 0.2, b: 0.6 });
+  const flying = { ...(frame(0.4) as object), carrier_id: null } as AnyEvent;
+  const landed = withCarrier(frame(0.6), "b", { a: 0.2, b: 0.6 });
+  const store = loaded(held, flying, landed);
+  const halfway = sampleAt(store.frames, 0.5)?.ballX ?? 0;
+  assert.ok(Math.abs(halfway - 0.3) < 1e-9, `ball at ${halfway}`);
+  assert.ok(Math.abs((sampleAt(store.frames, 1.5)?.ballX ?? 0) - 0.5) < 1e-9);
+});
+
 test("the ball never jumps between two samples a tenth of a second apart", () => {
   const first = withCarrier(frame(0.2), "a", { a: 0.2, b: 0.6 });
   const second = withCarrier(frame(0.2), "b", { a: 0.2, b: 0.6 });
@@ -172,9 +182,9 @@ test("deadSpans finds a long stoppage, keeps a lead-in and ignores short pauses"
 
 test("separate pushes overlapping players apart and leaves distant ones alone", () => {
   const near = [
-    { id: "a", x: 0.5, y: 0.5, running: false },
-    { id: "b", x: 0.5 + 0.5 / 105, y: 0.5, running: false },
-    { id: "c", x: 0.9, y: 0.5, running: false },
+    { id: "a", x: 0.5, y: 0.5, running: false, vx: 0, vy: 0 },
+    { id: "b", x: 0.5 + 0.5 / 105, y: 0.5, running: false, vx: 0, vy: 0 },
+    { id: "c", x: 0.9, y: 0.5, running: false, vx: 0, vy: 0 },
   ];
   const moved = separate(near);
   const gap = Math.hypot(((moved[1]?.x ?? 0) - (moved[0]?.x ?? 0)) * 105, ((moved[1]?.y ?? 0) - (moved[0]?.y ?? 0)) * 68);
@@ -184,9 +194,9 @@ test("separate pushes overlapping players apart and leaves distant ones alone", 
 
 test("separate gives the same result whatever the order of the list", () => {
   const players = [
-    { id: "a", x: 0.5, y: 0.5, running: false },
-    { id: "b", x: 0.5 + 0.8 / 105, y: 0.5, running: false },
-    { id: "c", x: 0.5, y: 0.5 + 0.8 / 68, running: false },
+    { id: "a", x: 0.5, y: 0.5, running: false, vx: 0, vy: 0 },
+    { id: "b", x: 0.5 + 0.8 / 105, y: 0.5, running: false, vx: 0, vy: 0 },
+    { id: "c", x: 0.5, y: 0.5 + 0.8 / 68, running: false, vx: 0, vy: 0 },
   ];
   const forward = separate(players);
   const backward = separate([...players].reverse()).reverse();
@@ -219,4 +229,37 @@ test("kickTime finds where a still ball starts to move, and a throw-in raises th
   const sample = sampleAt(store.frames, kick);
   assert.equal(posesAt(store.contests, sample, kick - 0.2, store.frames).get("t")?.name, "throw");
   assert.equal(posesAt(store.contests, sample, kick - 5, store.frames).get("t"), undefined);
+});
+
+test("two players whose paths cross slide past each other instead of swapping places in one frame", () => {
+  const cross = (x: number, ay: number, by: number): AnyEvent =>
+    ({
+      type: "frame",
+      team: "none",
+      clock,
+      ctx: { score_home: 0, score_away: 0, attack_dir: 1 },
+      participants: [],
+      ball_pos_x: 0.5,
+      ball_pos_y: 0.5,
+      carrier_id: null,
+      players: [
+        { player_id: "a", x, y: ay, speed_mps: 4, exhaustion: 0 },
+        { player_id: "b", x: 1 - x, y: by, speed_mps: 4, exhaustion: 0 },
+      ],
+    }) as AnyEvent;
+  // They run toward each other along the pitch and pass a hair's breadth apart: a straight push-apart flips sides at that instant.
+  const store = loaded(cross(0.3, 0.5, 0.5003), cross(0.4, 0.5, 0.5003), cross(0.5, 0.5, 0.5003), cross(0.6, 0.5, 0.5003), cross(0.7, 0.5, 0.5003));
+  let before: { x: number; y: number } | null = null;
+  let widest = 0;
+  for (let t = 0; t <= 4; t += 0.02) {
+    const sample = sampleAt(store.frames, t);
+    const a = sample?.players.find((p) => p.id === "a");
+    const b = sample?.players.find((p) => p.id === "b");
+    if (a === undefined || b === undefined) continue;
+    const apart = { x: (b.x - a.x) * 105, y: (b.y - a.y) * 68 };
+    if (before !== null) widest = Math.max(widest, Math.hypot(apart.x - before.x, apart.y - before.y));
+    before = apart;
+  }
+  // A swap is a jump of the whole 3.2 m body gap or more in a step; running past each other is a few tenths.
+  assert.ok(widest < 1.3, `the pair's separation changes by ${widest.toFixed(2)} m in a single 0.02 s step`);
 });

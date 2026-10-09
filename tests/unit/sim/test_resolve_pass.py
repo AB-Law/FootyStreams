@@ -11,6 +11,7 @@ from footystreams.sim.actions.challenge import attempt_press_tackle
 from footystreams.sim.actions.resolve_pass import resolve_pass
 from footystreams.sim.config import SimConfig, merge_config
 from footystreams.sim.decision import team_weights
+from footystreams.sim.geometry import segment_distance_m
 from footystreams.sim.options import ActionKind, Option, generate_options
 from footystreams.sim.play import Play, action_duration, label, take_possession
 from footystreams.sim.pressure import nearest_opponents
@@ -66,6 +67,23 @@ def test_resolve_pass__interception_is_emitted_after_and_caused_by_the_pass() ->
             assert isinstance(events[1], InterceptionEvent)
             assert events[1].caused_by == events[0].id
             assert events[1].player_id == play.state.carrier.player_id
+            return
+    pytest.fail("no interception in 80 seeds")
+
+
+def test_resolve_pass__the_interceptor_cuts_the_ball_out_on_the_passing_lane() -> None:
+    for seed in range(80):
+        play = make_play(seed)
+        passer = play.state.carrier
+        start = (passer.x, passer.y)
+        option = _option(play, ActionKind.PASS, 0.0)
+        resolve_pass(play, option)
+        events = play.emit.events
+        if isinstance(events[0], PassEvent) and events[0].outcome == "intercepted":
+            assert (
+                segment_distance_m((play.state.carrier.x, play.state.carrier.y), start, option.end)
+                < 1e-6
+            )
             return
     pytest.fail("no interception in 80 seeds")
 

@@ -1,4 +1,4 @@
-// A 3x5 pixel font, so text stays crisp at 320x180 (canvas text would be anti-aliased).
+// A 3x5 pixel font, so text stays crisp at 320x226 (canvas text would be anti-aliased).
 // Each glyph is five rows of three characters, "#" for a lit pixel.
 
 const GLYPH_ROWS = 5;

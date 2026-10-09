@@ -11,6 +11,7 @@ from math import sqrt
 
 from footystreams.sim.config import PositionConfig
 from footystreams.sim.config_rules import OffsideConfig
+from footystreams.sim.defending import plan_defending
 from footystreams.sim.geometry import (
     CENTRE,
     PENALTY_AREA_DEPTH,
@@ -20,10 +21,11 @@ from footystreams.sim.geometry import (
     frame_coordinate,
 )
 from footystreams.sim.mathx import PERCENT, clamp
-from footystreams.sim.movement import assign_marks, choose_pressers, spread_out, wander
+from footystreams.sim.movement import choose_pressers, spread_out, wander
 from footystreams.sim.offside import offside_line
 from footystreams.sim.side import Side, opposite
 from footystreams.sim.state import Line, MatchState, PlayerState, TeamState
+from footystreams.sim.support import support_spots, support_weight
 
 # Share of the line-height shift and the push/drop each row takes: GK, defence, mid, attack.
 _LINE_SHIFT_WEIGHT = (0.0, 1.0, 0.6, 0.3)
@@ -138,10 +140,55 @@ def _cover_spots(close_in: Point, ball: Point, count: int, cfg: PositionConfig) 
     return spots
 
 
+def _frame_spot(player: PlayerState, team: TeamState) -> Point:
+    return frame_coordinate(player.x, team.attack_dir), frame_coordinate(player.y, team.attack_dir)
+
+
+def _frame_spots(players: list[PlayerState], team: TeamState) -> list[Point]:
+    """Positions in the team's frame for a list of players."""
+    # Perf: M8-sim-profile - 22 conversions per position step; inlined, no call per coordinate.
+    if team.attack_dir < 0:
+        return [(1.0 - player.x, 1.0 - player.y) for player in players]
+    return [(player.x, player.y) for player in players]
+
+
+def _roles(
+    state: MatchState,
+    team: TeamState,
+    slots: list[tuple[PlayerState, Point]],
+    cfg: PositionConfig,
+    *,
+    in_possession: bool,
+) -> tuple[tuple[int, ...], dict[int, tuple[Point, float]]]:
+    """Who presses, and the spot and weight each other player's job pulls him toward."""
+    ball = (
+        _frame_spot(state.carrier, team)
+        if in_possession
+        else (
+            frame_coordinate(state.ball_x, team.attack_dir),
+            frame_coordinate(state.ball_y, team.attack_dir),
+        )
+    )
+    opponents = state.team(opposite(team.side))
+    if in_possession:
+        outfield = [player for player, _ in slots if player.line is not Line.KEEPER]
+        movers = list(zip(outfield, _frame_spots(outfield, team), strict=True))
+        rivals = _frame_spots(opponents.players, team)
+        spots = support_spots(movers, ball, rivals, cfg)
+        by_slot = {player.slot: player for player in outfield}
+        return (), {s: (spot, support_weight(by_slot[s], cfg)) for s, spot in spots.items()}
+    keeper_has_it = state.carrier.line is Line.KEEPER
+    pressers = choose_pressers(team, (state.ball_x, state.ball_y), cfg, keeper_has_it=keeper_has_it)
+    reach = (1.0 - PENALTY_AREA_DEPTH) if keeper_has_it else _MAX_TARGET_FRAME_X
+    close_in = (min(ball[0] - cfg.press_gap_m / PITCH_LENGTH_M, reach), ball[1])
+    free = [(p, t) for p, t in slots if p.slot not in pressers and cfg.marking_weight[p.line]]
+    return pressers, plan_defending(team, opponents, free, (ball, close_in), cfg)
+
+
 def _intents(
     state: MatchState, team: TeamState, cfg: PositionConfig, *, in_possession: bool
 ) -> list[Intent]:
-    """Where each player (not the carrier) wants to be: slot, mark or ball, plus his own loop."""
+    """Where each player (not the carrier) wants to be: slot, job, or ball, plus his own loop."""
     ball = (
         frame_coordinate(state.ball_x, team.attack_dir),
         frame_coordinate(state.ball_y, team.attack_dir),
@@ -151,16 +198,7 @@ def _intents(
         for player in team.players
         if player is not state.carrier
     ]
-    pressers: tuple[int, ...] = ()
-    marks: dict[int, Point] = {}
-    if not in_possession:
-        keeper_has_it = state.carrier.line is Line.KEEPER
-        pressers = choose_pressers(
-            team, (state.ball_x, state.ball_y), cfg, keeper_has_it=keeper_has_it
-        )
-        free = [(p, t) for p, t in slots if p.slot not in pressers and cfg.marking_weight[p.line]]
-        marks = assign_marks(team, state.team(opposite(team.side)), free, cfg)
-    # Nobody follows a keeper into his own box: the man closing him down stops at its edge.
+    pressers, jobs = _roles(state, team, slots, cfg, in_possession=in_possession)
     reach = (1.0 - PENALTY_AREA_DEPTH) if state.carrier.line is Line.KEEPER else _MAX_TARGET_FRAME_X
     close_in = (min(ball[0] - cfg.press_gap_m / PITCH_LENGTH_M, reach), ball[1])
     cover = _cover_spots(close_in, ball, len(pressers), cfg)
@@ -171,7 +209,8 @@ def _intents(
             spot = cover[pressers.index(player.slot)]
             intents.append((player, _inside(spot, cfg), cfg.press_speed_bonus))
             continue
-        aim = _toward(slot, marks.get(player.slot), cfg.marking_weight[player.line])
+        spot, weight = jobs.get(player.slot, (slot, 0.0))
+        aim = _toward(slot, spot, weight)
         loop = wander(player, state.elapsed_s, in_possession=in_possession, cfg=cfg)
         wanted = (aim[0] + loop[0], aim[1] + loop[1])
         spread = spread_out(wanted, crowd, cfg, own_slot=player.slot)

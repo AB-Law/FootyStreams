@@ -52,6 +52,9 @@ export interface FramePlayer {
   x: number;
   y: number;
   speed_mps: number;
+  /** Velocity over the last frame interval, metres per second along and across the pitch (schema 0.5.0 and later). */
+  vx?: number;
+  vy?: number;
   exhaustion: number;
 }
 
@@ -61,13 +64,15 @@ export interface FrameEvent extends EventBase {
   ball_pos_x: number;
   ball_pos_y: number;
   carrier_id: string | null;
+  /** Height of the ball above the grass in metres (schema 0.5.0 and later). */
+  ball_height_m?: number;
   players: FramePlayer[];
 }
 
 export interface GoalEvent extends EventBase {
   type: "goal";
   scorer_id: string;
-  assist_id: string | null;
+  assist_id?: string | null;
   own_goal: boolean;
 }
 
@@ -91,6 +96,7 @@ export interface PassEvent extends EventBase {
   outcome: "complete" | "incomplete" | "intercepted" | "out";
   length_m: number;
   end_pos: Pos | null;
+  progressive?: boolean;
 }
 
 /**
@@ -100,11 +106,15 @@ export interface PassEvent extends EventBase {
 export interface ShotEvent extends EventBase {
   type: "shot";
   player_id: string;
+  xg?: number;
+  assist_id?: string | null;
   outcome: "goal" | "saved" | "blocked" | "off_target" | "woodwork";
   target?: Pos | null;
   curve?: number;
   speed_mps?: number;
   loft?: number;
+  /** What the shot was taken with (schema 0.7.0 and later): a header starts at head height. */
+  body_part?: "foot" | "head";
 }
 
 export interface TackleEvent extends EventBase {
@@ -118,6 +128,8 @@ export interface DribbleEvent extends EventBase {
   type: "dribble";
   player_id: string;
   outcome: "success" | "tackled" | "lost";
+  /** How the take-on was done (schema 0.6.0 and later); null or absent is a plain run. */
+  skill_move?: string | null;
 }
 
 /** A dead-ball restart: the taker stands over the ball and the rest take up their shapes. */
@@ -130,6 +142,26 @@ export interface FoulEvent extends EventBase {
   type: "foul";
   fouler_id: string;
   fouled_id: string;
+}
+
+export interface InterceptionEvent extends EventBase {
+  type: "interception";
+  player_id: string;
+}
+
+export interface ClearanceEvent extends EventBase {
+  type: "clearance";
+  player_id: string;
+}
+
+export interface OffsideEvent extends EventBase {
+  type: "offside";
+  player_id: string;
+}
+
+export interface SaveEvent extends EventBase {
+  type: "save";
+  keeper_id: string;
 }
 
 export interface HalftimeEvent extends EventBase {
@@ -155,6 +187,10 @@ export type BroadcastEvent =
   | TackleEvent
   | RestartEvent
   | DribbleEvent
+  | InterceptionEvent
+  | ClearanceEvent
+  | OffsideEvent
+  | SaveEvent
   | SubstitutionEvent
   | HalftimeEvent
   | FulltimeEvent;

@@ -48,6 +48,7 @@ class DribbleEvent(EventBase):
         player_id="S",
         outcome="S",
         end_pos="S",
+        skill_move="S",
     )
 
     type: Literal["dribble"] = "dribble"
@@ -55,6 +56,20 @@ class DribbleEvent(EventBase):
     player_id: PlayerId
     outcome: Literal["success", "tackled", "lost"] = "success"
     end_pos: Pos | None = None
+    # How the take-on was done: a look for the renderer, never an input to the outcome. None is
+    # a plain run with the ball (and every dribble in logs from before schema 0.6.0).
+    skill_move: (
+        Literal[
+            "knock_past",
+            "step_over",
+            "drag_back",
+            "cut_inside",
+            "nutmeg",
+            "roulette",
+            "rainbow_flick",
+        ]
+        | None
+    ) = None
 
 
 class TackleEvent(EventBase):
@@ -108,6 +123,7 @@ class ShotEvent(EventBase):
         curve="S",
         speed_mps="S",
         loft="S",
+        body_part="S",
     )
 
     type: Literal["shot"] = "shot"
@@ -123,6 +139,8 @@ class ShotEvent(EventBase):
     curve: Signed = 0.0  # bend of the path in -1..1; the sign is the side it bows toward
     speed_mps: float = Field(ge=0.0, default=0.0)
     loft: Unit = 0.0  # peak height of the flight, 0 flat to 1 high
+    # What the shot was taken with, so a renderer can show a header. Only with the context on.
+    body_part: Literal["foot", "head"] = "foot"
 
 
 class SaveEvent(EventBase):

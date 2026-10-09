@@ -4,8 +4,6 @@ import { playerName, type ReplayMeta, type TeamSide } from "./meta.ts";
 import type { ActiveOverlay } from "./overlays.ts";
 import type { Kit } from "./palette.ts";
 import { HEIGHT, PITCH, WIDTH } from "./pitch.ts";
-import { toView, type Camera } from "./camera.ts";
-import type { Scene } from "./scene.ts";
 import type { CardColour, Mark } from "./store.ts";
 
 const PANEL = "#0d1620";
@@ -143,9 +141,7 @@ export function drawOverlays(
   ctx: CanvasRenderingContext2D,
   active: readonly ActiveOverlay[],
   meta: ReplayMeta,
-  scene: Scene,
-  sample: Sample | null,
-  camera: Camera,
+  locate: (playerId: string) => { x: number; y: number } | null,
 ): void {
   let slot = 0;
   for (const { mark, progress } of active) {
@@ -153,8 +149,7 @@ export function drawOverlays(
     else if (mark.kind === "halftime" || mark.kind === "fulltime") drawBreak(ctx, mark, meta);
     else {
       if (mark.kind === "card") {
-        const world = sample === null ? null : scene.screenPosition(sample, mark.playerId);
-        drawCard(ctx, mark, progress, world === null ? null : toView(camera, world));
+        drawCard(ctx, mark, progress, locate(mark.playerId));
       }
       const note = noteText(mark, meta);
       if (note !== null) drawNote(ctx, slot++, note.title, note.detail, note.accent);

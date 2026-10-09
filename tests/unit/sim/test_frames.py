@@ -6,7 +6,15 @@ from footystreams.domain.types import PlayerId
 from footystreams.events.result import MatchResult
 from footystreams.events.structure import FrameEvent
 from footystreams.sim import SimConfig, default_tables, merge_config, run_match
-from footystreams.sim.frames import FrameRecorder, Snapshot, _FrameView, _Moment
+from footystreams.sim.frames import (
+    MAX_CARRY_M,
+    MAX_LOFT_M,
+    MAX_SPEED_MPS,
+    FrameRecorder,
+    Snapshot,
+    _FrameView,
+    _Moment,
+)
 from tests.factories.sim_play import make_play
 from tests.factories.sim_teams import make_demo_setup
 from tests.helpers.logs import without_frames_renumbered
@@ -47,7 +55,7 @@ def test_frames__switching_them_on_changes_no_other_event() -> None:
 def test_frames__players_do_not_teleport_between_frames() -> None:
     frames = [e for e in _with_frames().events if isinstance(e, FrameEvent)]
     fastest = max(p.speed_mps for frame in frames[1:] for p in frame.players)
-    assert fastest < 60.0  # kick-off and restarts jump players, but never across the pitch twice
+    assert fastest <= MAX_SPEED_MPS + 0.1  # restarts place players far away; frames make them run
 
 
 def test_frames__the_summary_ignores_them() -> None:
@@ -117,7 +125,7 @@ def test_moment__a_short_pass_is_held_and_jogged_then_flies_and_lands_with_the_r
 def test_moment__the_passer_never_jogs_further_than_the_cap() -> None:
     moment = _Moment.of(_snapshot(0.0, 0.1, A, 0.7), _snapshot(4.0, 0.9, B, 0.9))
     furthest = max(abs(_FrameView(moment, t / 10).positions()[A][0] - 0.2) for t in range(41))
-    assert furthest * 105 <= 4.0 + 0.1
+    assert furthest * 105 <= MAX_CARRY_M + 0.1
 
 
 def test_moment__a_long_moment_shows_the_ball_arrive_first_and_then_the_wait() -> None:
@@ -135,3 +143,54 @@ def test_moment__a_carried_ball_travels_with_its_carrier_all_the_way() -> None:
     half = _FrameView(_Moment.of(start, end), 1.5)
     assert abs(half.ball()[0] - 0.25) < 1e-9
     assert half.carrier() == A
+
+
+def test_recorder__a_player_the_sim_moves_far_runs_there_at_a_sprint_not_instantly() -> None:
+    play = make_play(config=FRAMES)
+    state = play.state
+    runner = state.home.players[3]
+    recorder = FrameRecorder(1)
+    recorder.reset(state)
+    start_x = runner.x
+    runner.x = start_x + 0.5  # 52 m in one step
+    state.t_period = 1.0
+    recorder.record(state, play.emit)
+    frame = next(e for e in play.emit.events if isinstance(e, FrameEvent))
+    shown = next(p for p in frame.players if p.player_id == runner.player_id)
+    assert (shown.x - start_x) * 105 == pytest.approx(MAX_SPEED_MPS, abs=0.05)
+
+
+def test_recorder__the_ball_is_loose_until_its_carrier_has_reached_it() -> None:
+    far, near = (0.1, 0.5), (0.1 + 1.0 / 105, 0.5)
+    positions = {A: far}
+    assert FrameRecorder._controlling(A, positions, (0.5, 0.5)) is None
+    assert FrameRecorder._controlling(A, {A: near}, far) == A
+    assert FrameRecorder._controlling(None, positions, far) is None
+
+
+def test_frames__players_carry_the_velocity_they_moved_with_since_the_last_frame() -> None:
+    play = make_play(config=FRAMES)
+    state = play.state
+    mover = state.home.players[3]
+    recorder = FrameRecorder(1)
+    recorder.reset(state)
+    start_x, start_y = mover.x, mover.y
+    mover.x, mover.y = start_x + 3.0 / 105, start_y - 2.0 / 68  # 3 m along, 2 m across in a second
+    state.t_period = 1.0
+    recorder.record(state, play.emit)
+    frame = next(e for e in play.emit.events if isinstance(e, FrameEvent))
+    shown = next(p for p in frame.players if p.player_id == mover.player_id)
+    assert (shown.vx, shown.vy) == pytest.approx((3.0, -2.0), abs=0.1)
+    assert shown.speed_mps == pytest.approx(3.6, abs=0.1)
+
+
+def test_moment__a_long_pass_rises_and_falls_and_a_short_one_stays_on_the_grass() -> None:
+    long_moment = _Moment.of(_snapshot(0.0, 0.1, A, 0.7), _snapshot(4.0, 0.6, B, 0.9))
+    heights = [_FrameView(long_moment, t / 10).ball_height() for t in range(41)]
+    assert heights[0] == 0.0
+    assert heights[-1] == 0.0
+    assert 0.0 < max(heights) <= MAX_LOFT_M
+    peak = heights.index(max(heights))
+    assert heights[peak - 3] < heights[peak] > heights[peak + 3]
+    short = _Moment.of(_snapshot(0.0, 0.2, A, 0.7), _snapshot(4.0, 0.25, B, 0.9))
+    assert all(_FrameView(short, t / 10).ball_height() == 0.0 for t in range(41))

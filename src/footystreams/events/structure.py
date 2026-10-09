@@ -39,6 +39,8 @@ class FramePlayer(DomainModel):
         "x": "S",
         "y": "S",
         "speed_mps": "S",
+        "vx": "S",
+        "vy": "S",
         "exhaustion": "S",
     }
 
@@ -46,6 +48,10 @@ class FramePlayer(DomainModel):
     x: float = Field(ge=0.0, le=1.0)
     y: float = Field(ge=0.0, le=1.0)
     speed_mps: float = Field(ge=0.0, default=0.0)
+    # Velocity over the last frame interval in metres per second along the pitch (x) and across
+    # it (y), so a renderer can curve a run and face a player the way he is going.
+    vx: float = 0.0
+    vy: float = 0.0
     exhaustion: Unit = 0.0
 
 
@@ -57,6 +63,7 @@ class FrameEvent(EventBase):
         ball_pos_x="S",
         ball_pos_y="S",
         carrier_id="S",
+        ball_height_m="S",
         players="S",
     )
 
@@ -65,6 +72,7 @@ class FrameEvent(EventBase):
     ball_pos_x: float = Field(ge=0.0, le=1.0)
     ball_pos_y: float = Field(ge=0.0, le=1.0)
     carrier_id: PlayerId | None = None
+    ball_height_m: float = Field(ge=0.0, default=0.0)  # above the grass: a lofted ball in flight
     players: tuple[FramePlayer, ...] = ()  # home then away, in slot order
 
 

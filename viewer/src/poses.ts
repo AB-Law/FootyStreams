@@ -1,5 +1,6 @@
 import { sampleAt, type Sample } from "./interpolate.ts";
 import { toScreen } from "./pitch.ts";
+import { SKILL_MOVE_S, skillFrame } from "./skillposes.ts";
 import type { Contest, Frame } from "./store.ts";
 
 export type PoseName = "stand" | "slide" | "fall" | "throw";
@@ -15,6 +16,9 @@ export interface Pose {
   ballFollows?: boolean;
   /** How high the player holds the ball, in pixels (a throw-in). */
   ballLift?: number;
+  /** Where the ball is, beyond the shift it shares with the player (a skill move), in pixels. */
+  ballDx?: number;
+  ballDy?: number;
 }
 
 /** How long a contest plays, in match seconds (so it is quick at 4x and 16x, as everything is). */
@@ -72,7 +76,35 @@ function tackle(contest: Extract<Contest, { kind: "tackle" }>, sample: Sample, t
   }
 }
 
+/** A skill move: the player and the ball follow the move's shape along and across his running line. */
+function skillMove(contest: Extract<Contest, { kind: "dribble" }>, move: NonNullable<Extract<Contest, { kind: "dribble" }>["move"]>, sample: Sample, t: number, out: Map<string, Pose>): void {
+  const progress = (t - contest.t) / SKILL_MOVE_S;
+  if (progress < 0 || progress >= 1) return;
+  const player = sample.players.find((candidate) => candidate.id === contest.playerId);
+  if (player === undefined) return;
+  const speed = Math.hypot(player.vx, player.vy);
+  const along = speed < 0.5 ? { x: 1, y: 0 } : { x: player.vx / speed, y: player.vy / speed };
+  // Across is toward the middle of the pitch (the touchline-to-touchline axis is y).
+  const perp = { x: -along.y, y: along.x };
+  const toMiddle = player.y > 0.5 ? -1 : 1;
+  const across = perp.y * toMiddle >= 0 ? perp : { x: -perp.x, y: -perp.y };
+  const frame = skillFrame(move, progress);
+  out.set(contest.playerId, {
+    name: "stand",
+    dx: along.x * frame.along + across.x * frame.across,
+    dy: along.y * frame.along + across.y * frame.across,
+    facing: along.x >= 0 ? 1 : -1,
+    ballDx: along.x * frame.ballAlong + across.x * frame.ballAcross,
+    ballDy: along.y * frame.ballAlong + across.y * frame.ballAcross,
+    ballLift: frame.ballLift,
+  });
+}
+
 function dribble(contest: Extract<Contest, { kind: "dribble" }>, sample: Sample, t: number, out: Map<string, Pose>): void {
+  if (contest.move !== null) {
+    skillMove(contest, contest.move, sample, t, out);
+    return;
+  }
   const progress = (t - contest.t) / DRIBBLE_S;
   if (progress < 0 || progress >= 1) return;
   const carrier = place(sample, contest.playerId);
@@ -147,7 +179,7 @@ export function posesAt(contests: readonly Contest[], sample: Sample | null, t: 
     if (t - contest.t > FALL_S + (contest.kind === "restart" ? SEARCH_S : 0)) break;
     if (contest.kind === "tackle") tackle(contest, sample, t, out);
     else if (contest.kind === "dribble") dribble(contest, sample, t, out);
-    else restart(contest, sample, frames, t, out);
+    else if (contest.kind === "restart") restart(contest, sample, frames, t, out);
   }
   return out;
 }

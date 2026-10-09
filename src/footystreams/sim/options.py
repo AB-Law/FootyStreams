@@ -73,6 +73,7 @@ class Option:
     pass_kind: PassKind | None = None
     length_m: float = 0.0
     xg: float = 0.0
+    header: bool = False  # a shot taken with the head (a corner met in the air)
 
 
 @dataclass(frozen=True, slots=True)

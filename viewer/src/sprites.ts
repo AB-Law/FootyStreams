@@ -8,13 +8,13 @@ export interface Dress {
   appearance: Appearance;
 }
 
-const SHADOW = "rgba(0, 0, 0, 0.30)";
-const OUTLINE = "#12161c";
+export const SHADOW = "rgba(0, 0, 0, 0.30)";
+export const OUTLINE = "#12161c";
 const CARRIER_MARK = "#fff36b";
-const STRIDE_SECONDS = 0.18;
+export const STRIDE_SECONDS = 0.18;
 const EYE = "#1b1b1b";
-const BOOT = "#1b1b1b";
-const KEEPER_SHORTS = "#222222";
+export const BOOT = "#1b1b1b";
+export const KEEPER_SHORTS = "#222222";
 
 /**
  * Sprite art: 7 wide, 11 tall, one string per row. h hair, s skin, e eye, a sleeve, j shirt,
@@ -37,7 +37,7 @@ type Pose = keyof typeof LEGS;
 
 const cache = new Map<string, HTMLCanvasElement>();
 
-function colourOf(char: string, dress: Dress, column: number, row: number): string | null {
+export function colourOf(char: string, dress: Dress, column: number, row: number): string | null {
   const skin = skinColour(dress.appearance);
   switch (char) {
     case "h":
@@ -125,7 +125,7 @@ function sprite(dress: Dress, pose: Pose): HTMLCanvasElement {
   return found;
 }
 
-function pixel(ctx: CanvasRenderingContext2D, colour: string, x: number, y: number, width = 1): void {
+export function pixel(ctx: CanvasRenderingContext2D, colour: string, x: number, y: number, width = 1): void {
   ctx.fillStyle = colour;
   ctx.fillRect(x, y, width, 1);
 }
@@ -204,11 +204,11 @@ export function drawBall(ctx: CanvasRenderingContext2D, x: number, y: number, he
   ctx.fillRect(x - 1, y + 1, 3, 1);
   const lift = Math.round(height);
   ctx.fillStyle = OUTLINE;
-  ctx.fillRect(x - 2, y - 2 - lift, 4, 4);
+  ctx.fillRect(x - 1, y - 2 - lift, 3, 3);
   ctx.fillStyle = "#ffffff";
-  ctx.fillRect(x - 1, y - 1 - lift, 2, 2);
+  ctx.fillRect(x - 1, y - 2 - lift, 2, 2);
   ctx.fillStyle = "#b9c2cc";
-  ctx.fillRect(x, y - lift, 1, 1);
+  ctx.fillRect(x, y - 1 - lift, 1, 1);
 }
 
 /** Fading dots behind a fast ball, so a shot reads as speed. */
@@ -217,4 +217,20 @@ export function drawTrail(ctx: CanvasRenderingContext2D, points: { x: number; y:
     ctx.fillStyle = `rgba(255, 255, 255, ${0.5 - index * 0.15})`;
     ctx.fillRect(point.x - 1, point.y - 1 - Math.round(point.height), 2, 2);
   });
+}
+
+const FOCUS = "#4cd9ff";
+
+/** A ring at a followed player's feet and a marker over his head, so he is easy to pick out. */
+export function drawFocusMark(ctx: CanvasRenderingContext2D, x: number, y: number, big: boolean): void {
+  const wide = big ? 7 : 5;
+  ctx.fillStyle = FOCUS;
+  ctx.fillRect(x - wide + 2, y + 1, wide * 2 - 3, 1);
+  ctx.fillRect(x - wide + 2, y + 3, wide * 2 - 3, 1);
+  ctx.fillRect(x - wide, y + 2, 2, 1);
+  ctx.fillRect(x + wide - 1, y + 2, 2, 1);
+  const top = y - (big ? BIG_HEIGHT + 9 : SMALL_HEIGHT + 8);
+  ctx.fillRect(x - 2, top, 5, 1);
+  ctx.fillRect(x - 1, top + 1, 3, 1);
+  ctx.fillRect(x, top + 2, 1, 1);
 }

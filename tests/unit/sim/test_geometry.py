@@ -2,6 +2,7 @@ import pytest
 
 from footystreams.sim.geometry import (
     centrality,
+    closest_point_on_segment,
     distance_m,
     frame_coordinate,
     goal_distance_m,
@@ -51,3 +52,17 @@ def test_in_penalty_area__box_edges() -> None:
 def test_centrality__centre_one_touchline_zero() -> None:
     assert centrality(0.5) == 1.0
     assert centrality(0.0) == 0.0
+
+
+def test_closest_point_on_segment__is_the_perpendicular_foot_inside_the_segment() -> None:
+    assert closest_point_on_segment((0.5, 0.9), (0.2, 0.5), (0.8, 0.5)) == pytest.approx((0.5, 0.5))
+
+
+def test_closest_point_on_segment__beyond_the_end_is_the_endpoint() -> None:
+    assert closest_point_on_segment((0.95, 0.9), (0.2, 0.5), (0.8, 0.5)) == pytest.approx(
+        (0.8, 0.5)
+    )
+
+
+def test_closest_point_on_segment__a_degenerate_segment_is_its_start() -> None:
+    assert closest_point_on_segment((0.5, 0.5), (0.2, 0.3), (0.2, 0.3)) == (0.2, 0.3)

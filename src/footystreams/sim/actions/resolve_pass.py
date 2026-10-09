@@ -140,7 +140,7 @@ def resolve_pass(play: Play, option: Option) -> float:
         touch = opposite(passer.side) if failure.deflected else passer.side
         return duration + out_of_play(play, failure.exit_point, touch)
     if failure.outcome == "intercepted":
-        record_interception(play, failure.winner, pass_id)
+        record_interception(play, failure.winner, pass_id, (start, option.end))
     else:
         spot = _inside_pitch(option.end)
         take_possession(state, failure.winner, spot[0], spot[1])

@@ -7,6 +7,8 @@ const MIN_FLIGHT_S = 0.3;
 /** Peak height of a ball in the air, in screen pixels, for a full loft. */
 const MAX_LIFT_PX = 12;
 const DEFAULT_SHOT_LOFT = 0.15;
+/** A header leaves the head about 2.1 m up: in the top-down pixels the flights are measured in (2.86 to the metre). */
+const HEADER_LAUNCH_PX = 2.1 * (300 / 105);
 /** A curve of 1 puts the control point 0.7 of the shot length beside the middle: the ball itself bows by about a third of that. */
 const MAX_BEND = 0.7;
 
@@ -19,6 +21,8 @@ export interface Flight {
   bend: number;
   lift: number;
   fast: boolean;
+  /** Height above the grass at the start, in pixels, falling away as the ball flies (a header). */
+  launch?: number;
 }
 
 export interface BallPoint {
@@ -50,7 +54,8 @@ export function shotFlight(event: ShotEvent, start: number, goalX: 0 | 1): Fligh
   const { length } = metres(event.pos, to);
   const speed = event.speed_mps ?? SHOT_SPEED_MPS;
   const lift = (event.loft ?? DEFAULT_SHOT_LOFT) * MAX_LIFT_PX;
-  return { t0: start, t1: start + duration(length, speed), from: event.pos, to, bend: (event.curve ?? 0) * MAX_BEND, lift, fast: true };
+  const launch = event.body_part === "head" ? HEADER_LAUNCH_PX : undefined;
+  return { t0: start, t1: start + duration(length, speed), from: event.pos, to, bend: (event.curve ?? 0) * MAX_BEND, lift, fast: true, ...(launch === undefined ? {} : { launch }) };
 }
 
 /** The ball's place `t` seconds into the match on this flight (clamped to its ends). */
@@ -66,7 +71,7 @@ export function ballOnFlight(flight: Flight, t: number): BallPoint {
   return {
     x: flight.from.x + x / PITCH_LENGTH_M,
     y: flight.from.y + y / PITCH_WIDTH_M,
-    height: flight.lift * 4 * progress * (1 - progress),
+    height: flight.lift * 4 * progress * (1 - progress) + (flight.launch ?? 0) * (1 - progress),
     progress,
   };
 }

@@ -1,8 +1,11 @@
 export const WIDTH = 320;
-export const HEIGHT = 180;
+export const HEIGHT = 226;
 
-/** The playing surface in screen pixels; the strip above holds the scoreboard. */
-export const PITCH = { x: 10, y: 26, width: 300, height: 148 } as const;
+/**
+ * The playing surface in screen pixels; the strip above holds the scoreboard. It keeps the real
+ * 105 m x 68 m shape (about 2.86 px per metre both ways), so circles are round and runs are not stretched.
+ */
+export const PITCH = { x: 10, y: 26, width: 300, height: 194 } as const;
 
 const GRASS_LIGHT = "#3f8f3f";
 const GRASS_DARK = "#388538";
@@ -18,8 +21,9 @@ const SIX_DEPTH = 5.5 / 105;
 const SIX_WIDTH = 18.3 / 68;
 const SPOT_DEPTH = 11 / 105;
 const GOAL_WIDTH = 7.3 / 68;
-const GOAL_DEPTH_PX = 3;
-const CIRCLE_RADIUS_PX = 14;
+const GOAL_DEPTH_PX = 5;
+const CIRCLE_RADIUS_M = 9.15;
+const PIXELS_PER_METRE = PITCH.width / 105;
 
 export function toScreen(x: number, y: number): { x: number; y: number } {
   return { x: Math.round(PITCH.x + x * PITCH.width), y: Math.round(PITCH.y + y * PITCH.height) };
@@ -38,13 +42,19 @@ function outline(ctx: CanvasRenderingContext2D, x: number, y: number, width: num
 }
 
 /** A one-pixel circle by the midpoint algorithm (canvas arcs would be anti-aliased). */
-function circle(ctx: CanvasRenderingContext2D, centreX: number, centreY: number, radius: number): void {
+function circle(
+  ctx: CanvasRenderingContext2D,
+  centreX: number,
+  centreY: number,
+  radius: number,
+  keep: (dx: number, dy: number) => boolean = () => true,
+): void {
   let x = radius;
   let y = 0;
   let error = 1 - radius;
   while (x >= y) {
     for (const [dx, dy] of [[x, y], [y, x], [-y, x], [-x, y], [-x, -y], [-y, -x], [y, -x], [x, -y]] as const) {
-      rect(ctx, centreX + dx, centreY + dy, 1, 1);
+      if (keep(dx, dy)) rect(ctx, centreX + dx, centreY + dy, 1, 1);
     }
     y++;
     if (error < 0) {
@@ -71,7 +81,13 @@ function drawEnd(ctx: CanvasRenderingContext2D, leftEnd: boolean): void {
   ctx.fillStyle = LINE;
   outline(ctx, ...place(box.depth, box.height));
   outline(ctx, ...place(six.depth, six.height));
-  rect(ctx, edge + direction * SPOT_DEPTH * PITCH.width, middle, 1, 1);
+  const spotX = edge + direction * SPOT_DEPTH * PITCH.width;
+  rect(ctx, spotX, middle, 1, 1);
+  // The "D": the part of the 9.15 m circle round the spot that lies outside the box.
+  const boxEdge = edge + direction * box.depth;
+  circle(ctx, Math.round(spotX), Math.round(middle), Math.round(CIRCLE_RADIUS_M * PIXELS_PER_METRE), (dx) =>
+    direction > 0 ? spotX + dx > boxEdge : spotX + dx < boxEdge,
+  );
   const goalHeight = GOAL_WIDTH * PITCH.height;
   ctx.fillStyle = GOAL_NET;
   outline(ctx, leftEnd ? edge - GOAL_DEPTH_PX : edge, middle - goalHeight / 2, GOAL_DEPTH_PX, goalHeight);
@@ -129,6 +145,18 @@ function drawGrassTexture(ctx: CanvasRenderingContext2D): void {
 }
 
 function drawCornerFlags(ctx: CanvasRenderingContext2D): void {
+  ctx.fillStyle = LINE;
+  const arc = Math.round(PIXELS_PER_METRE);
+  for (const [cx, cy] of [
+    [PITCH.x, PITCH.y],
+    [PITCH.x + PITCH.width - 1, PITCH.y],
+    [PITCH.x, PITCH.y + PITCH.height - 1],
+    [PITCH.x + PITCH.width - 1, PITCH.y + PITCH.height - 1],
+  ] as const) {
+    const inside = (dx: number, dy: number): boolean =>
+      (cx === PITCH.x ? dx >= 0 : dx <= 0) && (cy === PITCH.y ? dy >= 0 : dy <= 0);
+    circle(ctx, cx, cy, arc, inside);
+  }
   ctx.fillStyle = FLAG;
   for (const x of [PITCH.x, PITCH.x + PITCH.width - 1]) {
     for (const y of [PITCH.y, PITCH.y + PITCH.height - 1]) ctx.fillRect(x, y - 3, 1, 4);
@@ -153,7 +181,7 @@ function render(): HTMLCanvasElement {
   ctx.fillStyle = LINE;
   outline(ctx, PITCH.x, PITCH.y, PITCH.width, PITCH.height);
   rect(ctx, PITCH.x + PITCH.width / 2, PITCH.y, 1, PITCH.height);
-  circle(ctx, PITCH.x + PITCH.width / 2, PITCH.y + PITCH.height / 2, CIRCLE_RADIUS_PX);
+  circle(ctx, PITCH.x + PITCH.width / 2, PITCH.y + PITCH.height / 2, Math.round(CIRCLE_RADIUS_M * PIXELS_PER_METRE));
   rect(ctx, PITCH.x + PITCH.width / 2 - 1, PITCH.y + PITCH.height / 2 - 1, 3, 3);
   drawEnd(ctx, true);
   drawEnd(ctx, false);

@@ -1,4 +1,4 @@
-import { sampleAt } from "./interpolate.ts";
+import { sampleAt, type Sample } from "./interpolate.ts";
 import { HEIGHT, WIDTH, toScreen } from "./pitch.ts";
 import type { Frame } from "./store.ts";
 
@@ -22,8 +22,14 @@ function clamp(value: number, low: number, high: number): number {
   return Math.min(Math.max(value, low), high);
 }
 
-/** Where the camera is at `t`: centred on the recent ball, with the ball never near the edge. */
-export function cameraAt(frames: readonly Frame[], t: number, zoom: number): Camera {
+/** The spot the camera cares about in a sample: the chosen player if he is on, else the ball. */
+function followed(sample: Sample, focusId: string | null): { x: number; y: number } {
+  const player = focusId === null ? undefined : sample.players.find((candidate) => candidate.id === focusId);
+  return player === undefined ? toScreen(sample.ballX, sample.ballY) : toScreen(player.x, player.y);
+}
+
+/** Where the camera is at `t`: centred on the recent ball (or the followed player), never near the edge. */
+export function cameraAt(frames: readonly Frame[], t: number, zoom: number, focusId: string | null = null): Camera {
   const width = WIDTH / zoom;
   const height = HEIGHT / zoom;
   if (zoom <= 1) return { x: 0, y: 0, zoom: 1 };
@@ -33,7 +39,7 @@ export function cameraAt(frames: readonly Frame[], t: number, zoom: number): Cam
   for (let step = 0; step < FOLLOW_SAMPLES; step++) {
     const sample = sampleAt(frames, t - (step * FOLLOW_SECONDS) / (FOLLOW_SAMPLES - 1));
     if (sample === null) continue;
-    const at = toScreen(sample.ballX, sample.ballY);
+    const at = followed(sample, focusId);
     if (step === 0) ball = at;
     centreX += at.x / FOLLOW_SAMPLES;
     centreY += at.y / FOLLOW_SAMPLES;
@@ -44,7 +50,7 @@ export function cameraAt(frames: readonly Frame[], t: number, zoom: number): Cam
   return { x: clamp(centreX - width / 2, 0, WIDTH - width), y: clamp(centreY - height / 2, 0, HEIGHT - height), zoom };
 }
 
-/** A point in the world as it appears on the 320x180 screen. */
+/** A point in the world as it appears on the 320x226 screen. */
 export function toView(camera: Camera, point: { x: number; y: number }): { x: number; y: number } {
   return { x: (point.x - camera.x) * camera.zoom, y: (point.y - camera.y) * camera.zoom };
 }
