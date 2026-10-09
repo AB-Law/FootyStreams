@@ -35,6 +35,7 @@ def _without_context(event: MatchEvent) -> dict[str, object]:
         data["ctx"].pop(name)
     for name in (
         "end_pos",
+        "skill_move",
         "progressive",
         "xt_gain",
         "big_chance",

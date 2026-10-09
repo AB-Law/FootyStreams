@@ -48,6 +48,7 @@ class DribbleEvent(EventBase):
         player_id="S",
         outcome="S",
         end_pos="S",
+        skill_move="S",
     )
 
     type: Literal["dribble"] = "dribble"
@@ -55,6 +56,20 @@ class DribbleEvent(EventBase):
     player_id: PlayerId
     outcome: Literal["success", "tackled", "lost"] = "success"
     end_pos: Pos | None = None
+    # How the take-on was done: a look for the renderer, never an input to the outcome. None is
+    # a plain run with the ball (and every dribble in logs from before schema 0.6.0).
+    skill_move: (
+        Literal[
+            "knock_past",
+            "step_over",
+            "drag_back",
+            "cut_inside",
+            "nutmeg",
+            "roulette",
+            "rainbow_flick",
+        ]
+        | None
+    ) = None
 
 
 class TackleEvent(EventBase):

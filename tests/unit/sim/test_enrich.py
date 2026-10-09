@@ -42,9 +42,14 @@ def test_pass_fields__a_short_or_backward_pass_is_not_progressive() -> None:
 
 def test_dribble_fields__only_a_kept_ball_has_an_end() -> None:
     play = _play(ON)
-    assert dribble_fields(play, _option((0.6, 0.4)), kept_ball=False) == {}
+    assert "end_pos" not in dribble_fields(play, _option((0.6, 0.4)), kept_ball=False)
     kept = dribble_fields(play, _option((0.6, 0.4)), kept_ball=True)
     assert kept["end_pos"] == {"x": 0.6, "y": 0.4}
+
+
+def test_dribble_fields__records_how_the_take_on_was_done_and_nothing_with_context_off() -> None:
+    assert "skill_move" in dribble_fields(_play(ON), _option((0.6, 0.4)), kept_ball=True)
+    assert dribble_fields(_play(OFF), _option((0.6, 0.4)), kept_ball=True) == {}
 
 
 def test_shot_fields__big_chance_starts_at_the_configured_xg() -> None:

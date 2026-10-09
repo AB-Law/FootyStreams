@@ -78,7 +78,7 @@ Notation: `field: type` — only the type-specific fields are listed; base field
 | `type` | Fields |
 |--------|--------|
 | `pass` | `passer_id, receiver_id` (intended), `kind: short\|long\|through\|cross\|cutback\|switch\|back\|header\|lofted`, `outcome: complete\|intercepted\|out_of_play\|blocked\|offside\|overhit`, `end_pos: Pos`, `length_m: float`, `progressive: bool`, `key_pass: bool` (the pass directly led to a shot — set on the pass event only retroactively via the shot's `assist_id`, so on the pass it is `False` and shot carries truth; see note), `under_pressure: Unit`, `xt_gain: float`. |
-| `dribble` | `player_id`, `outcome: success\|dispossessed\|fouled\|out_of_play`, `end_pos`, `distance_m`, `beaten_player_id\|None` |
+| `dribble` | `player_id`, `outcome: success\|dispossessed\|fouled\|out_of_play`, `end_pos`, `distance_m`, `beaten_player_id\|None`, `skill_move: knock_past\|step_over\|drag_back\|cut_inside\|nutmeg\|roulette\|rainbow_flick\|None` (how the take-on was done, chosen from the dribbler's dribbling, flair, agility, balance and pace and the defender's distance, the pressure and the carrier's width; a look for the renderer, never an input to the outcome; `None` is a plain run) |
 | `tackle` | `tackler_id, carrier_id`, `outcome: won\|lost\|foul`, `won_possession: bool`, `foul_event_id\|None` |
 | `interception` | `player_id`, `passer_id`, `intended_receiver_id`, `kind: read\|block\|cut_out` |
 | `clearance` | `player_id`, `under_pressure: Unit`, `outcome: out_of_play\|to_teammate\|to_opponent\|keeper_claimed`, `end_pos` |

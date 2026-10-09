@@ -12,6 +12,8 @@ from footystreams.sim.geometry import Point
 from footystreams.sim.mathx import clamp
 from footystreams.sim.options import Option
 from footystreams.sim.play import Play
+from footystreams.sim.pressure import nearest_opponents
+from footystreams.sim.skill_moves import choose_skill_move
 from footystreams.sim.state import PlayerState
 
 PRECISION = 4
@@ -40,10 +42,24 @@ def pass_fields(play: Play, start: Point, option: Option) -> dict[str, object]:
 
 
 def dribble_fields(play: Play, option: Option, *, kept_ball: bool) -> dict[str, object]:
-    """Return where a successful dribble ended (nothing when the ball was lost)."""
-    if not play.cfg.context.enabled or not kept_ball:
+    """Return how a dribble was done and, when he kept the ball, where it ended."""
+    if not play.cfg.context.enabled:
         return {}
-    return {"end_pos": _position(option.end)}
+    fields: dict[str, object] = {"skill_move": _skill_move(play, option)}
+    if kept_ball:
+        fields["end_pos"] = _position(option.end)
+    return fields
+
+
+def _skill_move(play: Play, option: Option) -> str | None:
+    """The move the carrier tries (a look only: the outcome was rolled without it)."""
+    state = play.state
+    carrier = state.carrier
+    nearest = nearest_opponents(state.defenders, carrier.x, carrier.y, 1)
+    gap = nearest[0][0] if nearest else None
+    frame_y = frame_value(carrier.y, state.attackers.attack_dir)
+    move = choose_skill_move(carrier.skills, gap, option.pressure, frame_y, state.tick)
+    return None if move is None else move.value
 
 
 def shot_fields(play: Play, xg: float, shooter: PlayerState, outcome: str) -> dict[str, object]:
