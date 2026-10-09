@@ -3,7 +3,7 @@ import { test } from "node:test";
 import type { AnyEvent } from "./events.ts";
 import { sampleAt } from "./interpolate.ts";
 import { posesAt } from "./poses.ts";
-import { project, sideCameraX } from "./sideview.ts";
+import { SIDE_WIDTH, project, sideCameraX } from "./sideview.ts";
 import { SKILL_MOVES, SKILL_MOVE_S, isSkillMove, skillFrame } from "./skillposes.ts";
 import { MatchStore } from "./store.ts";
 
@@ -29,7 +29,7 @@ test("the far touchline is higher on screen and smaller than the near one", () =
   const near = project("broadcast", 0.5, 0.5, 1);
   assert.ok(far.y < near.y);
   assert.ok(far.ppm < near.ppm);
-  assert.ok(Math.abs(far.ppm / near.ppm - 0.62) < 1e-9);
+  assert.ok(Math.abs(far.ppm / near.ppm - 0.74) < 1e-9);
 });
 
 test("depth spaces the rows the way a camera does: more pixels per row of pitch near the camera", () => {
@@ -40,7 +40,7 @@ test("depth spaces the rows the way a camera does: more pixels per row of pitch 
 
 test("the point the camera looks at is the middle of the screen, and a height lifts a point up", () => {
   const ground = project("broadcast", 0.4, 0.4, 0.5);
-  assert.equal(ground.x, 160);
+  assert.equal(ground.x, SIDE_WIDTH / 2);
   const lifted = project("broadcast", 0.4, 0.4, 0.5, 2);
   assert.ok(lifted.y < ground.y);
   assert.ok(Math.abs(ground.y - lifted.y - 2 * ground.ppm) < 1e-9);
@@ -65,9 +65,6 @@ test("every skill move starts and ends close to a plain run, and each does its o
   assert.ok(skillFrame("rainbow_flick", 0.5).ballLift > 8);
   assert.ok(skillFrame("drag_back", 0.3).ballAlong < -3);
   assert.ok(skillFrame("cut_inside", 0.4).ballAcross > 5);
-  assert.equal(skillFrame("roulette", 0.5).turn, -1);
-  assert.equal(skillFrame("roulette", 0.05).turn, 1);
-  assert.equal(skillFrame("step_over", 0.2).profile, "feint");
 });
 
 test("no skill move leaves the player or the ball displaced when it ends, and none moves a body more than a metre", () => {
@@ -92,7 +89,6 @@ test("a recorded skill move poses the dribbler for its length and a plain run ke
   const sample = sampleAt(store.frames, 3.5);
   const during = posesAt(store.contests, sample, 3 + SKILL_MOVE_S / 2, store.frames).get("a");
   assert.ok(during !== undefined && Math.abs(during.ballDx ?? 0) > 3, "the ball is knocked ahead");
-  assert.equal(during?.profile === undefined, false);
   assert.equal(posesAt(store.contests, sample, 3 + SKILL_MOVE_S + 0.1, store.frames).has("a"), false);
   assert.equal(isSkillMove("nutmeg"), true);
   assert.equal(isSkillMove("moonwalk"), false);

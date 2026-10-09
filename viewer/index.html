@@ -9,7 +9,7 @@
       body { margin: 0; background: #0a0f15; color: #d7e0ea; font: 14px system-ui, sans-serif; min-height: 100vh; }
       #app { display: grid; grid-template-columns: 250px minmax(0, 1fr) 270px; gap: 12px; padding: 12px; align-items: start; max-width: 1900px; margin: 0 auto; }
       #stage { justify-self: center; padding: 10px; background: #1a222c; border-radius: 10px; box-shadow: 0 0 0 2px var(--edge); }
-      canvas#screen { display: block; image-rendering: pixelated; width: 960px; height: 540px; background: #000; }
+      canvas#screen { display: block; image-rendering: pixelated; width: 960px; height: 678px; background: #000; }
       #controls { display: flex; gap: 8px; align-items: center; margin-top: 10px; width: 100%; flex-wrap: wrap; }
       #scrubber { flex: 1; min-width: 80px; }
       button, select { background: #243344; color: inherit; border: 1px solid #3b5068; border-radius: 4px; padding: 4px 10px; font: inherit; cursor: pointer; }
@@ -59,13 +59,14 @@
     <div id="app">
       <aside id="lineups" class="panel"></aside>
       <main id="stage">
-        <canvas id="screen" width="320" height="226"></canvas>
+        <canvas id="screen" width="640" height="452"></canvas>
         <div id="controls">
           <button id="play" type="button">Play</button>
           <button id="view" type="button" title="Switch between the broadcast and top-down views">Top-down</button>
           <button id="zoom-1" type="button" title="Whole pitch">Full</button>
           <button id="zoom-2" type="button" title="Follow the ball">2x</button>
           <button id="zoom-3" type="button" title="Close in">3x</button>
+          <button id="names" type="button" title="Name tags in the broadcast view: the player on the ball, everyone, or none">Names: carrier</button>
           <span class="gap"></span>
           <button id="speed-1" type="button">1x</button>
           <button id="speed-4" type="button">4x</button>

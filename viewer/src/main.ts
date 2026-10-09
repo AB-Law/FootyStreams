@@ -10,10 +10,11 @@ import { posesAt } from "./poses.ts";
 import { refereeTrack } from "./referee.ts";
 import { pickKits } from "./palette.ts";
 import { Playback, SPEEDS } from "./playback.ts";
-import { HEIGHT, WIDTH } from "./pitch.ts";
+import { WIDTH } from "./pitch.ts";
 import { Panels } from "./panels.ts";
 import { Scene } from "./scene.ts";
-import { SideView, sideCameraX, type SideMode } from "./sideview.ts";
+import { ScenePlayer } from "./sceneplay.ts";
+import { NAME_MODES, SIDE_HEIGHT, SIDE_WIDTH, SideView, sideCameraX, type NameMode, type SideMode } from "./sideview.ts";
 import { loadReplay } from "./source.ts";
 import { StatsIndex, formatClock } from "./stats.ts";
 import { MatchStore } from "./store.ts";
@@ -25,6 +26,10 @@ const SIDE_PANELS_PX = 250 + 270 + 84;
 const STAGE_PADDING_PX = 64;
 const DEFAULT_REPLAY = "replays/replay";
 const DEFAULT_ZOOM: Zoom = 2;
+/** The canvas has twice the pixels of the logical 320 x 226 screen that the scoreboard and top-down view are drawn on. */
+const PIXEL_RATIO = SIDE_WIDTH / WIDTH;
+/** The page is shown at the largest scale that fits, in steps of a quarter so a window resize is not jumpy. */
+const SCALE_STEP = 4;
 /** Dead ball time (throw-ins, goal kicks, injuries) is played this much faster. */
 const DEAD_TIME_BOOST = 3;
 
@@ -34,13 +39,14 @@ function element<T extends HTMLElement>(id: string): T {
   return found as T;
 }
 
-/** The largest whole-number scale that fits, so pixels stay square and crisp. */
+/** The largest scale that fits (in quarter steps, never below actual size), so pixels stay square and crisp. */
 function fitCanvas(canvas: HTMLCanvasElement): void {
   const wide = window.innerWidth >= SIDE_BY_SIDE_FROM_PX;
   const room = wide ? window.innerWidth - SIDE_PANELS_PX : window.innerWidth - STAGE_PADDING_PX;
-  const scale = Math.max(1, Math.floor(Math.min(room / WIDTH, (window.innerHeight - 140) / HEIGHT)));
-  canvas.style.width = `${WIDTH * scale}px`;
-  canvas.style.height = `${HEIGHT * scale}px`;
+  const fit = Math.min(room / SIDE_WIDTH, (window.innerHeight - 140) / SIDE_HEIGHT);
+  const scale = Math.max(1, Math.floor(fit * SCALE_STEP) / SCALE_STEP);
+  canvas.style.width = `${SIDE_WIDTH * scale}px`;
+  canvas.style.height = `${SIDE_HEIGHT * scale}px`;
 }
 
 async function start(): Promise<void> {
@@ -66,7 +72,9 @@ async function start(): Promise<void> {
 
   const scene = new Scene(meta);
   const sideView = new SideView(meta);
+  const scenes = new ScenePlayer(store, meta);
   let view: "side" | "top" = params.get("view") === "top" ? "top" : "side";
+  let names: NameMode = NAME_MODES.includes(params.get("names") as NameMode) ? (params.get("names") as NameMode) : "carrier";
   const kits = pickKits(meta);
   let focusId: string | null = null;
   const playback = new Playback();
@@ -109,6 +117,7 @@ async function start(): Promise<void> {
     element<HTMLButtonElement>("zoom-1").textContent = side ? "Wide" : "Full";
     element<HTMLButtonElement>("zoom-2").textContent = side ? "Broadcast" : "2x";
     element<HTMLButtonElement>("zoom-3").style.display = side ? "none" : "";
+    element<HTMLButtonElement>("names").style.display = side ? "" : "none";
     viewButton.textContent = side ? "Top-down" : "Broadcast view";
   };
   viewButton.addEventListener("click", () => {
@@ -118,6 +127,19 @@ async function start(): Promise<void> {
   });
   labelZoomButtons();
 
+  // Name tags in the broadcast view: just the player on the ball (and the one followed), everyone, or none.
+  const namesButton = element<HTMLButtonElement>("names");
+  const labelNames = (): void => {
+    namesButton.textContent = `Names: ${names}`;
+  };
+  namesButton.addEventListener("click", () => {
+    names = NAME_MODES[(NAME_MODES.indexOf(names) + 1) % NAME_MODES.length] ?? "carrier";
+    labelNames();
+    render();
+  });
+  labelNames();
+
+  const debug: { locate: (playerId: string) => { x: number; y: number } | null; scenes: ScenePlayer } = { locate: () => null, scenes };
   const render = (): void => {
     const sample = sampleAt(store.frames, playback.t);
     const overlays = overlaysAt(store.marks, playback.t, playback.speed);
@@ -132,25 +154,32 @@ async function start(): Promise<void> {
       focusId,
     };
     let locate: (playerId: string) => { x: number; y: number } | null;
+    context.setTransform(1, 0, 0, 1, 0, 0);
     if (view === "side") {
       const mode: SideMode = zoom === 1 ? "wide" : "broadcast";
       const camX = sideCameraX(store.frames, playback.t, mode, focusId);
-      sideView.draw(context, sample, extras, mode, camX);
-      locate = (playerId) => (sample === null ? null : sideView.locate(sample, mode, camX, playerId));
+      sideView.draw(context, sample, extras, mode, camX, scenes.at(playback.t, sample), names);
+      // The view is drawn at full resolution; the scoreboard and overlays are placed in logical pixels.
+      locate = (playerId) => {
+        const at = sample === null ? null : sideView.locate(sample, mode, camX, playerId);
+        return at === null ? null : { x: at.x / PIXEL_RATIO, y: at.y / PIXEL_RATIO };
+      };
     } else {
       const camera = cameraAt(store.frames, playback.t, focusId !== null && zoom < 2 ? 2 : zoom, focusId);
-      context.save();
-      context.setTransform(camera.zoom, 0, 0, camera.zoom, -camera.x * camera.zoom, -camera.y * camera.zoom);
+      const ratio = PIXEL_RATIO * camera.zoom;
+      context.setTransform(ratio, 0, 0, ratio, -camera.x * ratio, -camera.y * ratio);
       scene.draw(context, sample, { ...extras, big: camera.zoom > 1 });
-      context.restore();
       locate = (playerId) => {
         const world = sample === null ? null : scene.screenPosition(sample, playerId);
         return world === null ? null : toView(camera, world);
       };
     }
+    context.setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0);
     drawScoreboard(context, sample, meta, kits, playback.t >= store.duration);
     drawOverlays(context, overlays, meta, locate);
     if (hurrying()) drawText(context, ">>", WIDTH - 14, 24, "#ffd23f", 2);
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    debug.locate = locate;
     scrubber.value = String(Math.floor(playback.t));
     playButton.textContent = playback.playing ? "Pause" : "Play";
     time.textContent = `${formatClock(playback.t)} / ${formatClock(store.duration)}`;
@@ -193,7 +222,7 @@ async function start(): Promise<void> {
   render();
   requestAnimationFrame(frame);
   // Debug hook for checking the picture from the console or a test driver.
-  Object.assign(window, { viewer: { store, playback, render } });
+  Object.assign(window, { viewer: { store, playback, render, debug } });
 }
 
 void start();
