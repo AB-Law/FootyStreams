@@ -37,7 +37,9 @@ class Process:
             "--cursor-every", str(CURSOR_EVERY), "--starve-grace-s", "120", "--log-level", "ERROR",
         ]  # fmt: skip
         self._errors = (directory / f"{db.stem}.{pace.replace(':', '_')}.err").open("w")
-        flags = subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0
+        flags = 0
+        if sys.platform == "win32":  # an if statement: mypy skips it where the name is missing
+            flags = subprocess.CREATE_NEW_PROCESS_GROUP
         self.process = subprocess.Popen(  # noqa: S603 - our own interpreter, fixed arguments
             arguments, stdout=subprocess.PIPE, stderr=self._errors, text=True, creationflags=flags
         )
