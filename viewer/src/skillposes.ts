@@ -31,41 +31,61 @@ function plain(profile: ProfilePose): SkillFrame {
   return { along: 0, across: 0, ballAlong: 0, ballAcross: 0, ballLift: 0, profile, turn: 1 };
 }
 
+/** Every offset eases to nothing over the last part of a move, so nothing snaps back when it ends. */
+const FADE_FROM = 0.7;
+
+function faded(frame: SkillFrame, progress: number): SkillFrame {
+  const keep = 1 - SMOOTH(Math.min(Math.max((progress - FADE_FROM) / (1 - FADE_FROM), 0), 1));
+  return {
+    ...frame,
+    along: frame.along * keep,
+    across: frame.across * keep,
+    ballAlong: frame.ballAlong * keep,
+    ballAcross: frame.ballAcross * keep,
+    ballLift: frame.ballLift * keep,
+  };
+}
+
 /**
  * The shape of each skill move over `progress` from 0 to 1, in the pixels of the top-down view
- * (about 2.9 to the metre). They are drawn from the sim's choice alone: the outcome decides whether
- * the defender then gets the ball, which the contest code shows separately.
+ * (about 2.9 to the metre). The real positions in the frames already carry the player and the ball
+ * on, so a move only adds a flourish that starts and ends at nothing: the body shifts by a metre at
+ * most (he must not walk through the defender) and the ball by up to three.
  */
 export function skillFrame(move: SkillMoveName, progress: number): SkillFrame {
   const p = Math.min(Math.max(progress, 0), 1);
+  return faded(shape(move, p), p);
+}
+
+function shape(move: SkillMoveName, p: number): SkillFrame {
   switch (move) {
     case "knock_past":
-      // The ball is pushed well ahead and he sprints on to it.
-      return { ...plain("lean"), ballAlong: 14 * SMOOTH(Math.min(p / 0.5, 1)), along: 10 * SMOOTH(Math.max((p - 0.3) / 0.7, 0)) };
+      // The ball is pushed a little ahead and he strides on to it.
+      return { ...plain("lean"), ballAlong: 8 * HUMP(Math.min(p / 0.8, 1)), along: 2 * HUMP(p) };
     case "step_over":
       // A foot swung over the ball one way, then a push off the other.
-      return { ...plain(p < 0.45 ? "feint" : "stepA"), across: 5 * Math.sin(Math.PI * 2 * p) * (p < 0.7 ? 1 : 0.3), along: 4 * SMOOTH(p) };
+      return { ...plain(p < 0.45 ? "feint" : "stepA"), across: 2.5 * Math.sin(Math.PI * 2 * p), along: 1.5 * HUMP(p) };
     case "drag_back":
       // The ball is pulled back under the sole, then he turns away with it.
-      return { ...plain(p < 0.5 ? "kick" : "stepB"), ballAlong: -7 * HUMP(Math.min(p / 0.6, 1)), along: -2 * HUMP(p) };
+      return { ...plain(p < 0.5 ? "kick" : "stepB"), ballAlong: -6 * HUMP(Math.min(p / 0.6, 1)), along: -1.5 * HUMP(p) };
     case "cut_inside":
       // He drops a shoulder and takes the ball across his body toward the middle.
-      return { ...plain("lean"), across: 9 * SMOOTH(p), ballAcross: 11 * SMOOTH(Math.min(p / 0.6, 1)), along: 5 * p };
+      return { ...plain("lean"), across: 2.5 * HUMP(p), ballAcross: 8 * HUMP(Math.min(p / 0.7, 1)), along: 2 * HUMP(p) };
     case "nutmeg":
-      // The ball goes through the defender's legs and he runs round to collect it.
-      return { ...plain(p < 0.35 ? "kick" : "lean"), ballAlong: 16 * SMOOTH(Math.min(p / 0.45, 1)), along: 14 * SMOOTH(Math.max((p - 0.25) / 0.75, 0)) };
+      // The ball goes through the defender's legs and he steps round to collect it.
+      return { ...plain(p < 0.35 ? "kick" : "lean"), ballAlong: 9 * HUMP(Math.min(p / 0.8, 1)), across: 1.5 * HUMP(p) };
     case "roulette":
       // A full turn over the ball, the ball dragged round in a small circle.
       return {
         ...plain(p < 0.5 ? "stepA" : "stepB"),
         turn: p > 0.3 && p < 0.65 ? -1 : 1,
-        ballAlong: 4 * Math.sin(2 * Math.PI * p),
-        ballAcross: 4 * (1 - Math.cos(2 * Math.PI * p)),
-        along: 6 * SMOOTH(p),
+        ballAlong: 3 * Math.sin(2 * Math.PI * p),
+        ballAcross: 3 * (1 - Math.cos(2 * Math.PI * p)),
+        along: 1.5 * HUMP(p),
       };
     case "rainbow_flick":
       // The ball flicked up and over his own head and the defender's.
-      return { ...plain("flick"), ballAlong: 20 * SMOOTH(Math.min(p / 0.8, 1)), ballLift: 16 * HUMP(Math.min(p / 0.9, 1)), along: 12 * SMOOTH(Math.max((p - 0.2) / 0.8, 0)) };
+      return { ...plain("flick"), ballAlong: 10 * HUMP(Math.min(p / 0.9, 1)), ballLift: 16 * HUMP(Math.min(p / 0.9, 1)), along: 2 * HUMP(p) };
   }
 }
 

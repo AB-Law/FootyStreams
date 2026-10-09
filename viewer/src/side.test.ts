@@ -61,13 +61,28 @@ test("every skill move starts and ends close to a plain run, and each does its o
     const start = skillFrame(move, 0);
     assert.ok(Math.hypot(start.ballAlong, start.ballAcross, start.ballLift) < 1e-9, `${move} starts with the ball at his feet`);
   }
-  assert.ok(skillFrame("nutmeg", 0.5).ballAlong > 8);
+  assert.ok(skillFrame("nutmeg", 0.4).ballAlong > 5);
   assert.ok(skillFrame("rainbow_flick", 0.5).ballLift > 8);
   assert.ok(skillFrame("drag_back", 0.3).ballAlong < -3);
-  assert.ok(skillFrame("cut_inside", 1).across > 5);
+  assert.ok(skillFrame("cut_inside", 0.4).ballAcross > 5);
   assert.equal(skillFrame("roulette", 0.5).turn, -1);
   assert.equal(skillFrame("roulette", 0.05).turn, 1);
   assert.equal(skillFrame("step_over", 0.2).profile, "feint");
+});
+
+test("no skill move leaves the player or the ball displaced when it ends, and none moves a body more than a metre", () => {
+  for (const move of SKILL_MOVES) {
+    const end = skillFrame(move, 1);
+    assert.ok(Math.hypot(end.along, end.across, end.ballAlong, end.ballAcross, end.ballLift) < 1e-9, `${move} ends clean`);
+    for (let step = 0; step <= 40; step++) {
+      const frame = skillFrame(move, step / 40);
+      assert.ok(Math.hypot(frame.along, frame.across) <= 3.5, `${move} moves his body ${Math.hypot(frame.along, frame.across)} px`);
+      if (step < 40) {
+        const next = skillFrame(move, (step + 1) / 40);
+        assert.ok(Math.hypot(next.ballAlong - frame.ballAlong, next.ballAcross - frame.ballAcross) < 4, `${move} ball jumps at ${step}`);
+      }
+    }
+  }
 });
 
 test("a recorded skill move poses the dribbler for its length and a plain run keeps the old sway", () => {
@@ -76,7 +91,7 @@ test("a recorded skill move poses the dribbler for its length and a plain run ke
   store.onEvent({ type: "dribble", team: "home", clock, ctx: { score_home: 0, score_away: 0, attack_dir: 1 }, participants: [], pos: null, player_id: "a", outcome: "success", skill_move: "nutmeg" } as AnyEvent);
   const sample = sampleAt(store.frames, 3.5);
   const during = posesAt(store.contests, sample, 3 + SKILL_MOVE_S / 2, store.frames).get("a");
-  assert.ok(during !== undefined && (during.ballDx ?? 0) > 5, "the ball is knocked ahead");
+  assert.ok(during !== undefined && Math.abs(during.ballDx ?? 0) > 3, "the ball is knocked ahead");
   assert.equal(during?.profile === undefined, false);
   assert.equal(posesAt(store.contests, sample, 3 + SKILL_MOVE_S + 0.1, store.frames).has("a"), false);
   assert.equal(isSkillMove("nutmeg"), true);
