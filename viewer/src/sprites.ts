@@ -204,11 +204,11 @@ export function drawBall(ctx: CanvasRenderingContext2D, x: number, y: number, he
   ctx.fillRect(x - 1, y + 1, 3, 1);
   const lift = Math.round(height);
   ctx.fillStyle = OUTLINE;
-  ctx.fillRect(x - 2, y - 2 - lift, 4, 4);
+  ctx.fillRect(x - 1, y - 2 - lift, 3, 3);
   ctx.fillStyle = "#ffffff";
-  ctx.fillRect(x - 1, y - 1 - lift, 2, 2);
+  ctx.fillRect(x - 1, y - 2 - lift, 2, 2);
   ctx.fillStyle = "#b9c2cc";
-  ctx.fillRect(x, y - lift, 1, 1);
+  ctx.fillRect(x, y - 1 - lift, 1, 1);
 }
 
 /** Fading dots behind a fast ball, so a shot reads as speed. */

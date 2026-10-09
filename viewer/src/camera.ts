@@ -44,7 +44,7 @@ export function cameraAt(frames: readonly Frame[], t: number, zoom: number): Cam
   return { x: clamp(centreX - width / 2, 0, WIDTH - width), y: clamp(centreY - height / 2, 0, HEIGHT - height), zoom };
 }
 
-/** A point in the world as it appears on the 320x180 screen. */
+/** A point in the world as it appears on the 320x226 screen. */
 export function toView(camera: Camera, point: { x: number; y: number }): { x: number; y: number } {
   return { x: (point.x - camera.x) * camera.zoom, y: (point.y - camera.y) * camera.zoom };
 }

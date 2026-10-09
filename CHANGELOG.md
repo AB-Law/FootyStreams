@@ -146,6 +146,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0249** Draw the viewer pitch in true 105:68 proportion with a round centre circle, penalty arcs and corner arcs *(M8; scope: tools)*
 - **0246** Make pass accuracy follow pressure and stop the same two players passing back and forth *(M8; scope: sim; sim version minor)*
 - **0244** Give the ball carrier room: team-mates keep apart and nobody swarms a goalkeeper *(M8; scope: sim; sim version minor)*
 - **0241** Stop attackers in the final third passing the ball sideways and straight back *(M8; scope: sim; sim version minor)*

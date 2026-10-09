@@ -1,6 +1,6 @@
 # Pixel replay viewer (prototype)
 
-A silent browser page that replays a recorded match as a 320x180 pixel pitch scaled up without
+A silent browser page that replays a recorded match as a 320x226 pixel pitch scaled up without
 smoothing. It exists to iterate on the look before a live feed exists. It is **not a milestone**: no
 engine, schema or sim change, and it lives outside `src/` and `tests/` so the Python gate ignores it.
 
