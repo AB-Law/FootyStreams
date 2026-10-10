@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VPL News — FootyStreams</title>
+    <style>body { margin: 0; background: #070b10; }</style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">VPL News</div>
+      <nav>
+        <a href="index.html">Match</a>
+        <a class="on" href="studio.html">News desk</a>
+        <a href="channel.html">Channel</a>
+      </nav>
+    </header>
+    <main>
+      <div id="stage">
+        <section class="monitor" id="monitor" aria-label="News desk broadcast">
+          <div class="monitor-bar"><span>VPL News · Desk cam 1</span><span class="rec paused" id="rec">On air</span></div>
+          <div class="glass">
+            <canvas id="screen" width="480" height="270" role="img" aria-label="Anchors at the VPL News desk"></canvas>
+            <button id="cover" type="button">Play</button>
+          </div>
+        </section>
+        <div id="controls">
+          <button id="prev" class="tool" type="button" aria-label="Previous line">&#9664;&#9664;</button>
+          <button id="play" class="tool" type="button">Play</button>
+          <button id="next" class="tool" type="button" aria-label="Next line">&#9654;&#9654;</button>
+          <input id="scrubber" type="range" min="0" max="0" value="0" step="1" aria-label="Position" />
+          <span id="time">0:00 / 0:00</span>
+        </div>
+        <div id="empty" hidden>
+          <strong>No commentary yet.</strong> From the repo root, write a desk script:
+          <code>uv run narrate --home SEI --away BUK --seed 2 --engine template</code>
+        </div>
+      </div>
+      <aside id="transcript" aria-label="Transcript">
+        <h2 class="panel-title">Transcript</h2>
+        <ol id="lines" class="lines"></ol>
+      </aside>
+    </main>
+    <script type="module" src="dist/studio-app.js"></script>
+  </body>
+</html>

@@ -263,7 +263,7 @@ function arm(raster: Raster, shoulder: { x: number; y: number }, joint: Arm, pai
 }
 
 /** Mix two colours: `amount` 0 is `a`, 1 is `b`. */
-function mix(a: string, b: string, amount: number): string {
+export function mix(a: string, b: string, amount: number): string {
   const [ar, ag, ab] = hex(a);
   const [br, bg, bb] = hex(b);
   const part = (x: number, y: number): string => Math.round(x + (y - x) * amount).toString(16).padStart(2, "0");

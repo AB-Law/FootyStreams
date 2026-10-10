@@ -31,10 +31,84 @@ npm install        # once: typescript only
 npm start          # builds with tsc, serves http://127.0.0.1:5173/
 ```
 
-Open `http://127.0.0.1:5173/`. Options in the address: `?replay=replays/other` (another recording),
-`?t=2500` (start at a second), `?autoplay=1`, `?names=all` (name tags, see below). Space toggles play and
-pause. `preview.html` (served next to the page) is the review sheet for the player art and the scenes. Other commands:
-`npm run typecheck`, `npm test` (Node's built-in test runner, no extra dependencies).
+Open `http://127.0.0.1:5173/` for the **match**. Use the top nav **News desk** (or
+`http://127.0.0.1:5173/studio.html`) for the separate news page. Options on the match URL:
+`?replay=replays/other`, `?t=2500`, `?autoplay=1`, `?names=all`. Space toggles play/pause.
+`preview.html` is the review sheet for player art. Other commands: `npm run typecheck`, `npm test`.
+
+## News desk (separate page)
+
+The news desk is **not** inside the match stream. It is its own tab (`studio.html`) and plays a
+~2–3 minute desk script as one pixel-art broadcast on a 480x270 canvas: up to four anchors seated at
+a desk (front-facing, dressed from their speaker id so the same person always looks the same), a
+speech bubble over whoever is talking that types out at speaking pace, a lower third naming them, a
+night-skyline window with the stadium floodlit, a wall screen for the current beat and one for the
+score, an ON AIR sign and a scrolling ticker. Beside the picture are play/pause, previous/next line, a
+scrubber and a transcript you can click to jump to a line.
+
+```bash
+uv run narrate --home SEI --away BUK --seed 2 --engine template
+# LM Studio (local server on; falls back to templates if down):
+uv run narrate --home SEI --away BUK --seed 2 --engine lmstudio --model "qwen/qwen3.5-9b"
+```
+
+That writes `viewer/replays/commentary.json`. Then open the News desk tab. Facts only — no invented
+lore. Options: `?script=replays/other.json`, `?t=40` (start 40 s in), `?autoplay=1`; space plays and pauses.
+
+How it is built (all text is the proportional mixed-case pixel font in `src/pixelfont.ts`, so the
+bubble, lower third and ticker are drawn in the canvas and can be recorded as one picture later):
+
+- `src/commentary.ts`: the script's shape, which line is on at time `t` (`cueAt`), who speaks, and the
+  score read from the intro line. `src/bubble.ts` wraps a line to the bubble, pages it if it is too
+  long and types it out; both are pure functions of the time, so scrubbing shows the same thing.
+- `src/anchor-look.ts`, `src/anchor.ts`: the anchors. A look comes from a hash of the speaker id
+  (seat picks the jacket, and nobody at the desk shares a hairstyle); the sprite is painted pixel by
+  pixel with a face that blinks, glances at the speaker and moves its mouth while the bubble types.
+- `src/studio-set.ts` (wall, window, desk), `src/studio-screens.ts` (wall screens, ON AIR, bug),
+  `src/studio-hud.ts` (bubble, lower third, ticker), `src/studio.ts` (puts them together, one
+  `draw(ctx, t)`), `src/studio-app.ts` (the page).
+
+## Channel (24/7)
+
+`channel.html` is the News desk as a channel that never goes off air. A producer writes an endless feed
+and the page plays whatever the wall clock says is on air, joining in the middle (design:
+`docs/design/15-the-channel.md`). The talk comes only from **LM Studio** (local server on, a model
+loaded; no template fallback), so run this first:
+
+```bash
+uv run channel --model qwen/qwen3.5-9b        # keeps about 10 minutes of airtime queued; Ctrl+C to stop
+```
+
+Then open the **Channel** tab (`http://127.0.0.1:5173/channel.html`). Options: `--ahead-minutes 10`,
+`--lead-seconds 15`, `--temperature 0.8`, `--max-segments N`, `--reset` (forget the show bible and the
+feed), `--endpoint URL`. It writes `viewer/replays/channel/` (`index.json`, one `seg_NNNNNN.json` per
+segment, and `bible.json`, the hosts' memory); delete that folder, or pass `--reset`, for a fresh show.
+
+What is on: a preview and a recap of each fixture of the show's own double round robin (matches are
+simulated when their recap is made), a post-match interview with a guest (the player of the match, or a
+manager, drawn from their own appearance in their club's colours), club histories, manager and player
+files, the table after each matchday, banter, and a **break** between fixtures: a slideshow of invented
+sponsor ads, the table or results and the next match. Three hosts remember: results, who predicted what, and the running jokes and
+opinions they came up with, all listed under "What the desk remembers". The page shows only what has
+aired: the ticker and the memories come with each segment, and a match report is listed by its fixture,
+never its score.
+
+**Going back.** The feed keeps the last four hours (`--keep-hours`). "Earlier on VPL News" lists what has
+aired; pick one to watch it again (pause and a scrubber appear, it carries on through what aired after it,
+and "Back to live" returns), exactly as it went out.
+
+**Breaking news and guests.** The control room panel on the page, or the command line, asks the running
+producer for things:
+
+```bash
+uv run channel breaking "Seisund County sack their manager"   # a flash within seconds, cutting in, then the hosts react
+uv run channel guest Jorsen                                  # interviewed after the current segment
+```
+
+Both leave a file in `replays/channel/triggers/`; the control room posts to `viewer/serve.mjs`
+(`POST /api/trigger`, this machine only; restart `npm start` once to pick it up). If the producer or the model is away the page shows a stand-by scene and picks up when
+segments arrive. `src/channel.ts` (what is on air at a time), `src/channel-app.ts` (the page),
+`src/desk-page.ts` (styles shared with the News desk).
 
 ## How it is built
 
@@ -110,10 +184,10 @@ version of the same moves.
 
 ## Deliberately missing
 
-Audio, commentary, TTS, LLM text, studio scenes, recording or encoding for a stream, any WebSocket or
-engine sink, replays of goals, shirt numbers on screen, linesmen (the referee is a drawn guess,
-not sim data), camera moves, formation-aware kits for goalkeepers beyond a plain colour, and other
-event types (pass, shot, foul and so on are accepted and ignored).
+Audio, TTS, live engine/WebSocket sink, replays of goals, shirt numbers on screen, linesmen (the
+referee is a drawn guess, not sim data), camera moves, formation-aware kits for goalkeepers beyond a
+plain colour, and other event types (pass, shot, foul and so on are accepted and ignored). Studio
+commentary is a prototype (templated or local-LLM script beside the replay), not the M13 Narrator seam.
 
 ## Known limits
 

@@ -25,6 +25,7 @@ def save_world(world: World, uow: UnitOfWork) -> None:
         uow.nations.save_many(world.nations)
         uow.cities.save_many(world.cities)
         uow.clubs.save_many(world.clubs)
+        uow.wider_clubs.save_many(world.wider_clubs)
         uow.competitions.save_many(world.competitions)
         uow.seasons.save_many(world.seasons)
         uow.players.save_many(world.players)
@@ -70,6 +71,7 @@ def load_world(repositories: Repositories) -> World:
         competitions=tuple(repositories.competitions.all()),
         seasons=tuple(repositories.seasons.all()),
         clubs=tuple(repositories.clubs.all()),
+        wider_clubs=tuple(repositories.wider_clubs.all()),
         squad_entries=tuple(
             sorted(repositories.squad_entries.all(), key=lambda e: (e.club_id, e.squad_number))
         ),

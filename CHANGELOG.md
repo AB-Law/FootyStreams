@@ -9,6 +9,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 ## [Unreleased]
 
 ### Added
+- **0270** Add breaks, guest interviews, breaking news triggers and replay to the channel *(design; scope: cli, extensions, docs)*
+- **0269** Add a 24/7 channel: an LM Studio desk show whose hosts remember *(design; scope: cli, extensions, docs)*
+- **0267** Add a pixel studio scene that plays commentary scripts *(design; scope: docs)*
+- **0266** Add narrate CLI with optional LM Studio adapter *(design; scope: cli)*
+- **0265** Add BroadcastBrief packer and template narrator for the news desk *(design; scope: extensions)*
+- **0264** (migration needed) Add a named wider-world club catalog for career history *(design; scope: seed, domain, persistence, schemas, data; sim version patch; schema version minor)*
 - **0261** Play tackles, skill moves, headers and free kicks as scenes in the hi-res broadcast view *(M8; scope: tools)*
 - **0260** Mark a shot taken with the head so a renderer can show a header *(M8; scope: events, sim; sim version patch; schema version minor)*
 - **0258** Add a side-on broadcast view with profile players and skill-move animations to the pixel viewer *(M8; scope: tools)*
@@ -152,6 +158,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0011** Add documented package skeletons per layer and an architecture checker with canary tests. *(M0; scope: tools, ci)*
 
 ### Changed
+- **0268** Redo the news desk as a broadcast scene with anchors, speech bubbles and a ticker *(design; scope: docs)*
 - **0251** Give every defender a job off the ball and have team-mates make angles for the carrier *(M8; scope: sim; sim version minor; schema version patch)*
 - **0250** Make recorded frames run players at a sprint's pace and leave the ball loose until its carrier arrives *(M8; scope: sim)*
 - **0249** Draw the viewer pitch in true 105:68 proportion with a round centre circle, penalty arcs and corner arcs *(M8; scope: tools)*
@@ -186,7 +193,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: SemVer for 
 - **0002** Revise design after review - mood system, transfers and development, tunable balance targets, roadmap, decision log. *(design; scope: design)*
 
 ### Fixed
-- **0264** Keep every side to three substitution windows by letting a manager make several changes at one stoppage *(M8; scope: sim; sim version patch; schema version patch)*
+- **0271** Keep every side to three substitution windows by letting a manager make several changes at one stoppage *(M8; scope: sim; sim version patch; schema version patch)*
 - **0262** Stop crossing players swapping places in one frame in the pixel viewer *(M8; scope: tools)*
 - **0256** Keep supporters on their angle instead of swapping every step *(M8; scope: sim; sim version patch; schema version patch)*
 - **0252** Cut an intercepted pass out on its passing lane and keep the viewer ball on the frame's flight *(M8; scope: sim; sim version patch; schema version patch)*

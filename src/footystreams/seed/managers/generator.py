@@ -20,7 +20,7 @@ from footystreams.domain.manager import (
 from footystreams.domain.person import Personality
 from footystreams.domain.rng import WorldRng
 from footystreams.domain.types import ClubId, FormationId, Gender
-from footystreams.domain.world import WIDER_WORLD_PREFIX
+from footystreams.domain.world import WIDER_WORLD_CLUB_COUNT, WIDER_WORLD_PREFIX
 from footystreams.seed.managers.styles import StylePrototype
 from footystreams.seed.people import PersonBrief, make_person
 from footystreams.seed.players.context import GenerationContext
@@ -43,7 +43,6 @@ STINT_COUNT = (2, 4)
 STINT_YEARS = (1, 4)
 MATCHES_PER_YEAR = (30, 46)
 WAGE_BASE = 6_000
-WIDER_WORLD_CLUBS = 40
 PERCENT = 100.0
 EXPERIENCE_FLOOR = 0.2  # share of matches a stint's wins can fall to at the weak end
 
@@ -149,7 +148,7 @@ def _history(rng: WorldRng, today: dt.date) -> tuple[ManagerStint, ...]:
         played = years * rng.randint(*MATCHES_PER_YEAR)
         won = round(played * rng.uniform(EXPERIENCE_FLOOR, 0.5))
         drawn = round((played - won) * rng.uniform(0.2, 0.5))
-        club = ClubId(f"{WIDER_WORLD_PREFIX}{rng.randint(1, WIDER_WORLD_CLUBS):03d}")
+        club = ClubId(f"{WIDER_WORLD_PREFIX}{rng.randint(1, WIDER_WORLD_CLUB_COUNT):03d}")
         stints.append(
             ManagerStint(
                 club_id=club,
