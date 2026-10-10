@@ -47,7 +47,7 @@ from footystreams.domain.transfer import (
     TransferListing,
     TransferWindow,
 )
-from footystreams.domain.world import City, Nation, SquadEntry
+from footystreams.domain.world import City, Nation, SquadEntry, WiderClub
 from footystreams.persistence.errors import ConflictError, NotFoundError, PersistenceError
 from footystreams.persistence.records import (
     MetaEntry,
@@ -158,6 +158,7 @@ class Repositories:
     competitions: Repository[Competition]
     seasons: Repository[Season]
     clubs: Repository[Club]
+    wider_clubs: Repository[WiderClub]
     players: Repository[Player]
     squad_entries: Repository[SquadEntry]
     managers: Repository[Manager]

@@ -5,7 +5,7 @@ from __future__ import annotations
 import datetime as dt
 from dataclasses import dataclass
 
-GENERATOR_VERSION = "1.0.0"
+GENERATOR_VERSION = "1.1.0"
 WORLD_START = dt.date(2031, 7, 1)
 MIN_CLUBS = 2
 MAX_CLUBS = 8  # one club per archetype; a larger league needs more archetypes

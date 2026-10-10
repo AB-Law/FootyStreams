@@ -26,6 +26,7 @@ from footystreams.seed.players.generator import PlayerSpec, generate_player
 from footystreams.seed.referees import generate_referees
 from footystreams.seed.relations.graph import build_relationships
 from footystreams.seed.static.tables import StaticTables, load_static_tables
+from footystreams.seed.wider_clubs import generate_wider_clubs
 
 UNEMPLOYED_MANAGERS = 4
 UNEMPLOYED_QUALITY = (45, 60)
@@ -151,6 +152,8 @@ def generate_world(
     ]
     competition, season = _competition(ctx, clubs)
     players = [outcome.renamed.get(PlayerId(str(p.id)), p) for d in drafts for p in d.players]
+    taken_names = [d.club.name for d in drafts] + [d.club.location.city for d in drafts]
+    wider = generate_wider_clubs(root.fork("wider-clubs"), ctx.names, ctx.tables.clubs, taken_names)
     return World(
         world_seed=seed,
         created_in_world=settings.created_in_world,
@@ -159,6 +162,7 @@ def generate_world(
         competitions=(competition,),
         seasons=(season,),
         clubs=tuple(sorted(clubs, key=lambda club: club.id)),
+        wider_clubs=wider,
         squad_entries=tuple(
             sorted(
                 (e for d in drafts for e in d.squad_entries),

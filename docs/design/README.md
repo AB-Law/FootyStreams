@@ -20,6 +20,7 @@ A fictional football league as a 24/7 live broadcast. This phase builds the **fo
 | [12-voice-and-tts.md](12-voice-and-tts.md) | **New (rev 4).** What makes commentary sound human, `VoiceProfile v2` / `VoiceSynthesizer v2`, provider landscape, bake-off plan. |
 | [13-runtime-engine.md](13-runtime-engine.md) | **New (rev 4).** The long-running engine: supervisor, pre-simulation buffer, paced match player, event bus/sinks, crash-only resume, health. |
 | [14-learned-player-policies.md](14-learned-player-policies.md) | **Exploratory (rev 4+).** Per-player decision seam and intent events, player quality as rating-driven dials, learned policies (from scratch, self-play), and what the compute options (Python, Rust, GPU) cost. Not decided. |
+| [15-the-channel.md](15-the-channel.md) | **Prototype (rev 4+).** The 24/7 desk show: a producer that keeps a feed of segments filled from the world's facts, hosts that remember (a JSON show bible in the `MemoryRecord` shape), LM Studio talk with strict grounding checks, a wall-clock schedule and the Channel page. Outside the milestones. |
 | [.claude/rules/](../../.claude/rules/core.md) | **New (rev 4).** Agent rules for Claude Code (`.claude/rules/`) and Cursor (`.cursor/rules/`). |
 
 Root files: [`AGENTS.md`](../../AGENTS.md) / `CLAUDE.md` (rules for agents), [`CHANGELOG.md`](../../CHANGELOG.md) and [`changes/`](../../changes/README.md) (the change log).

@@ -25,7 +25,14 @@ from footystreams.domain.referee import Referee
 from footystreams.domain.relationship import Relationship
 from footystreams.domain.staff import StaffMember
 from footystreams.domain.versions import SCHEMA_VERSION
-from footystreams.domain.world import City, Nation, SquadEntry, World, WorldManifest
+from footystreams.domain.world import (
+    City,
+    Nation,
+    SquadEntry,
+    WiderClub,
+    World,
+    WorldManifest,
+)
 from footystreams.seed.config import GENERATOR_VERSION
 
 MANIFEST_FILE = "manifest.json"
@@ -52,6 +59,7 @@ _TABLES: tuple[_Table, ...] = (
     _Table("competitions.json", Competition, lambda w: w.competitions, "competitions"),
     _Table("seasons.json", Season, lambda w: w.seasons, "seasons"),
     _Table("clubs.json", Club, lambda w: w.clubs, "clubs"),
+    _Table("wider_clubs.json", WiderClub, lambda w: w.wider_clubs, "wider_clubs"),
     _Table("squad_entries.json", SquadEntry, lambda w: w.squad_entries, "squad_entries"),
     _Table("players.json", Player, lambda w: w.players, "players"),
     _Table("managers.json", Manager, lambda w: w.managers, "managers"),
@@ -158,6 +166,7 @@ def read_world(directory: Path, *, verify_hash: bool = True) -> World:
         competitions=read(Competition, "competitions.json"),
         seasons=read(Season, "seasons.json"),
         clubs=read(Club, "clubs.json"),
+        wider_clubs=read(WiderClub, "wider_clubs.json"),
         squad_entries=read(SquadEntry, "squad_entries.json"),
         players=read(Player, "players.json"),
         managers=read(Manager, "managers.json"),

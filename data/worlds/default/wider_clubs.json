@@ -1,0 +1,322 @@
+[
+  {
+    "city": "Bronkun",
+    "id": "clb_wd001",
+    "name": "Bronkun United",
+    "nickname": "the Hornets",
+    "region": "highland",
+    "short_name": "Bronkun"
+  },
+  {
+    "city": "Gitsachěnko",
+    "id": "clb_wd002",
+    "name": "Gitsachěnko Argyle",
+    "nickname": "the Clarets",
+    "region": "borderlands",
+    "short_name": "Gitsachěnko"
+  },
+  {
+    "city": "Jauzasz",
+    "id": "clb_wd003",
+    "name": "Jauzasz City",
+    "nickname": "the Seagulls",
+    "region": "borderlands",
+    "short_name": "Jauzasz"
+  },
+  {
+    "city": "Branach",
+    "id": "clb_wd004",
+    "name": "Branach Sporting",
+    "nickname": "the Oaks",
+    "region": "highland",
+    "short_name": "Branach"
+  },
+  {
+    "city": "Pemere",
+    "id": "clb_wd005",
+    "name": "Pemere Wanderers",
+    "nickname": "the Potters",
+    "region": "rivervale",
+    "short_name": "Pemere"
+  },
+  {
+    "city": "Drabultven",
+    "id": "clb_wd006",
+    "name": "Drabultven Albion",
+    "nickname": "the Magpies",
+    "region": "highland",
+    "short_name": "Drabultven"
+  },
+  {
+    "city": "Nalla",
+    "id": "clb_wd007",
+    "name": "Nalla Athletic",
+    "nickname": "the Irons",
+    "region": "coastal",
+    "short_name": "Nalla"
+  },
+  {
+    "city": "Kedrarskel",
+    "id": "clb_wd008",
+    "name": "Kedrarskel Rangers",
+    "nickname": "the Rams",
+    "region": "highland",
+    "short_name": "Kedrarskel"
+  },
+  {
+    "city": "Thimgimski",
+    "id": "clb_wd009",
+    "name": "Thimgimski Rovers",
+    "nickname": "the Owls",
+    "region": "borderlands",
+    "short_name": "Thimgimski"
+  },
+  {
+    "city": "Thusen",
+    "id": "clb_wd010",
+    "name": "Thusen Harriers",
+    "nickname": "the Canaries",
+    "region": "isles",
+    "short_name": "Thusen"
+  },
+  {
+    "city": "Grokultven",
+    "id": "clb_wd011",
+    "name": "Grokultven County",
+    "nickname": "the Blades",
+    "region": "highland",
+    "short_name": "Grokultven"
+  },
+  {
+    "city": "Varanettan",
+    "id": "clb_wd012",
+    "name": "Varanettan Town",
+    "nickname": "the Bees",
+    "region": "portside",
+    "short_name": "Varanettan"
+  },
+  {
+    "city": "Junrundvik",
+    "id": "clb_wd013",
+    "name": "Junrundvik Sporting",
+    "nickname": "the Swans",
+    "region": "isles",
+    "short_name": "Junrundvik"
+  },
+  {
+    "city": "Gaszaski",
+    "id": "clb_wd014",
+    "name": "Gaszaski Sporting",
+    "nickname": "the Cottagers",
+    "region": "borderlands",
+    "short_name": "Gaszaski"
+  },
+  {
+    "city": "Zaldo",
+    "id": "clb_wd015",
+    "name": "Zaldo Argyle",
+    "nickname": "the Tykes",
+    "region": "portside",
+    "short_name": "Zaldo"
+  },
+  {
+    "city": "Broubrand",
+    "id": "clb_wd016",
+    "name": "Broubrand County",
+    "nickname": "the Robins",
+    "region": "rivervale",
+    "short_name": "Broubrand"
+  },
+  {
+    "city": "Tseiktheik",
+    "id": "clb_wd017",
+    "name": "Tseiktheik County",
+    "nickname": "the Cherries",
+    "region": "borderlands",
+    "short_name": "Tseiktheik"
+  },
+  {
+    "city": "Westead",
+    "id": "clb_wd018",
+    "name": "Westead Wanderers",
+    "nickname": "the Mariners",
+    "region": "rivervale",
+    "short_name": "Westead"
+  },
+  {
+    "city": "Wyhoust",
+    "id": "clb_wd019",
+    "name": "Wyhoust Albion",
+    "nickname": "the Tricky Trees",
+    "region": "rivervale",
+    "short_name": "Wyhoust"
+  },
+  {
+    "city": "Thogaunduld",
+    "id": "clb_wd020",
+    "name": "Thogaunduld Sporting",
+    "nickname": "the Wanderers",
+    "region": "isles",
+    "short_name": "Thogaunduld"
+  },
+  {
+    "city": "Nofieri",
+    "id": "clb_wd021",
+    "name": "Nofieri Harriers",
+    "nickname": "the Tricky Trees",
+    "region": "coastal",
+    "short_name": "Nofieri"
+  },
+  {
+    "city": "Jyzěs",
+    "id": "clb_wd022",
+    "name": "Jyzěs Town",
+    "nickname": "the Owls",
+    "region": "borderlands",
+    "short_name": "Jyzěs"
+  },
+  {
+    "city": "Freifell",
+    "id": "clb_wd023",
+    "name": "Freifell Albion",
+    "nickname": "the Potters",
+    "region": "isles",
+    "short_name": "Freifell"
+  },
+  {
+    "city": "Freisvasund",
+    "id": "clb_wd024",
+    "name": "Freisvasund County",
+    "nickname": "the Mariners",
+    "region": "isles",
+    "short_name": "Freisvasund"
+  },
+  {
+    "city": "Hurorfell",
+    "id": "clb_wd025",
+    "name": "Hurorfell Rangers",
+    "nickname": "the Wanderers",
+    "region": "isles",
+    "short_name": "Hurorfell"
+  },
+  {
+    "city": "Vemieri",
+    "id": "clb_wd026",
+    "name": "Vemieri County",
+    "nickname": "the Robins",
+    "region": "coastal",
+    "short_name": "Vemieri"
+  },
+  {
+    "city": "Vonaro",
+    "id": "clb_wd027",
+    "name": "Vonaro Harriers",
+    "nickname": "the Robins",
+    "region": "coastal",
+    "short_name": "Vonaro"
+  },
+  {
+    "city": "Panpix",
+    "id": "clb_wd028",
+    "name": "Panpix Athletic",
+    "nickname": "the Rams",
+    "region": "portside",
+    "short_name": "Panpix"
+  },
+  {
+    "city": "Jychški",
+    "id": "clb_wd029",
+    "name": "Jychški Argyle",
+    "nickname": "the Rams",
+    "region": "borderlands",
+    "short_name": "Jychški"
+  },
+  {
+    "city": "Chakhiski",
+    "id": "clb_wd030",
+    "name": "Chakhiski City",
+    "nickname": "the Clarets",
+    "region": "borderlands",
+    "short_name": "Chakhiski"
+  },
+  {
+    "city": "Zenko",
+    "id": "clb_wd031",
+    "name": "Zenko City",
+    "nickname": "the Clarets",
+    "region": "borderlands",
+    "short_name": "Zenko"
+  },
+  {
+    "city": "Yegim",
+    "id": "clb_wd032",
+    "name": "Yegim Athletic",
+    "nickname": "the Irons",
+    "region": "borderlands",
+    "short_name": "Yegim"
+  },
+  {
+    "city": "Pehald",
+    "id": "clb_wd033",
+    "name": "Pehald City",
+    "nickname": "the Seagulls",
+    "region": "rivervale",
+    "short_name": "Pehald"
+  },
+  {
+    "city": "Famere",
+    "id": "clb_wd034",
+    "name": "Famere Wanderers",
+    "nickname": "the Clarets",
+    "region": "rivervale",
+    "short_name": "Famere"
+  },
+  {
+    "city": "Shooldmald",
+    "id": "clb_wd035",
+    "name": "Shooldmald Albion",
+    "nickname": "the Blades",
+    "region": "rivervale",
+    "short_name": "Shooldmald"
+  },
+  {
+    "city": "Gokach",
+    "id": "clb_wd036",
+    "name": "Gokach Athletic",
+    "nickname": "the Owls",
+    "region": "highland",
+    "short_name": "Gokach"
+  },
+  {
+    "city": "Mimaro",
+    "id": "clb_wd037",
+    "name": "Mimaro Rovers",
+    "nickname": "the Tykes",
+    "region": "coastal",
+    "short_name": "Mimaro"
+  },
+  {
+    "city": "Bamyld",
+    "id": "clb_wd038",
+    "name": "Bamyld Athletic",
+    "nickname": "the Wanderers",
+    "region": "rivervale",
+    "short_name": "Bamyld"
+  },
+  {
+    "city": "Tandun",
+    "id": "clb_wd039",
+    "name": "Tandun Town",
+    "nickname": "the Irons",
+    "region": "highland",
+    "short_name": "Tandun"
+  },
+  {
+    "city": "Gatekgar",
+    "id": "clb_wd040",
+    "name": "Gatekgar Argyle",
+    "nickname": "the Owls",
+    "region": "highland",
+    "short_name": "Gatekgar"
+  }
+]

@@ -83,7 +83,7 @@ A site around a live video stream in a styled "monitor" frame, with replays and 
 
 1. The design document and its decisions (below).
 2. A silent browser viewer fed by an engine sink: a live pixel match. A file-replay **prototype** of the picture (not this step) lives in `viewer/`: it reads a recorded `--frames` log through one `onEvent` function, so the live sink can replace the file reader.
-3. Studio scenes with templated scripts (no LLM).
+3. Studio scenes with templated scripts (no LLM). **Prototype started:** `uv run narrate` (template or LM Studio) + viewer Studio / VPL News desk; still outside M13 and without doc 14. **Going 24/7:** `uv run channel` + the Channel page keep an endless, LM Studio-only desk show with hosts that remember (design 15); still a prototype outside the milestones.
 4. LLM commentary and TTS behind the M13 seams, with fallbacks.
 5. Text products: social feed, newspapers, pundit shows.
 6. Recording, encoding and the site.
